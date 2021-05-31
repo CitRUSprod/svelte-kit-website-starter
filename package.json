@@ -1,0 +1,69 @@
+{
+    "name": "svelte-kit-website-template",
+    "private": true,
+    "scripts": {
+        "prepare": "husky install",
+        "validate": "pnpm validate --parallel",
+        "git:commit": "git-cz",
+        "prettier": "prettier --check",
+        "prettier:fix": "pnpm prettier -- --write",
+        "prettier:all": "pnpm prettier -- \"**/*.{html,md,json,yml,yaml,js,cjs,ts,svelte}\"",
+        "prettier:fix:all": "pnpm prettier:all -- --write",
+        "stylelint": "stylelint --color",
+        "stylelint:fix": "pnpm stylelint -- --fix",
+        "stylelint:all": "pnpm stylelint -- **/*.svelte",
+        "stylelint:fix:all": "pnpm stylelint:all -- --fix",
+        "eslint": "eslint --color",
+        "eslint:fix": "pnpm eslint -- --fix",
+        "eslint:all:scripts": "pnpm eslint -- \"**/*.{js,cjs,ts}\"",
+        "eslint:all:svelte": "pnpm eslint -- \"**/*.svelte\"",
+        "eslint:all": "pnpm eslint:all:scripts && pnpm eslint:all:svelte",
+        "eslint:fix:all": "pnpm eslint:all:scripts -- --fix && pnpm eslint:all:svelte -- --fix",
+        "lint": "pnpm prettier:all && pnpm stylelint:all && pnpm eslint:all",
+        "format": "pnpm prettier:fix:all && pnpm stylelint:fix:all && pnpm eslint:fix:all",
+        "ci": "pnpm validate && pnpm lint"
+    },
+    "lint-staged": {
+        "*.{html,md,json,yml,yaml,js,cjs,ts,svelte}": "pnpm prettier:fix",
+        "*.svelte": "pnpm stylelint:fix",
+        "*.{js,cjs,ts,svelte}": "pnpm eslint:fix"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-customizable"
+        },
+        "cz-customizable": {
+            "config": "./configs/commits/commitizen.js"
+        }
+    },
+    "prettier": "./configs/prettier/index.js",
+    "eslintConfig": {
+        "extends": "./configs/eslint/index.js"
+    },
+    "stylelint": {
+        "extends": "./configs/stylelint/index.js"
+    },
+    "devDependencies": {
+        "@citrus-linting/eslint-config": "0.8.0",
+        "@citrus-linting/prettier-config": "0.2.0",
+        "@citrus-linting/stylelint-config": "0.2.0",
+        "@commitlint/cli": "12.1.4",
+        "@typescript-eslint/eslint-plugin": "4.26.0",
+        "@typescript-eslint/parser": "4.26.0",
+        "commitizen": "4.2.4",
+        "cz-customizable": "6.3.0",
+        "eslint": "7.27.0",
+        "eslint-config-prettier": "8.3.0",
+        "eslint-plugin-svelte3": "3.2.0",
+        "husky": "6.0.0",
+        "inquirer": "8.1.0",
+        "lint-staged": "11.0.0",
+        "prettier": "2.3.0",
+        "prettier-plugin-packagejson": "2.2.11",
+        "prettier-plugin-svelte": "2.3.0",
+        "stylelint": "13.13.1",
+        "stylelint-config-prettier": "8.0.2",
+        "svelte": "3.38.2",
+        "typescript": "4.3.2"
+    }
+}

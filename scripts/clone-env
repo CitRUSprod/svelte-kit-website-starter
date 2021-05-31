@@ -1,0 +1,11 @@
+#!/bin/sh
+
+SCRIPTS_DIR=$(dirname "$0")
+ROOT_DIR=$SCRIPTS_DIR/..
+
+if ! [ -f "$ROOT_DIR"/.env ]
+then
+    cp "$ROOT_DIR"/.env.example "$ROOT_DIR"/.env
+fi
+
+exit 0

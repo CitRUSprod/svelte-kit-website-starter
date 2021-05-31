@@ -1,0 +1,8 @@
+services:
+    nginx:
+        extends:
+            file: ./base.yml
+            service: nginx
+        network_mode: host
+        environment:
+            WEB_CLIENT_HOST: localhost

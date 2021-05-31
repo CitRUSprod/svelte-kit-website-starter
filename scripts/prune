@@ -1,0 +1,5 @@
+#!/bin/sh
+
+docker rmi -f $(docker images -qf "dangling=true") > /dev/null 2>&1
+
+exit 0

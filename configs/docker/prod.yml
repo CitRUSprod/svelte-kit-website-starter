@@ -1,0 +1,15 @@
+services:
+    nginx:
+        extends:
+            file: ./base.yml
+            service: nginx
+        ports:
+            - ${WEBSITE_PORT}:6700
+        environment:
+            WEB_CLIENT_HOST: web-client
+        depends_on:
+            - web-client
+    web-client:
+        extends:
+            file: ./base.yml
+            service: web-client

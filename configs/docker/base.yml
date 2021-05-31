@@ -1,0 +1,13 @@
+services:
+    nginx:
+        image: nginx:1.21.0-alpine
+        restart: always
+        volumes:
+            - ../nginx:/etc/nginx/templates
+    web-client:
+        build:
+            context: ../../services/web-client
+            args:
+                NODE_IMAGE: node:16.2.0-alpine
+        restart: always
+        entrypoint: pnpm start
