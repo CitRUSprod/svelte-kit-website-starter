@@ -7,4 +7,11 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 3600;
     }
+
+    location /api/ {
+        proxy_pass http://${API_HOST}:6702/;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 3600;
+    }
 }

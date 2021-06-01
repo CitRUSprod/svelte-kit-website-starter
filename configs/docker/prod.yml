@@ -7,9 +7,22 @@ services:
             - ${WEBSITE_PORT}:6700
         environment:
             WEB_CLIENT_HOST: web-client
+            API_HOST: api
         depends_on:
             - web-client
     web-client:
         extends:
             file: ./base.yml
             service: web-client
+        depends_on:
+            - api
+    api:
+        extends:
+            file: ./base.yml
+            service: api
+        depends_on:
+            - mongo
+    mongo:
+        extends:
+            file: ./base.yml
+            service: mongo

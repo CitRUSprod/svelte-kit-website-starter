@@ -1,5 +1,6 @@
 .env
 .svelte-kit
 .vscode
+/volumes
 dist
 node_modules

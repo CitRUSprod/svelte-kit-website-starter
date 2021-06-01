@@ -7,11 +7,11 @@
         "git:commit": "git-cz",
         "prettier": "prettier --check",
         "prettier:fix": "pnpm prettier -- --write",
-        "prettier:all": "pnpm prettier -- \"**/*.{html,md,json,yml,yaml,js,cjs,ts,svelte}\"",
+        "prettier:all": "pnpm prettier -- \"**/*.{html,md,json,yml,yaml,js,cjs,ts,svelte}\" \"!volumes\"",
         "prettier:fix:all": "pnpm prettier:all -- --write",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint -- --fix",
-        "stylelint:all": "pnpm stylelint -- **/*.svelte",
+        "stylelint:all": "pnpm stylelint -- \"**/*.svelte\" \"!volumes\"",
         "stylelint:fix:all": "pnpm stylelint:all -- --fix",
         "eslint": "eslint --color",
         "eslint:fix": "pnpm eslint -- --fix",
@@ -44,7 +44,7 @@
         "extends": "./configs/stylelint/index.js"
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.8.0",
+        "@citrus-linting/eslint-config": "0.9.0",
         "@citrus-linting/prettier-config": "0.2.0",
         "@citrus-linting/stylelint-config": "0.2.0",
         "@commitlint/cli": "12.1.4",
