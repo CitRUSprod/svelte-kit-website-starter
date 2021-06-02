@@ -15,6 +15,7 @@
         <a class="font-bold text-lg" href="/">SvelteKit Website Template</a>
     </div>
     <div class="flex-1 justify-end mx-2 px-2">
+        <Button class="rounded-btn btn-ghost btn-sm" href="/chat">Chat</Button>
         {#if $session.user}
             <Button class="rounded-btn btn-ghost btn-sm" href="/profile">Profile</Button>
         {/if}

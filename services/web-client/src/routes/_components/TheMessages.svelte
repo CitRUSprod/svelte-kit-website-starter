@@ -41,7 +41,7 @@
             out:fade
         >
             <FaIcon icon="{getIconByType(message.type)}" />
-            <div class="msg-text flex-grow px-3">{message.text}</div>
+            <div class="break-text flex-grow px-3">{message.text}</div>
             <Button
                 class="btn-ghost btn-circle btn-sm"
                 on:click="{() => {
@@ -53,9 +53,3 @@
         </div>
     {/each}
 </div>
-
-<style lang="postcss">
-    .msg-text {
-        word-break: break-word;
-    }
-</style>

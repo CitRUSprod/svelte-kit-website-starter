@@ -7,12 +7,15 @@ specifiers:
   '@types/cookie': 0.4.0
   '@types/node': 15.6.1
   '@types/nprogress': 0.2.0
+  '@types/overlayscrollbars': 1.12.0
   cookie: 0.4.1
   daisyui: 1.3.0
   nprogress: 0.2.0
+  overlayscrollbars: 1.13.1
   postcss: 8.3.0
   postcss-load-config: 3.0.1
   postcss-nested: 5.0.5
+  reconnecting-websocket: 4.4.0
   redaxios: 0.4.1
   svelte: 3.38.2
   svelte-check: 2.0.0
@@ -25,6 +28,8 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.3
   cookie: 0.4.1
   nprogress: 0.2.0
+  overlayscrollbars: 1.13.1
+  reconnecting-websocket: 4.4.0
   redaxios: 0.4.1
   svelte-fa: 2.2.0
 
@@ -34,6 +39,7 @@ devDependencies:
   '@types/cookie': 0.4.0
   '@types/node': 15.6.1
   '@types/nprogress': 0.2.0
+  '@types/overlayscrollbars': 1.12.0
   daisyui: 1.3.0
   postcss: 8.3.0
   postcss-load-config: 3.0.1
@@ -176,6 +182,10 @@ packages:
 
   /@types/nprogress/0.2.0:
     resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
+    dev: true
+
+  /@types/overlayscrollbars/1.12.0:
+    resolution: {integrity: sha512-h/pScHNKi4mb+TrJGDon8Yb06ujFG0mSg12wIO0sWMUF3dQIe2ExRRdNRviaNt9IjxIiOfnRr7FsQAdHwK4sMg==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -762,6 +772,10 @@ packages:
       wrappy: 1.0.2
     dev: true
 
+  /overlayscrollbars/1.13.1:
+    resolution: {integrity: sha512-gIQfzgGgu1wy80EB4/6DaJGHMEGmizq27xHIESrzXq0Y/J0Ay1P3DWk6tuVmEPIZH15zaBlxeEJOqdJKmowHCQ==}
+    dev: false
+
   /parent-module/1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -912,6 +926,10 @@ packages:
     dependencies:
       picomatch: 2.3.0
     dev: true
+
+  /reconnecting-websocket/4.4.0:
+    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
+    dev: false
 
   /redaxios/0.4.1:
     resolution: {integrity: sha512-+Jhh1j8/H0KBro+Hih/MrDEJ1PICaU10JA6iu5b3+uvgRI+5n2M7qpMNXq7eC/0fspP0tTq49ONXlGWFdRoNLg==}
