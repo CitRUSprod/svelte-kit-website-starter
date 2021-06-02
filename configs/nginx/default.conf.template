@@ -1,5 +1,5 @@
 server {
-    listen 6700;
+    listen ${WEBSITE_PORT};
 
     location / {
         proxy_pass http://${WEB_CLIENT_HOST}:6701/;

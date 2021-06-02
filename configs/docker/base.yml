@@ -2,6 +2,8 @@ services:
     nginx:
         image: nginx:1.21.0-alpine
         restart: always
+        environment:
+            WEBSITE_PORT: ${WEBSITE_PORT}
         volumes:
             - ../nginx:/etc/nginx/templates
     web-client:

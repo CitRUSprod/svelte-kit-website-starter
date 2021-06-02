@@ -15,7 +15,7 @@ let url = "/api"
 
 if (!browser) {
     if (dev) {
-        url = "http://localhost:6700/api"
+        url = "http://localhost:6702"
     } else {
         url = "http://api:6702"
     }

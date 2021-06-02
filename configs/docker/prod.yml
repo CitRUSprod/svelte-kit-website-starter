@@ -4,7 +4,7 @@ services:
             file: ./base.yml
             service: nginx
         ports:
-            - ${WEBSITE_PORT}:6700
+            - ${WEBSITE_PORT}:${WEBSITE_PORT}
         environment:
             WEB_CLIENT_HOST: web-client
             API_HOST: api
