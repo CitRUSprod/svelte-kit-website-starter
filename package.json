@@ -44,7 +44,7 @@
         "extends": "./configs/stylelint/index.js"
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.9.0",
+        "@citrus-linting/eslint-config": "0.10.0",
         "@citrus-linting/prettier-config": "0.2.0",
         "@citrus-linting/stylelint-config": "0.2.0",
         "@commitlint/cli": "12.1.4",

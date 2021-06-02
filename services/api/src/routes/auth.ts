@@ -6,6 +6,7 @@ import { FastifyAuthFunction } from "fastify-auth"
 import argon2 from "argon2"
 import nodemailer from "nodemailer"
 import validator from "validator"
+import { parse as cookieParse } from "cookie"
 import Database from "$/db"
 import { UserPayload } from "$/assets/types"
 
@@ -96,19 +97,31 @@ function isGoodEmail(email: string) {
 
 export default (app: FastifyInstance, opts: FastifyPluginOptions, done: () => void) => {
     const verifyJwt: FastifyAuthFunction = async (req: FastifyRequest) => {
-        if (!req.raw.headers.authorization) {
-            throw new Error("Missing token header")
-        }
-
         const tokenNotValid = new Error("Token not valid")
 
-        const headerParts = req.raw.headers.authorization.split(" ")
+        let token: string | undefined
 
-        if (headerParts[0] !== "Bearer") {
-            throw tokenNotValid
+        if (req.raw.headers.authorization) {
+            const [type, credentials] = req.raw.headers.authorization.split(" ")
+
+            if (type !== "Bearer") {
+                throw tokenNotValid
+            } else if (credentials) {
+                token = credentials
+            }
         }
 
-        const token = headerParts[1]
+        if (!token) {
+            const { token: t } = cookieParse(req.raw.headers.cookie ?? "")
+
+            if (t) {
+                token = t
+            }
+        }
+
+        if (!token) {
+            throw new Error("Missing token header or cookie")
+        }
 
         try {
             const user = app.jwt.verify<UserPayload>(token)
@@ -227,6 +240,10 @@ export default (app: FastifyInstance, opts: FastifyPluginOptions, done: () => vo
         }
     })
 
+    app.get("/logout", (req, reply) => {
+        reply.clearCookie("token").send()
+    })
+
     app.get("/user", {
         preHandler: app.auth([verifyJwt]),
         async handler(req: FastifyRequest & { user: any }, reply) {
@@ -271,7 +288,7 @@ export default (app: FastifyInstance, opts: FastifyPluginOptions, done: () => vo
                 })
 
                 const subject = "Email confirmation"
-                const message = `<h3>Dear ${username}</h3>\n<div><a href="http://127.0.0.1:${websitePort}/example/auth/verify-email/${token}">Confirm Email</a></div>`
+                const message = `<h3>Dear ${username}</h3>\n<div><a href="http://127.0.0.1:${websitePort}/auth/verify-email-${token}">Confirm Email</a></div>`
                 await sendEmail(email, subject, message)
 
                 reply.send()

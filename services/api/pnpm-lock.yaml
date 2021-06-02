@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@typegoose/typegoose': 7.6.1
+  '@types/cookie': 0.4.0
   '@types/lodash': 4.14.170
   '@types/mongoose': 5.10.5
   '@types/node': 15.6.1
@@ -9,6 +10,7 @@ specifiers:
   '@types/validator': 13.1.3
   '@types/ws': 7.4.4
   argon2: 0.27.2
+  cookie: 0.4.1
   dotenv: 10.0.0
   esbuild: 0.12.5
   fastify: 3.17.0
@@ -29,6 +31,7 @@ specifiers:
 dependencies:
   '@typegoose/typegoose': 7.6.1_38d548ef85dab4f0aadd2686a958bafe
   argon2: 0.27.2
+  cookie: 0.4.1
   fastify: 3.17.0
   fastify-auth: 1.1.0
   fastify-cookie: 5.3.1
@@ -41,6 +44,7 @@ dependencies:
   ws: 7.4.6
 
 devDependencies:
+  '@types/cookie': 0.4.0
   '@types/lodash': 4.14.170
   '@types/mongoose': 5.10.5
   '@types/node': 15.6.1
@@ -128,6 +132,10 @@ packages:
     resolution: {integrity: sha512-mVRvYnTOZJz3ccpxhr3wgxVmSeiYinW+zlzQz3SXWaJmD1DuL05Jeq7nKw3SnbKmbleW5qrLG5vdyWe/A9sXhw==}
     dependencies:
       '@types/node': 15.6.1
+    dev: true
+
+  /@types/cookie/0.4.0:
+    resolution: {integrity: sha512-y7mImlc/rNkvCRmg8gC3/lj87S7pTUIJ6QGjwHR9WQJcFs+ZMTOaoPrkdFA/YdbuqVEmEbb5RdhVxMkAcgOnpg==}
     dev: true
 
   /@types/jsonwebtoken/8.5.1:

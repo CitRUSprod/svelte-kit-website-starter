@@ -18,6 +18,7 @@ services:
                 NODE_IMAGE: node:16.2.0-alpine
         restart: always
         environment:
+            WEBSITE_PORT: ${WEBSITE_PORT}
             MONGO_HOST: mongo
             MONGO_USERNAME: ${MONGO_USERNAME}
             MONGO_PASSWORD: ${MONGO_PASSWORD}
