@@ -6,12 +6,15 @@
         "strict": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "importsNotUsedAsValues": "error",
+        "isolatedModules": true,
+        "resolveJsonModule": true,
         "sourceMap": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "baseUrl": "src",
         "paths": {
-            "$/*": ["*"]
+            "$lib/*": ["lib/*"]
         }
     },
     "include": ["src/**/*"]

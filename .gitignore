@@ -1,4 +1,5 @@
 .env
+.svelte-kit
 .vscode
 *.log
 /volumes
