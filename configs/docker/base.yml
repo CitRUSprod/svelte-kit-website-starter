@@ -1,42 +1,14 @@
 services:
     nginx:
-        image: nginx:1.21.0-alpine
+        image: nginx:1.21.1-alpine
         restart: always
         environment:
             WEBSITE_PORT: ${WEBSITE_PORT}
         volumes:
             - ../nginx:/etc/nginx/templates
-    web-client:
+    web:
         build:
-            context: ../../services/web-client
+            context: ../../services/web
             args:
-                NODE_IMAGE: node:16.2.0-alpine
+                NODE_IMAGE: node:16.8.0-alpine
         restart: always
-        entrypoint: pnpm start
-    api:
-        build:
-            context: ../../services/api
-            args:
-                NODE_IMAGE: node:16.2.0-alpine
-        restart: always
-        environment:
-            WEBSITE_PORT: ${WEBSITE_PORT}
-            MONGO_HOST: mongo
-            MONGO_USERNAME: ${MONGO_USERNAME}
-            MONGO_PASSWORD: ${MONGO_PASSWORD}
-            MONGO_DB_NAME: ${MONGO_DB_NAME}
-            LOCAL_CLIENT_SECRET: ${LOCAL_CLIENT_SECRET}
-            GMAIL_USERNAME: ${GMAIL_USERNAME}
-            GMAIL_PASSWORD: ${GMAIL_PASSWORD}
-            GMAIL_NAME: ${GMAIL_NAME}
-        entrypoint: pnpm start
-    mongo:
-        image: mongo:4.4.6
-        restart: always
-        ports:
-            - ${MONGO_PORT}:27017
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-        volumes:
-            - ../../volumes/mongo:/data/db

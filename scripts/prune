@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 docker rmi -f $(docker images -qf "dangling=true") > /dev/null 2>&1
 

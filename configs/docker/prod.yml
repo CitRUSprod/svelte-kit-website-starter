@@ -6,23 +6,10 @@ services:
         ports:
             - ${WEBSITE_PORT}:${WEBSITE_PORT}
         environment:
-            WEB_CLIENT_HOST: web-client
-            API_HOST: api
+            WEB_HOST: web
         depends_on:
-            - web-client
-    web-client:
+            - web
+    web:
         extends:
             file: ./base.yml
-            service: web-client
-        depends_on:
-            - api
-    api:
-        extends:
-            file: ./base.yml
-            service: api
-        depends_on:
-            - mongo
-    mongo:
-        extends:
-            file: ./base.yml
-            service: mongo
+            service: web

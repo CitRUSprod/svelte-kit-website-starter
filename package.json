@@ -2,31 +2,16 @@
     "name": "svelte-kit-website-template",
     "private": true,
     "scripts": {
-        "prepare": "husky install",
-        "validate": "pnpm validate --parallel",
         "git:commit": "git-cz",
-        "prettier": "prettier --check",
-        "prettier:fix": "pnpm prettier -- --write",
-        "prettier:all": "pnpm prettier -- \"**/*.{html,md,json,yml,yaml,js,cjs,ts,svelte}\" \"!volumes\"",
-        "prettier:fix:all": "pnpm prettier:all -- --write",
-        "stylelint": "stylelint --color",
-        "stylelint:fix": "pnpm stylelint -- --fix",
-        "stylelint:all": "pnpm stylelint -- \"**/*.svelte\" \"!volumes\"",
-        "stylelint:fix:all": "pnpm stylelint:all -- --fix",
+        "validate": "pnpm validate --parallel",
         "eslint": "eslint --color",
         "eslint:fix": "pnpm eslint -- --fix",
-        "eslint:all:scripts": "pnpm eslint -- \"**/*.{js,cjs,ts}\"",
-        "eslint:all:svelte": "pnpm eslint -- \"**/*.svelte\"",
-        "eslint:all": "pnpm eslint:all:scripts && pnpm eslint:all:svelte",
-        "eslint:fix:all": "pnpm eslint:all:scripts -- --fix && pnpm eslint:all:svelte -- --fix",
-        "lint": "pnpm prettier:all && pnpm stylelint:all && pnpm eslint:all",
-        "format": "pnpm prettier:fix:all && pnpm stylelint:fix:all && pnpm eslint:fix:all",
-        "ci": "pnpm validate && pnpm lint"
-    },
-    "lint-staged": {
-        "*.{html,md,json,yml,yaml,js,cjs,ts,svelte}": "pnpm prettier:fix",
-        "*.svelte": "pnpm stylelint:fix",
-        "*.{js,cjs,ts,svelte}": "pnpm eslint:fix"
+        "eslint:all": "pnpm eslint -- \"**/*.{md,json,y?(a)ml,js,ts}\"",
+        "eslint:fix:all": "pnpm eslint:all -- --fix",
+        "lint": "pnpm eslint:all",
+        "format": "pnpm eslint:fix:all",
+        "ci": "pnpm validate && pnpm lint",
+        "prepare": "husky install"
     },
     "config": {
         "commitizen": {
@@ -36,34 +21,36 @@
             "config": "./configs/commits/commitizen.js"
         }
     },
+    "lint-staged": {
+        "*.{md,json,y?(a)ml,js,ts}": "pnpm eslint:fix"
+    },
     "prettier": "./configs/prettier/index.js",
     "eslintConfig": {
-        "extends": "./configs/eslint/index.js"
-    },
-    "stylelint": {
-        "extends": "./configs/stylelint/index.js"
+        "extends": "./configs/eslint/index.js",
+        "ignorePatterns": [
+            "!.travis.yml",
+            "/volumes",
+            "dist",
+            "pnpm-lock.yaml"
+        ]
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.11.0",
-        "@citrus-linting/prettier-config": "0.2.0",
-        "@citrus-linting/stylelint-config": "0.2.0",
-        "@commitlint/cli": "12.1.4",
-        "@typescript-eslint/eslint-plugin": "4.26.0",
-        "@typescript-eslint/parser": "4.26.0",
+        "@citrus-linting/eslint-config": "0.17.1",
+        "@citrus-linting/prettier-config": "0.3.0",
+        "@commitlint/cli": "13.1.0",
+        "@types/eslint": "7.28.0",
+        "@types/prettier": "2.3.2",
+        "@typescript-eslint/eslint-plugin": "4.30.0",
+        "@typescript-eslint/parser": "4.30.0",
+        "any-eslint-parser": "1.0.1",
         "commitizen": "4.2.4",
         "cz-customizable": "6.3.0",
-        "eslint": "7.27.0",
+        "eslint": "7.32.0",
         "eslint-config-prettier": "8.3.0",
-        "eslint-plugin-svelte3": "3.2.0",
-        "husky": "6.0.0",
-        "inquirer": "8.1.0",
-        "lint-staged": "11.0.0",
-        "prettier": "2.3.0",
-        "prettier-plugin-packagejson": "2.2.11",
-        "prettier-plugin-svelte": "2.3.0",
-        "stylelint": "13.13.1",
-        "stylelint-config-prettier": "8.0.2",
-        "svelte": "3.38.2",
-        "typescript": "4.3.2"
+        "eslint-plugin-prettier": "4.0.0",
+        "husky": "7.0.2",
+        "lint-staged": "11.1.2",
+        "prettier": "2.3.2",
+        "typescript": "4.4.2"
     }
 }
