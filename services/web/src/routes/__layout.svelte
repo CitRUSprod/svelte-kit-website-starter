@@ -18,4 +18,9 @@
 
 <style lang="postcss" global>
     @import "tailwindcss/tailwind";
+    @import "overlayscrollbars/css/OverlayScrollbars.min";
+
+    .break-text {
+        word-break: break-word;
+    }
 </style>

@@ -17,6 +17,8 @@
     "dependencies": {
         "@fortawesome/free-solid-svg-icons": "5.15.4",
         "nprogress": "0.2.0",
+        "overlayscrollbars": "1.13.1",
+        "socket.io-client": "4.2.0",
         "svelte-fa": "2.3.3",
         "svelte-local-storage-store": "0.2.4"
     },
@@ -25,6 +27,7 @@
         "@sveltejs/kit": "1.0.0-next.162",
         "@types/node": "16.7.10",
         "@types/nprogress": "0.2.0",
+        "@types/overlayscrollbars": "1.12.1",
         "@types/tailwindcss": "2.2.1",
         "daisyui": "1.14.0",
         "node-fetch": "3.0.0",
@@ -33,7 +36,7 @@
         "postcss-nested": "5.0.6",
         "svelte": "3.42.4",
         "svelte-check": "2.2.5",
-        "svelte-preprocess": "4.8.0",
+        "svelte-preprocess": "4.9.1",
         "tailwindcss": "2.2.9",
         "typescript": "4.4.2"
     }
