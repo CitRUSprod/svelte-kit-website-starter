@@ -6,3 +6,4 @@ services:
         network_mode: host
         environment:
             WEB_HOST: localhost
+            API_HOST: localhost

@@ -12,3 +12,9 @@ services:
             args:
                 NODE_IMAGE: node:16.8.0-alpine
         restart: always
+    api:
+        build:
+            context: ../../services/api
+            args:
+                NODE_IMAGE: node:16.8.0-alpine
+        restart: always
