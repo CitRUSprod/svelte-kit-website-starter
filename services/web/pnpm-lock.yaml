@@ -8,6 +8,7 @@ specifiers:
   '@types/nprogress': 0.2.0
   '@types/overlayscrollbars': 1.12.1
   '@types/tailwindcss': 2.2.1
+  axios: 0.21.4
   daisyui: 1.14.0
   node-fetch: 3.0.0
   nprogress: 0.2.0
@@ -26,6 +27,7 @@ specifiers:
 
 dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.4
+  axios: 0.21.4
   nprogress: 0.2.0
   overlayscrollbars: 1.13.1
   socket.io-client: 4.2.0
@@ -241,6 +243,14 @@ packages:
   /arg/5.0.1:
     resolution: {integrity: sha512-e0hDa9H2Z9AwFkk2qDlwhoMYE4eToKarchkQHovNdLTCYMHZHeRjI71crOh+dio4K6u1IcwubQqo79Ga4CyAQA==}
     dev: true
+
+  /axios/0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+    dependencies:
+      follow-redirects: 1.14.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /backo2/1.0.2:
     resolution: {integrity: sha1-MasayLEpNjRj41s+u2n038+6eUc=}
@@ -539,6 +549,16 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
+
+  /follow-redirects/1.14.3:
+    resolution: {integrity: sha512-3MkHxknWMUtb23apkgz/83fDoe+y+qr0TdgacGIA7bew+QLBo3vdgEN2xEsuXNivpFy4CyDhBBZnNZOtalmenw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /fs-extra/10.0.0:
     resolution: {integrity: sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==}

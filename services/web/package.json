@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@fortawesome/free-solid-svg-icons": "5.15.4",
+        "axios": "0.21.4",
         "nprogress": "0.2.0",
         "overlayscrollbars": "1.13.1",
         "socket.io-client": "4.2.0",

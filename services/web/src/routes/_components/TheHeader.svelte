@@ -3,6 +3,7 @@
     import { Button } from "$lib/components"
 
     import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
+    import { session } from "$app/stores"
     import { theme } from "$lib/stores"
 
     const { dark } = theme
@@ -20,6 +21,11 @@
                 Page {page}
             </Button>
         {/each}
+        {#if $session.user}
+            <Button class="rounded-btn btn-ghost btn-sm" href="/auth/logout">Logout</Button>
+        {:else}
+            <Button class="rounded-btn btn-ghost btn-sm" href="/auth/login">Login</Button>
+        {/if}
         <Button class="rounded-btn btn-ghost btn-sm" on:click={theme.toggle}>
             <FaIcon icon={$dark ? faSun : faMoon} />
         </Button>
