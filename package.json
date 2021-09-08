@@ -6,7 +6,7 @@
         "git:commit": "git-cz",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint -- --fix",
-        "stylelint:all": "pnpm stylelint -- \"**/*.svelte\"",
+        "stylelint:all": "pnpm stylelint -- \"**/*.svelte\" \"!volumes\"",
         "stylelint:fix:all": "pnpm stylelint:all -- --fix",
         "eslint": "eslint --color",
         "eslint:fix": "pnpm eslint -- --fix",

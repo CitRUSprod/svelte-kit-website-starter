@@ -7,3 +7,7 @@ services:
         environment:
             WEB_HOST: localhost
             API_HOST: localhost
+    postgres:
+        extends:
+            file: ./base.yml
+            service: postgres

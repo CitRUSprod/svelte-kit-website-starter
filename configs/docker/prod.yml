@@ -20,3 +20,9 @@ services:
         extends:
             file: ./base.yml
             service: api
+        depends_on:
+            - postgres
+    postgres:
+        extends:
+            file: ./base.yml
+            service: postgres

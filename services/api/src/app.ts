@@ -1,21 +1,22 @@
 import fastify from "fastify"
+import auth from "fastify-auth"
+import jwt from "fastify-jwt"
+import cookie from "fastify-cookie"
 import socketIo from "fastify-socket.io"
+import routes from "$/routes"
 
 const port = 6702
 
+const jwtSecret = process.env.JWT_SECRET!
+
 const app = fastify()
 
-app.register(socketIo)
+app.register(jwt, { secret: jwtSecret }).register(cookie).register(auth).register(socketIo)
 
-app.get("/", (req, reply) => {
-    reply.send({
-        message: "Hello world"
-    })
-})
+app.register(routes)
 
 app.listen(port, "0.0.0.0", (err: Error | undefined) => {
     if (err) throw err
-    console.log(`Running on http://localhost:${port}`)
 
     app.io.on("connection", socket => {
         socket.on("globalChat.join", () => {
@@ -31,4 +32,6 @@ app.listen(port, "0.0.0.0", (err: Error | undefined) => {
             socket.broadcast.to("globalChat").emit("globalChat.receive", data)
         })
     })
+
+    console.log(`Running on http://localhost:${port}`)
 })

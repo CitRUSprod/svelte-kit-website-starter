@@ -12,7 +12,7 @@ const devConfig = {
     define: {
         "process.env.NODE_ENV": JSON.stringify("development")
     },
-    inject: [path.join(__dirname, "source-map-support.js")]
+    inject: [path.join(__dirname, "dotenv.js"), path.join(__dirname, "source-map-support.js")]
 }
 
 estrella.build(defu(devConfig, baseConfig))

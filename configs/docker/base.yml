@@ -18,3 +18,17 @@ services:
             args:
                 NODE_IMAGE: node:16.8.0-alpine
         restart: always
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            JWT_SECRET: ${JWT_SECRET}
+    postgres:
+        image: postgres:13.4-alpine
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        volumes:
+            - ../../volumes/postgres:/var/lib/postgresql/data
