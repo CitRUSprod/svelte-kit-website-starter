@@ -7,8 +7,7 @@
         "start": "node dist/app",
         "validate": "tsc --noEmit",
         "knex": "knex --knexfile configs/knex",
-        "db:migrate:dev": "pnpm knex -- migrate:latest",
-        "db:migrate:prod": "NODE_ENV=production pnpm knex -- migrate:latest"
+        "db:migrate": "pnpm knex -- migrate:latest"
     },
     "devDependencies": {
         "@types/node": "16.7.10",
