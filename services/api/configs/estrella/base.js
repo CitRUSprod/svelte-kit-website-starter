@@ -1,7 +1,7 @@
 const path = require("path")
 const { nodeExternalsPlugin } = require("esbuild-node-externals")
 const { default: cleanPlugin } = require("esbuild-plugin-clean")
-const knexConfig = require("../knex")
+const typeormConfig = require("../typeorm")
 
 /** @type {import("estrella").BuildConfig} */
 const baseConfig = {
@@ -10,7 +10,7 @@ const baseConfig = {
     bundle: true,
     platform: "node",
     define: {
-        "process.env.KNEX_CONFIG": JSON.stringify(JSON.stringify(knexConfig))
+        "process.env.TYPEORM_CONFIG": JSON.stringify(JSON.stringify(typeormConfig))
     },
     plugins: [
         nodeExternalsPlugin(),

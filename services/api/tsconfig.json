@@ -2,7 +2,7 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "target": "es2019",
-        "module": "esnext",
+        "module": "commonjs",
         "strict": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,

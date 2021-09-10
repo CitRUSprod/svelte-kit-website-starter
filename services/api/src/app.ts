@@ -1,17 +1,24 @@
 import fastify from "fastify"
-import auth from "fastify-auth"
+import typeorm from "fastify-typeorm-plugin"
 import jwt from "fastify-jwt"
 import cookie from "fastify-cookie"
+import auth from "fastify-auth"
 import socketIo from "fastify-socket.io"
 import routes from "$/routes"
+import * as entities from "$/db/entities"
 
 const port = 6702
 
+const typeormConfig = JSON.parse(process.env.TYPEORM_CONFIG!)
 const jwtSecret = process.env.JWT_SECRET!
 
 const app = fastify()
 
-app.register(jwt, { secret: jwtSecret }).register(cookie).register(auth).register(socketIo)
+app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), migrations: [] })
+    .register(jwt, { secret: jwtSecret })
+    .register(cookie)
+    .register(auth)
+    .register(socketIo)
 
 app.register(routes)
 

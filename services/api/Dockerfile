@@ -14,4 +14,4 @@ COPY . .
 
 RUN pnpm build
 
-CMD pnpm db:migrate && pnpm start
+CMD pnpm db:migrations:run && pnpm start
