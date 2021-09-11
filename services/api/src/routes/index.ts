@@ -1,16 +1,12 @@
 import { FastifyPluginCallback } from "fastify"
 import authRoute from "./auth"
+import usersRoute from "./users"
 
-const route = ((app, opts, next) => {
+const route = ((app, opts, done) => {
     app.register(authRoute, { prefix: "/auth" })
+    app.register(usersRoute, { prefix: "/users" })
 
-    app.get("/", async (req, reply) => {
-        reply.send({
-            message: "Hello world"
-        })
-    })
-
-    next()
+    done()
 }) as FastifyPluginCallback
 
 export default route
