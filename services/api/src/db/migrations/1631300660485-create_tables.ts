@@ -2,7 +2,7 @@
 
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class CreateUsersTable1631300660485 implements MigrationInterface {
+export class CreateTables1631300660485 implements MigrationInterface {
     public async up(queryRunner: QueryRunner) {
         await queryRunner.createTable(
             new Table({
@@ -30,6 +30,11 @@ export class CreateUsersTable1631300660485 implements MigrationInterface {
                         name: "password",
                         type: "varchar",
                         length: "255"
+                    },
+                    {
+                        name: "createdAt",
+                        type: "timestamp",
+                        default: "now()"
                     }
                 ]
             })

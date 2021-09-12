@@ -7,12 +7,15 @@ export class User {
     @PrimaryGeneratedColumn()
     public id!: number
 
-    @Column("varchar", { length: 64 })
+    @Column("varchar", { unique: true, length: 64 })
     public email!: string
 
-    @Column("varchar", { length: 64 })
+    @Column("varchar", { unique: true, length: 64 })
     public username!: string
 
     @Column("varchar", { length: 255 })
     public password!: string
+
+    @Column("timestamp")
+    public createdAt!: Date
 }
