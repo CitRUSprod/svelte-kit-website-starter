@@ -1,1 +1,1 @@
-export { UserPayload } from "./user-payload"
+export { Payload } from "./payload"

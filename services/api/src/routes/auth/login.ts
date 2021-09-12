@@ -1,6 +1,7 @@
 import { FastifyPluginCallback } from "fastify"
+import { BadRequest } from "http-errors"
 import argon2 from "argon2"
-import { UserPayload } from "$/types"
+import { Payload } from "$/types"
 import { User, RefreshToken } from "$/db/entities"
 
 interface LoginData {
@@ -21,18 +22,18 @@ const route = ((app, opts, done) => {
         const user = await usersRepository.findOne({ email: trimmedEmail })
 
         if (!user) {
-            reply.code(400).send(new Error("User with such email was not found"))
+            reply.send(new BadRequest("User with such email was not found"))
             return
         }
 
         const isCorrectPassword = await argon2.verify(user.password, password)
 
         if (!isCorrectPassword) {
-            reply.code(400).send(new Error("Incorrect password"))
+            reply.send(new BadRequest("Incorrect password"))
             return
         }
 
-        const payload: UserPayload = {
+        const payload: Payload = {
             id: user.id
         }
         const tokens = app.generateTokens(payload)

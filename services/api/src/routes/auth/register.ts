@@ -1,4 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
+import { BadRequest } from "http-errors"
 import argon2 from "argon2"
 import { User } from "$/db/entities"
 
@@ -21,14 +22,14 @@ const route = ((app, opts, done) => {
         const userByEmail = await usersRepository.findOne({ email: trimmedEmail })
 
         if (userByEmail) {
-            reply.code(400).send(new Error("A user with this email already exists"))
+            reply.send(new BadRequest("A user with this email already exists"))
             return
         }
 
         const userByUsername = await usersRepository.findOne({ username: trimmedUsername })
 
         if (userByUsername) {
-            reply.code(400).send(new Error("A user with this username already exists"))
+            reply.send(new BadRequest("A user with this username already exists"))
             return
         }
 

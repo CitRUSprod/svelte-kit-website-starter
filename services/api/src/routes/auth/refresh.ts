@@ -1,5 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
-import { UserPayload } from "$/types"
+import { Unauthorized, InternalServerError } from "http-errors"
 import { RefreshToken } from "$/db/entities"
 
 const route = ((app, opts, done) => {
@@ -8,20 +8,38 @@ const route = ((app, opts, done) => {
     app.get("/", async (req, reply) => {
         const oldRefreshToken = req.cookies.refreshToken
 
-        let payload: UserPayload | undefined
-
-        try {
-            payload = app.verifyToken(oldRefreshToken)
-        } catch (err: unknown) {}
-
-        const refreshToken = await refreshTokensRepository.findOne({ token: oldRefreshToken })
-
-        if (!payload || !refreshToken) {
-            reply.code(401).send(new Error("User is not authorized"))
+        if (!oldRefreshToken) {
+            reply.send(new Unauthorized("Refresh token is not defined"))
             return
         }
 
-        const tokens = app.generateTokens(payload)
+        const [payload, err] = app.getPayload(oldRefreshToken)
+
+        if (err) {
+            switch (err.name) {
+                case "TokenExpiredError": {
+                    reply.send(new Unauthorized("Refresh token expired"))
+                    return
+                }
+
+                case "JsonWebTokenError": {
+                    reply.send(new Unauthorized("Refresh token is invalid"))
+                    return
+                }
+            }
+
+            reply.send(new InternalServerError(`Unexpected error: ${err.message}`))
+            return
+        }
+
+        const refreshToken = await refreshTokensRepository.findOne({ token: oldRefreshToken })
+
+        if (!refreshToken) {
+            reply.send(new Unauthorized("Refresh token expired"))
+            return
+        }
+
+        const tokens = app.generateTokens(payload!)
 
         refreshToken.token = tokens.refresh
         await refreshTokensRepository.save(refreshToken)

@@ -1,4 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
+import { Unauthorized } from "http-errors"
 import { RefreshToken } from "$/db/entities"
 
 const route = ((app, opts, done) => {
@@ -7,7 +8,19 @@ const route = ((app, opts, done) => {
     app.post("/", async (req, reply) => {
         const { refreshToken } = req.cookies
 
-        await refreshTokensRepository.delete({ token: refreshToken })
+        if (!refreshToken) {
+            reply.send(new Unauthorized("Refresh token is not defined"))
+            return
+        }
+
+        const refreshTokenFromDb = await refreshTokensRepository.findOne({ token: refreshToken })
+
+        if (!refreshTokenFromDb) {
+            reply.clearCookie("refreshToken").send(new Unauthorized("Refresh token expired"))
+            return
+        }
+
+        await refreshTokensRepository.remove(refreshTokenFromDb)
 
         reply.clearCookie("refreshToken").send()
     })

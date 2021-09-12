@@ -1,5 +1,6 @@
 import { FastifyPluginCallback } from "fastify"
-import { UserPayload } from "$/types"
+import { InternalServerError } from "http-errors"
+import { Payload } from "$/types"
 import { User } from "$/db/entities"
 import { createUserDto } from "$/dtos"
 
@@ -9,12 +10,12 @@ const route = ((app, opts, done) => {
     app.get("/", {
         preHandler: app.auth([app.isAuthorized]),
         async handler(req, reply) {
-            const { id } = req.user as UserPayload
+            const { id } = req.user as Payload
 
             const user = await usersRepository.findOne(id)
 
             if (!user) {
-                reply.code(400).send(new Error("User not found"))
+                reply.send(new InternalServerError("User not found"))
                 return
             }
 
