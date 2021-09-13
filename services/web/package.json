@@ -17,6 +17,7 @@
     "dependencies": {
         "@fortawesome/free-solid-svg-icons": "5.15.4",
         "axios": "0.21.4",
+        "cookie": "0.4.1",
         "nprogress": "0.2.0",
         "overlayscrollbars": "1.13.1",
         "socket.io-client": "4.2.0",
@@ -26,6 +27,7 @@
     "devDependencies": {
         "@sveltejs/adapter-node": "1.0.0-next.45",
         "@sveltejs/kit": "1.0.0-next.162",
+        "@types/cookie": "0.4.1",
         "@types/node": "16.7.10",
         "@types/nprogress": "0.2.0",
         "@types/overlayscrollbars": "1.12.1",

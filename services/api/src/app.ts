@@ -7,6 +7,7 @@ import socketIo from "fastify-socket.io"
 import { Payload } from "$/types"
 import routes from "$/routes"
 import * as entities from "$/db/entities"
+import { TokenTtl } from "$/enums"
 
 interface Tokens {
     access: string
@@ -29,8 +30,8 @@ const jwtSecret = process.env.JWT_SECRET!
 const app = fastify()
 
 app.decorate("generateTokens", (payload => {
-    const access = app.jwt.sign(payload, { expiresIn: "15m" })
-    const refresh = app.jwt.sign(payload, { expiresIn: "30d" })
+    const access = app.jwt.sign(payload, { expiresIn: TokenTtl.Access * 1000 })
+    const refresh = app.jwt.sign(payload, { expiresIn: TokenTtl.Refresh * 1000 })
     return { access, refresh }
 }) as FastifyInstance["generateTokens"])
     .decorate("getPayload", (token => {

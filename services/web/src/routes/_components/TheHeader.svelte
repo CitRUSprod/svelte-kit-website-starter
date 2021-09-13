@@ -16,6 +16,9 @@
     </div>
     <div class="flex-1 justify-end mx-2 px-2">
         <Button class="rounded-btn btn-ghost btn-sm" href="/chat">Chat</Button>
+        {#if $session.user}
+            <Button class="rounded-btn btn-ghost btn-sm" href="/profile">Profile</Button>
+        {/if}
         {#each pages as page}
             <Button class="rounded-btn btn-ghost btn-sm" href={`/page/${page}`}>
                 Page {page}

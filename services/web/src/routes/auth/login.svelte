@@ -18,8 +18,8 @@
 
     import { goto } from "$app/navigation"
     import { session } from "$app/stores"
-    import { Auth } from "$lib/services"
     import { toasts } from "$lib/stores"
+    import axios from "$lib/utils/axios"
 
     let email = ""
     let password = ""
@@ -31,13 +31,16 @@
 
     $: disabled = !trimmedEmail || !trimmedPassword
 
-    async function onLogin() {
+    async function login() {
         loading = true
 
         try {
-            const { token } = await Auth.login(trimmedEmail, trimmedPassword)
-            const user = await Auth.getUser(token)
-            $session.user = user
+            await axios.post("/api/auth/login", {
+                email: trimmedEmail,
+                password: trimmedPassword
+            })
+            const { data } = await axios.get("/api/auth/user")
+            $session.user = data
             toasts.add("success", "You have successfully logged in")
             goto("/")
         } catch (err: any) {
@@ -49,7 +52,7 @@
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && !disabled) {
-            await onLogin()
+            await login()
             const input = e.target as HTMLInputElement
             input.focus()
         }
@@ -84,7 +87,7 @@
         </div>
         <div class="flex mt-4 justify-between">
             <Button class="btn-ghost" href="/auth/registration">Register</Button>
-            <Button class="btn-primary" {loading} {disabled} on:click={onLogin}>Login</Button>
+            <Button class="btn-primary" {loading} {disabled} on:click={login}>Login</Button>
         </div>
     </div>
 </div>

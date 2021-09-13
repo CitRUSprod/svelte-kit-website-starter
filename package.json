@@ -48,7 +48,7 @@
         ]
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.17.2",
+        "@citrus-linting/eslint-config": "0.17.3",
         "@citrus-linting/prettier-config": "0.3.0",
         "@citrus-linting/stylelint-config": "0.2.0",
         "@commitlint/cli": "13.1.0",

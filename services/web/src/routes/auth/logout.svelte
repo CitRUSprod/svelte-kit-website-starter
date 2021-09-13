@@ -3,11 +3,11 @@
     import { goto } from "$app/navigation"
     import { session } from "$app/stores"
     import { toasts } from "$lib/stores"
-    import { Auth } from "$lib/services"
+    import axios from "$lib/utils/axios"
 
     async function logout() {
         try {
-            await Auth.logout()
+            await axios.post("/api/auth/logout")
             $session.user = null
             goto("/", { replaceState: true })
         } catch (err: any) {

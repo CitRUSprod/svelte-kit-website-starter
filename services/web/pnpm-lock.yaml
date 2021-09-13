@@ -4,11 +4,13 @@ specifiers:
   '@fortawesome/free-solid-svg-icons': 5.15.4
   '@sveltejs/adapter-node': 1.0.0-next.45
   '@sveltejs/kit': 1.0.0-next.162
+  '@types/cookie': 0.4.1
   '@types/node': 16.7.10
   '@types/nprogress': 0.2.0
   '@types/overlayscrollbars': 1.12.1
   '@types/tailwindcss': 2.2.1
   axios: 0.21.4
+  cookie: 0.4.1
   daisyui: 1.14.0
   node-fetch: 3.0.0
   nprogress: 0.2.0
@@ -28,6 +30,7 @@ specifiers:
 dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.4
   axios: 0.21.4
+  cookie: 0.4.1
   nprogress: 0.2.0
   overlayscrollbars: 1.13.1
   socket.io-client: 4.2.0
@@ -37,6 +40,7 @@ dependencies:
 devDependencies:
   '@sveltejs/adapter-node': 1.0.0-next.45
   '@sveltejs/kit': 1.0.0-next.162_svelte@3.42.4
+  '@types/cookie': 0.4.1
   '@types/node': 16.7.10
   '@types/nprogress': 0.2.0
   '@types/overlayscrollbars': 1.12.1
@@ -168,6 +172,10 @@ packages:
   /@types/component-emitter/1.2.10:
     resolution: {integrity: sha512-bsjleuRKWmGqajMerkzox19aGbscQX5rmmvvXl3wlIp5gMG1HgkiwPxsN5p070fBDKTNSPgojVbuY1+HWMbFhg==}
     dev: false
+
+  /@types/cookie/0.4.1:
+    resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
+    dev: true
 
   /@types/node/16.7.10:
     resolution: {integrity: sha512-S63Dlv4zIPb8x6MMTgDq5WWRJQe56iBEY0O3SOFA9JrRienkOVDXSXBjjJw6HTNQYSE2JI6GMCR6LVbIMHJVvA==}
@@ -399,6 +407,11 @@ packages:
   /concat-map/0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
+
+  /cookie/0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}
+    engines: {node: '>= 0.6'}
+    dev: false
 
   /cosmiconfig/7.0.1:
     resolution: {integrity: sha512-a1YWNUV2HwGimB7dU2s1wUMurNKjpx60HxBB6xUM8Re+2s1g1IIfJvFR0/iCF+XHdE0GMTKTuLR32UQff4TEyQ==}

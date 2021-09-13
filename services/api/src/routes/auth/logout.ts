@@ -16,13 +16,16 @@ const route = ((app, opts, done) => {
         const refreshTokenFromDb = await refreshTokensRepository.findOne({ token: refreshToken })
 
         if (!refreshTokenFromDb) {
-            reply.clearCookie("refreshToken").send(new Unauthorized("Refresh token expired"))
+            reply
+                .clearCookie("accessToken")
+                .clearCookie("refreshToken")
+                .send(new Unauthorized("Refresh token expired"))
             return
         }
 
         await refreshTokensRepository.remove(refreshTokenFromDb)
 
-        reply.clearCookie("refreshToken").send()
+        reply.clearCookie("accessToken").clearCookie("refreshToken").send()
     })
 
     done()

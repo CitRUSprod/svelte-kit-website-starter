@@ -2,6 +2,7 @@ import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
 import argon2 from "argon2"
 import { User, RefreshToken } from "$/db/entities"
+import { TokenTtl } from "$/enums"
 
 interface LoginData {
     email: string
@@ -56,12 +57,16 @@ const route = ((app, opts, done) => {
             await refreshTokensRepository.save(refreshToken)
 
             reply
+                .setCookie("accessToken", tokens.access, {
+                    path: "/",
+                    maxAge: TokenTtl.Access
+                })
                 .setCookie("refreshToken", tokens.refresh, {
                     path: "/",
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
+                    maxAge: TokenTtl.Refresh,
                     httpOnly: true
                 })
-                .send({ token: tokens.access })
+                .send()
         }
     })
 

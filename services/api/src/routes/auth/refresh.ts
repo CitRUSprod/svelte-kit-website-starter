@@ -1,6 +1,7 @@
 import { FastifyPluginCallback } from "fastify"
 import { Unauthorized, InternalServerError } from "http-errors"
 import { RefreshToken } from "$/db/entities"
+import { TokenTtl } from "$/enums"
 
 const route = ((app, opts, done) => {
     const refreshTokensRepository = app.orm.getRepository(RefreshToken)
@@ -45,12 +46,16 @@ const route = ((app, opts, done) => {
         await refreshTokensRepository.save(refreshToken)
 
         reply
+            .setCookie("accessToken", tokens.access, {
+                path: "/",
+                maxAge: TokenTtl.Access
+            })
             .setCookie("refreshToken", tokens.refresh, {
                 path: "/",
-                maxAge: 30 * 24 * 60 * 60 * 1000,
+                maxAge: TokenTtl.Refresh,
                 httpOnly: true
             })
-            .send({ token: tokens.access })
+            .send()
     })
 
     done()

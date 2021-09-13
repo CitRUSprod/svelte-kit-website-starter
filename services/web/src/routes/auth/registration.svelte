@@ -17,8 +17,8 @@
     import { Button } from "$lib/components"
 
     import { goto } from "$app/navigation"
-    import { Auth } from "$lib/services"
     import { toasts } from "$lib/stores"
+    import axios from "$lib/utils/axios"
 
     let email = ""
     let username = ""
@@ -39,11 +39,15 @@
         !trimmedPasswordConfirmation ||
         trimmedPassword !== trimmedPasswordConfirmation
 
-    async function onRegister() {
+    async function register() {
         loading = true
 
         try {
-            await Auth.register(trimmedEmail, trimmedUsername, trimmedPassword)
+            await axios.post("/api/auth/registration", {
+                email: trimmedEmail,
+                username: trimmedUsername,
+                password: trimmedPassword
+            })
             toasts.add("success", "You have successfully registered")
             goto("/auth/login")
         } catch (err: any) {
@@ -55,7 +59,7 @@
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && !disabled) {
-            await onRegister()
+            await register()
             const input = e.target as HTMLInputElement
             input.focus()
         }
@@ -109,7 +113,7 @@
         </div>
         <div class="flex mt-4 justify-between">
             <Button class="btn-ghost" href="/auth/login">Login</Button>
-            <Button class="btn-primary" {loading} {disabled} on:click={onRegister}>Register</Button>
+            <Button class="btn-primary" {loading} {disabled} on:click={register}>Register</Button>
         </div>
     </div>
 </div>

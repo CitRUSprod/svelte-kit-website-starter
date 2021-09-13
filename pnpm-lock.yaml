@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@citrus-linting/eslint-config': 0.17.2
+  '@citrus-linting/eslint-config': 0.17.3
   '@citrus-linting/prettier-config': 0.3.0
   '@citrus-linting/stylelint-config': 0.2.0
   '@commitlint/cli': 13.1.0
@@ -28,7 +28,7 @@ specifiers:
   typescript: 4.4.2
 
 devDependencies:
-  '@citrus-linting/eslint-config': 0.17.2
+  '@citrus-linting/eslint-config': 0.17.3
   '@citrus-linting/prettier-config': 0.3.0
   '@citrus-linting/stylelint-config': 0.2.0
   '@commitlint/cli': 13.1.0
@@ -286,8 +286,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@citrus-linting/eslint-config/0.17.2:
-    resolution: {integrity: sha512-l2IVK7/f1gTJMgVI8t8qEmHAHCXN+mq8rGfdqQwVvA7FhkkV1mGoTqB/2gthbGLoKWtGM7q8dZRw9KfBxjwFqw==}
+  /@citrus-linting/eslint-config/0.17.3:
+    resolution: {integrity: sha512-5Oxx14382xWIhVuRWi0q0NEK0zYrqv1I66FB3f+jLBBjPu0t2UeLZEOtaWytH8A+c4erjWyD1C+r4S2XSvmJ5w==}
     dev: true
 
   /@citrus-linting/prettier-config/0.3.0:
