@@ -3,7 +3,7 @@ import { Unauthorized, InternalServerError } from "http-errors"
 import { RefreshToken } from "$/db/entities"
 import { TokenTtl } from "$/enums"
 
-const route = ((app, opts, done) => {
+const route: FastifyPluginCallback = (app, opts, done) => {
     const refreshTokensRepository = app.orm.getRepository(RefreshToken)
 
     app.post("/", async (req, reply) => {
@@ -59,6 +59,6 @@ const route = ((app, opts, done) => {
     })
 
     done()
-}) as FastifyPluginCallback
+}
 
 export default route

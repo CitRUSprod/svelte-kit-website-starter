@@ -4,7 +4,7 @@ import { Payload } from "$/types"
 import { User } from "$/db/entities"
 import { createUserDto } from "$/dtos"
 
-const route = ((app, opts, done) => {
+const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
 
     app.get("/", {
@@ -24,6 +24,6 @@ const route = ((app, opts, done) => {
     })
 
     done()
-}) as FastifyPluginCallback
+}
 
 export default route

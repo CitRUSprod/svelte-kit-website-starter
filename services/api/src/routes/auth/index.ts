@@ -5,7 +5,7 @@ import logoutRoute from "./logout"
 import refreshRoute from "./refresh"
 import userRoute from "./user"
 
-const route = ((app, opts, done) => {
+const route: FastifyPluginCallback = (app, opts, done) => {
     app.register(registrationRoute, { prefix: "/registration" })
         .register(loginRoute, { prefix: "/login" })
         .register(logoutRoute, { prefix: "/logout" })
@@ -13,6 +13,6 @@ const route = ((app, opts, done) => {
         .register(userRoute, { prefix: "/user" })
 
     done()
-}) as FastifyPluginCallback
+}
 
 export default route

@@ -29,20 +29,20 @@ const jwtSecret = process.env.JWT_SECRET!
 
 const app = fastify()
 
-app.decorate("generateTokens", (payload => {
+app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
     const access = app.jwt.sign(payload, { expiresIn: TokenTtl.Access })
     const refresh = app.jwt.sign(payload, { expiresIn: TokenTtl.Refresh })
     return { access, refresh }
-}) as FastifyInstance["generateTokens"])
-    .decorate("getPayload", (token => {
+})
+    .decorate<FastifyInstance["getPayload"]>("getPayload", token => {
         try {
             const { iat, exp, ...payload } = app.jwt.verify(token)
             return [payload as Payload, null]
         } catch (err: any) {
             return [null, err]
         }
-    }) as FastifyInstance["getPayload"])
-    .decorate("isAuthorized", (async req => req.jwtVerify()) as FastifyAuthFunction)
+    })
+    .decorate<FastifyAuthFunction>("isAuthorized", async req => req.jwtVerify())
 
 app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), migrations: [] })
     .register(jwt, { secret: jwtSecret })

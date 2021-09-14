@@ -9,7 +9,7 @@ interface RegistrationData {
     password: string
 }
 
-const route = ((app, opts, done) => {
+const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -60,6 +60,6 @@ const route = ((app, opts, done) => {
     })
 
     done()
-}) as FastifyPluginCallback
+}
 
 export default route

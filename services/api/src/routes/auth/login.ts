@@ -9,7 +9,7 @@ interface LoginData {
     password: string
 }
 
-const route = ((app, opts, done) => {
+const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
     const refreshTokensRepository = app.orm.getRepository(RefreshToken)
 
@@ -71,6 +71,6 @@ const route = ((app, opts, done) => {
     })
 
     done()
-}) as FastifyPluginCallback
+}
 
 export default route
