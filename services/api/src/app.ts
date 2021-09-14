@@ -30,8 +30,8 @@ const jwtSecret = process.env.JWT_SECRET!
 const app = fastify()
 
 app.decorate("generateTokens", (payload => {
-    const access = app.jwt.sign(payload, { expiresIn: TokenTtl.Access * 1000 })
-    const refresh = app.jwt.sign(payload, { expiresIn: TokenTtl.Refresh * 1000 })
+    const access = app.jwt.sign(payload, { expiresIn: TokenTtl.Access })
+    const refresh = app.jwt.sign(payload, { expiresIn: TokenTtl.Refresh })
     return { access, refresh }
 }) as FastifyInstance["generateTokens"])
     .decorate("getPayload", (token => {

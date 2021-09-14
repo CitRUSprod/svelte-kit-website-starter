@@ -6,7 +6,7 @@ import { TokenTtl } from "$/enums"
 const route = ((app, opts, done) => {
     const refreshTokensRepository = app.orm.getRepository(RefreshToken)
 
-    app.get("/", async (req, reply) => {
+    app.post("/", async (req, reply) => {
         const oldRefreshToken = req.cookies.refreshToken
 
         if (!oldRefreshToken) {
