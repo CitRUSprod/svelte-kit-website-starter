@@ -3,7 +3,7 @@
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
-        if (session.user) {
+        if (!session.user) {
             return {
                 status: 302,
                 redirect: "/"
@@ -18,7 +18,7 @@
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import axios from "$lib/utils/axios"
+    import { axios } from "$lib/utils"
 
     async function logout() {
         try {

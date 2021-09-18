@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
     import { Role } from "$lib/enums"
-    import { hasAccess } from "$lib/utils"
+    import { axios, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
 
-    export const load: Load<{ session: Session }> = async ({ session }) => {
+    export const load: Load<{ session: Session }> = ({ session }) => {
         if (!hasAccess(session.user, Role.Admin)) {
             return {
                 status: 302,
@@ -18,7 +18,6 @@
 </script>
 
 <script lang="ts">
-    import axios from "$lib/utils/axios"
     import { browser } from "$app/env"
 
     let users: Array<User> = []

@@ -1,5 +1,5 @@
 import baseAxios from "axios"
-import { parse as cookieParse } from "cookie"
+import { parse as parseCookie } from "cookie"
 import { browser, dev } from "$app/env"
 
 let baseUrl: string | undefined
@@ -8,20 +8,43 @@ if (!browser) {
     baseUrl = `http://${dev ? "localhost" : "nginx"}:6700`
 }
 
-const axios = baseAxios.create()
+export const axios = baseAxios.create({ baseURL: baseUrl })
+
+function getCookieValues(cookieArray: Array<string>) {
+    return cookieArray.map(c => c.split("; ")[0])
+}
+
+function mergeCookie(...cookieArrays: Array<Array<string> | undefined>) {
+    const cookieArray: Array<string> = []
+
+    for (const arr of cookieArrays) {
+        if (arr) {
+            cookieArray.push(...arr)
+        }
+    }
+
+    const obj: Record<string, string> = {}
+
+    for (const cookie of cookieArray) {
+        const name = cookie.split("=")[0]
+        obj[name] = cookie
+    }
+
+    const result = Object.values(obj)
+
+    return result
+}
 
 axios.interceptors.request.use(config => {
-    config.baseURL = baseUrl
-
     let accessToken: string | undefined
 
     if (browser) {
-        accessToken = cookieParse(document.cookie).accessToken
+        accessToken = parseCookie(document.cookie).accessToken
     } else {
         const { cookie } = config.headers
 
         if (cookie) {
-            accessToken = cookieParse(cookie).accessToken
+            accessToken = parseCookie(cookie).accessToken
         }
     }
 
@@ -39,8 +62,6 @@ axios.interceptors.response.use(
             error.config.isRetry = true
 
             try {
-                const cookieArray: Array<string> = []
-
                 const { headers } = await baseAxios.post(
                     "/api/auth/refresh",
                     {},
@@ -49,17 +70,17 @@ axios.interceptors.response.use(
                         headers: error.config.headers
                     }
                 )
-                cookieArray.push(...(headers["set-cookie"] ?? []))
+                let cookieArray: Array<string> = headers["set-cookie"] ?? []
 
-                const cookie = cookieArray.map(c => c.split("; ")[0]).join("; ")
+                const cookie = getCookieValues(cookieArray)
                 const res = await axios.request({
                     ...error.config,
                     headers: {
                         ...error.config.headers,
-                        cookie: cookie || undefined
+                        cookie: cookie.length ? cookie.join("; ") : undefined
                     }
                 })
-                cookieArray.push(...(res.headers["set-cookie"] ?? []))
+                cookieArray = mergeCookie(cookieArray, res.headers["set-cookie"])
 
                 return {
                     ...res,
@@ -74,5 +95,3 @@ axios.interceptors.response.use(
         throw error
     }
 )
-
-export default axios

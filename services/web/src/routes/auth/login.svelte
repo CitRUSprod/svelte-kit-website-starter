@@ -19,7 +19,7 @@
 
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import axios from "$lib/utils/axios"
+    import { axios } from "$lib/utils"
 
     let email = ""
     let password = ""
