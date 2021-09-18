@@ -4,10 +4,11 @@ import jwt from "fastify-jwt"
 import cookie from "fastify-cookie"
 import auth, { FastifyAuthFunction } from "fastify-auth"
 import socketIo from "fastify-socket.io"
+import { MethodNotAllowed } from "http-errors"
 import { Payload } from "$/types"
 import routes from "$/routes"
 import * as entities from "$/db/entities"
-import { TokenTtl } from "$/enums"
+import { TokenTtl, Role } from "$/enums"
 
 interface Tokens {
     access: string
@@ -19,6 +20,7 @@ declare module "fastify" {
         generateTokens(payload: Payload): Tokens
         getPayload(token: string): [Payload, null] | [null, Error]
         isAuthorized: FastifyAuthFunction
+        hasAccess(...allowedRoles: Array<Role>): FastifyAuthFunction
     }
 }
 
@@ -43,6 +45,26 @@ app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
         }
     })
     .decorate<FastifyAuthFunction>("isAuthorized", async req => req.jwtVerify())
+    .decorate<FastifyInstance["hasAccess"]>(
+        "hasAccess",
+        (...allowedRoles) =>
+            async (req, reply, done) => {
+                const noAccessError = new MethodNotAllowed("No access")
+
+                const usersRepository = app.orm.getRepository(entities.User)
+
+                const { id } = req.user as Payload
+                const user = await usersRepository.findOne(id)
+
+                if (!user) {
+                    done(noAccessError)
+                    return
+                }
+
+                const allowed = allowedRoles.includes(user.role)
+                done(allowed ? undefined : noAccessError)
+            }
+    )
 
 app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), migrations: [] })
     .register(jwt, { secret: jwtSecret })

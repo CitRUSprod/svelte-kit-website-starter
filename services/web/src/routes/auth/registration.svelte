@@ -1,7 +1,8 @@
 <script lang="ts" context="module">
     import type { Load } from "@sveltejs/kit"
+    import type { Session } from "$lib/types"
 
-    export const load: Load = ({ session }) => {
+    export const load: Load<{ session: Session }> = ({ session }) => {
         if (session.user) {
             return {
                 status: 302,

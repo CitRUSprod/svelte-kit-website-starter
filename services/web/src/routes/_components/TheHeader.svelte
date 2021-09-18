@@ -3,8 +3,9 @@
     import { Button } from "$lib/components"
 
     import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
-    import { session } from "$app/stores"
-    import { theme } from "$lib/stores"
+    import { session, theme } from "$lib/stores"
+    import { Role } from "$lib/enums"
+    import { hasAccess } from "$lib/utils"
 
     const { dark } = theme
     const pages = [1, 2, 3, 4]
@@ -18,6 +19,9 @@
         <Button class="rounded-btn btn-ghost btn-sm" href="/chat">Chat</Button>
         {#if $session.user}
             <Button class="rounded-btn btn-ghost btn-sm" href="/profile">Profile</Button>
+        {/if}
+        {#if hasAccess($session.user, Role.Admin)}
+            <Button class="rounded-btn btn-ghost btn-sm" href="/users">Users</Button>
         {/if}
         {#each pages as page}
             <Button class="rounded-btn btn-ghost btn-sm" href={`/page/${page}`}>

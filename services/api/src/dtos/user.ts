@@ -5,6 +5,7 @@ export function createUserDto(user: User) {
         id: user.id,
         email: user.email,
         username: user.username,
+        role: user.role,
         createdAt: user.createdAt
     }
 }

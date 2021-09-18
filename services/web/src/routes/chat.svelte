@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { default as createScrollbar } from "overlayscrollbars"
+    import createScrollbar from "overlayscrollbars"
     import { onMount, onDestroy, tick } from "svelte"
     import { browser } from "$app/env"
     import socket from "$lib/socket"

@@ -32,6 +32,12 @@ export class CreateTables1631300660485 implements MigrationInterface {
                         length: "255"
                     },
                     {
+                        name: "role",
+                        type: "varchar",
+                        length: "16",
+                        default: "'user'"
+                    },
+                    {
                         name: "createdAt",
                         type: "timestamp",
                         default: "now()"

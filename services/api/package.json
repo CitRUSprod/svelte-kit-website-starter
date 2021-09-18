@@ -6,7 +6,7 @@
         "build": "node configs/estrella/prod",
         "start": "node dist/app",
         "validate": "tsc --noEmit",
-        "typeorm": "ts-node -T node_modules/typeorm/cli.js -f configs/typeorm/index.js",
+        "typeorm": "ts-node -r tsconfig-paths/register -T node_modules/typeorm/cli.js -f configs/typeorm/index.js",
         "db:migrations:run": "pnpm typeorm -- migration:run",
         "db:migrations:revert": "pnpm typeorm -- migration:revert"
     },
@@ -20,6 +20,7 @@
         "estrella": "1.4.1",
         "source-map-support": "0.5.19",
         "ts-node": "10.2.1",
+        "tsconfig-paths": "3.11.0",
         "typescript": "4.4.2"
     },
     "dependencies": {

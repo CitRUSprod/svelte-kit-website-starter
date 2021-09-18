@@ -1,7 +1,8 @@
 <script lang="ts" context="module">
     import type { Load } from "@sveltejs/kit"
+    import type { Session } from "$lib/types"
 
-    export const load: Load = ({ session }) => {
+    export const load: Load<{ session: Session }> = ({ session }) => {
         if (session.user) {
             return {
                 status: 302,
@@ -17,8 +18,7 @@
     import { Button } from "$lib/components"
 
     import { goto } from "$app/navigation"
-    import { session } from "$app/stores"
-    import { toasts } from "$lib/stores"
+    import { session, toasts } from "$lib/stores"
     import axios from "$lib/utils/axios"
 
     let email = ""

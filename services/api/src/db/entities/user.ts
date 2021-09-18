@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Role } from "$/enums"
 
 @Entity("users")
 export class User {
@@ -15,6 +16,9 @@ export class User {
 
     @Column("varchar", { length: 255 })
     public password!: string
+
+    @Column("varchar", { length: 16 })
+    public role!: Role
 
     @Column("timestamp")
     public createdAt!: Date
