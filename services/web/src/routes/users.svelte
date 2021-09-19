@@ -1,11 +1,12 @@
 <script lang="ts" context="module">
+    import { browser } from "$app/env"
     import { Role } from "$lib/enums"
     import { axios, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
 
-    export const load: Load<{ session: Session }> = ({ session }) => {
+    export const load: Load<{ session: Session }> = async ({ session }) => {
         if (!hasAccess(session.user, Role.Admin)) {
             return {
                 status: 302,
@@ -13,23 +14,17 @@
             }
         }
 
-        return {}
+        if (browser) {
+            const { data } = await axios.get<Array<User>>("/api/users")
+            return { props: { users: data } }
+        } else {
+            return {}
+        }
     }
 </script>
 
 <script lang="ts">
-    import { browser } from "$app/env"
-
-    let users: Array<User> = []
-
-    async function updateUsers() {
-        const { data } = await axios.get<Array<User>>("/api/users")
-        users = data
-    }
-
-    if (browser) {
-        updateUsers()
-    }
+    export let users: Array<User> = []
 </script>
 
 <svelte:head>

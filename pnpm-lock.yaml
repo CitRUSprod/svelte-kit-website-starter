@@ -3,7 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@citrus-linting/eslint-config': 0.17.3
   '@citrus-linting/prettier-config': 0.3.0
-  '@citrus-linting/stylelint-config': 0.2.0
+  '@citrus-linting/stylelint-config': 0.3.0
   '@commitlint/cli': 13.1.0
   '@ota-meshi/eslint-plugin-svelte': 0.9.0
   '@types/eslint': 7.28.0
@@ -30,7 +30,7 @@ specifiers:
 devDependencies:
   '@citrus-linting/eslint-config': 0.17.3
   '@citrus-linting/prettier-config': 0.3.0
-  '@citrus-linting/stylelint-config': 0.2.0
+  '@citrus-linting/stylelint-config': 0.3.0
   '@commitlint/cli': 13.1.0
   '@ota-meshi/eslint-plugin-svelte': 0.9.0_eslint@7.32.0+svelte@3.42.4
   '@types/eslint': 7.28.0
@@ -294,8 +294,8 @@ packages:
     resolution: {integrity: sha512-X5sgIN4j3c2HsmL5AEN/perd9uGR/CsAPwJNqW/j/tTWdGAK/GSQnGTAbVbKADOR0YdkGoe73k5HLRTM/v6Q7A==}
     dev: true
 
-  /@citrus-linting/stylelint-config/0.2.0:
-    resolution: {integrity: sha512-vVOb7ObJ79Cswfq7fzuQbA1OMsPUkYpGsk8g+7/lrVArNfrBP96c87y9/GreOgY/bhGpokF/K86s0ICBxTiuhg==}
+  /@citrus-linting/stylelint-config/0.3.0:
+    resolution: {integrity: sha512-2bP6D34Q4uefa9Gy0ksUPJiMUe6DXQLImeWqgznUyQo8s2CnAxfev7h00cxKynPB2ak3mxD78cD7GnR6Ja8VgQ==}
     dev: true
 
   /@commitlint/cli/13.1.0:
