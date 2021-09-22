@@ -17,6 +17,10 @@
     $: watchForChanging(!!$navigating)
 </script>
 
+{#if false}
+    <div />
+{/if}
+
 <style lang="postcss" global>
     #nprogress {
         @apply pointer-events-none;
