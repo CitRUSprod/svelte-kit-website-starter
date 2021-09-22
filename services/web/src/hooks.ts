@@ -1,12 +1,11 @@
-import { parse as parseCookie } from "cookie"
-import { axios } from "$lib/utils"
+import { cookies, axios } from "$lib/utils"
 
 import type { Handle, GetSession } from "@sveltejs/kit"
 
 export const handle: Handle = async ({ request, resolve }) => {
     const cookie = (request.headers.cookie as string | undefined) ?? ""
-    const { accessToken, refreshToken } = parseCookie(cookie)
-    const cookieArray: Array<string> = []
+    const { accessToken, refreshToken } = cookies.parse(cookie)
+    let cookieArray: Array<string> = []
 
     if (refreshToken) {
         try {
@@ -18,12 +17,15 @@ export const handle: Handle = async ({ request, resolve }) => {
             })
 
             request.locals.user = data
-            cookieArray.push(...(headers["set-cookie"] ?? []))
+
+            if (headers["set-cookie"]) {
+                cookieArray.push(...headers["set-cookie"])
+            }
         } catch (err: unknown) {}
     }
 
     const res = await resolve(request)
-    cookieArray.push(...((res.headers["set-cookie"] as Array<string> | undefined) ?? []))
+    cookieArray = cookies.merge(cookieArray, res.headers["set-cookie"] as Array<string> | undefined)
 
     return {
         ...res,

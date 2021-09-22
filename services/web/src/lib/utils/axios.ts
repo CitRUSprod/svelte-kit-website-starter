@@ -1,5 +1,5 @@
 import baseAxios from "axios"
-import { parse as parseCookie } from "cookie"
+import { cookies } from "$lib/utils"
 import { browser, dev } from "$app/env"
 
 let baseUrl: string | undefined
@@ -10,41 +10,16 @@ if (!browser) {
 
 export const axios = baseAxios.create({ baseURL: baseUrl })
 
-function getCookieValues(cookieArray: Array<string>) {
-    return cookieArray.map(c => c.split("; ")[0])
-}
-
-function mergeCookie(...cookieArrays: Array<Array<string> | undefined>) {
-    const cookieArray: Array<string> = []
-
-    for (const arr of cookieArrays) {
-        if (arr) {
-            cookieArray.push(...arr)
-        }
-    }
-
-    const obj: Record<string, string> = {}
-
-    for (const cookie of cookieArray) {
-        const name = cookie.split("=")[0]
-        obj[name] = cookie
-    }
-
-    const result = Object.values(obj)
-
-    return result
-}
-
 axios.interceptors.request.use(config => {
     let accessToken: string | undefined
 
     if (browser) {
-        accessToken = parseCookie(document.cookie).accessToken
+        accessToken = cookies.parse(document.cookie).accessToken
     } else {
         const { cookie } = config.headers
 
         if (cookie) {
-            accessToken = parseCookie(cookie).accessToken
+            accessToken = cookies.parse(cookie).accessToken
         }
     }
 
@@ -72,7 +47,7 @@ axios.interceptors.response.use(
                 )
                 let cookieArray: Array<string> = headers["set-cookie"] ?? []
 
-                const cookie = getCookieValues(cookieArray)
+                const cookie = cookies.getKeyValuePairs(cookieArray)
                 const res = await axios.request({
                     ...error.config,
                     headers: {
@@ -80,7 +55,7 @@ axios.interceptors.response.use(
                         cookie: cookie.length ? cookie.join("; ") : undefined
                     }
                 })
-                cookieArray = mergeCookie(cookieArray, res.headers["set-cookie"])
+                cookieArray = cookies.merge(cookieArray, res.headers["set-cookie"])
 
                 return {
                     ...res,
