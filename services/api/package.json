@@ -34,6 +34,7 @@
         "http-errors": "1.8.0",
         "pg": "8.7.1",
         "reflect-metadata": "0.1.13",
+        "socketio-jwt-auth": "0.2.1",
         "typeorm": "0.2.37"
     }
 }

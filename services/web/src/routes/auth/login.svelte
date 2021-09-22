@@ -19,7 +19,7 @@
 
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import { axios } from "$lib/utils"
+    import { axios, socket } from "$lib/utils"
 
     let email = ""
     let password = ""
@@ -41,6 +41,7 @@
             })
             const { data } = await axios.get("/api/auth/user")
             $session.user = data
+            socket.disconnect().connect()
             toasts.add("success", "You have successfully logged in")
             goto("/")
         } catch (err: any) {

@@ -6,6 +6,6 @@ export function createUserDto(user: User) {
         email: user.email,
         username: user.username,
         role: user.role,
-        createdAt: user.createdAt
+        createdAt: user.createdAt.toJSON()
     }
 }

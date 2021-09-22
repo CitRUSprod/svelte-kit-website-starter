@@ -7,6 +7,7 @@ import socketIo from "fastify-socket.io"
 import { MethodNotAllowed } from "http-errors"
 import { Payload } from "$/types"
 import routes from "$/routes"
+import { init as initSockets } from "$/sockets"
 import * as entities from "$/db/entities"
 import { TokenTtl, Role } from "$/enums"
 
@@ -77,20 +78,7 @@ app.register(routes)
 app.listen(port, "0.0.0.0", (err: Error | undefined) => {
     if (err) throw err
 
-    app.io.on("connection", socket => {
-        socket.on("globalChat.join", () => {
-            socket.join("globalChat")
-        })
-
-        socket.on("globalChat.leave", () => {
-            socket.leave("globalChat")
-        })
-
-        socket.on("globalChat.send", (data: any) => {
-            socket.emit("globalChat.receive", data)
-            socket.broadcast.to("globalChat").emit("globalChat.receive", data)
-        })
-    })
+    initSockets(app, jwtSecret)
 
     console.log(`Running on http://localhost:${port}`)
 })

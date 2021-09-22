@@ -1,37 +1,32 @@
 <script lang="ts">
     import createScrollbar from "overlayscrollbars"
     import { onMount, onDestroy, tick } from "svelte"
-    import { browser } from "$app/env"
-    import socket from "$lib/socket"
+    import { session } from "$lib/stores"
+    import { socket } from "$lib/utils"
 
     import type OverlayScrollbar from "overlayscrollbars"
+    import type { RawChatMessage, ChatMessage } from "$lib/types"
 
-    interface Message {
-        text: string
-    }
-
-    let messages: Array<Message> = []
+    let messages: Array<ChatMessage> = []
     let messagesWrapper: HTMLElement
     let scrollbar: OverlayScrollbar | undefined
 
     onMount(() => {
-        if (browser) {
-            socket.emit("globalChat.join").on("globalChat.receive", (msg: Message) => {
-                messages.push(msg)
-                messages = messages
-            })
+        socket.emit("global-chat:join").on("global-chat:receive", (msg: ChatMessage) => {
+            messages.push(msg)
+            messages = messages
+        })
 
-            scrollbar = createScrollbar(messagesWrapper, {
-                scrollbars: {
-                    autoHide: "move"
-                }
-            })
-        }
+        scrollbar = createScrollbar(messagesWrapper, {
+            scrollbars: {
+                autoHide: "move"
+            }
+        })
     })
 
     onDestroy(() => {
         scrollbar?.destroy()
-        socket.off("globalChat.receive").emit("globalChat.leave")
+        socket.off("global-chat:receive").emit("global-chat:leave")
     })
 
     async function scrollDown() {
@@ -54,9 +49,11 @@
 
     function sendMessage() {
         if (trimmedMessageText) {
-            socket.emit("globalChat.send", {
-                text: messageText
-            })
+            const msg: RawChatMessage = {
+                text: trimmedMessageText
+            }
+
+            socket.emit("global-chat:send", msg)
             messageText = ""
         }
     }
@@ -82,7 +79,7 @@
                 <div class="h-full w-full">
                     {#each messages as message}
                         <div class="py-1 break-text">
-                            <b>Anonymous:</b>
+                            <b>{message.user.username}:</b>
                             <span>{message.text}</span>
                         </div>
                     {:else}
@@ -93,13 +90,15 @@
                 </div>
             </div>
         </div>
-        <div class="pt-4">
-            <input
-                class="input input-bordered w-full"
-                placeholder="Message"
-                bind:value={messageText}
-                on:keypress={onEnter}
-            />
-        </div>
+        {#if $session.user}
+            <div class="pt-4">
+                <input
+                    class="input input-bordered w-full"
+                    placeholder="Message"
+                    bind:value={messageText}
+                    on:keypress={onEnter}
+                />
+            </div>
+        {/if}
     </div>
 </div>

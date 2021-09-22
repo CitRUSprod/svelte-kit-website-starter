@@ -18,6 +18,7 @@ specifiers:
   http-errors: 1.8.0
   pg: 8.7.1
   reflect-metadata: 0.1.13
+  socketio-jwt-auth: 0.2.1
   source-map-support: 0.5.19
   ts-node: 10.2.1
   tsconfig-paths: 3.11.0
@@ -35,6 +36,7 @@ dependencies:
   http-errors: 1.8.0
   pg: 8.7.1
   reflect-metadata: 0.1.13
+  socketio-jwt-auth: 0.2.1
   typeorm: 0.2.37_pg@8.7.1
 
 devDependencies:
@@ -1050,6 +1052,11 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /jwt-simple/0.5.6:
+    resolution: {integrity: sha512-40aUybvhH9t2h71ncA1/1SbtTNCVZHgsTsTgqPUxGWDmUDrXyDf2wMNQKEbdBjbf4AI+fQhbECNTV6lWxQKUzg==}
+    engines: {node: '>= 0.4.0'}
+    dev: false
+
   /light-my-request/4.4.4:
     resolution: {integrity: sha512-nxYLB+Lke3wGQ55HQIo/CjSS18xGyHRF0y/u7YxEwp1YsqQTxObteBXYHZY3ELSvYmqy0pRLTWbI5//zRYTXlg==}
     dependencies:
@@ -1578,6 +1585,13 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /socketio-jwt-auth/0.2.1:
+    resolution: {integrity: sha512-twjxtFQcIqO46wJnsV3Ef0EylQoU9EOfr5iMXIxwycSaSMuAZlFM9CnePtceX34eJjEJ08plSntyyjZCK1t3uQ==}
+    dependencies:
+      jwt-simple: 0.5.6
+      xtend: 4.0.2
     dev: false
 
   /sonic-boom/1.4.1:

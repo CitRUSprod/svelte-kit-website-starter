@@ -18,12 +18,13 @@
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import { axios } from "$lib/utils"
+    import { axios, socket } from "$lib/utils"
 
     async function logout() {
         try {
             await axios.post("/api/auth/logout")
             $session.user = null
+            socket.disconnect().connect()
             goto("/", { replaceState: true })
         } catch (err: any) {
             toasts.add("error", err.response?.data?.message ?? err.message)
