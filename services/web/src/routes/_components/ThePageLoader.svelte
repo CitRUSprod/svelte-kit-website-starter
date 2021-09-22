@@ -4,7 +4,7 @@
 
 <div
     class="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-base-100 text-5xl z-[1000]"
-    out:fade
+    transition:fade
 >
     <div class="loader" />
 </div>

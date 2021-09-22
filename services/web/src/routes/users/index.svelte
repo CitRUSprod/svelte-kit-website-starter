@@ -104,7 +104,7 @@
                 </tr>
             {:else}
                 <tr>
-                    <td class="text-center" colspan="5">Empty</td>
+                    <td class="text-center" colspan="6">Empty</td>
                 </tr>
             {/each}
         </tbody>
