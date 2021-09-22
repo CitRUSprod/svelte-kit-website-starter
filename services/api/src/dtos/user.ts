@@ -1,6 +1,7 @@
+import { JsonObject } from "type-fest"
 import { User } from "$/db/entities"
 
-export function createUserDto(user: User) {
+export function createUserDto(user: User): JsonObject {
     return {
         id: user.id,
         email: user.email,

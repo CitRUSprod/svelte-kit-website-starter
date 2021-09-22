@@ -8,7 +8,6 @@
     import { hasAccess } from "$lib/utils"
 
     const { dark } = theme
-    const pages = [1, 2, 3, 4]
 </script>
 
 <div class="bg-neutral shadow-lg text-neutral-content mb-2 navbar">
@@ -18,16 +17,13 @@
     <div class="flex-1 justify-end mx-2 px-2">
         <Button class="rounded-btn btn-ghost btn-sm" href="/chat">Chat</Button>
         {#if $session.user}
-            <Button class="rounded-btn btn-ghost btn-sm" href="/profile">Profile</Button>
+            <Button class="rounded-btn btn-ghost btn-sm" href="/users/{$session.user.id}">
+                Profile
+            </Button>
         {/if}
         {#if hasAccess($session.user, Role.Admin)}
             <Button class="rounded-btn btn-ghost btn-sm" href="/users">Users</Button>
         {/if}
-        {#each pages as page}
-            <Button class="rounded-btn btn-ghost btn-sm" href={`/page/${page}`}>
-                Page {page}
-            </Button>
-        {/each}
         {#if $session.user}
             <Button class="rounded-btn btn-ghost btn-sm" href="/auth/logout">Logout</Button>
         {:else}

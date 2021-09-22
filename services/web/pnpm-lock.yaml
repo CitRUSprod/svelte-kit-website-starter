@@ -5,6 +5,7 @@ specifiers:
   '@sveltejs/adapter-node': 1.0.0-next.45
   '@sveltejs/kit': 1.0.0-next.162
   '@types/cookie': 0.4.1
+  '@types/luxon': 2.0.4
   '@types/node': 16.7.10
   '@types/nprogress': 0.2.0
   '@types/overlayscrollbars': 1.12.1
@@ -12,6 +13,7 @@ specifiers:
   axios: 0.21.4
   cookie: 0.4.1
   daisyui: 1.14.0
+  luxon: 2.0.2
   node-fetch: 3.0.0
   nprogress: 0.2.0
   overlayscrollbars: 1.13.1
@@ -31,6 +33,7 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.4
   axios: 0.21.4
   cookie: 0.4.1
+  luxon: 2.0.2
   nprogress: 0.2.0
   overlayscrollbars: 1.13.1
   socket.io-client: 4.2.0
@@ -41,6 +44,7 @@ devDependencies:
   '@sveltejs/adapter-node': 1.0.0-next.45
   '@sveltejs/kit': 1.0.0-next.162_svelte@3.42.4
   '@types/cookie': 0.4.1
+  '@types/luxon': 2.0.4
   '@types/node': 16.7.10
   '@types/nprogress': 0.2.0
   '@types/overlayscrollbars': 1.12.1
@@ -175,6 +179,10 @@ packages:
 
   /@types/cookie/0.4.1:
     resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
+    dev: true
+
+  /@types/luxon/2.0.4:
+    resolution: {integrity: sha512-l3xuhmyF2kBldy15SeY6d6HbK2BacEcSK1qTF1ISPtPHr29JH0C1fndz9ExXLKpGl0J6pZi+dGp1i5xesMt60Q==}
     dev: true
 
   /@types/node/16.7.10:
@@ -768,6 +776,10 @@ packages:
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: true
+
+  /luxon/2.0.2:
+    resolution: {integrity: sha512-ZRioYLCgRHrtTORaZX1mx+jtxKtKuI5ZDvHNAmqpUzGqSrR+tL4FVLn/CUGMA3h0+AKD1MAxGI5GnCqR5txNqg==}
+    dev: false
 
   /magic-string/0.25.7:
     resolution: {integrity: sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==}
