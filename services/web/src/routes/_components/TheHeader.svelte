@@ -21,6 +21,7 @@
                 Profile
             </Button>
         {/if}
+        <Button class="rounded-btn btn-ghost btn-sm" href="/posts">Posts</Button>
         {#if hasAccess($session.user, Role.Admin)}
             <Button class="rounded-btn btn-ghost btn-sm" href="/users">Users</Button>
         {/if}

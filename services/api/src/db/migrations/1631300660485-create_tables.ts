@@ -75,9 +75,53 @@ export class CreateTables1631300660485 implements MigrationInterface {
                 ]
             })
         )
+        await queryRunner.createTable(
+            new Table({
+                name: "posts",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isGenerated: true
+                    },
+                    {
+                        name: "authorId",
+                        type: "int"
+                    },
+                    {
+                        name: "title",
+                        type: "varchar",
+                        length: "255"
+                    },
+                    {
+                        name: "body",
+                        type: "text"
+                    },
+                    {
+                        name: "createdAt",
+                        type: "timestamp",
+                        default: "now()"
+                    },
+                    {
+                        name: "editedAt",
+                        type: "timestamp",
+                        default: "now()"
+                    }
+                ],
+                foreignKeys: [
+                    {
+                        referencedTableName: "users",
+                        columnNames: ["authorId"],
+                        referencedColumnNames: ["id"]
+                    }
+                ]
+            })
+        )
     }
 
     public async down(queryRunner: QueryRunner) {
+        await queryRunner.dropTable("posts")
         await queryRunner.dropTable("refresh-tokens")
         await queryRunner.dropTable("users")
     }

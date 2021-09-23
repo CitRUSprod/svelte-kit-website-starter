@@ -10,6 +10,7 @@ import routes from "$/routes"
 import { init as initSockets } from "$/sockets"
 import * as entities from "$/db/entities"
 import { TokenTtl, Role } from "$/enums"
+import { hasAccess } from "$/utils"
 
 interface Tokens {
     access: string
@@ -62,7 +63,7 @@ app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
                     return
                 }
 
-                const allowed = allowedRoles.includes(user.role)
+                const allowed = hasAccess(user, allowedRoles)
                 done(allowed ? undefined : noAccessError)
             }
     )
