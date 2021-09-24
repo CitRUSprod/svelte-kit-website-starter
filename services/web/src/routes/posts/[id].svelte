@@ -4,16 +4,9 @@
     import { axios, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
-    import type { Session, Post } from "$lib/types"
+    import type { Post } from "$lib/types"
 
-    export const load: Load<{ session: Session }> = async ({ session, page }) => {
-        if (!session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
-        }
-
+    export const load: Load = async ({ page }) => {
         if (browser) {
             const { id } = page.params
 

@@ -4,19 +4,41 @@ import { Post, User } from "$/db/entities"
 import { Role } from "$/enums"
 import { Payload } from "$/types"
 import { createPostDto } from "$/dtos"
-import { hasAccess } from "$/utils"
+import { hasAccess, getItemsPage } from "$/utils"
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     const postsRepository = app.orm.getRepository(Post)
     const usersRepository = app.orm.getRepository(User)
 
-    app.get("/", {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    app.get<{ Querystring: { perPage: number; page: number } }>("/", {
+        schema: {
+            querystring: {
+                type: "object",
+                properties: {
+                    perPage: { type: "integer", minimum: 10 },
+                    page: { type: "integer", minimum: 1 }
+                }
+            }
+        },
         async handler(req, reply) {
-            const posts = await postsRepository.find({
-                order: { id: "ASC" },
-                relations: ["author"]
-            })
-            reply.send(posts.map(p => createPostDto(p)))
+            const page = await getItemsPage(
+                req.query.perPage,
+                req.query.page,
+                async (skip, take) => {
+                    const itemCount = await postsRepository.count()
+                    const posts = await postsRepository.find({
+                        order: { id: "ASC" },
+                        relations: ["author"],
+                        skip,
+                        take
+                    })
+                    const items = posts.map(p => createPostDto(p))
+                    return { itemCount, items }
+                }
+            )
+
+            reply.send(page)
         }
     })
 

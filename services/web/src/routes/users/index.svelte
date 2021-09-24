@@ -4,9 +4,9 @@
     import { axios, hasAccess, getRoleName } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
-    import type { Session, User } from "$lib/types"
+    import type { Session, User, ItemsPage } from "$lib/types"
 
-    export const load: Load<{ session: Session }> = async ({ session }) => {
+    export const load: Load<{ session: Session }> = async ({ session, page }) => {
         if (!hasAccess(session.user, Role.Admin)) {
             return {
                 status: 302,
@@ -15,8 +15,13 @@
         }
 
         if (browser) {
-            const { data } = await axios.get<Array<User>>("/api/users")
-            return { props: { users: data } }
+            const { data } = await axios.get<ItemsPage<User>>("/api/users", {
+                params: {
+                    page: page.query.get("page")
+                }
+            })
+            const { items, ...pagination } = data
+            return { props: { users: items, pagination } }
         } else {
             return {}
         }
@@ -25,13 +30,20 @@
 
 <script lang="ts">
     import FaIcon from "svelte-fa"
-    import { Button, Modal } from "$lib/components"
+    import { Button, Modal, Pagination } from "$lib/components"
 
     import { DateTime } from "luxon"
-    import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
+    import {
+        faPencilAlt,
+        faAngleDoubleLeft,
+        faAngleDoubleRight,
+        faAngleLeft,
+        faAngleRight
+    } from "@fortawesome/free-solid-svg-icons"
     import { toasts } from "$lib/stores"
 
     export let users: Array<User> = []
+    export let pagination: Omit<ItemsPage, "items"> | null = null
 
     const modals = {
         userEditing: {
@@ -109,6 +121,45 @@
             {/each}
         </tbody>
     </table>
+    {#if pagination && users.length}
+        <Pagination
+            class="btn-group justify-center"
+            currentPage={pagination.pageNumber}
+            pageCount={pagination.pageCount}
+            let:pageNumber
+        >
+            <Button href="/users?page=1" disabled={pagination.pageNumber === 1} slot="first">
+                <FaIcon icon={faAngleDoubleLeft} />
+            </Button>
+            <Button
+                href="/users?page={pagination.pageNumber - 1}"
+                disabled={pagination.pageNumber === 1}
+                slot="prev"
+            >
+                <FaIcon icon={faAngleLeft} />
+            </Button>
+            <Button
+                class={pagination.pageNumber === pageNumber ? "btn-active" : ""}
+                href="/users?page={pageNumber}"
+            >
+                {pageNumber}
+            </Button>
+            <Button
+                href="/users?page={pagination.pageNumber + 1}"
+                disabled={pagination.pageNumber === pagination.pageCount}
+                slot="next"
+            >
+                <FaIcon icon={faAngleRight} />
+            </Button>
+            <Button
+                href="/users?page={pagination.pageCount}"
+                disabled={pagination.pageNumber === pagination.pageCount}
+                slot="last"
+            >
+                <FaIcon icon={faAngleDoubleRight} />
+            </Button>
+        </Pagination>
+    {/if}
 </div>
 <Modal
     class="space-y-2"

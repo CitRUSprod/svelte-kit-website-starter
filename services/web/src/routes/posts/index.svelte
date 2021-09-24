@@ -3,19 +3,17 @@
     import { axios } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
-    import type { Session, Post } from "$lib/types"
+    import type { Post, ItemsPage } from "$lib/types"
 
-    export const load: Load<{ session: Session }> = async ({ session }) => {
-        if (!session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
-        }
-
+    export const load: Load = async ({ page }) => {
         if (browser) {
-            const { data } = await axios.get<Array<Post>>("/api/posts")
-            return { props: { posts: data } }
+            const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
+                params: {
+                    page: page.query.get("page")
+                }
+            })
+            const { items, ...pagination } = data
+            return { props: { posts: items, pagination } }
         } else {
             return {}
         }
@@ -23,12 +21,20 @@
 </script>
 
 <script lang="ts">
-    import { Button, Modal } from "$lib/components"
+    import FaIcon from "svelte-fa"
+    import { Button, Modal, Pagination } from "$lib/components"
 
+    import {
+        faAngleDoubleLeft,
+        faAngleDoubleRight,
+        faAngleLeft,
+        faAngleRight
+    } from "@fortawesome/free-solid-svg-icons"
     import { DateTime } from "luxon"
-    import { toasts } from "$lib/stores"
+    import { toasts, session } from "$lib/stores"
 
     export let posts: Array<Post> = []
+    export let pagination: Omit<ItemsPage, "items"> | null = null
 
     function toShortStr(str: string) {
         const s = str.substr(0, 100).trimEnd()
@@ -76,9 +82,11 @@
 </svelte:head>
 
 <h1 class="text-4xl">Posts</h1>
-<div class="flex justify-end mt-4">
-    <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
-</div>
+{#if $session.user}
+    <div class="flex justify-end mt-4">
+        <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
+    </div>
+{/if}
 <div class="mt-4 space-y-4">
     {#each posts as post (post.id)}
         <div class="card bordered shadow-lg">
@@ -107,6 +115,45 @@
     {:else}
         <h1 class="mt-10 text-2xl text-center">No posts</h1>
     {/each}
+    {#if pagination && posts.length}
+        <Pagination
+            class="btn-group justify-center"
+            currentPage={pagination.pageNumber}
+            pageCount={pagination.pageCount}
+            let:pageNumber
+        >
+            <Button href="/posts?page=1" disabled={pagination.pageNumber === 1} slot="first">
+                <FaIcon icon={faAngleDoubleLeft} />
+            </Button>
+            <Button
+                href="/posts?page={pagination.pageNumber - 1}"
+                disabled={pagination.pageNumber === 1}
+                slot="prev"
+            >
+                <FaIcon icon={faAngleLeft} />
+            </Button>
+            <Button
+                class={pagination.pageNumber === pageNumber ? "btn-active" : ""}
+                href="/posts?page={pageNumber}"
+            >
+                {pageNumber}
+            </Button>
+            <Button
+                href="/posts?page={pagination.pageNumber + 1}"
+                disabled={pagination.pageNumber === pagination.pageCount}
+                slot="next"
+            >
+                <FaIcon icon={faAngleRight} />
+            </Button>
+            <Button
+                href="/posts?page={pagination.pageCount}"
+                disabled={pagination.pageNumber === pagination.pageCount}
+                slot="last"
+            >
+                <FaIcon icon={faAngleDoubleRight} />
+            </Button>
+        </Pagination>
+    {/if}
 </div>
 <Modal
     class="space-y-2"

@@ -3,15 +3,40 @@ import { BadRequest } from "http-errors"
 import { User } from "$/db/entities"
 import { Role } from "$/enums"
 import { createUserDto } from "$/dtos"
+import { getItemsPage } from "$/utils"
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
 
-    app.get("/", {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    app.get<{ Querystring: { perPage: number; page: number } }>("/", {
+        schema: {
+            querystring: {
+                type: "object",
+                properties: {
+                    perPage: { type: "integer", minimum: 10 },
+                    page: { type: "integer", minimum: 1 }
+                }
+            }
+        },
         preHandler: app.auth([app.isAuthorized, app.hasAccess(Role.Admin)], { relation: "and" }),
         async handler(req, reply) {
-            const users = await usersRepository.find({ order: { id: "ASC" } })
-            reply.send(users.map(u => createUserDto(u)))
+            const page = await getItemsPage(
+                req.query.perPage,
+                req.query.page,
+                async (skip, take) => {
+                    const itemCount = await usersRepository.count()
+                    const users = await usersRepository.find({
+                        order: { id: "ASC" },
+                        skip,
+                        take
+                    })
+                    const items = users.map(u => createUserDto(u))
+                    return { itemCount, items }
+                }
+            )
+
+            reply.send(page)
         }
     })
 
