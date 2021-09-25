@@ -14,17 +14,15 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.post<{ Body: RegistrationData }>("/", {
-        schema: {
-            body: {
-                type: "object",
-                properties: {
-                    email: { type: "string", minLength: 6, maxLength: 64 },
-                    username: { type: "string", minLength: 3, maxLength: 64 },
-                    password: { type: "string", minLength: 8 }
-                },
-                required: ["email", "username", "password"]
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            body: yup
+                .object({
+                    email: yup.string().trim().lowercase().min(6).max(64).email().required(),
+                    username: yup.string().trim().min(3).max(64).required(),
+                    password: yup.string().trim().min(8).required()
+                })
+                .required()
+        })),
         async handler(req, reply) {
             const { email, username, password } = req.body
 

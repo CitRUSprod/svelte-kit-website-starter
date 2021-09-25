@@ -12,15 +12,12 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.get<{ Querystring: { perPage: number; page: number } }>("/", {
-        schema: {
-            querystring: {
-                type: "object",
-                properties: {
-                    perPage: { type: "integer", minimum: 10 },
-                    page: { type: "integer", minimum: 1 }
-                }
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            querystring: yup.object({
+                perPage: yup.number().integer().min(10).max(100),
+                page: yup.number().integer().min(1)
+            })
+        })),
         async handler(req, reply) {
             const page = await getItemsPage(
                 req.query.perPage,
@@ -44,19 +41,17 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.post<{ Body: { title: string; body: string } }>("/", {
-        schema: {
-            params: {
-                id: { type: "integer", minimum: 1 }
-            },
-            body: {
-                type: "object",
-                properties: {
-                    title: { type: "string", minLength: 2, maxLength: 255 },
-                    body: { type: "string", minLength: 2 }
-                },
-                required: ["title", "body"]
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            params: yup.object({
+                id: yup.number().integer().min(1)
+            }),
+            body: yup
+                .object({
+                    title: yup.string().trim().min(2).max(255).required(),
+                    body: yup.string().trim().min(2).required()
+                })
+                .required()
+        })),
         preHandler: app.auth([app.isAuthorized]),
         async handler(req, reply) {
             const { id } = req.user as Payload
@@ -82,11 +77,11 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.get<{ Params: { id: number } }>("/:id", {
-        schema: {
-            params: {
-                id: { type: "integer", minimum: 1 }
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            params: yup.object({
+                id: yup.number().integer().min(1)
+            })
+        })),
         async handler(req, reply) {
             const post = await postsRepository.findOne(req.params.id, { relations: ["author"] })
 
@@ -101,19 +96,17 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.put<{ Params: { id: number }; Body: { title?: string; body?: string } }>("/:id", {
-        schema: {
-            params: {
-                id: { type: "integer", minimum: 1 }
-            },
-            body: {
-                type: "object",
-                properties: {
-                    title: { type: "string", minLength: 2, maxLength: 255 },
-                    body: { type: "string", minLength: 2 }
-                },
-                required: ["title", "body"]
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            params: yup.object({
+                id: yup.number().integer().min(1)
+            }),
+            body: yup
+                .object({
+                    title: yup.string().trim().min(2).max(255).required(),
+                    body: yup.string().trim().min(2).required()
+                })
+                .required()
+        })),
         preHandler: app.auth([app.isAuthorized]),
         async handler(req, reply) {
             const post = await postsRepository.findOne(req.params.id, { relations: ["author"] })
@@ -147,11 +140,11 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     app.delete<{ Params: { id: number } }>("/:id", {
-        schema: {
-            params: {
-                id: { type: "integer", minimum: 1 }
-            }
-        },
+        schema: app.createYupSchema(yup => ({
+            params: yup.object({
+                id: yup.number().integer().min(1)
+            })
+        })),
         preHandler: app.auth([app.isAuthorized]),
         async handler(req, reply) {
             const post = await postsRepository.findOne(req.params.id, { relations: ["author"] })

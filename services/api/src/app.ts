@@ -4,6 +4,7 @@ import jwt from "fastify-jwt"
 import cookie from "fastify-cookie"
 import auth, { FastifyAuthFunction } from "fastify-auth"
 import socketIo from "fastify-socket.io"
+import { fastifyYupSchema as yupSchema, createYupSchema } from "fastify-yup-schema"
 import { MethodNotAllowed } from "http-errors"
 import { Payload } from "$/types"
 import routes from "$/routes"
@@ -21,6 +22,7 @@ declare module "fastify" {
     interface FastifyInstance {
         generateTokens(payload: Payload): Tokens
         getPayload(token: string): [Payload, null] | [null, Error]
+        createYupSchema: typeof createYupSchema
         isAuthorized: FastifyAuthFunction
         hasAccess(...allowedRoles: Array<Role>): FastifyAuthFunction
     }
@@ -46,6 +48,7 @@ app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
             return [null, err]
         }
     })
+    .decorate<FastifyInstance["createYupSchema"]>("createYupSchema", createYupSchema)
     .decorate<FastifyAuthFunction>("isAuthorized", async req => req.jwtVerify())
     .decorate<FastifyInstance["hasAccess"]>(
         "hasAccess",
@@ -73,6 +76,7 @@ app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), mig
     .register(cookie)
     .register(auth)
     .register(socketIo)
+    .register(yupSchema)
 
 app.register(routes)
 
