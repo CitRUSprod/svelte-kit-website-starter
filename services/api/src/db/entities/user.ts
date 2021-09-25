@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from "typeorm"
+import argon2 from "argon2"
 import { Role } from "$/enums"
 
 @Entity("users")
@@ -24,8 +25,9 @@ export class User {
     public registrationDate!: Date
 
     @BeforeInsert()
-    public setDefaultValues() {
-        this.role = Role.User
+    public async setDefaultValues() {
+        this.password = await argon2.hash(this.password)
+        this.role ??= Role.User
         this.registrationDate = new Date()
     }
 }

@@ -16,6 +16,8 @@ const config = {
     database: process.env.POSTGRES_DB,
     entities: ["src/db/entities/*.ts"],
     migrations: ["src/db/migrations/*.ts"],
+    seeds: ["src/db/seeds/*.ts"],
+    factories: ["src/db/factories/*.ts"],
     cli: {
         entitiesDir: "src/db/entities",
         migrationsDir: "src/db/migrations"

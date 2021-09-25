@@ -26,9 +26,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         async handler(req, reply) {
             const { email, password } = req.body
 
-            const trimmedEmail = email.trim().toLowerCase()
-
-            const user = await usersRepository.findOne({ email: trimmedEmail })
+            const user = await usersRepository.findOne({ email })
 
             if (!user) {
                 reply.send(new BadRequest("User with such email was not found"))

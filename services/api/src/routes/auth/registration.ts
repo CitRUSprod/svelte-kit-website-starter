@@ -1,6 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
-import argon2 from "argon2"
 import { User } from "$/db/entities"
 
 interface RegistrationData {
@@ -26,31 +25,21 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         async handler(req, reply) {
             const { email, username, password } = req.body
 
-            const trimmedEmail = email.trim().toLowerCase()
-            const trimmedUsername = username.trim()
-
-            const userByEmail = await usersRepository.findOne({ email: trimmedEmail })
+            const userByEmail = await usersRepository.findOne({ email })
 
             if (userByEmail) {
                 reply.send(new BadRequest("A user with this email already exists"))
                 return
             }
 
-            const userByUsername = await usersRepository.findOne({ username: trimmedUsername })
+            const userByUsername = await usersRepository.findOne({ username })
 
             if (userByUsername) {
                 reply.send(new BadRequest("A user with this username already exists"))
                 return
             }
 
-            const passwordHash = await argon2.hash(password)
-
-            const user = usersRepository.create({
-                email: trimmedEmail,
-                username: trimmedUsername,
-                password: passwordHash
-            })
-
+            const user = usersRepository.create({ email, username, password })
             await usersRepository.save(user)
 
             reply.send()
