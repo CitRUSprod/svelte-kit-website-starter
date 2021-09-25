@@ -115,12 +115,12 @@
                         </div>
                         <div>
                             <b>Created at:</b>
-                            {DateTime.fromISO(post.createdAt).toFormat("yyyy-MM-dd HH:mm")}
+                            {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
                         </div>
-                        {#if post.createdAt !== post.editedAt}
+                        {#if post.creationDate !== post.editingDate}
                             <div>
                                 <b>Edited at:</b>
-                                {DateTime.fromISO(post.editedAt).toFormat("yyyy-MM-dd HH:mm")}
+                                {DateTime.fromISO(post.editingDate).toFormat("yyyy-MM-dd HH:mm")}
                             </div>
                         {/if}
                     </div>

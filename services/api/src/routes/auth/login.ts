@@ -46,14 +46,10 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
             const tokens = app.generateTokens({ id: user.id })
 
-            let refreshToken = await refreshTokensRepository.findOne({ user })
-
-            if (!refreshToken) {
-                refreshToken = refreshTokensRepository.create()
-            }
-
-            refreshToken.token = tokens.refresh
-            refreshToken.user = user
+            const refreshToken = refreshTokensRepository.create({
+                token: tokens.refresh,
+                user
+            })
             await refreshTokensRepository.save(refreshToken)
 
             reply

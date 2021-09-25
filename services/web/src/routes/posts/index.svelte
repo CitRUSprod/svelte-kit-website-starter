@@ -103,7 +103,7 @@
                         </div>
                         <div>
                             <b>Created at:</b>
-                            {DateTime.fromISO(post.createdAt).toFormat("yyyy-MM-dd HH:mm")}
+                            {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
                         </div>
                     </div>
                     <div>

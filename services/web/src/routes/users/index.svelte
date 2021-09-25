@@ -107,7 +107,7 @@
                     </td>
                     <td>{user.email}</td>
                     <td>{getRoleName(user.role)}</td>
-                    <td>{DateTime.fromISO(user.createdAt).toFormat("LLLL d, yyyy")}</td>
+                    <td>{DateTime.fromISO(user.registrationDate).toFormat("LLLL d, yyyy")}</td>
                     <td class="text-right">
                         <Button on:click={() => modals.userEditing.open(user)}>
                             <FaIcon icon={faPencilAlt} />

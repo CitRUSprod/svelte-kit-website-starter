@@ -8,7 +8,7 @@ export function createPostDto(post: Post): JsonObject {
         author: createUserDto(post.author),
         title: post.title,
         body: post.body,
-        createdAt: post.createdAt.toJSON(),
-        editedAt: post.editedAt.toJSON()
+        creationDate: post.creationDate.toJSON(),
+        editingDate: post.editingDate.toJSON()
     }
 }

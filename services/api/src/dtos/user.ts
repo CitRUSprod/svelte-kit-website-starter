@@ -7,6 +7,6 @@ export function createUserDto(user: User): JsonObject {
         email: user.email,
         username: user.username,
         role: user.role,
-        createdAt: user.createdAt.toJSON()
+        registrationDate: user.registrationDate.toJSON()
     }
 }

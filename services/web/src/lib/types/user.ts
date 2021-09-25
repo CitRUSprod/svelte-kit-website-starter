@@ -6,5 +6,5 @@ export interface User {
     username: string
     password: string
     role: Role
-    createdAt: string
+    registrationDate: string
 }

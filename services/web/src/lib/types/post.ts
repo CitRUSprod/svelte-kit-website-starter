@@ -5,6 +5,6 @@ export interface Post {
     author: User
     title: string
     body: string
-    createdAt: string
-    editedAt: string
+    creationDate: string
+    editingDate: string
 }

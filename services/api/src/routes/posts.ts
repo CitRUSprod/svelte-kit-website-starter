@@ -139,7 +139,6 @@ const route: FastifyPluginCallback = (app, opts, done) => {
 
             if (req.body.title) post.title = req.body.title
             if (req.body.body) post.body = req.body.body
-            post.editedAt = new Date()
             await postsRepository.save(post)
 
             reply.send(createPostDto(post))

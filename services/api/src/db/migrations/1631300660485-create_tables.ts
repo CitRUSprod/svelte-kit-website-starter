@@ -34,13 +34,11 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     {
                         name: "role",
                         type: "varchar",
-                        length: "16",
-                        default: "'user'"
+                        length: "16"
                     },
                     {
-                        name: "createdAt",
-                        type: "timestamp",
-                        default: "now()"
+                        name: "registrationDate",
+                        type: "timestamp"
                     }
                 ]
             })
@@ -64,6 +62,10 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     {
                         name: "userId",
                         type: "int"
+                    },
+                    {
+                        name: "expirationDate",
+                        type: "timestamp"
                     }
                 ],
                 foreignKeys: [
@@ -99,14 +101,12 @@ export class CreateTables1631300660485 implements MigrationInterface {
                         type: "text"
                     },
                     {
-                        name: "createdAt",
-                        type: "timestamp",
-                        default: "now()"
+                        name: "creationDate",
+                        type: "timestamp"
                     },
                     {
-                        name: "editedAt",
-                        type: "timestamp",
-                        default: "now()"
+                        name: "editingDate",
+                        type: "timestamp"
                     }
                 ],
                 foreignKeys: [

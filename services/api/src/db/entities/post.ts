@@ -1,6 +1,14 @@
 /* eslint-disable new-cap */
 
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    JoinColumn,
+    BeforeInsert,
+    BeforeUpdate
+} from "typeorm"
 import { User } from "./user"
 
 @Entity("posts")
@@ -19,8 +27,20 @@ export class Post {
     public body!: string
 
     @Column("timestamp")
-    public createdAt!: Date
+    public creationDate!: Date
 
     @Column("timestamp")
-    public editedAt!: Date
+    public editingDate!: Date
+
+    @BeforeInsert()
+    public setDefaultValues() {
+        const date = new Date()
+        this.creationDate = date
+        this.editingDate = date
+    }
+
+    @BeforeUpdate()
+    public updateEditedDate() {
+        this.editingDate = new Date()
+    }
 }

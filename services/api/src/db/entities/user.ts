@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from "typeorm"
 import { Role } from "$/enums"
 
 @Entity("users")
@@ -21,5 +21,11 @@ export class User {
     public role!: Role
 
     @Column("timestamp")
-    public createdAt!: Date
+    public registrationDate!: Date
+
+    @BeforeInsert()
+    public setDefaultValues() {
+        this.role = Role.User
+        this.registrationDate = new Date()
+    }
 }

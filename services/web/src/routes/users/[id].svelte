@@ -47,7 +47,7 @@
         <div><b>Role:</b> {getRoleName(user.role)}</div>
         <div>
             <b>Registration date:</b>
-            {DateTime.fromISO(user.createdAt).toFormat("LLLL d, yyyy")}
+            {DateTime.fromISO(user.registrationDate).toFormat("LLLL d, yyyy")}
         </div>
     </div>
 {/if}
