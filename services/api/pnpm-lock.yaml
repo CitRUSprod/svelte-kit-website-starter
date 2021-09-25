@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@types/faker': 5.5.8
   '@types/http-errors': 1.8.1
   '@types/node': 16.7.10
   argon2: 0.28.2
@@ -44,6 +45,7 @@ dependencies:
   typeorm: 0.2.37_pg@8.7.1
 
 devDependencies:
+  '@types/faker': 5.5.8
   '@types/http-errors': 1.8.1
   '@types/node': 16.7.10
   defu: 5.0.0
@@ -159,6 +161,10 @@ packages:
   /@types/cors/2.8.12:
     resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
     dev: false
+
+  /@types/faker/5.5.8:
+    resolution: {integrity: sha512-bsl0rYsaZVHlZkynL5O04q6YXDmVjcid6MbOHWqvtE2WWs/EKhp0qchDDhVWlWyQXUffX1G83X9LnMxRl8S/Mw==}
+    dev: true
 
   /@types/http-errors/1.8.1:
     resolution: {integrity: sha512-e+2rjEwK6KDaNOm5Aa9wNGgyS9oSZU/4pfSMMPYNOfjvFI0WVXm29+ITRFr6aKDvvKo7uU1jV68MW4ScsfDi7Q==}
