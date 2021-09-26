@@ -1,21 +1,33 @@
 import { FastifyPluginCallback } from "fastify"
+import { FindManyOptions, ILike } from "typeorm"
 import { BadRequest, InternalServerError, MethodNotAllowed } from "http-errors"
 import { Post, User } from "$/db/entities"
 import { Role } from "$/enums"
-import { Payload } from "$/types"
+import { Payload, Pagination, Sorting } from "$/types"
 import { createPostDto } from "$/dtos"
 import { hasAccess, getItemsPage } from "$/utils"
+
+interface Filters {
+    title?: string
+}
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     const postsRepository = app.orm.getRepository(Post)
     const usersRepository = app.orm.getRepository(User)
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    app.get<{ Querystring: { perPage: number; page: number } }>("/", {
+    app.get<{ Querystring: Pagination & Sorting<"creationDate" | "title"> & Filters }>("/", {
         schema: app.createYupSchema(yup => ({
             querystring: yup.object({
-                perPage: yup.number().integer().min(10).max(100),
-                page: yup.number().integer().min(1)
+                perPage: yup.number().integer().min(10).max(100).default(10),
+                page: yup.number().integer().positive().default(1),
+                sort: yup.mixed().oneOf(["creationDate", "title"]).default("creationDate"),
+                order: yup
+                    .mixed()
+                    .transform(v => v.toUpperCase())
+                    .oneOf(["ASC", "DESC"])
+                    .default("ASC"),
+                title: yup.string().trim()
             })
         })),
         async handler(req, reply) {
@@ -23,10 +35,18 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 req.query.perPage,
                 req.query.page,
                 async (skip, take) => {
-                    const itemCount = await postsRepository.count()
+                    const sorting: FindManyOptions<Post>["order"] = {}
+                    sorting[req.query.sort] = req.query.order
+
+                    const filters: FindManyOptions<Post>["where"] = {}
+                    // eslint-disable-next-line new-cap
+                    if (req.query.title) filters.title = ILike(`%${req.query.title}%`)
+
+                    const itemCount = await postsRepository.count({ where: filters })
                     const posts = await postsRepository.find({
-                        order: { id: "ASC" },
                         relations: ["author"],
+                        order: sorting,
+                        where: filters,
                         skip,
                         take
                     })
@@ -43,7 +63,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.post<{ Body: { title: string; body: string } }>("/", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             }),
             body: yup
                 .object({
@@ -79,7 +99,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.get<{ Params: { id: number } }>("/:id", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             })
         })),
         async handler(req, reply) {
@@ -98,7 +118,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.put<{ Params: { id: number }; Body: { title?: string; body?: string } }>("/:id", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             }),
             body: yup
                 .object({
@@ -142,7 +162,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.delete<{ Params: { id: number } }>("/:id", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             })
         })),
         preHandler: app.auth([app.isAuthorized]),

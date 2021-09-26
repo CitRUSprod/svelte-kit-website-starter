@@ -1,18 +1,39 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
-    import { axios } from "$lib/utils"
+    import { axios, setQueryParams } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
 
+    interface QueryParams {
+        page?: string
+        sort?: string
+        order?: string
+        title?: string
+        [key: string]: string | undefined
+    }
+
+    async function getPostsPage(query: QueryParams) {
+        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
+            params: {
+                page: query.page,
+                sort: query.sort,
+                order: query.order,
+                title: query.title
+            }
+        })
+        const { items, ...pagination } = data
+        return { items, pagination }
+    }
+
     export const load: Load = async ({ page }) => {
         if (browser) {
-            const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
-                params: {
-                    page: page.query.get("page")
-                }
+            const { items, pagination } = await getPostsPage({
+                page: page.query.get("page") ?? undefined,
+                sort: page.query.get("sort") ?? undefined,
+                order: page.query.get("order") ?? undefined,
+                title: page.query.get("title") ?? undefined
             })
-            const { items, ...pagination } = data
             return { props: { posts: items, pagination } }
         } else {
             return {}
@@ -28,7 +49,8 @@
         faAngleDoubleLeft,
         faAngleDoubleRight,
         faAngleLeft,
-        faAngleRight
+        faAngleRight,
+        faSearch
     } from "@fortawesome/free-solid-svg-icons"
     import { DateTime } from "luxon"
     import { toasts, session } from "$lib/stores"
@@ -36,10 +58,36 @@
     export let posts: Array<Post> = []
     export let pagination: Omit<ItemsPage, "items"> | null = null
 
+    async function updatePosts(query: QueryParams) {
+        const { items, pagination: p } = await getPostsPage({
+            page: query.page,
+            sort: query.sort,
+            order: query.order,
+            title: query.title
+        })
+        posts = items
+        pagination = p
+
+        setQueryParams(query)
+    }
+
     function toShortStr(str: string) {
         const s = str.substr(0, 100).trimEnd()
         return s.length < str.length ? `${s}...` : str
     }
+
+    const search = {
+        title: ""
+    }
+
+    let sortingValue = "creationDate-asc"
+
+    function sortingToObject(value: string) {
+        const arr = value.split("-")
+        return { sort: arr[0], order: arr[1] }
+    }
+
+    $: sorting = sortingToObject(sortingValue)
 
     const modals = {
         postCreating: {
@@ -83,7 +131,47 @@
 
 <h1 class="text-4xl">Posts</h1>
 {#if $session.user}
-    <div class="flex justify-end mt-4">
+    <div class="flex mt-4 space-x-2">
+        <div class="relative w-full">
+            <input
+                class="input input-primary input-bordered w-full pr-14"
+                placeholder="Title"
+                bind:value={search.title}
+            />
+            <div class="absolute top-0 right-0">
+                <Button
+                    class="btn-primary rounded-l-none"
+                    on:click={() =>
+                        updatePosts({
+                            page: "1",
+                            sort: sorting.sort,
+                            order: sorting.order,
+                            title: search.title
+                        })}
+                >
+                    <FaIcon icon={faSearch} />
+                </Button>
+            </div>
+        </div>
+        <select
+            class="select select-primary select-bordered"
+            bind:value={sortingValue}
+            on:change={() => {
+                setTimeout(() => {
+                    updatePosts({
+                        page: "1",
+                        sort: sorting.sort,
+                        order: sorting.order,
+                        title: search.title
+                    })
+                })
+            }}
+        >
+            <option value="creationDate-asc">Creation date (Earliest)</option>
+            <option value="creationDate-desc">Creation date (Latest)</option>
+            <option value="title-asc">Title (A-Z)</option>
+            <option value="title-desc">Title (Z-A)</option>
+        </select>
         <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
     </div>
 {/if}

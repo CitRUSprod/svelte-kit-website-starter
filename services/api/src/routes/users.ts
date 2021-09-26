@@ -1,19 +1,37 @@
 import { FastifyPluginCallback } from "fastify"
+import { FindManyOptions, ILike } from "typeorm"
 import { BadRequest } from "http-errors"
 import { User } from "$/db/entities"
 import { Role } from "$/enums"
+import { Pagination, Sorting } from "$/types"
 import { createUserDto } from "$/dtos"
 import { getItemsPage } from "$/utils"
+
+interface Filters {
+    email?: string
+    username?: string
+}
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    app.get<{ Querystring: { perPage: number; page: number } }>("/", {
+    app.get<{ Querystring: Pagination & Sorting<"registrationDate" | "username"> & Filters }>("/", {
         schema: app.createYupSchema(yup => ({
             querystring: yup.object({
-                perPage: yup.number().integer().min(10).max(100),
-                page: yup.number().integer().min(1)
+                perPage: yup.number().integer().min(10).max(100).default(10),
+                page: yup.number().integer().positive().default(1),
+                sort: yup
+                    .mixed()
+                    .oneOf(["registrationDate", "username"])
+                    .default("registrationDate"),
+                order: yup
+                    .mixed()
+                    .transform(v => v.toUpperCase())
+                    .oneOf(["ASC", "DESC"])
+                    .default("ASC"),
+                email: yup.string().trim(),
+                username: yup.string().trim()
             })
         })),
         preHandler: app.auth([app.isAuthorized, app.hasAccess(Role.Admin)], { relation: "and" }),
@@ -22,9 +40,19 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 req.query.perPage,
                 req.query.page,
                 async (skip, take) => {
-                    const itemCount = await usersRepository.count()
+                    const sorting: FindManyOptions<User>["order"] = {}
+                    sorting[req.query.sort] = req.query.order
+
+                    const filters: FindManyOptions<User>["where"] = {}
+                    // eslint-disable-next-line new-cap
+                    if (req.query.email) filters.email = ILike(`%${req.query.email}%`)
+                    // eslint-disable-next-line new-cap
+                    if (req.query.username) filters.username = ILike(`%${req.query.username}%`)
+
+                    const itemCount = await usersRepository.count({ where: filters })
                     const users = await usersRepository.find({
-                        order: { id: "ASC" },
+                        order: sorting,
+                        where: filters,
                         skip,
                         take
                     })
@@ -41,7 +69,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.get<{ Params: { id: number } }>("/:id", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             })
         })),
         preHandler: app.auth([app.isAuthorized]),
@@ -61,7 +89,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     app.put<{ Params: { id: number }; Body: { role: Role } }>("/:id", {
         schema: app.createYupSchema(yup => ({
             params: yup.object({
-                id: yup.number().integer().min(1)
+                id: yup.number().integer().positive()
             }),
             body: yup
                 .object({

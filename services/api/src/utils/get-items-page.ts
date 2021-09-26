@@ -6,15 +6,13 @@ interface ItemsData {
 }
 
 export async function getItemsPage(
-    itemsPerPage: number | undefined,
-    pageNumber: number | undefined,
+    itemsPerPage: number,
+    pageNumber: number,
     getItemsData: (skip: number, take: number) => Promise<ItemsData>
 ) {
     let perPage: number
 
-    if (itemsPerPage === undefined) {
-        perPage = 10
-    } else if (itemsPerPage < 1) {
+    if (itemsPerPage < 1) {
         perPage = 1
     } else if (itemsPerPage > 100) {
         perPage = 100
@@ -24,7 +22,7 @@ export async function getItemsPage(
 
     let page: number
 
-    if (pageNumber === undefined || pageNumber < 1) {
+    if (pageNumber < 1) {
         page = 1
     } else {
         page = pageNumber
