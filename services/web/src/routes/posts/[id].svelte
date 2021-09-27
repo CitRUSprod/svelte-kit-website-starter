@@ -24,7 +24,7 @@
 
 <script lang="ts">
     import FaIcon from "svelte-fa"
-    import { Button, Modal } from "$lib/components"
+    import { Button, CommonModal } from "$lib/components"
 
     import { DateTime } from "luxon"
     import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
@@ -138,12 +138,11 @@
             </div>
         </div>
     </div>
-    <Modal
-        class="space-y-2"
+    <CommonModal
+        title="Post editing"
         persistent={modals.postEditing.waiting}
         bind:visible={modals.postEditing.visible}
     >
-        <h1 class="text-2xl">Post editing</h1>
         <div class="form-control">
             <div class="label">
                 <span class="label-text">Title:</span>
@@ -159,7 +158,7 @@
                 bind:value={modals.postEditing.body}
             />
         </div>
-        <div class="grid grid-cols-2 gap-2 !mt-6">
+        <svelte:fragment slot="actions">
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postEditing.waiting}
@@ -176,16 +175,15 @@
             >
                 Cancel
             </Button>
-        </div>
-    </Modal>
-    <Modal
-        class="space-y-2"
+        </svelte:fragment>
+    </CommonModal>
+    <CommonModal
+        title="Post removing"
         persistent={modals.postRemoving.waiting}
         bind:visible={modals.postRemoving.visible}
     >
-        <h1 class="text-2xl">Post removing</h1>
         <div>Do you really want to remove this post?</div>
-        <div class="grid grid-cols-2 gap-2 !mt-6">
+        <svelte:fragment slot="actions">
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postRemoving.waiting}
@@ -200,6 +198,6 @@
             >
                 Cancel
             </Button>
-        </div>
-    </Modal>
+        </svelte:fragment>
+    </CommonModal>
 {/if}

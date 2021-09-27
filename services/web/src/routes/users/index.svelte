@@ -30,16 +30,10 @@
 
 <script lang="ts">
     import FaIcon from "svelte-fa"
-    import { Button, Modal, Pagination } from "$lib/components"
+    import { Button, CommonModal, CommonPagination } from "$lib/components"
 
     import { DateTime } from "luxon"
-    import {
-        faPencilAlt,
-        faAngleDoubleLeft,
-        faAngleDoubleRight,
-        faAngleLeft,
-        faAngleRight
-    } from "@fortawesome/free-solid-svg-icons"
+    import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
     import { toasts } from "$lib/stores"
 
     export let users: Array<User> = []
@@ -122,51 +116,18 @@
         </tbody>
     </table>
     {#if pagination && users.length}
-        <Pagination
-            class="btn-group justify-center"
+        <CommonPagination
             currentPage={pagination.pageNumber}
             pageCount={pagination.pageCount}
-            let:pageNumber
-        >
-            <Button href="/users?page=1" disabled={pagination.pageNumber === 1} slot="first">
-                <FaIcon icon={faAngleDoubleLeft} />
-            </Button>
-            <Button
-                href="/users?page={pagination.pageNumber - 1}"
-                disabled={pagination.pageNumber === 1}
-                slot="prev"
-            >
-                <FaIcon icon={faAngleLeft} />
-            </Button>
-            <Button
-                class={pagination.pageNumber === pageNumber ? "btn-active" : ""}
-                href="/users?page={pageNumber}"
-            >
-                {pageNumber}
-            </Button>
-            <Button
-                href="/users?page={pagination.pageNumber + 1}"
-                disabled={pagination.pageNumber === pagination.pageCount}
-                slot="next"
-            >
-                <FaIcon icon={faAngleRight} />
-            </Button>
-            <Button
-                href="/users?page={pagination.pageCount}"
-                disabled={pagination.pageNumber === pagination.pageCount}
-                slot="last"
-            >
-                <FaIcon icon={faAngleDoubleRight} />
-            </Button>
-        </Pagination>
+            href="/users"
+        />
     {/if}
 </div>
-<Modal
-    class="space-y-2"
+<CommonModal
+    title="User editing"
     persistent={modals.userEditing.waiting}
     bind:visible={modals.userEditing.visible}
 >
-    <h1 class="text-2xl">User editing</h1>
     <div class="form-control">
         <div class="label">
             <span class="label-text">Username:</span>
@@ -193,7 +154,7 @@
             {/each}
         </select>
     </div>
-    <div class="grid grid-cols-2 gap-2 !mt-6">
+    <svelte:fragment slot="actions">
         <Button
             class="btn-success btn-sm"
             loading={modals.userEditing.waiting}
@@ -209,5 +170,5 @@
         >
             Cancel
         </Button>
-    </div>
-</Modal>
+    </svelte:fragment>
+</CommonModal>

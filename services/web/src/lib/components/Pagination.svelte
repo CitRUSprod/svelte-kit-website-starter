@@ -38,11 +38,9 @@
 </script>
 
 <div class={klass}>
-    <slot name="first" />
-    <slot name="prev" />
+    <slot name="before" />
     {#each pages as page (page)}
         <slot pageNumber={page} />
     {/each}
-    <slot name="next" />
-    <slot name="last" />
+    <slot name="after" />
 </div>

@@ -43,15 +43,9 @@
 
 <script lang="ts">
     import FaIcon from "svelte-fa"
-    import { Button, Modal, Pagination } from "$lib/components"
+    import { Button, CommonModal, CommonPagination } from "$lib/components"
 
-    import {
-        faAngleDoubleLeft,
-        faAngleDoubleRight,
-        faAngleLeft,
-        faAngleRight,
-        faSearch
-    } from "@fortawesome/free-solid-svg-icons"
+    import { faSearch } from "@fortawesome/free-solid-svg-icons"
     import { DateTime } from "luxon"
     import { toasts, session } from "$lib/stores"
 
@@ -204,51 +198,18 @@
         <h1 class="mt-10 text-2xl text-center">No posts</h1>
     {/each}
     {#if pagination && posts.length}
-        <Pagination
-            class="btn-group justify-center"
+        <CommonPagination
             currentPage={pagination.pageNumber}
             pageCount={pagination.pageCount}
-            let:pageNumber
-        >
-            <Button href="/posts?page=1" disabled={pagination.pageNumber === 1} slot="first">
-                <FaIcon icon={faAngleDoubleLeft} />
-            </Button>
-            <Button
-                href="/posts?page={pagination.pageNumber - 1}"
-                disabled={pagination.pageNumber === 1}
-                slot="prev"
-            >
-                <FaIcon icon={faAngleLeft} />
-            </Button>
-            <Button
-                class={pagination.pageNumber === pageNumber ? "btn-active" : ""}
-                href="/posts?page={pageNumber}"
-            >
-                {pageNumber}
-            </Button>
-            <Button
-                href="/posts?page={pagination.pageNumber + 1}"
-                disabled={pagination.pageNumber === pagination.pageCount}
-                slot="next"
-            >
-                <FaIcon icon={faAngleRight} />
-            </Button>
-            <Button
-                href="/posts?page={pagination.pageCount}"
-                disabled={pagination.pageNumber === pagination.pageCount}
-                slot="last"
-            >
-                <FaIcon icon={faAngleDoubleRight} />
-            </Button>
-        </Pagination>
+            href="/posts"
+        />
     {/if}
 </div>
-<Modal
-    class="space-y-2"
+<CommonModal
+    title="Post creating"
     persistent={modals.postCreating.waiting}
     bind:visible={modals.postCreating.visible}
 >
-    <h1 class="text-2xl">Post creating</h1>
     <div class="form-control">
         <div class="label">
             <span class="label-text">Title:</span>
@@ -264,7 +225,7 @@
             bind:value={modals.postCreating.body}
         />
     </div>
-    <div class="grid grid-cols-2 gap-2 !mt-6">
+    <svelte:fragment slot="actions">
         <Button
             class="btn-success btn-sm"
             loading={modals.postCreating.waiting}
@@ -280,5 +241,5 @@
         >
             Cancel
         </Button>
-    </div>
-</Modal>
+    </svelte:fragment>
+</CommonModal>
