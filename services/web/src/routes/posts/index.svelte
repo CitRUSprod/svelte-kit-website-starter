@@ -6,35 +6,34 @@
     import type { Post, ItemsPage } from "$lib/types"
 
     interface QueryParams {
-        page?: string
+        perPage?: string | number
+        page?: string | number
         sort?: string
         order?: string
         title?: string
-        [key: string]: string | undefined
     }
 
     async function getPostsPage(query: QueryParams) {
-        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
-            params: {
-                page: query.page,
-                sort: query.sort,
-                order: query.order,
-                title: query.title
-            }
-        })
-        const { items, ...pagination } = data
-        return { items, pagination }
+        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", { params: query })
+        return data
     }
 
-    export const load: Load = async ({ page }) => {
+    export const load: Load = async ({ page: p }) => {
         if (browser) {
-            const { items, pagination } = await getPostsPage({
-                page: page.query.get("page") ?? undefined,
-                sort: page.query.get("sort") ?? undefined,
-                order: page.query.get("order") ?? undefined,
-                title: page.query.get("title") ?? undefined
-            })
-            return { props: { posts: items, pagination } }
+            const query: QueryParams = {
+                perPage: p.query.get("perPage") ?? undefined,
+                page: p.query.get("page") ?? undefined,
+                sort: p.query.get("sort") ?? undefined,
+                order: p.query.get("order") ?? undefined,
+                title: p.query.get("title") ?? undefined
+            }
+
+            const page = await getPostsPage(query)
+            return {
+                props: {
+                    asyncData: { page, query }
+                }
+            }
         } else {
             return {}
         }
@@ -45,43 +44,65 @@
     import FaIcon from "svelte-fa"
     import { Button, CommonModal, CommonPagination } from "$lib/components"
 
+    import * as _ from "lodash-es"
     import { faSearch } from "@fortawesome/free-solid-svg-icons"
     import { DateTime } from "luxon"
     import { toasts, session } from "$lib/stores"
 
-    export let posts: Array<Post> = []
-    export let pagination: Omit<ItemsPage, "items"> | null = null
-
-    async function updatePosts(query: QueryParams) {
-        const { items, pagination: p } = await getPostsPage({
-            page: query.page,
-            sort: query.sort,
-            order: query.order,
-            title: query.title
-        })
-        posts = items
-        pagination = p
-
-        setQueryParams(query)
+    interface AsyncData {
+        page: ItemsPage<Post>
+        query: QueryParams
     }
 
-    function toShortStr(str: string) {
-        const s = str.substr(0, 100).trimEnd()
-        return s.length < str.length ? `${s}...` : str
+    export let asyncData: AsyncData | null = null
+
+    let itemsPerPage = 10
+
+    const defaultQuery: Omit<Required<QueryParams>, "perPage" | "page"> = {
+        title: "",
+        sort: "creationDate",
+        order: "asc"
     }
 
     const search = {
-        title: ""
+        title: defaultQuery.title
     }
 
-    let sortingValue = "creationDate-asc"
+    let sortingValue = `${defaultQuery.sort}-${defaultQuery.order}`
 
-    function sortingToObject(value: string) {
-        const arr = value.split("-")
-        return { sort: arr[0], order: arr[1] }
+    function watchForAsyncData(data: AsyncData | null) {
+        if (data) {
+            search.title = data.query.title ?? defaultQuery.title
+            const sort = data.query.sort ?? defaultQuery.sort
+            const order = data.query.order ?? defaultQuery.order
+            sortingValue = `${sort}-${order}`
+        }
     }
 
-    $: sorting = sortingToObject(sortingValue)
+    $: watchForAsyncData(asyncData)
+
+    async function updatePosts() {
+        const page = await getPostsPage(asyncData!.query)
+        asyncData!.page = page
+        setQueryParams(asyncData!.query)
+    }
+
+    async function onChangeItemsPerPage() {
+        asyncData!.query.perPage = itemsPerPage
+        await updatePosts()
+    }
+
+    async function onInputTitle() {
+        asyncData!.query.title = search.title || undefined
+        await updatePosts()
+    }
+
+    async function onChangeSorting() {
+        const arr = sortingValue.split("-")
+        asyncData!.query.sort = arr[0]
+        asyncData!.query.order = arr[1]
+        await updatePosts()
+    }
 
     const modals = {
         postCreating: {
@@ -101,12 +122,11 @@
                 modals.postCreating.waiting = true
 
                 try {
-                    const { data } = await axios.post<Post>("/api/posts", {
+                    await axios.post<Post>("/api/posts", {
                         title: modals.postCreating.title,
                         body: modals.postCreating.body
                     })
-                    posts.push(data)
-                    posts = posts
+                    await updatePosts()
                     toasts.add("success", "Post has been successfully created")
                     modals.postCreating.visible = false
                 } catch (err: any) {
@@ -117,129 +137,115 @@
             }
         }
     }
+
+    function toShortStr(str: string) {
+        const s = str.substr(0, 100).trimEnd()
+        return s.length < str.length ? `${s}...` : str
+    }
 </script>
 
 <svelte:head>
     <title>Posts</title>
 </svelte:head>
 
-<h1 class="text-4xl">Posts</h1>
-{#if $session.user}
+{#if asyncData}
+    <h1 class="text-4xl">Posts</h1>
     <div class="flex mt-4 space-x-2">
         <div class="relative w-full">
             <input
-                class="input input-primary input-bordered w-full pr-14"
+                class="input input-primary w-full pr-12"
                 placeholder="Title"
                 bind:value={search.title}
+                on:input={_.debounce(onInputTitle, 500)}
             />
-            <div class="absolute top-0 right-0">
-                <Button
-                    class="btn-primary rounded-l-none"
-                    on:click={() =>
-                        updatePosts({
-                            page: "1",
-                            sort: sorting.sort,
-                            order: sorting.order,
-                            title: search.title
-                        })}
-                >
-                    <FaIcon icon={faSearch} />
-                </Button>
+            <div class="absolute top-0 right-0 p-4 pointer-events-none">
+                <FaIcon icon={faSearch} />
             </div>
         </div>
-        <select
-            class="select select-primary select-bordered"
-            bind:value={sortingValue}
-            on:change={() => {
-                setTimeout(() => {
-                    updatePosts({
-                        page: "1",
-                        sort: sorting.sort,
-                        order: sorting.order,
-                        title: search.title
-                    })
-                })
-            }}
-        >
+        <select class="select select-primary" bind:value={sortingValue} on:change={onChangeSorting}>
             <option value="creationDate-asc">Creation date (Earliest)</option>
             <option value="creationDate-desc">Creation date (Latest)</option>
             <option value="title-asc">Title (A-Z)</option>
             <option value="title-desc">Title (Z-A)</option>
         </select>
-        <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
+        {#if $session.user}
+            <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
+        {/if}
     </div>
-{/if}
-<div class="mt-4 space-y-4">
-    {#each posts as post (post.id)}
-        <div class="card bordered shadow-lg">
-            <div class="card-body">
-                <h2 class="card-title">{post.title}</h2>
-                <p>{toShortStr(post.body)}</p>
-                <div class="card-actions justify-between items-center">
-                    <div class="text-sm">
-                        <div>
-                            <b>Author:</b>
-                            <a class="hover:underline" href="/users/{post.author.id}">
-                                {post.author.username}
-                            </a>
+    <div class="mt-4 space-y-4">
+        {#each asyncData.page.items as post (post.id)}
+            <div class="card bordered shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title">{post.title}</h2>
+                    <p>{toShortStr(post.body)}</p>
+                    <div class="card-actions justify-between items-center">
+                        <div class="text-sm">
+                            <div>
+                                <b>Author:</b>
+                                <a class="hover:underline" href="/users/{post.author.id}">
+                                    {post.author.username}
+                                </a>
+                            </div>
+                            <div>
+                                <b>Created at:</b>
+                                {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
+                            </div>
                         </div>
                         <div>
-                            <b>Created at:</b>
-                            {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
+                            <Button class="btn-primary" href="/posts/{post.id}">Open</Button>
                         </div>
-                    </div>
-                    <div>
-                        <Button class="btn-primary" href="/posts/{post.id}">Open</Button>
                     </div>
                 </div>
             </div>
-        </div>
-    {:else}
-        <h1 class="mt-10 text-2xl text-center">No posts</h1>
-    {/each}
-    {#if pagination && posts.length}
-        <CommonPagination
-            currentPage={pagination.pageNumber}
-            pageCount={pagination.pageCount}
-            href="/posts"
-        />
-    {/if}
-</div>
-<CommonModal
-    title="Post creating"
-    persistent={modals.postCreating.waiting}
-    bind:visible={modals.postCreating.visible}
->
-    <div class="form-control">
-        <div class="label">
-            <span class="label-text">Title:</span>
-        </div>
-        <input class="input input-bordered" bind:value={modals.postCreating.title} />
+        {:else}
+            <h1 class="mt-10 text-2xl text-center">No posts</h1>
+        {/each}
+        {#if asyncData.page.items.length}
+            <CommonPagination
+                currentPage={asyncData.page.pageNumber}
+                pageCount={asyncData.page.pageCount}
+                href="/posts"
+                bind:itemsPerPage
+                on:changeItemsPerPage={onChangeItemsPerPage}
+            />
+        {/if}
     </div>
-    <div class="form-control">
-        <div class="label">
-            <span class="label-text">Body:</span>
+    <CommonModal
+        title="Post creating"
+        persistent={modals.postCreating.waiting}
+        bind:visible={modals.postCreating.visible}
+    >
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">Title:</span>
+            </div>
+            <input class="input input-bordered" bind:value={modals.postCreating.title} />
         </div>
-        <textarea
-            class="textarea textarea-bordered h-64 resize-none"
-            bind:value={modals.postCreating.body}
-        />
-    </div>
-    <svelte:fragment slot="actions">
-        <Button
-            class="btn-success btn-sm"
-            loading={modals.postCreating.waiting}
-            disabled={!modals.postCreating.title || !modals.postCreating.body}
-            on:click={modals.postCreating.save}
-        >
-            Create
-        </Button>
-        <Button
-            class="btn-error btn-sm"
-            disabled={modals.postCreating.waiting}
-            on:click={modals.postCreating.close}
-        >
-            Cancel
-        </Button>
-    </svelte:fragment>
-</CommonModal>
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">Body:</span>
+            </div>
+            <textarea
+                class="textarea textarea-bordered h-64 resize-none"
+                bind:value={modals.postCreating.body}
+            />
+        </div>
+        <svelte:fragment slot="actions">
+            <Button
+                class="btn-success btn-sm"
+                loading={modals.postCreating.waiting}
+                disabled={!modals.postCreating.title || !modals.postCreating.body}
+                on:click={modals.postCreating.save}
+            >
+                Create
+            </Button>
+            <Button
+                class="btn-error btn-sm"
+                disabled={modals.postCreating.waiting}
+                on:click={modals.postCreating.close}
+            >
+                Cancel
+            </Button>
+        </svelte:fragment>
+    </CommonModal>
+{/if}

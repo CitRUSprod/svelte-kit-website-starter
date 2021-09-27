@@ -1,12 +1,10 @@
-export function setQueryParams(query: Record<string, string | undefined>) {
+export function setQueryParams(query: Record<string, any>) {
     const url = new URL(location.href)
     const keys = Object.keys(query)
 
     for (const key of keys) {
-        const value = query[key]
-
-        if (value) {
-            url.searchParams.set(key, value)
+        if (query[key]) {
+            url.searchParams.set(key, query[key])
         } else {
             url.searchParams.delete(key)
         }
