@@ -99,10 +99,13 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                             .string()
                             .trim()
                             .lowercase()
+                            .max(64)
                             .test(v => vld.isEmail(v!)),
                         username: yup
                             .string()
                             .trim()
+                            .min(3)
+                            .max(32)
                             .test(v => vld.isWordChars(v!)),
                         role: yup.mixed().oneOf(Object.values(Role))
                     })

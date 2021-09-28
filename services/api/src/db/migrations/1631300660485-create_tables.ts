@@ -23,7 +23,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     {
                         name: "username",
                         type: "varchar",
-                        length: "64",
+                        length: "32",
                         isUnique: true
                     },
                     {

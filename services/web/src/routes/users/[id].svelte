@@ -97,12 +97,15 @@
                 .string()
                 .trim()
                 .lowercase()
+                .max(64)
                 .test(v => vld.isEmail(v!))
                 .required()
                 .isValidSync(modals.userEditing.email) &&
             yup
                 .string()
                 .trim()
+                .min(3)
+                .max(32)
                 .test(v => vld.isWordChars(v!))
                 .required()
                 .isValidSync(modals.userEditing.username)

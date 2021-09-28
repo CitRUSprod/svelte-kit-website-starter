@@ -28,7 +28,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                         .string()
                         .trim()
                         .min(3)
-                        .max(64)
+                        .max(32)
                         .test(v => vld.isWordChars(v!))
                         .required(),
                     password: yup.string().trim().min(8).required()

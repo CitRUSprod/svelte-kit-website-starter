@@ -33,6 +33,7 @@
                 .string()
                 .trim()
                 .lowercase()
+                .max(64)
                 .test(v => vld.isEmail(v!))
                 .required()
                 .isValidSync(email) && yup.string().trim().min(8).required().isValidSync(password)
