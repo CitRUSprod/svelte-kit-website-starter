@@ -4,8 +4,7 @@ import { BadRequest, InternalServerError, MethodNotAllowed } from "http-errors"
 import { Post, User } from "$/db/entities"
 import { Role } from "$/enums"
 import { Payload, Pagination, Sorting } from "$/types"
-import { createPostDto } from "$/dtos"
-import { hasAccess, getItemsPage } from "$/utils"
+import { dtos, hasAccess, getItemsPage } from "$/utils"
 
 interface Filters {
     title?: string
@@ -50,7 +49,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                         skip,
                         take
                     })
-                    const items = posts.map(p => createPostDto(p))
+                    const items = posts.map(p => dtos.post(p))
                     return { itemCount, items }
                 }
             )
@@ -91,7 +90,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
             await postsRepository.save(newPost)
             const post = await postsRepository.findOne(newPost, { relations: ["author"] })
 
-            reply.send(createPostDto(post!))
+            reply.send(dtos.post(post!))
         }
     })
 
@@ -110,7 +109,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 return
             }
 
-            reply.send(createPostDto(post))
+            reply.send(dtos.post(post))
         }
     })
 
@@ -154,7 +153,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
             if (req.body.body) post.body = req.body.body
             await postsRepository.save(post)
 
-            reply.send(createPostDto(post))
+            reply.send(dtos.post(post))
         }
     })
 

@@ -4,8 +4,7 @@ import { BadRequest, MethodNotAllowed, InternalServerError } from "http-errors"
 import { User } from "$/db/entities"
 import { Role } from "$/enums"
 import { Payload, Pagination, Sorting } from "$/types"
-import { createUserDto } from "$/dtos"
-import { validators as vld, hasAccess, getItemsPage } from "$/utils"
+import { dtos, validators as vld, hasAccess, getItemsPage } from "$/utils"
 
 interface Filters {
     email?: string
@@ -56,7 +55,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                         skip,
                         take
                     })
-                    const items = users.map(u => createUserDto(u))
+                    const items = users.map(u => dtos.user(u))
                     return { itemCount, items }
                 }
             )
@@ -81,7 +80,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 return
             }
 
-            reply.send(createUserDto(user))
+            reply.send(dtos.user(user))
         }
     })
 
@@ -139,7 +138,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 if (req.body.role && hasAccess(user, Role.Admin)) u.role = req.body.role
                 await usersRepository.save(u)
 
-                reply.send(createUserDto(u))
+                reply.send(dtos.user(u))
             }
         }
     )

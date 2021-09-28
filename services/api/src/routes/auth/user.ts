@@ -2,7 +2,7 @@ import { FastifyPluginCallback } from "fastify"
 import { InternalServerError } from "http-errors"
 import { Payload } from "$/types"
 import { User } from "$/db/entities"
-import { createUserDto } from "$/dtos"
+import { dtos } from "$/utils"
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     const usersRepository = app.orm.getRepository(User)
@@ -19,7 +19,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 return
             }
 
-            reply.send(createUserDto(user))
+            reply.send(dtos.user(user))
         }
     })
 
