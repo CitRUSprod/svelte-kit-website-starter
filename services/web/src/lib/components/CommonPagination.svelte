@@ -14,11 +14,27 @@
     export let currentPage: number
     export let pageCount: number
     export let length = 5
-    export let href: string
+    export let pathname: string
+    export let query: Record<string, any>
     export let itemsPerPage = 10
     export let itemsPerPageText = "Items per page:"
 
     const itemsPerPageOptions = [10, 25, 50, 100]
+
+    function getUrl(pageNumber: number, queryParams: Record<string, any>) {
+        const params = new URLSearchParams()
+        const keys = Object.keys(queryParams)
+
+        for (const key of keys) {
+            if (queryParams[key]) {
+                params.set(key, queryParams[key].toString())
+            }
+        }
+
+        params.set("page", pageNumber.toString())
+
+        return `${pathname}?${params.toString()}`
+    }
 
     const dispatch = createEventDispatcher()
 
@@ -30,24 +46,35 @@
 <div class="flex justify-between">
     <Pagination class="btn-group" {currentPage} {pageCount} {length} let:pageNumber>
         <svelte:fragment slot="before">
-            <Button href="{href}?page=1" disabled={currentPage === 1}>
+            <Button class="btn-info" href={getUrl(1, query)} disabled={currentPage === 1}>
                 <FaIcon icon={faAngleDoubleLeft} />
             </Button>
-            <Button href="{href}?page={currentPage - 1}" disabled={currentPage === 1}>
+            <Button
+                class="btn-info !mx-1"
+                href={getUrl(currentPage - 1, query)}
+                disabled={currentPage === 1}
+            >
                 <FaIcon icon={faAngleLeft} />
             </Button>
         </svelte:fragment>
-        <Button
-            class={currentPage === pageNumber ? "btn-active" : ""}
-            href="{href}?page={pageNumber}"
-        >
-            {pageNumber}
-        </Button>
+        {#if currentPage === pageNumber}
+            <Button class="btn-active">{pageNumber}</Button>
+        {:else}
+            <Button class="btn-info" href={getUrl(pageNumber, query)}>{pageNumber}</Button>
+        {/if}
         <svelte:fragment slot="after">
-            <Button href="{href}?page={currentPage + 1}" disabled={currentPage === pageCount}>
+            <Button
+                class="btn-info !mx-1"
+                href={getUrl(currentPage + 1, query)}
+                disabled={currentPage === pageCount}
+            >
                 <FaIcon icon={faAngleRight} />
             </Button>
-            <Button href="{href}?page={pageCount}" disabled={currentPage === pageCount}>
+            <Button
+                class="btn-info"
+                href={getUrl(pageCount, query)}
+                disabled={currentPage === pageCount}
+            >
                 <FaIcon icon={faAngleDoubleRight} />
             </Button>
         </svelte:fragment>

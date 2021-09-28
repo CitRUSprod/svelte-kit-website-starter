@@ -1,34 +1,43 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
-    import { axios, setQueryParams } from "$lib/utils"
+    import { axios, qp } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
 
     interface QueryParams {
-        perPage?: string | number
-        page?: string | number
-        sort?: string
-        order?: string
-        title?: string
+        perPage: number
+        page: number
+        sort: string
+        order: string
+        title: string
+    }
+
+    const defaultQuery: QueryParams = {
+        perPage: 10,
+        page: 1,
+        sort: "creationDate",
+        order: "asc",
+        title: ""
     }
 
     async function getPostsPage(query: QueryParams) {
-        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", { params: query })
+        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
+            params: qp.removeDefault(query, defaultQuery)
+        })
         return data
     }
 
     export const load: Load = async ({ page: p }) => {
         if (browser) {
-            const query: QueryParams = {
-                perPage: p.query.get("perPage") ?? undefined,
-                page: p.query.get("page") ?? undefined,
-                sort: p.query.get("sort") ?? undefined,
-                order: p.query.get("order") ?? undefined,
-                title: p.query.get("title") ?? undefined
-            }
-
+            const query = qp.get(
+                p.query,
+                defaultQuery,
+                ["sort", "order", "title"],
+                ["perPage", "page"]
+            )
             const page = await getPostsPage(query)
+
             return {
                 props: {
                     asyncData: { page, query }
@@ -56,26 +65,19 @@
 
     export let asyncData: AsyncData | null = null
 
-    let itemsPerPage = 10
-
-    const defaultQuery: Omit<Required<QueryParams>, "perPage" | "page"> = {
-        title: "",
-        sort: "creationDate",
-        order: "asc"
-    }
+    let itemsPerPage = defaultQuery.perPage
 
     const search = {
         title: defaultQuery.title
     }
 
-    let sortingValue = `${defaultQuery.sort}-${defaultQuery.order}`
+    let sorting = `${defaultQuery.sort}-${defaultQuery.order}`
 
     function watchForAsyncData(data: AsyncData | null) {
         if (data) {
-            search.title = data.query.title ?? defaultQuery.title
-            const sort = data.query.sort ?? defaultQuery.sort
-            const order = data.query.order ?? defaultQuery.order
-            sortingValue = `${sort}-${order}`
+            itemsPerPage = data.query.perPage
+            search.title = data.query.title
+            sorting = `${data.query.sort}-${data.query.order}`
         }
     }
 
@@ -84,21 +86,22 @@
     async function updatePosts() {
         const page = await getPostsPage(asyncData!.query)
         asyncData!.page = page
-        setQueryParams(asyncData!.query)
+        qp.setForCurrentPage(qp.removeDefault(asyncData!.query, defaultQuery))
     }
 
     async function onChangeItemsPerPage() {
         asyncData!.query.perPage = itemsPerPage
+        asyncData!.query.page = 1
         await updatePosts()
     }
 
     async function onInputTitle() {
-        asyncData!.query.title = search.title || undefined
+        asyncData!.query.title = search.title
         await updatePosts()
     }
 
     async function onChangeSorting() {
-        const arr = sortingValue.split("-")
+        const arr = sorting.split("-")
         asyncData!.query.sort = arr[0]
         asyncData!.query.order = arr[1]
         await updatePosts()
@@ -162,7 +165,7 @@
                 <FaIcon icon={faSearch} />
             </div>
         </div>
-        <select class="select select-primary" bind:value={sortingValue} on:change={onChangeSorting}>
+        <select class="select select-primary" bind:value={sorting} on:change={onChangeSorting}>
             <option value="creationDate-asc">Creation date (Earliest)</option>
             <option value="creationDate-desc">Creation date (Latest)</option>
             <option value="title-asc">Title (A-Z)</option>
@@ -204,7 +207,8 @@
             <CommonPagination
                 currentPage={asyncData.page.pageNumber}
                 pageCount={asyncData.page.pageCount}
-                href="/posts"
+                pathname="/posts"
+                query={asyncData.query}
                 bind:itemsPerPage
                 on:changeItemsPerPage={onChangeItemsPerPage}
             />
