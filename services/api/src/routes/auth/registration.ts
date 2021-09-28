@@ -1,6 +1,7 @@
 import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
 import { User } from "$/db/entities"
+import { validators as vld } from "$/utils"
 
 interface RegistrationData {
     email: string
@@ -16,8 +17,20 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         schema: app.createYupSchema(yup => ({
             body: yup
                 .object({
-                    email: yup.string().trim().lowercase().min(6).max(64).email().required(),
-                    username: yup.string().trim().min(3).max(64).required(),
+                    email: yup
+                        .string()
+                        .trim()
+                        .lowercase()
+                        .max(64)
+                        .test(v => vld.isEmail(v!))
+                        .required(),
+                    username: yup
+                        .string()
+                        .trim()
+                        .min(3)
+                        .max(64)
+                        .test(v => vld.isWordChars(v!))
+                        .required(),
                     password: yup.string().trim().min(8).required()
                 })
                 .required()

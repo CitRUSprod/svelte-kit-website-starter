@@ -3,6 +3,7 @@ import { BadRequest } from "http-errors"
 import argon2 from "argon2"
 import { User, RefreshToken } from "$/db/entities"
 import { TokenTtl } from "$/enums"
+import { validators as vld } from "$/utils"
 
 interface LoginData {
     email: string
@@ -18,7 +19,13 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         schema: app.createYupSchema(yup => ({
             body: yup
                 .object({
-                    email: yup.string().trim().lowercase().min(6).max(64).email().required(),
+                    email: yup
+                        .string()
+                        .trim()
+                        .lowercase()
+                        .max(64)
+                        .test(v => vld.isEmail(v!))
+                        .required(),
                     password: yup.string().trim().min(8).required()
                 })
                 .required()

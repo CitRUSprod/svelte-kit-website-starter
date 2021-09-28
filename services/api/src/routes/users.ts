@@ -5,7 +5,7 @@ import { User } from "$/db/entities"
 import { Role } from "$/enums"
 import { Payload, Pagination, Sorting } from "$/types"
 import { createUserDto } from "$/dtos"
-import { hasAccess, getItemsPage } from "$/utils"
+import { validators as vld, hasAccess, getItemsPage } from "$/utils"
 
 interface Filters {
     email?: string
@@ -30,7 +30,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                     .transform(v => v.toUpperCase())
                     .oneOf(["ASC", "DESC"])
                     .default("ASC"),
-                email: yup.string().trim().lowercase(),
+                email: yup.string().trim(),
                 username: yup.string().trim()
             })
         })),
@@ -95,8 +95,15 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 }),
                 body: yup
                     .object({
-                        email: yup.string().trim().lowercase(),
-                        username: yup.string().trim(),
+                        email: yup
+                            .string()
+                            .trim()
+                            .lowercase()
+                            .test(v => vld.isEmail(v!)),
+                        username: yup
+                            .string()
+                            .trim()
+                            .test(v => vld.isWordChars(v!)),
                         role: yup.mixed().oneOf(Object.values(Role))
                     })
                     .required()
