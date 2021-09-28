@@ -95,33 +95,32 @@
 
     $: watchForAsyncData(asyncData)
 
-    async function updateUsers() {
-        const page = await getUsersPage(asyncData!.query)
-        asyncData!.page = page
+    async function updateUsersPage() {
+        asyncData!.page = await getUsersPage(asyncData!.query)
         qp.setForCurrentPage(qp.removeDefault(asyncData!.query, defaultQuery))
     }
 
     async function onChangeItemsPerPage() {
         asyncData!.query.perPage = itemsPerPage
         asyncData!.query.page = 1
-        await updateUsers()
+        await updateUsersPage()
     }
 
     async function onInputEmail() {
-        asyncData!.query.email = search.email
-        await updateUsers()
+        asyncData!.query.email = search.email.trim().toLowerCase()
+        await updateUsersPage()
     }
 
     async function onInputUsername() {
-        asyncData!.query.username = search.username
-        await updateUsers()
+        asyncData!.query.username = search.username.trim()
+        await updateUsersPage()
     }
 
     async function onChangeSorting() {
         const arr = sorting.split("-")
         asyncData!.query.sort = arr[0]
         asyncData!.query.order = arr[1]
-        await updateUsers()
+        await updateUsersPage()
     }
 
     const modals = {
@@ -146,7 +145,7 @@
                     await axios.put<User>(`/api/users/${id}`, {
                         role: modals.userEditing.role
                     })
-                    await updateUsers()
+                    await updateUsersPage()
                     toasts.add("success", "User has been successfully edited")
                     modals.userEditing.visible = false
                 } catch (err: any) {
@@ -156,6 +155,11 @@
                 modals.userEditing.waiting = false
             }
         }
+    }
+
+    $: rules = {
+        completedUserEditingModal:
+            !!modals.userEditing.user && modals.userEditing.role !== modals.userEditing.user.role
     }
 </script>
 
@@ -280,7 +284,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.userEditing.waiting}
-                disabled={modals.userEditing.role === modals.userEditing.user?.role}
+                disabled={!rules.completedUserEditingModal}
                 on:click={modals.userEditing.save}
             >
                 Save

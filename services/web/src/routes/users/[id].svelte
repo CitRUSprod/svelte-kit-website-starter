@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, getRoleName } from "$lib/utils"
+    import { axios, validators as vld, getRoleName } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
@@ -40,6 +40,7 @@
 <script lang="ts">
     import { Button, CommonModal } from "$lib/components"
 
+    import * as yup from "yup"
     import { DateTime } from "luxon"
     import { session, toasts } from "$lib/stores"
 
@@ -50,8 +51,7 @@
     export let asyncData: AsyncData | null = null
 
     async function updateUser() {
-        const user = await getUser(asyncData!.user.id)
-        asyncData!.user = user
+        asyncData!.user = await getUser(asyncData!.user.id)
     }
 
     const modals = {
@@ -73,8 +73,8 @@
 
                 try {
                     await axios.put<User>(`/api/users/${asyncData!.user.id}`, {
-                        email: modals.userEditing.email,
-                        username: modals.userEditing.username
+                        email: modals.userEditing.email.trim().toLowerCase(),
+                        username: modals.userEditing.username.trim()
                     })
                     await updateUser()
                     toasts.add("success", "User has been successfully edited")
@@ -86,6 +86,26 @@
                 modals.userEditing.waiting = false
             }
         }
+    }
+
+    $: rules = {
+        completedUserEditingModal:
+            !!asyncData &&
+            (!vld.isEqualTI(modals.userEditing.email, asyncData.user.email) ||
+                !vld.isEqualT(modals.userEditing.username, asyncData.user.username)) &&
+            yup
+                .string()
+                .trim()
+                .lowercase()
+                .test(v => vld.isEmail(v!))
+                .required()
+                .isValidSync(modals.userEditing.email) &&
+            yup
+                .string()
+                .trim()
+                .test(v => vld.isWordChars(v!))
+                .required()
+                .isValidSync(modals.userEditing.username)
     }
 </script>
 
@@ -118,20 +138,27 @@
             <div class="label">
                 <span class="label-text">Username:</span>
             </div>
-            <input class="input input-bordered" bind:value={modals.userEditing.username} />
+            <input
+                class="input input-bordered"
+                disabled={modals.userEditing.waiting}
+                bind:value={modals.userEditing.username}
+            />
         </div>
         <div class="form-control">
             <div class="label">
                 <span class="label-text">Email:</span>
             </div>
-            <input class="input input-bordered" bind:value={modals.userEditing.email} />
+            <input
+                class="input input-bordered"
+                disabled={modals.userEditing.waiting}
+                bind:value={modals.userEditing.email}
+            />
         </div>
         <svelte:fragment slot="actions">
             <Button
                 class="btn-success btn-sm"
                 loading={modals.userEditing.waiting}
-                disabled={modals.userEditing.email === asyncData.user.email &&
-                    modals.userEditing.username === asyncData.user.username}
+                disabled={!rules.completedUserEditingModal}
                 on:click={modals.userEditing.save}
             >
                 Save

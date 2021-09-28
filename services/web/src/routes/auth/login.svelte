@@ -17,27 +17,34 @@
 <script lang="ts">
     import { Button } from "$lib/components"
 
+    import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import { axios, socket } from "$lib/utils"
+    import { axios, socket, validators as vld } from "$lib/utils"
 
     let email = ""
     let password = ""
 
-    let loading = false
+    let waiting = false
 
-    $: trimmedEmail = email.trim()
-    $: trimmedPassword = password.trim()
-
-    $: disabled = !trimmedEmail || !trimmedPassword
+    $: rules = {
+        completedLoginForm:
+            yup
+                .string()
+                .trim()
+                .lowercase()
+                .test(v => vld.isEmail(v!))
+                .required()
+                .isValidSync(email) && yup.string().trim().min(8).required().isValidSync(password)
+    }
 
     async function login() {
-        loading = true
+        waiting = true
 
         try {
             await axios.post("/api/auth/login", {
-                email: trimmedEmail,
-                password: trimmedPassword
+                email: email.trim().toLowerCase(),
+                password: password.trim()
             })
             const { data } = await axios.get("/api/auth/user")
             $session.user = data
@@ -48,11 +55,11 @@
             toasts.add("error", err.response?.data?.message ?? err.message)
         }
 
-        loading = false
+        waiting = false
     }
 
     async function onEnter(e: KeyboardEvent) {
-        if (e.key === "Enter" && !disabled) {
+        if (e.key === "Enter" && rules.completedLoginForm) {
             await login()
             const input = e.target as HTMLInputElement
             input.focus()
@@ -71,7 +78,7 @@
             <input
                 class="input input-bordered w-full"
                 placeholder="Email"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -81,14 +88,21 @@
                 class="input input-bordered w-full"
                 placeholder="Password"
                 type="password"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={password}
                 on:keypress={onEnter}
             />
         </div>
         <div class="flex mt-4 justify-between">
             <Button class="btn-ghost" href="/auth/registration">Register</Button>
-            <Button class="btn-primary" {loading} {disabled} on:click={login}>Login</Button>
+            <Button
+                class="btn-primary"
+                loading={waiting}
+                disabled={!rules.completedLoginForm}
+                on:click={login}
+            >
+                Login
+            </Button>
         </div>
     </div>
 </div>

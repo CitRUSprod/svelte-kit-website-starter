@@ -17,37 +17,45 @@
 <script lang="ts">
     import { Button } from "$lib/components"
 
+    import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios } from "$lib/utils"
+    import { axios, validators as vld } from "$lib/utils"
 
     let email = ""
     let username = ""
     let password = ""
     let passwordConfirmation = ""
 
-    let loading = false
+    let waiting = false
 
-    $: trimmedEmail = email.trim()
-    $: trimmedUsername = username.trim()
-    $: trimmedPassword = password.trim()
-    $: trimmedPasswordConfirmation = passwordConfirmation.trim()
-
-    $: disabled =
-        !trimmedEmail ||
-        !trimmedUsername ||
-        !trimmedPassword ||
-        !trimmedPasswordConfirmation ||
-        trimmedPassword !== trimmedPasswordConfirmation
+    $: rules = {
+        completedRegistrationForm:
+            vld.isEqualT(password, passwordConfirmation) &&
+            yup
+                .string()
+                .trim()
+                .lowercase()
+                .test(v => vld.isEmail(v!))
+                .required()
+                .isValidSync(email) &&
+            yup
+                .string()
+                .trim()
+                .test(v => vld.isWordChars(v!))
+                .required()
+                .isValidSync(username) &&
+            yup.string().trim().min(8).required().isValidSync(password)
+    }
 
     async function register() {
-        loading = true
+        waiting = true
 
         try {
             await axios.post("/api/auth/registration", {
-                email: trimmedEmail,
-                username: trimmedUsername,
-                password: trimmedPassword
+                email: email.trim().toLowerCase(),
+                username: username.trim(),
+                password: password.trim()
             })
             toasts.add("success", "You have successfully registered")
             goto("/auth/login")
@@ -55,11 +63,11 @@
             toasts.add("error", err.response?.data?.message ?? err.message)
         }
 
-        loading = false
+        waiting = false
     }
 
     async function onEnter(e: KeyboardEvent) {
-        if (e.key === "Enter" && !disabled) {
+        if (e.key === "Enter" && rules.completedRegistrationForm) {
             await register()
             const input = e.target as HTMLInputElement
             input.focus()
@@ -78,7 +86,7 @@
             <input
                 class="input input-bordered w-full"
                 placeholder="Email"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -87,7 +95,7 @@
             <input
                 class="input input-bordered w-full"
                 placeholder="Username"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={username}
                 on:keypress={onEnter}
             />
@@ -97,7 +105,7 @@
                 class="input input-bordered w-full"
                 placeholder="Password"
                 type="password"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={password}
                 on:keypress={onEnter}
             />
@@ -107,14 +115,21 @@
                 class="input input-bordered w-full"
                 placeholder="Password Confirmation"
                 type="password"
-                disabled={loading}
+                disabled={waiting}
                 bind:value={passwordConfirmation}
                 on:keypress={onEnter}
             />
         </div>
         <div class="flex mt-4 justify-between">
             <Button class="btn-ghost" href="/auth/login">Login</Button>
-            <Button class="btn-primary" {loading} {disabled} on:click={register}>Register</Button>
+            <Button
+                class="btn-primary"
+                loading={waiting}
+                disabled={!rules.completedRegistrationForm}
+                on:click={register}
+            >
+                Register
+            </Button>
         </div>
     </div>
 </div>

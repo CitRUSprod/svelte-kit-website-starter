@@ -45,7 +45,5 @@ export function setForCurrentPage(query: Record<string, any>) {
         }
     }
 
-    console.log("URL:", url.toString())
-
     history.pushState(null, "", url.toString())
 }

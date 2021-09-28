@@ -24,7 +24,8 @@
         "overlayscrollbars": "1.13.1",
         "socket.io-client": "4.2.0",
         "svelte-fa": "2.3.3",
-        "svelte-local-storage-store": "0.2.4"
+        "svelte-local-storage-store": "0.2.4",
+        "yup": "0.32.9"
     },
     "devDependencies": {
         "@sveltejs/adapter-node": "1.0.0-next.45",

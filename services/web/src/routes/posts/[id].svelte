@@ -1,18 +1,26 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, hasAccess } from "$lib/utils"
+    import { axios, validators as vld, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
 
+    async function getPost(id: number) {
+        const { data } = await axios.get<Post>(`/api/posts/${id}`)
+        return data
+    }
+
     export const load: Load = async ({ page }) => {
         if (browser) {
-            const { id } = page.params
-
             try {
-                const { data } = await axios.get<Post>(`/api/posts/${id}`)
-                return { props: { post: data } }
+                const post = await getPost(parseInt(page.params.id))
+
+                return {
+                    props: {
+                        asyncData: { post }
+                    }
+                }
             } catch (err: unknown) {
                 goto("/posts", { replaceState: true })
             }
@@ -26,12 +34,21 @@
     import FaIcon from "svelte-fa"
     import { Button, CommonModal } from "$lib/components"
 
+    import * as yup from "yup"
     import { DateTime } from "luxon"
     import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
     import { toasts, session } from "$lib/stores"
     import { Role } from "$lib/enums"
 
-    export let post: Post | null = null
+    interface AsyncData {
+        post: Post
+    }
+
+    export let asyncData: AsyncData | null = null
+
+    async function updatePost() {
+        asyncData!.post = await getPost(asyncData!.post.id)
+    }
 
     const modals = {
         postEditing: {
@@ -40,8 +57,8 @@
             title: "",
             body: "",
             open(this: void) {
-                modals.postEditing.title = post!.title
-                modals.postEditing.body = post!.body
+                modals.postEditing.title = asyncData!.post.title
+                modals.postEditing.body = asyncData!.post.body
                 modals.postEditing.visible = true
             },
             close(this: void) {
@@ -51,12 +68,11 @@
                 modals.postEditing.waiting = true
 
                 try {
-                    const { id } = post!
-                    const { data } = await axios.put<Post>(`/api/posts/${id}`, {
-                        title: modals.postEditing.title,
-                        body: modals.postEditing.body
+                    await axios.put<Post>(`/api/posts/${asyncData!.post.id}`, {
+                        title: modals.postEditing.title.trim(),
+                        body: modals.postEditing.body.trim()
                     })
-                    post = data
+                    await updatePost()
                     toasts.add("success", "Post has been successfully edited")
                     modals.postEditing.visible = false
                 } catch (err: any) {
@@ -79,8 +95,7 @@
                 modals.postRemoving.waiting = true
 
                 try {
-                    const { id } = post!
-                    await axios.delete(`/api/posts/${id}`)
+                    await axios.delete(`/api/posts/${asyncData!.post.id}`)
                     toasts.add("success", "Post has been successfully edited")
                     modals.postRemoving.visible = false
                     goto("/posts", { replaceState: true })
@@ -92,39 +107,52 @@
             }
         }
     }
+
+    $: rules = {
+        completedPostEditingModal:
+            !!asyncData &&
+            (!vld.isEqualT(modals.postEditing.title, asyncData.post.title) ||
+                !vld.isEqualT(modals.postEditing.body, asyncData.post.body)) &&
+            yup.string().trim().min(2).max(255).required().isValidSync(modals.postEditing.title) &&
+            yup.string().trim().min(2).required().isValidSync(modals.postEditing.body)
+    }
 </script>
 
 <svelte:head>
     <title>Post</title>
 </svelte:head>
 
-{#if post}
+{#if asyncData}
     <h1 class="text-4xl">Post</h1>
     <div class="mt-4 space-y-1">
         <div class="card bordered shadow-lg">
             <div class="card-body">
-                <h2 class="card-title">{post.title}</h2>
-                <p>{post.body}</p>
+                <h2 class="card-title">{asyncData.post.title}</h2>
+                <p>{asyncData.post.body}</p>
                 <div class="card-actions justify-between items-center">
                     <div class="text-sm">
                         <div>
                             <b>Author:</b>
-                            <a class="hover:underline" href="/users/{post.author.id}">
-                                {post.author.username}
+                            <a class="hover:underline" href="/users/{asyncData.post.author.id}">
+                                {asyncData.post.author.username}
                             </a>
                         </div>
                         <div>
                             <b>Created at:</b>
-                            {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
+                            {DateTime.fromISO(asyncData.post.creationDate).toFormat(
+                                "yyyy-MM-dd HH:mm"
+                            )}
                         </div>
-                        {#if post.creationDate !== post.editingDate}
+                        {#if asyncData.post.creationDate !== asyncData.post.editingDate}
                             <div>
                                 <b>Edited at:</b>
-                                {DateTime.fromISO(post.editingDate).toFormat("yyyy-MM-dd HH:mm")}
+                                {DateTime.fromISO(asyncData.post.editingDate).toFormat(
+                                    "yyyy-MM-dd HH:mm"
+                                )}
                             </div>
                         {/if}
                     </div>
-                    {#if post.author.id === $session.user?.id || hasAccess($session.user, Role.Admin)}
+                    {#if asyncData.post.author.id === $session.user?.id || hasAccess($session.user, Role.Admin)}
                         <div>
                             <Button class="btn-warning" on:click={modals.postEditing.open}>
                                 <FaIcon icon={faPencilAlt} />
@@ -147,7 +175,11 @@
             <div class="label">
                 <span class="label-text">Title:</span>
             </div>
-            <input class="input input-bordered" bind:value={modals.postEditing.title} />
+            <input
+                class="input input-bordered"
+                disabled={modals.postEditing.waiting}
+                bind:value={modals.postEditing.title}
+            />
         </div>
         <div class="form-control">
             <div class="label">
@@ -155,6 +187,7 @@
             </div>
             <textarea
                 class="textarea textarea-bordered h-64 resize-none"
+                disabled={modals.postEditing.waiting}
                 bind:value={modals.postEditing.body}
             />
         </div>
@@ -162,8 +195,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postEditing.waiting}
-                disabled={modals.postEditing.title === post.title &&
-                    modals.postEditing.body === post.body}
+                disabled={!rules.completedPostEditingModal}
                 on:click={modals.postEditing.save}
             >
                 Save

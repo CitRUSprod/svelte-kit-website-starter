@@ -54,6 +54,7 @@
     import { Button, CommonModal, CommonPagination } from "$lib/components"
 
     import * as _ from "lodash-es"
+    import * as yup from "yup"
     import { faSearch } from "@fortawesome/free-solid-svg-icons"
     import { DateTime } from "luxon"
     import { toasts, session } from "$lib/stores"
@@ -83,28 +84,27 @@
 
     $: watchForAsyncData(asyncData)
 
-    async function updatePosts() {
-        const page = await getPostsPage(asyncData!.query)
-        asyncData!.page = page
+    async function updatePostsPage() {
+        asyncData!.page = await getPostsPage(asyncData!.query)
         qp.setForCurrentPage(qp.removeDefault(asyncData!.query, defaultQuery))
     }
 
     async function onChangeItemsPerPage() {
         asyncData!.query.perPage = itemsPerPage
         asyncData!.query.page = 1
-        await updatePosts()
+        await updatePostsPage()
     }
 
     async function onInputTitle() {
-        asyncData!.query.title = search.title
-        await updatePosts()
+        asyncData!.query.title = search.title.trim()
+        await updatePostsPage()
     }
 
     async function onChangeSorting() {
         const arr = sorting.split("-")
         asyncData!.query.sort = arr[0]
         asyncData!.query.order = arr[1]
-        await updatePosts()
+        await updatePostsPage()
     }
 
     const modals = {
@@ -126,10 +126,10 @@
 
                 try {
                     await axios.post<Post>("/api/posts", {
-                        title: modals.postCreating.title,
-                        body: modals.postCreating.body
+                        title: modals.postCreating.title.trim(),
+                        body: modals.postCreating.body.trim()
                     })
-                    await updatePosts()
+                    await updatePostsPage()
                     toasts.add("success", "Post has been successfully created")
                     modals.postCreating.visible = false
                 } catch (err: any) {
@@ -139,6 +139,12 @@
                 modals.postCreating.waiting = false
             }
         }
+    }
+
+    $: rules = {
+        completedPostCreatingModal:
+            yup.string().trim().min(2).max(255).required().isValidSync(modals.postCreating.title) &&
+            yup.string().trim().min(2).required().isValidSync(modals.postCreating.body)
     }
 
     function toShortStr(str: string) {
@@ -223,7 +229,11 @@
             <div class="label">
                 <span class="label-text">Title:</span>
             </div>
-            <input class="input input-bordered" bind:value={modals.postCreating.title} />
+            <input
+                class="input input-bordered"
+                disabled={modals.postCreating.waiting}
+                bind:value={modals.postCreating.title}
+            />
         </div>
         <div class="form-control">
             <div class="label">
@@ -231,6 +241,7 @@
             </div>
             <textarea
                 class="textarea textarea-bordered h-64 resize-none"
+                disabled={modals.postCreating.waiting}
                 bind:value={modals.postCreating.body}
             />
         </div>
@@ -238,7 +249,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postCreating.waiting}
-                disabled={!modals.postCreating.title || !modals.postCreating.body}
+                disabled={!rules.completedPostCreatingModal}
                 on:click={modals.postCreating.save}
             >
                 Create
