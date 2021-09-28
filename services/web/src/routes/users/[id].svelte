@@ -6,6 +6,11 @@
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
 
+    async function getUser(id: number) {
+        const { data } = await axios.get<User>(`/api/users/${id}`)
+        return data
+    }
+
     export const load: Load<{ session: Session }> = async ({ session, page }) => {
         if (!session.user) {
             return {
@@ -15,11 +20,14 @@
         }
 
         if (browser) {
-            const { id } = page.params
-
             try {
-                const { data } = await axios.get<User>(`/api/users/${id}`)
-                return { props: { user: data } }
+                const user = await getUser(parseInt(page.params.id))
+
+                return {
+                    props: {
+                        asyncData: { user }
+                    }
+                }
             } catch (err: unknown) {
                 goto("/", { replaceState: true })
             }
@@ -30,24 +38,111 @@
 </script>
 
 <script lang="ts">
-    import { DateTime } from "luxon"
+    import { Button, CommonModal } from "$lib/components"
 
-    export let user: User | null = null
+    import { DateTime } from "luxon"
+    import { session, toasts } from "$lib/stores"
+
+    interface AsyncData {
+        user: User
+    }
+
+    export let asyncData: AsyncData | null = null
+
+    async function updateUser() {
+        const user = await getUser(asyncData!.user.id)
+        asyncData!.user = user
+    }
+
+    const modals = {
+        userEditing: {
+            visible: false,
+            waiting: false,
+            email: "",
+            username: "",
+            open(this: void) {
+                modals.userEditing.email = asyncData!.user.email
+                modals.userEditing.username = asyncData!.user.username
+                modals.userEditing.visible = true
+            },
+            close(this: void) {
+                modals.userEditing.visible = false
+            },
+            async save(this: void) {
+                modals.userEditing.waiting = true
+
+                try {
+                    await axios.put<User>(`/api/users/${asyncData!.user.id}`, {
+                        email: modals.userEditing.email,
+                        username: modals.userEditing.username
+                    })
+                    await updateUser()
+                    toasts.add("success", "User has been successfully edited")
+                    modals.userEditing.visible = false
+                } catch (err: any) {
+                    toasts.add("error", err.response?.data?.message ?? err.message)
+                }
+
+                modals.userEditing.waiting = false
+            }
+        }
+    }
 </script>
 
 <svelte:head>
     <title>User Profile</title>
 </svelte:head>
 
-{#if user}
+{#if asyncData}
     <h1 class="text-4xl">User Profile</h1>
     <div class="mt-4 space-y-1">
-        <div><b>Username:</b> {user.username}</div>
-        <div><b>Email:</b> {user.email}</div>
-        <div><b>Role:</b> {getRoleName(user.role)}</div>
+        <div><b>Username:</b> {asyncData.user.username}</div>
+        <div><b>Email:</b> {asyncData.user.email}</div>
+        <div><b>Role:</b> {getRoleName(asyncData.user.role)}</div>
         <div>
             <b>Registration date:</b>
-            {DateTime.fromISO(user.registrationDate).toFormat("LLLL d, yyyy")}
+            {DateTime.fromISO(asyncData.user.registrationDate).toFormat("LLLL d, yyyy")}
         </div>
+        {#if $session.user?.id === asyncData.user.id}
+            <div>
+                <Button class="btn-warning" on:click={modals.userEditing.open}>Edit</Button>
+            </div>
+        {/if}
     </div>
+    <CommonModal
+        title="User editing"
+        persistent={modals.userEditing.waiting}
+        bind:visible={modals.userEditing.visible}
+    >
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">Username:</span>
+            </div>
+            <input class="input input-bordered" bind:value={modals.userEditing.username} />
+        </div>
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">Email:</span>
+            </div>
+            <input class="input input-bordered" bind:value={modals.userEditing.email} />
+        </div>
+        <svelte:fragment slot="actions">
+            <Button
+                class="btn-success btn-sm"
+                loading={modals.userEditing.waiting}
+                disabled={modals.userEditing.email === asyncData.user.email &&
+                    modals.userEditing.username === asyncData.user.username}
+                on:click={modals.userEditing.save}
+            >
+                Save
+            </Button>
+            <Button
+                class="btn-error btn-sm"
+                disabled={modals.userEditing.waiting}
+                on:click={modals.userEditing.close}
+            >
+                Cancel
+            </Button>
+        </svelte:fragment>
+    </CommonModal>
 {/if}

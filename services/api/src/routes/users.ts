@@ -1,11 +1,11 @@
 import { FastifyPluginCallback } from "fastify"
 import { FindManyOptions, ILike } from "typeorm"
-import { BadRequest } from "http-errors"
+import { BadRequest, MethodNotAllowed, InternalServerError } from "http-errors"
 import { User } from "$/db/entities"
 import { Role } from "$/enums"
-import { Pagination, Sorting } from "$/types"
+import { Payload, Pagination, Sorting } from "$/types"
 import { createUserDto } from "$/dtos"
-import { getItemsPage } from "$/utils"
+import { hasAccess, getItemsPage } from "$/utils"
 
 interface Filters {
     email?: string
@@ -30,7 +30,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                     .transform(v => v.toUpperCase())
                     .oneOf(["ASC", "DESC"])
                     .default("ASC"),
-                email: yup.string().trim(),
+                email: yup.string().trim().lowercase(),
                 username: yup.string().trim()
             })
         })),
@@ -86,32 +86,53 @@ const route: FastifyPluginCallback = (app, opts, done) => {
     })
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    app.put<{ Params: { id: number }; Body: { role: Role } }>("/:id", {
-        schema: app.createYupSchema(yup => ({
-            params: yup.object({
-                id: yup.number().integer().positive()
-            }),
-            body: yup
-                .object({
-                    role: yup.mixed().oneOf(Object.values(Role)).required()
-                })
-                .required()
-        })),
-        preHandler: app.auth([app.isAuthorized, app.hasAccess(Role.Admin)], { relation: "and" }),
-        async handler(req, reply) {
-            const user = await usersRepository.findOne(req.params.id)
+    app.put<{ Params: { id: number }; Body: { email?: string; username?: string; role?: Role } }>(
+        "/:id",
+        {
+            schema: app.createYupSchema(yup => ({
+                params: yup.object({
+                    id: yup.number().integer().positive()
+                }),
+                body: yup
+                    .object({
+                        email: yup.string().trim().lowercase(),
+                        username: yup.string().trim(),
+                        role: yup.mixed().oneOf(Object.values(Role))
+                    })
+                    .required()
+            })),
+            preHandler: app.auth([app.isAuthorized]),
+            async handler(req, reply) {
+                const { id } = req.user as Payload
 
-            if (!user) {
-                reply.send(new BadRequest("User with such ID was not found"))
-                return
+                const user = await usersRepository.findOne(id)
+
+                if (!user) {
+                    reply.send(new InternalServerError("User not found"))
+                    return
+                }
+
+                if (user.id !== req.params.id && !hasAccess(user, Role.Admin)) {
+                    reply.send(new MethodNotAllowed("No access"))
+                    return
+                }
+
+                const u = await usersRepository.findOne(req.params.id)
+
+                if (!u) {
+                    reply.send(new BadRequest("User with such ID was not found"))
+                    return
+                }
+
+                if (req.body.email) u.email = req.body.email
+                if (req.body.username) u.username = req.body.username
+                if (req.body.role && hasAccess(user, Role.Admin)) u.role = req.body.role
+                await usersRepository.save(u)
+
+                reply.send(createUserDto(u))
             }
-
-            user.role = req.body.role
-            await usersRepository.save(user)
-
-            reply.send(createUserDto(user))
         }
-    })
+    )
 
     done()
 }
