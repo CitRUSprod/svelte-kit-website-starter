@@ -30,13 +30,11 @@ export class Post {
     public creationDate!: Date
 
     @Column("timestamp")
-    public editingDate!: Date
+    public editingDate!: Date | null
 
     @BeforeInsert()
     public setDefaultValues() {
-        const date = new Date()
-        this.creationDate = date
-        this.editingDate = date
+        this.creationDate = new Date()
     }
 
     @BeforeUpdate()

@@ -106,7 +106,8 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "editingDate",
-                        type: "timestamp"
+                        type: "timestamp",
+                        isNullable: true
                     }
                 ],
                 foreignKeys: [

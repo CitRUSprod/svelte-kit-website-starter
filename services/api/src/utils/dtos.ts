@@ -18,6 +18,6 @@ export function post(p: Post): JsonObject {
         title: p.title,
         body: p.body,
         creationDate: p.creationDate.toJSON(),
-        editingDate: p.editingDate.toJSON()
+        editingDate: p.editingDate?.toJSON() ?? null
     }
 }

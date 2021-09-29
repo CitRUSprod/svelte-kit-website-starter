@@ -143,7 +143,7 @@
                                 "yyyy-MM-dd HH:mm"
                             )}
                         </div>
-                        {#if asyncData.post.creationDate !== asyncData.post.editingDate}
+                        {#if asyncData.post.editingDate}
                             <div>
                                 <b>Edited at:</b>
                                 {DateTime.fromISO(asyncData.post.editingDate).toFormat(

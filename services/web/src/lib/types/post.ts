@@ -6,5 +6,5 @@ export interface Post {
     title: string
     body: string
     creationDate: string
-    editingDate: string
+    editingDate: string | null
 }

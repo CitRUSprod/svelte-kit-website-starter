@@ -23,7 +23,7 @@ export class RefreshToken {
     @PrimaryGeneratedColumn()
     public id!: number
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { unique: true, length: 255 })
     public token!: string
 
     @OneToOne(() => User)
