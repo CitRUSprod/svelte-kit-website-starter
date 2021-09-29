@@ -91,7 +91,7 @@
             close(this: void) {
                 modals.postRemoving.visible = false
             },
-            async save(this: void) {
+            async remove(this: void) {
                 modals.postRemoving.waiting = true
 
                 try {
@@ -219,7 +219,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postRemoving.waiting}
-                on:click={modals.postRemoving.save}
+                on:click={modals.postRemoving.remove}
             >
                 Remove
             </Button>

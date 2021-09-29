@@ -85,6 +85,38 @@
 
                 modals.userEditing.waiting = false
             }
+        },
+        passwordChanging: {
+            visible: false,
+            waiting: false,
+            oldPassword: "",
+            newPassword: "",
+            newPasswordConfirmation: "",
+            open(this: void) {
+                modals.passwordChanging.oldPassword = ""
+                modals.passwordChanging.newPassword = ""
+                modals.passwordChanging.newPasswordConfirmation = ""
+                modals.passwordChanging.visible = true
+            },
+            close(this: void) {
+                modals.passwordChanging.visible = false
+            },
+            async change(this: void) {
+                modals.passwordChanging.waiting = true
+
+                try {
+                    await axios.put<User>("/api/auth/password", {
+                        oldPassword: modals.passwordChanging.oldPassword.trim(),
+                        newPassword: modals.passwordChanging.newPassword.trim()
+                    })
+                    toasts.add("success", "Password has been successfully changed")
+                    modals.passwordChanging.visible = false
+                } catch (err: any) {
+                    toasts.add("error", err.response?.data?.message ?? err.message)
+                }
+
+                modals.passwordChanging.waiting = false
+            }
         }
     }
 
@@ -108,7 +140,23 @@
                 .max(32)
                 .test(v => vld.isWordChars(v!))
                 .required()
-                .isValidSync(modals.userEditing.username)
+                .isValidSync(modals.userEditing.username),
+        completedPasswordChangingModal:
+            !vld.isEqualT(
+                modals.passwordChanging.oldPassword,
+                modals.passwordChanging.newPassword
+            ) &&
+            vld.isEqualT(
+                modals.passwordChanging.newPassword,
+                modals.passwordChanging.newPasswordConfirmation
+            ) &&
+            yup
+                .string()
+                .trim()
+                .min(8)
+                .required()
+                .isValidSync(modals.passwordChanging.oldPassword) &&
+            yup.string().trim().min(8).required().isValidSync(modals.passwordChanging.newPassword)
     }
 </script>
 
@@ -129,6 +177,9 @@
         {#if $session.user?.id === asyncData.user.id}
             <div>
                 <Button class="btn-warning" on:click={modals.userEditing.open}>Edit</Button>
+                <Button class="btn-warning" on:click={modals.passwordChanging.open}>
+                    Change password
+                </Button>
             </div>
         {/if}
     </div>
@@ -170,6 +221,62 @@
                 class="btn-error btn-sm"
                 disabled={modals.userEditing.waiting}
                 on:click={modals.userEditing.close}
+            >
+                Cancel
+            </Button>
+        </svelte:fragment>
+    </CommonModal>
+    <CommonModal
+        title="Password changing"
+        persistent={modals.passwordChanging.waiting}
+        bind:visible={modals.passwordChanging.visible}
+    >
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">Old password:</span>
+            </div>
+            <input
+                class="input input-bordered"
+                type="password"
+                disabled={modals.passwordChanging.waiting}
+                bind:value={modals.passwordChanging.oldPassword}
+            />
+        </div>
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">New password:</span>
+            </div>
+            <input
+                class="input input-bordered"
+                type="password"
+                disabled={modals.passwordChanging.waiting}
+                bind:value={modals.passwordChanging.newPassword}
+            />
+        </div>
+        <div class="form-control">
+            <div class="label">
+                <span class="label-text">New password confirmation:</span>
+            </div>
+            <input
+                class="input input-bordered"
+                type="password"
+                disabled={modals.passwordChanging.waiting}
+                bind:value={modals.passwordChanging.newPasswordConfirmation}
+            />
+        </div>
+        <svelte:fragment slot="actions">
+            <Button
+                class="btn-success btn-sm"
+                loading={modals.passwordChanging.waiting}
+                disabled={!rules.completedPasswordChangingModal}
+                on:click={modals.passwordChanging.change}
+            >
+                Change
+            </Button>
+            <Button
+                class="btn-error btn-sm"
+                disabled={modals.passwordChanging.waiting}
+                on:click={modals.passwordChanging.close}
             >
                 Cancel
             </Button>

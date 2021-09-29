@@ -126,19 +126,39 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                     return
                 }
 
-                const u = await usersRepository.findOne(req.params.id)
+                const editableUser = await usersRepository.findOne(req.params.id)
 
-                if (!u) {
+                if (!editableUser) {
                     reply.send(new BadRequest("User with such ID was not found"))
                     return
                 }
 
-                if (req.body.email) u.email = req.body.email
-                if (req.body.username) u.username = req.body.username
-                if (req.body.role && hasAccess(user, Role.Admin)) u.role = req.body.role
-                await usersRepository.save(u)
+                const { email, username, role } = req.body
 
-                reply.send(dtos.user(u))
+                if (email && email !== editableUser.email) {
+                    const userByEmail = await usersRepository.findOne({ email })
+
+                    if (userByEmail) {
+                        reply.send(new BadRequest("A user with this email already exists"))
+                        return
+                    }
+                }
+
+                if (username && username !== editableUser.username) {
+                    const userByUsername = await usersRepository.findOne({ username })
+
+                    if (userByUsername) {
+                        reply.send(new BadRequest("A user with this username already exists"))
+                        return
+                    }
+                }
+
+                if (email) editableUser.email = email
+                if (username) editableUser.username = username
+                if (role && hasAccess(user, Role.Admin)) editableUser.role = role
+                await usersRepository.save(editableUser)
+
+                reply.send(dtos.user(editableUser))
             }
         }
     )

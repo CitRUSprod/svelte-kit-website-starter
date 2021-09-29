@@ -24,9 +24,13 @@ export class User {
     @Column("timestamp")
     public registrationDate!: Date
 
+    public async updatePassword(password: string) {
+        this.password = await argon2.hash(password)
+    }
+
     @BeforeInsert()
     public async setDefaultValues() {
-        this.password = await argon2.hash(this.password)
+        await this.updatePassword(this.password)
         this.role ??= Role.User
         this.registrationDate = new Date()
     }
