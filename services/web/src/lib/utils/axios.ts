@@ -10,26 +10,6 @@ if (!browser) {
 
 export const axios = baseAxios.create({ baseURL: baseUrl })
 
-axios.interceptors.request.use(config => {
-    let accessToken: string | undefined
-
-    if (browser) {
-        accessToken = cookies.parse(document.cookie).accessToken
-    } else {
-        const { cookie } = config.headers
-
-        if (cookie) {
-            accessToken = cookies.parse(cookie).accessToken
-        }
-    }
-
-    if (accessToken) {
-        config.headers.authorization = `Bearer ${accessToken}`
-    }
-
-    return config
-})
-
 axios.interceptors.response.use(
     config => config,
     async error => {

@@ -49,7 +49,7 @@ app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
         }
     })
     .decorate<FastifyInstance["createYupSchema"]>("createYupSchema", createYupSchema)
-    .decorate<FastifyAuthFunction>("isAuthorized", async req => req.jwtVerify())
+    .decorate<FastifyInstance["isAuthorized"]>("isAuthorized", async req => req.jwtVerify())
     .decorate<FastifyInstance["hasAccess"]>(
         "hasAccess",
         (...allowedRoles) =>
@@ -72,7 +72,7 @@ app.decorate<FastifyInstance["generateTokens"]>("generateTokens", payload => {
     )
 
 app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), migrations: [] })
-    .register(jwt, { secret: jwtSecret })
+    .register(jwt, { secret: jwtSecret, cookie: { cookieName: "accessToken", signed: false } })
     .register(cookie)
     .register(auth)
     .register(socketIo)
