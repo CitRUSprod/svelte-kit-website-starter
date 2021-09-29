@@ -48,15 +48,15 @@
         ]
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.17.3",
-        "@citrus-linting/prettier-config": "0.3.0",
+        "@citrus-linting/eslint-config": "0.17.4",
+        "@citrus-linting/prettier-config": "0.4.0",
         "@citrus-linting/stylelint-config": "0.3.0",
-        "@commitlint/cli": "13.1.0",
-        "@ota-meshi/eslint-plugin-svelte": "0.9.0",
+        "@commitlint/cli": "13.2.0",
+        "@ota-meshi/eslint-plugin-svelte": "0.10.0",
         "@types/eslint": "7.28.0",
-        "@types/prettier": "2.3.2",
-        "@typescript-eslint/eslint-plugin": "4.30.0",
-        "@typescript-eslint/parser": "4.30.0",
+        "@types/prettier": "2.4.1",
+        "@typescript-eslint/eslint-plugin": "4.32.0",
+        "@typescript-eslint/parser": "4.32.0",
         "any-eslint-parser": "1.0.1",
         "commitizen": "4.2.4",
         "cz-customizable": "6.3.0",
@@ -65,13 +65,13 @@
         "eslint-plugin-prettier": "4.0.0",
         "husky": "7.0.2",
         "lint-staged": "11.1.2",
-        "prettier": "2.3.2",
+        "prettier": "2.4.1",
         "prettier-plugin-svelte": "2.4.0",
         "stylelint": "13.13.1",
         "stylelint-config-prettier": "8.0.2",
         "stylelint-prettier": "1.2.0",
-        "svelte": "3.42.4",
+        "svelte": "3.43.0",
         "svelte-eslint-parser": "0.4.5",
-        "typescript": "4.4.2"
+        "typescript": "4.4.3"
     }
 }
