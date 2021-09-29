@@ -29,7 +29,7 @@ export class Post {
     @Column("timestamp")
     public creationDate!: Date
 
-    @Column("timestamp")
+    @Column("timestamp", { nullable: true })
     public editingDate!: Date | null
 
     @BeforeInsert()

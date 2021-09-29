@@ -2,12 +2,12 @@ import { define } from "typeorm-seeding"
 import { Role } from "$/enums"
 import { User } from "../entities"
 
-define(User, () => {
+define(User, faker => {
     const user = new User()
-    user.email = "admin@google.com"
-    user.username = "Admin"
+    user.email = faker.internet.email().toLowerCase()
+    user.username = faker.internet.userName()
     user.password = "12345678"
-    user.role = Role.Admin
+    user.role = Role.User
 
     return user
 })
