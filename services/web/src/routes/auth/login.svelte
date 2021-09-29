@@ -20,14 +20,14 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import { axios, socket, validators as vld } from "$lib/utils"
+    import { axios, socket, vld } from "$lib/utils"
 
     let email = ""
     let password = ""
 
     let waiting = false
 
-    $: rules = {
+    $: validators = {
         completedLoginForm:
             yup
                 .string()
@@ -60,7 +60,7 @@
     }
 
     async function onEnter(e: KeyboardEvent) {
-        if (e.key === "Enter" && rules.completedLoginForm) {
+        if (e.key === "Enter" && validators.completedLoginForm) {
             await login()
             const input = e.target as HTMLInputElement
             input.focus()
@@ -99,7 +99,7 @@
             <Button
                 class="btn-primary"
                 loading={waiting}
-                disabled={!rules.completedLoginForm}
+                disabled={!validators.completedLoginForm}
                 on:click={login}
             >
                 Login

@@ -1,7 +1,7 @@
 import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
 import { User } from "$/db/entities"
-import { validators as vld } from "$/utils"
+import { vld } from "$/utils"
 
 interface RegistrationData {
     email: string

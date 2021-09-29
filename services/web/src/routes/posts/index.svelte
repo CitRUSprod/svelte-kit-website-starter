@@ -141,7 +141,7 @@
         }
     }
 
-    $: rules = {
+    $: validators = {
         completedPostCreatingModal:
             yup.string().trim().min(2).max(255).required().isValidSync(modals.postCreating.title) &&
             yup.string().trim().min(2).required().isValidSync(modals.postCreating.body)
@@ -249,7 +249,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postCreating.waiting}
-                disabled={!rules.completedPostCreatingModal}
+                disabled={!validators.completedPostCreatingModal}
                 on:click={modals.postCreating.save}
             >
                 Create

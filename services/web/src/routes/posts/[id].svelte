@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, validators as vld, hasAccess } from "$lib/utils"
+    import { axios, vld, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
@@ -108,7 +108,7 @@
         }
     }
 
-    $: rules = {
+    $: validators = {
         completedPostEditingModal:
             !!asyncData &&
             (!vld.isEqualT(modals.postEditing.title, asyncData.post.title) ||
@@ -195,7 +195,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.postEditing.waiting}
-                disabled={!rules.completedPostEditingModal}
+                disabled={!validators.completedPostEditingModal}
                 on:click={modals.postEditing.save}
             >
                 Save

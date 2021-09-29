@@ -20,7 +20,7 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios, validators as vld } from "$lib/utils"
+    import { axios, vld } from "$lib/utils"
 
     let email = ""
     let username = ""
@@ -29,7 +29,7 @@
 
     let waiting = false
 
-    $: rules = {
+    $: validators = {
         completedRegistrationForm:
             vld.isEqualT(password, passwordConfirmation) &&
             yup
@@ -70,7 +70,7 @@
     }
 
     async function onEnter(e: KeyboardEvent) {
-        if (e.key === "Enter" && rules.completedRegistrationForm) {
+        if (e.key === "Enter" && validators.completedRegistrationForm) {
             await register()
             const input = e.target as HTMLInputElement
             input.focus()
@@ -128,7 +128,7 @@
             <Button
                 class="btn-primary"
                 loading={waiting}
-                disabled={!rules.completedRegistrationForm}
+                disabled={!validators.completedRegistrationForm}
                 on:click={register}
             >
                 Register

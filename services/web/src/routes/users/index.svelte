@@ -157,7 +157,7 @@
         }
     }
 
-    $: rules = {
+    $: validators = {
         completedUserEditingModal:
             !!modals.userEditing.user && modals.userEditing.role !== modals.userEditing.user.role
     }
@@ -284,7 +284,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.userEditing.waiting}
-                disabled={!rules.completedUserEditingModal}
+                disabled={!validators.completedUserEditingModal}
                 on:click={modals.userEditing.save}
             >
                 Save

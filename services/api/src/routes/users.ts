@@ -4,7 +4,7 @@ import { BadRequest, MethodNotAllowed, InternalServerError } from "http-errors"
 import { User } from "$/db/entities"
 import { Role } from "$/enums"
 import { Payload, Pagination, Sorting } from "$/types"
-import { dtos, validators as vld, hasAccess, getItemsPage } from "$/utils"
+import { dtos, vld, hasAccess, getItemsPage } from "$/utils"
 
 interface Filters {
     email?: string

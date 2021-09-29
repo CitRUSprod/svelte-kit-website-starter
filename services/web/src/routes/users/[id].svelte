@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, validators as vld, getRoleName } from "$lib/utils"
+    import { axios, vld, getRoleName } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
@@ -120,7 +120,7 @@
         }
     }
 
-    $: rules = {
+    $: validators = {
         completedUserEditingModal:
             !!asyncData &&
             (!vld.isEqualTI(modals.userEditing.email, asyncData.user.email) ||
@@ -212,7 +212,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.userEditing.waiting}
-                disabled={!rules.completedUserEditingModal}
+                disabled={!validators.completedUserEditingModal}
                 on:click={modals.userEditing.save}
             >
                 Save
@@ -268,7 +268,7 @@
             <Button
                 class="btn-success btn-sm"
                 loading={modals.passwordChanging.waiting}
-                disabled={!rules.completedPasswordChangingModal}
+                disabled={!validators.completedPasswordChangingModal}
                 on:click={modals.passwordChanging.change}
             >
                 Change

@@ -2,7 +2,7 @@ import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
 import { User, RefreshToken } from "$/db/entities"
 import { TokenTtl } from "$/enums"
-import { validators as vld } from "$/utils"
+import { vld } from "$/utils"
 
 interface LoginData {
     email: string
