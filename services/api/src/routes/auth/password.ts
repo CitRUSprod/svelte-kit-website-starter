@@ -1,5 +1,4 @@
 import { FastifyPluginCallback } from "fastify"
-import argon2 from "argon2"
 import { BadRequest, InternalServerError } from "http-errors"
 import { User } from "$/db/entities"
 import { Payload } from "$/types"
@@ -38,7 +37,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 return
             }
 
-            const isCorrectPassword = await argon2.verify(user.password, oldPassword)
+            const isCorrectPassword = await user.verifyPassword(oldPassword)
 
             if (!isCorrectPassword) {
                 reply.send(new BadRequest("Incorrect old password"))

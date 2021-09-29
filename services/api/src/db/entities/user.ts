@@ -24,6 +24,10 @@ export class User {
     @Column("timestamp")
     public registrationDate!: Date
 
+    public verifyPassword(password: string) {
+        return argon2.verify(this.password, password)
+    }
+
     public async updatePassword(password: string) {
         this.password = await argon2.hash(password)
     }
