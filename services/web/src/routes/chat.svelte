@@ -12,10 +12,15 @@
     let scrollbar: OverlayScrollbar | undefined
 
     onMount(() => {
-        socket.emit("global-chat:join").on("global-chat:receive", (msg: ChatMessage) => {
-            messages.push(msg)
-            messages = messages
-        })
+        socket
+            .emit("global-chat:join")
+            .once("global-chat:get-history", (msgs: Array<ChatMessage>) => {
+                messages = msgs
+            })
+            .on("global-chat:receive", (msg: ChatMessage) => {
+                messages.push(msg)
+                messages = messages
+            })
 
         scrollbar = createScrollbar(messagesWrapper, {
             scrollbars: {
@@ -77,10 +82,17 @@
         <div class="flex-grow relative">
             <div class="h-full w-full overflow-y-auto absolute" bind:this={messagesWrapper}>
                 <div class="h-full w-full">
-                    {#each messages as message}
+                    {#each messages as msg}
                         <div class="py-1 break-text">
-                            <b>{message.user.username}:</b>
-                            <span>{message.text}</span>
+                            <a
+                                class="font-bold hover:underline"
+                                href="/users/{msg.user.id}"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                {msg.user.username}:
+                            </a>
+                            <span>{msg.text}</span>
                         </div>
                     {:else}
                         <div class="flex flex-col h-full justify-center">

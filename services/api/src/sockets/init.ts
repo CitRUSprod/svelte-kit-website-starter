@@ -49,11 +49,14 @@ export function init(app: FastifyInstance, jwtSecret: string) {
         )
     )
 
+    const globalChatHistory: Array<ChatMessage> = []
+
     app.io.on("connection", socket => {
         const user = getUserFromSocket(socket)
 
         socket.on("global-chat:join", () => {
             socket.join("global-chat")
+            socket.emit("global-chat:get-history", globalChatHistory)
         })
 
         socket.on("global-chat:leave", () => {
@@ -69,6 +72,12 @@ export function init(app: FastifyInstance, jwtSecret: string) {
                     },
                     text: rawMsg.text
                 }
+
+                if (globalChatHistory.length === 100) {
+                    globalChatHistory.shift()
+                }
+
+                globalChatHistory.push(msg)
 
                 socket.emit("global-chat:receive", msg)
                 socket.broadcast.to("global-chat").emit("global-chat:receive", msg)
