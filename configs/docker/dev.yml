@@ -5,9 +5,9 @@ services:
             service: nginx
         network_mode: host
         environment:
-            WEB_CLIENT_HOST: localhost
+            WEB_HOST: localhost
             API_HOST: localhost
-    mongo:
+    postgres:
         extends:
             file: ./base.yml
-            service: mongo
+            service: postgres

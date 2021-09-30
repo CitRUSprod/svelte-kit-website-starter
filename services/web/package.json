@@ -1,0 +1,51 @@
+{
+    "name": "web",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "svelte-kit dev -p 6701",
+        "build": "svelte-kit build",
+        "start": "PORT=6701 node dist",
+        "validate": "tsc --noEmit && svelte-check"
+    },
+    "postcss": {
+        "plugins": {
+            "tailwindcss": {},
+            "postcss-nested": {}
+        }
+    },
+    "dependencies": {
+        "@fortawesome/free-solid-svg-icons": "5.15.4",
+        "axios": "0.21.4",
+        "cookie": "0.4.1",
+        "lodash-es": "4.17.21",
+        "luxon": "2.0.2",
+        "nprogress": "0.2.0",
+        "overlayscrollbars": "1.13.1",
+        "socket.io-client": "4.2.0",
+        "svelte-fa": "2.3.3",
+        "svelte-local-storage-store": "0.2.4",
+        "yup": "0.32.9"
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-node": "1.0.0-next.52",
+        "@sveltejs/kit": "1.0.0-next.177",
+        "@types/cookie": "0.4.1",
+        "@types/lodash-es": "4.17.5",
+        "@types/luxon": "2.0.4",
+        "@types/node": "16.10.2",
+        "@types/nprogress": "0.2.0",
+        "@types/overlayscrollbars": "1.12.1",
+        "@types/tailwindcss": "2.2.1",
+        "daisyui": "1.14.1",
+        "node-fetch": "3.0.0",
+        "postcss": "8.3.8",
+        "postcss-load-config": "3.1.0",
+        "postcss-nested": "5.0.6",
+        "svelte": "3.43.0",
+        "svelte-check": "2.2.6",
+        "svelte-preprocess": "4.9.5",
+        "tailwindcss": "2.2.16",
+        "typescript": "4.4.3"
+    }
+}
