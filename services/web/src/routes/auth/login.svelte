@@ -94,6 +94,9 @@
                 on:keypress={onEnter}
             />
         </div>
+        <div class="mt-2">
+            <a class="hover:underline" href="/auth/reset">Forgot password?</a>
+        </div>
         <div class="flex mt-4 justify-between">
             <Button class="btn-ghost" href="/auth/registration">Register</Button>
             <Button

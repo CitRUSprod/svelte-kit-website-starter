@@ -118,6 +118,41 @@ export class CreateTables1631300660485 implements MigrationInterface {
         )
         await queryRunner.createTable(
             new Table({
+                name: "reset-tokens",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isGenerated: true
+                    },
+                    {
+                        name: "token",
+                        type: "varchar",
+                        length: "36",
+                        isUnique: true
+                    },
+                    {
+                        name: "userId",
+                        type: "int",
+                        isUnique: true
+                    },
+                    {
+                        name: "expirationDate",
+                        type: "timestamp"
+                    }
+                ],
+                foreignKeys: [
+                    {
+                        referencedTableName: "users",
+                        columnNames: ["userId"],
+                        referencedColumnNames: ["id"]
+                    }
+                ]
+            })
+        )
+        await queryRunner.createTable(
+            new Table({
                 name: "posts",
                 columns: [
                     {
@@ -162,6 +197,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner) {
         await queryRunner.dropTable("posts")
+        await queryRunner.dropTable("reset-tokens")
         await queryRunner.dropTable("verification-tokens")
         await queryRunner.dropTable("refresh-tokens")
         await queryRunner.dropTable("users")
