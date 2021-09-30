@@ -21,6 +21,9 @@ export class User {
     @Column("varchar", { length: 16 })
     public role!: Role
 
+    @Column("boolean")
+    public verified!: boolean
+
     @Column("timestamp")
     public registrationDate!: Date
 
@@ -36,6 +39,7 @@ export class User {
     public async setDefaultValues() {
         await this.updatePassword(this.password)
         this.role ??= Role.User
+        this.verified = false
         this.registrationDate = new Date()
     }
 }

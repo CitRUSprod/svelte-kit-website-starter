@@ -37,6 +37,10 @@ export class CreateTables1631300660485 implements MigrationInterface {
                         length: "16"
                     },
                     {
+                        name: "verified",
+                        type: "boolean"
+                    },
+                    {
                         name: "registrationDate",
                         type: "timestamp"
                     }
@@ -62,6 +66,41 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     {
                         name: "userId",
                         type: "int"
+                    },
+                    {
+                        name: "expirationDate",
+                        type: "timestamp"
+                    }
+                ],
+                foreignKeys: [
+                    {
+                        referencedTableName: "users",
+                        columnNames: ["userId"],
+                        referencedColumnNames: ["id"]
+                    }
+                ]
+            })
+        )
+        await queryRunner.createTable(
+            new Table({
+                name: "verification-tokens",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isGenerated: true
+                    },
+                    {
+                        name: "token",
+                        type: "varchar",
+                        length: "36",
+                        isUnique: true
+                    },
+                    {
+                        name: "userId",
+                        type: "int",
+                        isUnique: true
                     },
                     {
                         name: "expirationDate",
@@ -123,6 +162,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner) {
         await queryRunner.dropTable("posts")
+        await queryRunner.dropTable("verification-tokens")
         await queryRunner.dropTable("refresh-tokens")
         await queryRunner.dropTable("users")
     }

@@ -153,7 +153,11 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                     }
                 }
 
-                if (email) editableUser.email = email
+                if (email && email !== editableUser.email) {
+                    editableUser.email = email
+                    editableUser.verified = false
+                }
+
                 if (username) editableUser.username = username
                 if (role && hasAccess(user, Role.Admin)) editableUser.role = role
                 await usersRepository.save(editableUser)

@@ -23,11 +23,17 @@ services:
                 POSTGRES_DB: ${POSTGRES_DB}
         restart: always
         environment:
+            WEBSITE_DOMAIN: ${WEBSITE_DOMAIN}
             POSTGRES_HOST: postgres
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
             JWT_SECRET: ${JWT_SECRET}
+            MAILER_HOST: ${MAILER_HOST}
+            MAILER_PORT: ${MAILER_PORT}
+            MAILER_USER: ${MAILER_USER}
+            MAILER_PASSWORD: ${MAILER_PASSWORD}
+            MAILER_NAME: ${MAILER_NAME}
     postgres:
         image: postgres:13.4-alpine
         restart: always

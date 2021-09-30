@@ -7,6 +7,7 @@ export function user(u: User): JsonObject {
         email: u.email,
         username: u.username,
         role: u.role,
+        verified: u.verified,
         registrationDate: u.registrationDate.toJSON()
     }
 }

@@ -5,6 +5,7 @@ import logoutRoute from "./logout"
 import refreshRoute from "./refresh"
 import userRoute from "./user"
 import passwordRoute from "./password"
+import verificationRoute from "./verification"
 
 const route: FastifyPluginCallback = (app, opts, done) => {
     app.register(registrationRoute, { prefix: "/registration" })
@@ -13,6 +14,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         .register(refreshRoute, { prefix: "/refresh" })
         .register(userRoute, { prefix: "/user" })
         .register(passwordRoute, { prefix: "/password" })
+        .register(verificationRoute, { prefix: "/verification" })
 
     done()
 }

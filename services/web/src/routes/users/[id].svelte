@@ -72,7 +72,7 @@
                 modals.userEditing.waiting = true
 
                 try {
-                    await axios.put<User>(`/api/users/${asyncData!.user.id}`, {
+                    await axios.put(`/api/users/${asyncData!.user.id}`, {
                         email: modals.userEditing.email.trim().toLowerCase(),
                         username: modals.userEditing.username.trim()
                     })
@@ -105,7 +105,7 @@
                 modals.passwordChanging.waiting = true
 
                 try {
-                    await axios.put<User>("/api/auth/password", {
+                    await axios.put("/api/auth/password", {
                         oldPassword: modals.passwordChanging.oldPassword.trim(),
                         newPassword: modals.passwordChanging.newPassword.trim()
                     })
@@ -158,6 +158,21 @@
                 .isValidSync(modals.passwordChanging.oldPassword) &&
             yup.string().trim().min(8).required().isValidSync(modals.passwordChanging.newPassword)
     }
+
+    let emailSending = false
+
+    async function verifyEmail() {
+        emailSending = true
+
+        try {
+            await axios.post("/api/auth/verification")
+            toasts.add("success", "A confirmation email was sent to your email address")
+        } catch (err: any) {
+            toasts.add("error", err.response?.data?.message ?? err.message)
+        }
+
+        emailSending = false
+    }
 </script>
 
 <svelte:head>
@@ -170,6 +185,7 @@
         <div><b>Username:</b> {asyncData.user.username}</div>
         <div><b>Email:</b> {asyncData.user.email}</div>
         <div><b>Role:</b> {getRoleName(asyncData.user.role)}</div>
+        <div><b>Verified:</b> {asyncData.user.verified ? "Yes" : "No"}</div>
         <div>
             <b>Registration date:</b>
             {DateTime.fromISO(asyncData.user.registrationDate).toFormat("LLLL d, yyyy")}
@@ -180,6 +196,11 @@
                 <Button class="btn-warning" on:click={modals.passwordChanging.open}>
                     Change password
                 </Button>
+                {#if !asyncData.user.verified}
+                    <Button class="btn-success" loading={emailSending} on:click={verifyEmail}>
+                        Verify email
+                    </Button>
+                {/if}
             </div>
         {/if}
     </div>
