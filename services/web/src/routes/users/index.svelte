@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { Role } from "$lib/enums"
-    import { axios, qp, hasAccess, getRoleName } from "$lib/utils"
+    import { axios, qp, dt, hasAccess, getRoleName } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User, ItemsPage } from "$lib/types"
@@ -64,7 +64,6 @@
     import { Button, CommonModal, CommonPagination } from "$lib/components"
 
     import * as _ from "lodash-es"
-    import { DateTime } from "luxon"
     import { faSearch, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
     import { toasts } from "$lib/stores"
 
@@ -220,7 +219,7 @@
                         </td>
                         <td>{user.email}</td>
                         <td>{getRoleName(user.role)}</td>
-                        <td>{DateTime.fromISO(user.registrationDate).toFormat("LLLL d, yyyy")}</td>
+                        <td>{dt.getFullDate(user.registrationDate)}</td>
                         <td class="text-right">
                             <Button on:click={() => modals.userEditing.open(user)}>
                                 <FaIcon icon={faPencilAlt} />

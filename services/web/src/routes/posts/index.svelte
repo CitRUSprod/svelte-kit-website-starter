@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
-    import { axios, qp } from "$lib/utils"
+    import { axios, qp, dt } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
@@ -56,7 +56,6 @@
     import * as _ from "lodash-es"
     import * as yup from "yup"
     import { faSearch } from "@fortawesome/free-solid-svg-icons"
-    import { DateTime } from "luxon"
     import { toasts, session } from "$lib/stores"
 
     interface AsyncData {
@@ -197,7 +196,7 @@
                             </div>
                             <div>
                                 <b>Created at:</b>
-                                {DateTime.fromISO(post.creationDate).toFormat("yyyy-MM-dd HH:mm")}
+                                {dt.getFullDateAndTime(post.creationDate)}
                             </div>
                         </div>
                         <div>

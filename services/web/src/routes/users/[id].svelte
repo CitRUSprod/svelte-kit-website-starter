@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, vld, getRoleName } from "$lib/utils"
+    import { axios, vld, dt, getRoleName } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
@@ -41,7 +41,6 @@
     import { Button, CommonModal } from "$lib/components"
 
     import * as yup from "yup"
-    import { DateTime } from "luxon"
     import { session, toasts } from "$lib/stores"
 
     interface AsyncData {
@@ -188,7 +187,7 @@
         <div><b>Verified:</b> {asyncData.user.verified ? "Yes" : "No"}</div>
         <div>
             <b>Registration date:</b>
-            {DateTime.fromISO(asyncData.user.registrationDate).toFormat("LLLL d, yyyy")}
+            {dt.getFullDate(asyncData.user.registrationDate)}
         </div>
         {#if $session.user?.id === asyncData.user.id}
             <div>

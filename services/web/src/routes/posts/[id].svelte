@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
-    import { axios, vld, hasAccess } from "$lib/utils"
+    import { axios, vld, dt, hasAccess } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
@@ -35,7 +35,6 @@
     import { Button, CommonModal } from "$lib/components"
 
     import * as yup from "yup"
-    import { DateTime } from "luxon"
     import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
     import { toasts, session } from "$lib/stores"
     import { Role } from "$lib/enums"
@@ -139,16 +138,12 @@
                         </div>
                         <div>
                             <b>Created at:</b>
-                            {DateTime.fromISO(asyncData.post.creationDate).toFormat(
-                                "yyyy-MM-dd HH:mm"
-                            )}
+                            {dt.getFullDateAndTime(asyncData.post.creationDate)}
                         </div>
                         {#if asyncData.post.editingDate}
                             <div>
                                 <b>Edited at:</b>
-                                {DateTime.fromISO(asyncData.post.editingDate).toFormat(
-                                    "yyyy-MM-dd HH:mm"
-                                )}
+                                {dt.getFullDateAndTime(asyncData.post.editingDate)}
                             </div>
                         {/if}
                     </div>
