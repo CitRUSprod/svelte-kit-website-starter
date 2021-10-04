@@ -2,6 +2,18 @@ import { parse } from "cookie"
 
 export { parse }
 
+export function getSetFromHeaders(headers: Headers | Record<string, any>): Array<string> {
+    const header = "set-cookie"
+    const setCookie =
+        headers instanceof Headers ? headers.get(header)?.split(", ") : headers[header]
+
+    if (Array.isArray(setCookie)) {
+        return setCookie
+    } else {
+        return setCookie ? [setCookie] : []
+    }
+}
+
 export function getKeyValuePairs(cookieArray: Array<string>) {
     return cookieArray.map(c => c.split("; ")[0])
 }

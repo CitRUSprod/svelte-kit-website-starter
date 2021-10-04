@@ -1,13 +1,12 @@
 <script lang="ts" context="module">
+    import { ky, vld, getRedirectLoadOutput } from "$lib/utils"
+
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
         if (session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
+            return getRedirectLoadOutput("/")
         }
 
         return {}
@@ -20,7 +19,6 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios, vld } from "$lib/utils"
 
     let email = ""
     let username = ""
@@ -55,10 +53,12 @@
         waiting = true
 
         try {
-            await axios.post("/api/auth/registration", {
-                email: email.trim().toLowerCase(),
-                username: username.trim(),
-                password: password.trim()
+            await ky.post("api/auth/registration", {
+                json: {
+                    email: email.trim().toLowerCase(),
+                    username: username.trim(),
+                    password: password.trim()
+                }
             })
             toasts.add("success", "You have successfully registered")
             goto("/auth/login")

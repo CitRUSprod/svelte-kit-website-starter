@@ -1,13 +1,12 @@
 <script lang="ts" context="module">
+    import { ky, socket, getRedirectLoadOutput } from "$lib/utils"
+
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
         if (!session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
+            return getRedirectLoadOutput("/")
         }
 
         return {}
@@ -18,11 +17,10 @@
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
     import { session, toasts } from "$lib/stores"
-    import { axios, socket } from "$lib/utils"
 
     async function logout() {
         try {
-            await axios.post("/api/auth/logout")
+            await ky.post("api/auth/logout")
             $session.user = null
             socket.disconnect().connect()
             goto("/", { replaceState: true })

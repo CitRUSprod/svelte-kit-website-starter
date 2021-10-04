@@ -1,38 +1,35 @@
 <script lang="ts" context="module">
-    import { browser } from "$app/env"
-    import { goto } from "$app/navigation"
-    import { axios, vld, dt, getRoleName } from "$lib/utils"
+    import { HTTPError } from "ky"
+    import { ky, vld, dt, getRoleName, getRedirectLoadOutput } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
 
-    async function getUser(id: number) {
-        const { data } = await axios.get<User>(`/api/users/${id}`)
+    async function getUser(id: number, f?: typeof fetch) {
+        const res = await ky.get(`api/users/${id}`, { fetch: f })
+        const data: User = await res.json()
         return data
     }
 
-    export const load: Load<{ session: Session }> = async ({ session, page }) => {
+    export const load: Load<{ session: Session }> = async ({ session, page: p, fetch: f }) => {
         if (!session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
+            return getRedirectLoadOutput("/")
         }
 
-        if (browser) {
-            try {
-                const user = await getUser(parseInt(page.params.id))
+        let user: User
 
-                return {
-                    props: {
-                        asyncData: { user }
-                    }
-                }
-            } catch (err: unknown) {
-                goto("/", { replaceState: true })
+        try {
+            user = await getUser(parseInt(p.params.id), f)
+        } catch (err: unknown) {
+            if (err instanceof HTTPError && err.response.status === 401) {
+                return getRedirectLoadOutput(p)
             }
-        } else {
-            return {}
+
+            return getRedirectLoadOutput("/")
+        }
+
+        return {
+            props: { user }
         }
     }
 </script>
@@ -43,14 +40,10 @@
     import * as yup from "yup"
     import { session, toasts } from "$lib/stores"
 
-    interface AsyncData {
-        user: User
-    }
-
-    export let asyncData: AsyncData | null = null
+    export let user: User
 
     async function updateUser() {
-        asyncData!.user = await getUser(asyncData!.user.id)
+        user = await getUser(user.id)
     }
 
     const modals = {
@@ -60,8 +53,8 @@
             email: "",
             username: "",
             open(this: void) {
-                modals.userEditing.email = asyncData!.user.email
-                modals.userEditing.username = asyncData!.user.username
+                modals.userEditing.email = user.email
+                modals.userEditing.username = user.username
                 modals.userEditing.visible = true
             },
             close(this: void) {
@@ -71,9 +64,11 @@
                 modals.userEditing.waiting = true
 
                 try {
-                    await axios.put(`/api/users/${asyncData!.user.id}`, {
-                        email: modals.userEditing.email.trim().toLowerCase(),
-                        username: modals.userEditing.username.trim()
+                    await ky.put(`api/users/${user.id}`, {
+                        json: {
+                            email: modals.userEditing.email.trim().toLowerCase(),
+                            username: modals.userEditing.username.trim()
+                        }
                     })
                     await updateUser()
                     toasts.add("success", "User has been successfully edited")
@@ -104,9 +99,11 @@
                 modals.passwordChanging.waiting = true
 
                 try {
-                    await axios.put("/api/auth/password", {
-                        oldPassword: modals.passwordChanging.oldPassword.trim(),
-                        newPassword: modals.passwordChanging.newPassword.trim()
+                    await ky.put("api/auth/password", {
+                        json: {
+                            oldPassword: modals.passwordChanging.oldPassword.trim(),
+                            newPassword: modals.passwordChanging.newPassword.trim()
+                        }
                     })
                     toasts.add("success", "Password has been successfully changed")
                     modals.passwordChanging.visible = false
@@ -121,9 +118,8 @@
 
     $: validators = {
         completedUserEditingModal:
-            !!asyncData &&
-            (!vld.isEqualTI(modals.userEditing.email, asyncData.user.email) ||
-                !vld.isEqualT(modals.userEditing.username, asyncData.user.username)) &&
+            (!vld.isEqualTI(modals.userEditing.email, user.email) ||
+                !vld.isEqualT(modals.userEditing.username, user.username)) &&
             yup
                 .string()
                 .trim()
@@ -164,7 +160,7 @@
         emailSending = true
 
         try {
-            await axios.post("/api/auth/verification")
+            await ky.post("api/auth/verification")
             toasts.add("success", "A confirmation email was sent to your email address")
         } catch (err: any) {
             toasts.add("error", err.response?.data?.message ?? err.message)
@@ -178,128 +174,126 @@
     <title>User Profile</title>
 </svelte:head>
 
-{#if asyncData}
-    <h1 class="text-4xl">User Profile</h1>
-    <div class="mt-4 space-y-1">
-        <div><b>Username:</b> {asyncData.user.username}</div>
-        <div><b>Email:</b> {asyncData.user.email}</div>
-        <div><b>Role:</b> {getRoleName(asyncData.user.role)}</div>
-        <div><b>Verified:</b> {asyncData.user.verified ? "Yes" : "No"}</div>
-        <div>
-            <b>Registration date:</b>
-            {dt.getFullDate(asyncData.user.registrationDate)}
-        </div>
-        {#if $session.user?.id === asyncData.user.id}
-            <div>
-                <Button class="btn-warning" on:click={modals.userEditing.open}>Edit</Button>
-                <Button class="btn-warning" on:click={modals.passwordChanging.open}>
-                    Change password
-                </Button>
-                {#if !asyncData.user.verified}
-                    <Button class="btn-success" loading={emailSending} on:click={verifyEmail}>
-                        Verify email
-                    </Button>
-                {/if}
-            </div>
-        {/if}
+<h1 class="text-4xl">User Profile</h1>
+<div class="mt-4 space-y-1">
+    <div><b>Username:</b> {user.username}</div>
+    <div><b>Email:</b> {user.email}</div>
+    <div><b>Role:</b> {getRoleName(user.role)}</div>
+    <div><b>Verified:</b> {user.verified ? "Yes" : "No"}</div>
+    <div>
+        <b>Registration date:</b>
+        {dt.getFullDate(user.registrationDate)}
     </div>
-    <CommonModal
-        title="User editing"
-        persistent={modals.userEditing.waiting}
-        bind:visible={modals.userEditing.visible}
-    >
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Username:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                disabled={modals.userEditing.waiting}
-                bind:value={modals.userEditing.username}
-            />
-        </div>
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Email:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                disabled={modals.userEditing.waiting}
-                bind:value={modals.userEditing.email}
-            />
-        </div>
-        <svelte:fragment slot="actions">
-            <Button
-                class="btn-success btn-sm"
-                loading={modals.userEditing.waiting}
-                disabled={!validators.completedUserEditingModal}
-                on:click={modals.userEditing.save}
-            >
-                Save
+    {#if $session.user?.id === user.id}
+        <div>
+            <Button class="btn-warning" on:click={modals.userEditing.open}>Edit</Button>
+            <Button class="btn-warning" on:click={modals.passwordChanging.open}>
+                Change password
             </Button>
-            <Button
-                class="btn-error btn-sm"
-                disabled={modals.userEditing.waiting}
-                on:click={modals.userEditing.close}
-            >
-                Cancel
-            </Button>
-        </svelte:fragment>
-    </CommonModal>
-    <CommonModal
-        title="Password changing"
-        persistent={modals.passwordChanging.waiting}
-        bind:visible={modals.passwordChanging.visible}
-    >
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Old password:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                type="password"
-                disabled={modals.passwordChanging.waiting}
-                bind:value={modals.passwordChanging.oldPassword}
-            />
+            {#if !user.verified}
+                <Button class="btn-success" loading={emailSending} on:click={verifyEmail}>
+                    Verify email
+                </Button>
+            {/if}
         </div>
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">New password:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                type="password"
-                disabled={modals.passwordChanging.waiting}
-                bind:value={modals.passwordChanging.newPassword}
-            />
+    {/if}
+</div>
+<CommonModal
+    title="User editing"
+    persistent={modals.userEditing.waiting}
+    bind:visible={modals.userEditing.visible}
+>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Username:</span>
         </div>
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">New password confirmation:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                type="password"
-                disabled={modals.passwordChanging.waiting}
-                bind:value={modals.passwordChanging.newPasswordConfirmation}
-            />
+        <input
+            class="input input-bordered"
+            disabled={modals.userEditing.waiting}
+            bind:value={modals.userEditing.username}
+        />
+    </div>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Email:</span>
         </div>
-        <svelte:fragment slot="actions">
-            <Button
-                class="btn-success btn-sm"
-                loading={modals.passwordChanging.waiting}
-                disabled={!validators.completedPasswordChangingModal}
-                on:click={modals.passwordChanging.change}
-            >
-                Change
-            </Button>
-            <Button
-                class="btn-error btn-sm"
-                disabled={modals.passwordChanging.waiting}
-                on:click={modals.passwordChanging.close}
-            >
-                Cancel
-            </Button>
-        </svelte:fragment>
-    </CommonModal>
-{/if}
+        <input
+            class="input input-bordered"
+            disabled={modals.userEditing.waiting}
+            bind:value={modals.userEditing.email}
+        />
+    </div>
+    <svelte:fragment slot="actions">
+        <Button
+            class="btn-success btn-sm"
+            loading={modals.userEditing.waiting}
+            disabled={!validators.completedUserEditingModal}
+            on:click={modals.userEditing.save}
+        >
+            Save
+        </Button>
+        <Button
+            class="btn-error btn-sm"
+            disabled={modals.userEditing.waiting}
+            on:click={modals.userEditing.close}
+        >
+            Cancel
+        </Button>
+    </svelte:fragment>
+</CommonModal>
+<CommonModal
+    title="Password changing"
+    persistent={modals.passwordChanging.waiting}
+    bind:visible={modals.passwordChanging.visible}
+>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Old password:</span>
+        </div>
+        <input
+            class="input input-bordered"
+            type="password"
+            disabled={modals.passwordChanging.waiting}
+            bind:value={modals.passwordChanging.oldPassword}
+        />
+    </div>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">New password:</span>
+        </div>
+        <input
+            class="input input-bordered"
+            type="password"
+            disabled={modals.passwordChanging.waiting}
+            bind:value={modals.passwordChanging.newPassword}
+        />
+    </div>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">New password confirmation:</span>
+        </div>
+        <input
+            class="input input-bordered"
+            type="password"
+            disabled={modals.passwordChanging.waiting}
+            bind:value={modals.passwordChanging.newPasswordConfirmation}
+        />
+    </div>
+    <svelte:fragment slot="actions">
+        <Button
+            class="btn-success btn-sm"
+            loading={modals.passwordChanging.waiting}
+            disabled={!validators.completedPasswordChangingModal}
+            on:click={modals.passwordChanging.change}
+        >
+            Change
+        </Button>
+        <Button
+            class="btn-error btn-sm"
+            disabled={modals.passwordChanging.waiting}
+            on:click={modals.passwordChanging.close}
+        >
+            Cancel
+        </Button>
+    </svelte:fragment>
+</CommonModal>

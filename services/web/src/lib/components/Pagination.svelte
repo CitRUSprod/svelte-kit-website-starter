@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { browser } from "$app/env"
+
     export let currentPage: number
     export let pageCount: number
     export let length = 5
@@ -37,10 +39,12 @@
     $: updatePages(currentPage, pageCount, length)
 </script>
 
-<div class={klass}>
-    <slot name="before" />
-    {#each pages as page (page)}
-        <slot pageNumber={page} />
-    {/each}
-    <slot name="after" />
-</div>
+{#if browser}
+    <div class={klass}>
+        <slot name="before" />
+        {#each pages as page (page)}
+            <slot pageNumber={page} />
+        {/each}
+        <slot name="after" />
+    </div>
+{/if}

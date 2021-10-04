@@ -14,7 +14,7 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios, vld } from "$lib/utils"
+    import { ky, vld } from "$lib/utils"
 
     export let token: string
 
@@ -33,9 +33,11 @@
         waiting = true
 
         try {
-            await axios.patch("/api/auth/password", {
-                token,
-                password: newPassword.trim()
+            await ky.patch("api/auth/password", {
+                json: {
+                    token,
+                    password: newPassword.trim()
+                }
             })
             toasts.add("success", "Password has been successfully reset")
             goto("/auth/login")

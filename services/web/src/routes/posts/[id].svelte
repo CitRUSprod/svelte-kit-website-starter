@@ -1,31 +1,31 @@
 <script lang="ts" context="module">
-    import { browser } from "$app/env"
-    import { goto } from "$app/navigation"
-    import { axios, vld, dt, hasAccess } from "$lib/utils"
+    import { HTTPError } from "ky"
+    import { ky, vld, dt, hasAccess, getRedirectLoadOutput } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
 
-    async function getPost(id: number) {
-        const { data } = await axios.get<Post>(`/api/posts/${id}`)
+    async function getPost(id: number, f?: typeof fetch) {
+        const res = await ky.get(`api/posts/${id}`, { fetch: f })
+        const data: Post = await res.json()
         return data
     }
 
-    export const load: Load = async ({ page }) => {
-        if (browser) {
-            try {
-                const post = await getPost(parseInt(page.params.id))
+    export const load: Load = async ({ page: p, fetch: f }) => {
+        let post: Post
 
-                return {
-                    props: {
-                        asyncData: { post }
-                    }
-                }
-            } catch (err: unknown) {
-                goto("/posts", { replaceState: true })
+        try {
+            post = await getPost(parseInt(p.params.id), f)
+        } catch (err: unknown) {
+            if (err instanceof HTTPError && err.response.status === 401) {
+                return getRedirectLoadOutput(p)
             }
-        } else {
-            return {}
+
+            return getRedirectLoadOutput("/posts")
+        }
+
+        return {
+            props: { post }
         }
     }
 </script>
@@ -36,17 +36,14 @@
 
     import * as yup from "yup"
     import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
+    import { goto } from "$app/navigation"
     import { toasts, session } from "$lib/stores"
     import { Role } from "$lib/enums"
 
-    interface AsyncData {
-        post: Post
-    }
-
-    export let asyncData: AsyncData | null = null
+    export let post: Post
 
     async function updatePost() {
-        asyncData!.post = await getPost(asyncData!.post.id)
+        post = await getPost(post.id)
     }
 
     const modals = {
@@ -56,8 +53,8 @@
             title: "",
             body: "",
             open(this: void) {
-                modals.postEditing.title = asyncData!.post.title
-                modals.postEditing.body = asyncData!.post.body
+                modals.postEditing.title = post.title
+                modals.postEditing.body = post.body
                 modals.postEditing.visible = true
             },
             close(this: void) {
@@ -67,9 +64,11 @@
                 modals.postEditing.waiting = true
 
                 try {
-                    await axios.put<Post>(`/api/posts/${asyncData!.post.id}`, {
-                        title: modals.postEditing.title.trim(),
-                        body: modals.postEditing.body.trim()
+                    await ky.put(`api/posts/${post.id}`, {
+                        json: {
+                            title: modals.postEditing.title.trim(),
+                            body: modals.postEditing.body.trim()
+                        }
                     })
                     await updatePost()
                     toasts.add("success", "Post has been successfully edited")
@@ -94,7 +93,7 @@
                 modals.postRemoving.waiting = true
 
                 try {
-                    await axios.delete(`/api/posts/${asyncData!.post.id}`)
+                    await ky.delete(`api/posts/${post.id}`)
                     toasts.add("success", "Post has been successfully edited")
                     modals.postRemoving.visible = false
                     goto("/posts", { replaceState: true })
@@ -109,9 +108,8 @@
 
     $: validators = {
         completedPostEditingModal:
-            !!asyncData &&
-            (!vld.isEqualT(modals.postEditing.title, asyncData.post.title) ||
-                !vld.isEqualT(modals.postEditing.body, asyncData.post.body)) &&
+            (!vld.isEqualT(modals.postEditing.title, post.title) ||
+                !vld.isEqualT(modals.postEditing.body, post.body)) &&
             yup.string().trim().min(2).max(255).required().isValidSync(modals.postEditing.title) &&
             yup.string().trim().min(2).required().isValidSync(modals.postEditing.body)
     }
@@ -121,110 +119,108 @@
     <title>Post</title>
 </svelte:head>
 
-{#if asyncData}
-    <h1 class="text-4xl">Post</h1>
-    <div class="mt-4 space-y-1">
-        <div class="card bordered shadow-lg">
-            <div class="card-body">
-                <h2 class="card-title">{asyncData.post.title}</h2>
-                <p>{asyncData.post.body}</p>
-                <div class="card-actions justify-between items-center">
-                    <div class="text-sm">
-                        <div>
-                            <b>Author:</b>
-                            <a class="hover:underline" href="/users/{asyncData.post.author.id}">
-                                {asyncData.post.author.username}
-                            </a>
-                        </div>
-                        <div>
-                            <b>Created at:</b>
-                            {dt.getFullDateAndTime(asyncData.post.creationDate)}
-                        </div>
-                        {#if asyncData.post.editingDate}
-                            <div>
-                                <b>Edited at:</b>
-                                {dt.getFullDateAndTime(asyncData.post.editingDate)}
-                            </div>
-                        {/if}
+<h1 class="text-4xl">Post</h1>
+<div class="mt-4 space-y-1">
+    <div class="card bordered shadow-lg">
+        <div class="card-body">
+            <h2 class="card-title">{post.title}</h2>
+            <p>{post.body}</p>
+            <div class="card-actions justify-between items-center">
+                <div class="text-sm">
+                    <div>
+                        <b>Author:</b>
+                        <a class="hover:underline" href="/users/{post.author.id}">
+                            {post.author.username}
+                        </a>
                     </div>
-                    {#if asyncData.post.author.id === $session.user?.id || hasAccess($session.user, Role.Admin)}
+                    <div>
+                        <b>Created at:</b>
+                        {dt.getFullDateAndTime(post.creationDate)}
+                    </div>
+                    {#if post.editingDate}
                         <div>
-                            <Button class="btn-warning" on:click={modals.postEditing.open}>
-                                <FaIcon icon={faPencilAlt} />
-                            </Button>
-                            <Button class="btn-error" on:click={modals.postRemoving.open}>
-                                <FaIcon icon={faTrash} />
-                            </Button>
+                            <b>Edited at:</b>
+                            {dt.getFullDateAndTime(post.editingDate)}
                         </div>
                     {/if}
                 </div>
+                {#if post.author.id === $session.user?.id || hasAccess($session.user, Role.Admin)}
+                    <div>
+                        <Button class="btn-warning" on:click={modals.postEditing.open}>
+                            <FaIcon icon={faPencilAlt} />
+                        </Button>
+                        <Button class="btn-error" on:click={modals.postRemoving.open}>
+                            <FaIcon icon={faTrash} />
+                        </Button>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
-    <CommonModal
-        title="Post editing"
-        persistent={modals.postEditing.waiting}
-        bind:visible={modals.postEditing.visible}
-    >
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Title:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                disabled={modals.postEditing.waiting}
-                bind:value={modals.postEditing.title}
-            />
+</div>
+<CommonModal
+    title="Post editing"
+    persistent={modals.postEditing.waiting}
+    bind:visible={modals.postEditing.visible}
+>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Title:</span>
         </div>
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Body:</span>
-            </div>
-            <textarea
-                class="textarea textarea-bordered h-64 resize-none"
-                disabled={modals.postEditing.waiting}
-                bind:value={modals.postEditing.body}
-            />
+        <input
+            class="input input-bordered"
+            disabled={modals.postEditing.waiting}
+            bind:value={modals.postEditing.title}
+        />
+    </div>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Body:</span>
         </div>
-        <svelte:fragment slot="actions">
-            <Button
-                class="btn-success btn-sm"
-                loading={modals.postEditing.waiting}
-                disabled={!validators.completedPostEditingModal}
-                on:click={modals.postEditing.save}
-            >
-                Save
-            </Button>
-            <Button
-                class="btn-error btn-sm"
-                disabled={modals.postEditing.waiting}
-                on:click={modals.postEditing.close}
-            >
-                Cancel
-            </Button>
-        </svelte:fragment>
-    </CommonModal>
-    <CommonModal
-        title="Post removing"
-        persistent={modals.postRemoving.waiting}
-        bind:visible={modals.postRemoving.visible}
-    >
-        <div>Do you really want to remove this post?</div>
-        <svelte:fragment slot="actions">
-            <Button
-                class="btn-success btn-sm"
-                loading={modals.postRemoving.waiting}
-                on:click={modals.postRemoving.remove}
-            >
-                Remove
-            </Button>
-            <Button
-                class="btn-error btn-sm"
-                disabled={modals.postRemoving.waiting}
-                on:click={modals.postRemoving.close}
-            >
-                Cancel
-            </Button>
-        </svelte:fragment>
-    </CommonModal>
-{/if}
+        <textarea
+            class="textarea textarea-bordered h-64 resize-none"
+            disabled={modals.postEditing.waiting}
+            bind:value={modals.postEditing.body}
+        />
+    </div>
+    <svelte:fragment slot="actions">
+        <Button
+            class="btn-success btn-sm"
+            loading={modals.postEditing.waiting}
+            disabled={!validators.completedPostEditingModal}
+            on:click={modals.postEditing.save}
+        >
+            Save
+        </Button>
+        <Button
+            class="btn-error btn-sm"
+            disabled={modals.postEditing.waiting}
+            on:click={modals.postEditing.close}
+        >
+            Cancel
+        </Button>
+    </svelte:fragment>
+</CommonModal>
+<CommonModal
+    title="Post removing"
+    persistent={modals.postRemoving.waiting}
+    bind:visible={modals.postRemoving.visible}
+>
+    <div>Do you really want to remove this post?</div>
+    <svelte:fragment slot="actions">
+        <Button
+            class="btn-success btn-sm"
+            loading={modals.postRemoving.waiting}
+            on:click={modals.postRemoving.remove}
+        >
+            Remove
+        </Button>
+        <Button
+            class="btn-error btn-sm"
+            disabled={modals.postRemoving.waiting}
+            on:click={modals.postRemoving.close}
+        >
+            Cancel
+        </Button>
+    </svelte:fragment>
+</CommonModal>

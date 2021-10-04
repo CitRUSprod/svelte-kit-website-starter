@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
-    import { theme, pageLoading } from "$lib/stores"
+    import { theme } from "$lib/stores"
 
     import type { Load } from "@sveltejs/kit"
 
@@ -14,21 +14,7 @@
 </script>
 
 <script lang="ts">
-    import {
-        ThePageProgressBar,
-        TheHeader,
-        TheContent,
-        ThePageLoader,
-        TheToastContainer
-    } from "./_components"
-
-    import { onMount } from "svelte"
-
-    onMount(() => {
-        setTimeout(() => {
-            $pageLoading = false
-        }, 500)
-    })
+    import { ThePageProgressBar, TheHeader, TheContent, TheToastContainer } from "./_components"
 </script>
 
 <ThePageProgressBar />
@@ -36,9 +22,6 @@
 <TheContent>
     <slot />
 </TheContent>
-{#if $pageLoading}
-    <ThePageLoader />
-{/if}
 <TheToastContainer />
 
 <style lang="postcss" global>

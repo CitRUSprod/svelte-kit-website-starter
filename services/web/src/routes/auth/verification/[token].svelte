@@ -12,13 +12,13 @@
     import { browser } from "$app/env"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios } from "$lib/utils"
+    import { ky } from "$lib/utils"
 
     export let token: string
 
     async function verify() {
         try {
-            await axios.put("/api/auth/verification", { token })
+            await ky.put("api/auth/verification", { json: { token } })
             toasts.add("success", "Email successfully verified")
         } catch (err: any) {
             toasts.add("error", err.response?.data?.message ?? err.message)

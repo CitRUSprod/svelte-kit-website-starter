@@ -1,13 +1,12 @@
 <script lang="ts" context="module">
+    import { ky, vld, getRedirectLoadOutput } from "$lib/utils"
+
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
         if (session.user) {
-            return {
-                status: 302,
-                redirect: "/"
-            }
+            return getRedirectLoadOutput("/")
         }
 
         return {}
@@ -20,7 +19,6 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { axios, vld } from "$lib/utils"
 
     let email = ""
 
@@ -41,8 +39,10 @@
         waiting = true
 
         try {
-            await axios.post("/api/auth/password", {
-                email: email.trim().toLowerCase()
+            await ky.post("api/auth/password", {
+                json: {
+                    email: email.trim().toLowerCase()
+                }
             })
             toasts.add("success", "A reset link was sent to your email address")
             goto("/")

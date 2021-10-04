@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-    import { browser } from "$app/env"
-    import { axios, qp, dt } from "$lib/utils"
+    import { HTTPError } from "ky"
+    import { ky, qp, dt, getRedirectLoadOutput } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
@@ -21,30 +21,32 @@
         title: ""
     }
 
-    async function getPostsPage(query: QueryParams) {
-        const { data } = await axios.get<ItemsPage<Post>>("/api/posts", {
-            params: qp.removeDefault(query, defaultQuery)
+    async function getPostsPage(query: QueryParams, f?: typeof fetch) {
+        const res = await ky.get("api/posts", {
+            searchParams: qp.removeDefault(query, defaultQuery),
+            fetch: f
         })
+        const data: ItemsPage<Post> = await res.json()
         return data
     }
 
-    export const load: Load = async ({ page: p }) => {
-        if (browser) {
-            const query = qp.get(
-                p.query,
-                defaultQuery,
-                ["sort", "order", "title"],
-                ["perPage", "page"]
-            )
-            const page = await getPostsPage(query)
+    export const load: Load = async ({ page: p, fetch: f }) => {
+        const query = qp.get(p.query, defaultQuery, ["sort", "order", "title"], ["perPage", "page"])
 
-            return {
-                props: {
-                    asyncData: { page, query }
-                }
+        let page: ItemsPage<Post>
+
+        try {
+            page = await getPostsPage(query, f)
+        } catch (err: unknown) {
+            if (err instanceof HTTPError && err.response.status === 401) {
+                return getRedirectLoadOutput(p)
             }
-        } else {
-            return {}
+
+            throw err
+        }
+
+        return {
+            props: { page, query }
         }
     }
 </script>
@@ -58,51 +60,37 @@
     import { faSearch } from "@fortawesome/free-solid-svg-icons"
     import { toasts, session } from "$lib/stores"
 
-    interface AsyncData {
-        page: ItemsPage<Post>
-        query: QueryParams
-    }
+    export let page: ItemsPage<Post>
+    export let query: QueryParams
 
-    export let asyncData: AsyncData | null = null
-
-    let itemsPerPage = defaultQuery.perPage
+    let itemsPerPage = query.perPage
 
     const search = {
-        title: defaultQuery.title
+        title: query.title
     }
 
-    let sorting = `${defaultQuery.sort}-${defaultQuery.order}`
-
-    function watchForAsyncData(data: AsyncData | null) {
-        if (data) {
-            itemsPerPage = data.query.perPage
-            search.title = data.query.title
-            sorting = `${data.query.sort}-${data.query.order}`
-        }
-    }
-
-    $: watchForAsyncData(asyncData)
+    let sorting = `${query.sort}-${query.order}`
 
     async function updatePostsPage() {
-        asyncData!.page = await getPostsPage(asyncData!.query)
-        qp.setForCurrentPage(qp.removeDefault(asyncData!.query, defaultQuery))
+        page = await getPostsPage(query)
+        qp.setForCurrentPage(qp.removeDefault(query, defaultQuery))
     }
 
     async function onChangeItemsPerPage() {
-        asyncData!.query.perPage = itemsPerPage
-        asyncData!.query.page = 1
+        query.perPage = itemsPerPage
+        query.page = 1
         await updatePostsPage()
     }
 
     async function onInputTitle() {
-        asyncData!.query.title = search.title.trim()
+        query.title = search.title.trim()
         await updatePostsPage()
     }
 
     async function onChangeSorting() {
         const arr = sorting.split("-")
-        asyncData!.query.sort = arr[0]
-        asyncData!.query.order = arr[1]
+        query.sort = arr[0]
+        query.order = arr[1]
         await updatePostsPage()
     }
 
@@ -124,9 +112,11 @@
                 modals.postCreating.waiting = true
 
                 try {
-                    await axios.post<Post>("/api/posts", {
-                        title: modals.postCreating.title.trim(),
-                        body: modals.postCreating.body.trim()
+                    await ky.post("api/posts", {
+                        json: {
+                            title: modals.postCreating.title.trim(),
+                            body: modals.postCreating.body.trim()
+                        }
                     })
                     await updatePostsPage()
                     toasts.add("success", "Post has been successfully created")
@@ -156,110 +146,108 @@
     <title>Posts</title>
 </svelte:head>
 
-{#if asyncData}
-    <h1 class="text-4xl">Posts</h1>
-    <div class="flex mt-4 space-x-2">
-        <div class="relative w-full">
-            <input
-                class="input input-primary w-full pr-12"
-                placeholder="Title"
-                bind:value={search.title}
-                on:input={_.debounce(onInputTitle, 500)}
-            />
-            <div class="absolute top-0 right-0 p-4 pointer-events-none">
-                <FaIcon icon={faSearch} />
-            </div>
+<h1 class="text-4xl">Posts</h1>
+<div class="flex mt-4 space-x-2">
+    <div class="relative w-full">
+        <input
+            class="input input-primary w-full pr-12"
+            placeholder="Title"
+            bind:value={search.title}
+            on:input={_.debounce(onInputTitle, 500)}
+        />
+        <div class="absolute top-0 right-0 p-4 pointer-events-none">
+            <FaIcon icon={faSearch} />
         </div>
-        <select class="select select-primary" bind:value={sorting} on:change={onChangeSorting}>
-            <option value="creationDate-asc">Creation date (Earliest)</option>
-            <option value="creationDate-desc">Creation date (Latest)</option>
-            <option value="title-asc">Title (A-Z)</option>
-            <option value="title-desc">Title (Z-A)</option>
-        </select>
-        {#if $session.user}
-            <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
-        {/if}
     </div>
-    <div class="mt-4 space-y-4">
-        {#each asyncData.page.items as post (post.id)}
-            <div class="card bordered shadow-lg">
-                <div class="card-body">
-                    <h2 class="card-title">{post.title}</h2>
-                    <p>{toShortStr(post.body)}</p>
-                    <div class="card-actions justify-between items-center">
-                        <div class="text-sm">
-                            <div>
-                                <b>Author:</b>
-                                <a class="hover:underline" href="/users/{post.author.id}">
-                                    {post.author.username}
-                                </a>
-                            </div>
-                            <div>
-                                <b>Created at:</b>
-                                {dt.getFullDateAndTime(post.creationDate)}
-                            </div>
+    <select class="select select-primary" bind:value={sorting} on:change={onChangeSorting}>
+        <option value="creationDate-asc">Creation date (Earliest)</option>
+        <option value="creationDate-desc">Creation date (Latest)</option>
+        <option value="title-asc">Title (A-Z)</option>
+        <option value="title-desc">Title (Z-A)</option>
+    </select>
+    {#if $session.user}
+        <Button class="btn-success" on:click={modals.postCreating.open}>New post</Button>
+    {/if}
+</div>
+<div class="mt-4 space-y-4">
+    {#each page.items as post (post.id)}
+        <div class="card bordered shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title">{post.title}</h2>
+                <p>{toShortStr(post.body)}</p>
+                <div class="card-actions justify-between items-center">
+                    <div class="text-sm">
+                        <div>
+                            <b>Author:</b>
+                            <a class="hover:underline" href="/users/{post.author.id}">
+                                {post.author.username}
+                            </a>
                         </div>
                         <div>
-                            <Button class="btn-primary" href="/posts/{post.id}">Open</Button>
+                            <b>Created at:</b>
+                            {dt.getFullDateAndTime(post.creationDate)}
                         </div>
+                    </div>
+                    <div>
+                        <Button class="btn-primary" href="/posts/{post.id}">Open</Button>
                     </div>
                 </div>
             </div>
-        {:else}
-            <h1 class="mt-10 text-2xl text-center">No posts</h1>
-        {/each}
-        {#if asyncData.page.items.length}
-            <CommonPagination
-                currentPage={asyncData.page.pageNumber}
-                pageCount={asyncData.page.pageCount}
-                pathname="/posts"
-                query={asyncData.query}
-                bind:itemsPerPage
-                on:changeItemsPerPage={onChangeItemsPerPage}
-            />
-        {/if}
+        </div>
+    {:else}
+        <h1 class="mt-10 text-2xl text-center">No posts</h1>
+    {/each}
+    {#if page.items.length}
+        <CommonPagination
+            currentPage={page.pageNumber}
+            pageCount={page.pageCount}
+            pathname="/posts"
+            {query}
+            bind:itemsPerPage
+            on:changeItemsPerPage={onChangeItemsPerPage}
+        />
+    {/if}
+</div>
+<CommonModal
+    title="Post creating"
+    persistent={modals.postCreating.waiting}
+    bind:visible={modals.postCreating.visible}
+>
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Title:</span>
+        </div>
+        <input
+            class="input input-bordered"
+            disabled={modals.postCreating.waiting}
+            bind:value={modals.postCreating.title}
+        />
     </div>
-    <CommonModal
-        title="Post creating"
-        persistent={modals.postCreating.waiting}
-        bind:visible={modals.postCreating.visible}
-    >
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Title:</span>
-            </div>
-            <input
-                class="input input-bordered"
-                disabled={modals.postCreating.waiting}
-                bind:value={modals.postCreating.title}
-            />
+    <div class="form-control">
+        <div class="label">
+            <span class="label-text">Body:</span>
         </div>
-        <div class="form-control">
-            <div class="label">
-                <span class="label-text">Body:</span>
-            </div>
-            <textarea
-                class="textarea textarea-bordered h-64 resize-none"
-                disabled={modals.postCreating.waiting}
-                bind:value={modals.postCreating.body}
-            />
-        </div>
-        <svelte:fragment slot="actions">
-            <Button
-                class="btn-success btn-sm"
-                loading={modals.postCreating.waiting}
-                disabled={!validators.completedPostCreatingModal}
-                on:click={modals.postCreating.save}
-            >
-                Create
-            </Button>
-            <Button
-                class="btn-error btn-sm"
-                disabled={modals.postCreating.waiting}
-                on:click={modals.postCreating.close}
-            >
-                Cancel
-            </Button>
-        </svelte:fragment>
-    </CommonModal>
-{/if}
+        <textarea
+            class="textarea textarea-bordered h-64 resize-none"
+            disabled={modals.postCreating.waiting}
+            bind:value={modals.postCreating.body}
+        />
+    </div>
+    <svelte:fragment slot="actions">
+        <Button
+            class="btn-success btn-sm"
+            loading={modals.postCreating.waiting}
+            disabled={!validators.completedPostCreatingModal}
+            on:click={modals.postCreating.save}
+        >
+            Create
+        </Button>
+        <Button
+            class="btn-error btn-sm"
+            disabled={modals.postCreating.waiting}
+            on:click={modals.postCreating.close}
+        >
+            Cancel
+        </Button>
+    </svelte:fragment>
+</CommonModal>

@@ -1,4 +1,4 @@
-import { cookies, axios } from "$lib/utils"
+import { cookies, ky } from "$lib/utils"
 
 import type { Handle, GetSession } from "@sveltejs/kit"
 
@@ -6,19 +6,16 @@ export const handle: Handle = async ({ request, resolve }) => {
     let cookieArray: Array<string> = []
 
     try {
-        const { data, headers } = await axios.get("/api/auth/user", {
-            headers: request.headers
-        })
+        const res = await ky.get("api/auth/user", { headers: request.headers })
+        const data = await res.json()
 
         request.locals.user = data
 
-        if (headers["set-cookie"]) {
-            cookieArray.push(...headers["set-cookie"])
-        }
-    } catch (err: unknown) {}
+        cookieArray = cookies.getSetFromHeaders(res.headers)
+    } catch {}
 
     const res = await resolve(request)
-    cookieArray = cookies.merge(cookieArray, res.headers["set-cookie"] as Array<string> | undefined)
+    cookieArray = cookies.merge(cookieArray, cookies.getSetFromHeaders(res.headers))
 
     return {
         ...res,
