@@ -1,12 +1,18 @@
-import { cookies, ky } from "$lib/utils"
+import { dev } from "$app/env"
+import { cookies, fetchy } from "$lib/utils"
 
 import type { Handle, GetSession } from "@sveltejs/kit"
 
+const host = `${dev ? "localhost" : "nginx"}:6700`
+
 export const handle: Handle = async ({ request, resolve }) => {
+    request.host = host
+    const headers = new Headers(request.headers)
+
     let cookieArray: Array<string> = []
 
     try {
-        const res = await ky.get("api/auth/user", { headers: request.headers })
+        const res = await fetchy.get("/api/auth/user", { headers })
         const data = await res.json()
 
         request.locals.user = data
@@ -14,7 +20,18 @@ export const handle: Handle = async ({ request, resolve }) => {
         cookieArray = cookies.getSetFromHeaders(res.headers)
     } catch {}
 
-    const res = await resolve(request)
+    const cookie = cookies.merge(
+        headers.get("cookie")?.split("; "),
+        cookies.getKeyValuePairs(cookieArray)
+    )
+
+    const res = await resolve({
+        ...request,
+        headers: {
+            ...request.headers,
+            ...(cookie.length ? { cookie: cookie.join("; ") } : {})
+        }
+    })
     cookieArray = cookies.merge(cookieArray, cookies.getSetFromHeaders(res.headers))
 
     return {

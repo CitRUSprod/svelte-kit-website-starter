@@ -1,31 +1,24 @@
 <script lang="ts" context="module">
-    import { HTTPError } from "ky"
-    import { ky, vld, dt, hasAccess, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, vld, dt, hasAccess, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
 
     async function getPost(id: number, f?: typeof fetch) {
-        const res = await ky.get(`api/posts/${id}`, { fetch: f })
+        const res = await fetchy.get(`/api/posts/${id}`, { fetch: f })
         const data: Post = await res.json()
         return data
     }
 
     export const load: Load = async ({ page: p, fetch: f }) => {
-        let post: Post
-
         try {
-            post = await getPost(parseInt(p.params.id), f)
-        } catch (err: unknown) {
-            if (err instanceof HTTPError && err.response.status === 401) {
-                return getRedirectLoadOutput(p)
+            const post = await getPost(parseInt(p.params.id), f)
+
+            return {
+                props: { post }
             }
-
-            return getRedirectLoadOutput("/posts")
-        }
-
-        return {
-            props: { post }
+        } catch {
+            return createRedirectResponse("/posts")
         }
     }
 </script>
@@ -64,7 +57,7 @@
                 modals.postEditing.waiting = true
 
                 try {
-                    await ky.put(`api/posts/${post.id}`, {
+                    await fetchy.put(`/api/posts/${post.id}`, {
                         json: {
                             title: modals.postEditing.title.trim(),
                             body: modals.postEditing.body.trim()
@@ -93,7 +86,7 @@
                 modals.postRemoving.waiting = true
 
                 try {
-                    await ky.delete(`api/posts/${post.id}`)
+                    await fetchy.delete(`/api/posts/${post.id}`)
                     toasts.add("success", "Post has been successfully edited")
                     modals.postRemoving.visible = false
                     goto("/posts", { replaceState: true })

@@ -1,35 +1,28 @@
 <script lang="ts" context="module">
-    import { HTTPError } from "ky"
-    import { ky, vld, dt, getRoleName, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, vld, dt, getRoleName, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
 
     async function getUser(id: number, f?: typeof fetch) {
-        const res = await ky.get(`api/users/${id}`, { fetch: f })
+        const res = await fetchy.get(`/api/users/${id}`, { fetch: f })
         const data: User = await res.json()
         return data
     }
 
     export const load: Load<{ session: Session }> = async ({ session, page: p, fetch: f }) => {
         if (!session.user) {
-            return getRedirectLoadOutput("/")
+            return createRedirectResponse("/")
         }
-
-        let user: User
 
         try {
-            user = await getUser(parseInt(p.params.id), f)
-        } catch (err: unknown) {
-            if (err instanceof HTTPError && err.response.status === 401) {
-                return getRedirectLoadOutput(p)
+            const user = await getUser(parseInt(p.params.id), f)
+
+            return {
+                props: { user }
             }
-
-            return getRedirectLoadOutput("/")
-        }
-
-        return {
-            props: { user }
+        } catch {
+            return createRedirectResponse("/")
         }
     }
 </script>
@@ -64,7 +57,7 @@
                 modals.userEditing.waiting = true
 
                 try {
-                    await ky.put(`api/users/${user.id}`, {
+                    await fetchy.put(`/api/users/${user.id}`, {
                         json: {
                             email: modals.userEditing.email.trim().toLowerCase(),
                             username: modals.userEditing.username.trim()
@@ -99,7 +92,7 @@
                 modals.passwordChanging.waiting = true
 
                 try {
-                    await ky.put("api/auth/password", {
+                    await fetchy.put("/api/auth/password", {
                         json: {
                             oldPassword: modals.passwordChanging.oldPassword.trim(),
                             newPassword: modals.passwordChanging.newPassword.trim()
@@ -160,7 +153,7 @@
         emailSending = true
 
         try {
-            await ky.post("api/auth/verification")
+            await fetchy.post("/api/auth/verification")
             toasts.add("success", "A confirmation email was sent to your email address")
         } catch (err: any) {
             toasts.add("error", err.response?.data?.message ?? err.message)

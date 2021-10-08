@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
-    import { ky, socket, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, socket, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
         if (!session.user) {
-            return getRedirectLoadOutput("/")
+            return createRedirectResponse("/")
         }
 
         return {}
@@ -20,7 +20,7 @@
 
     async function logout() {
         try {
-            await ky.post("api/auth/logout")
+            await fetchy.post("/api/auth/logout")
             $session.user = null
             socket.disconnect().connect()
             goto("/", { replaceState: true })

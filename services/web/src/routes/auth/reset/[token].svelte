@@ -14,7 +14,7 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { ky, vld } from "$lib/utils"
+    import { fetchy, vld } from "$lib/utils"
 
     export let token: string
 
@@ -33,7 +33,7 @@
         waiting = true
 
         try {
-            await ky.patch("api/auth/password", {
+            await fetchy.patch("/api/auth/password", {
                 json: {
                     token,
                     password: newPassword.trim()

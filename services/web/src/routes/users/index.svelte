@@ -1,7 +1,6 @@
 <script lang="ts" context="module">
-    import { HTTPError } from "ky"
     import { Role } from "$lib/enums"
-    import { ky, qp, dt, hasAccess, getRoleName, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, qp, dt, hasAccess, getRoleName, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User, ItemsPage } from "$lib/types"
@@ -25,8 +24,8 @@
     }
 
     async function getUsersPage(query: QueryParams, f?: typeof fetch) {
-        const res = await ky.get("api/users", {
-            searchParams: qp.removeDefault(query, defaultQuery),
+        const res = await fetchy.get("/api/users", {
+            searchParams: new URLSearchParams(qp.removeDefault(query, defaultQuery) as any),
             fetch: f
         })
         const data: ItemsPage<User> = await res.json()
@@ -35,7 +34,7 @@
 
     export const load: Load<{ session: Session }> = async ({ session, page: p, fetch: f }) => {
         if (!hasAccess(session.user, Role.Admin)) {
-            return getRedirectLoadOutput("/")
+            return createRedirectResponse("/")
         }
 
         const query = qp.get(
@@ -45,17 +44,7 @@
             ["perPage", "page"]
         )
 
-        let page: ItemsPage<User>
-
-        try {
-            page = await getUsersPage(query, f)
-        } catch (err: unknown) {
-            if (err instanceof HTTPError && err.response.status === 401) {
-                return getRedirectLoadOutput(p)
-            }
-
-            throw err
-        }
+        const page = await getUsersPage(query, f)
 
         return {
             props: { page, query }
@@ -130,7 +119,7 @@
 
                 try {
                     const { id } = modals.userEditing.user!
-                    await ky.put(`api/users/${id}`, {
+                    await fetchy.put(`/api/users/${id}`, {
                         json: {
                             role: modals.userEditing.role
                         }

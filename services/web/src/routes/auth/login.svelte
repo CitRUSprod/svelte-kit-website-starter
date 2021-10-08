@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
-    import { ky, socket, vld, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, socket, vld, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
 
     export const load: Load<{ session: Session }> = ({ session }) => {
         if (session.user) {
-            return getRedirectLoadOutput("/")
+            return createRedirectResponse("/")
         }
 
         return {}
@@ -41,13 +41,13 @@
         waiting = true
 
         try {
-            await ky.post("api/auth/login", {
+            await fetchy.post("/api/auth/login", {
                 json: {
                     email: email.trim().toLowerCase(),
                     password: password.trim()
                 }
             })
-            const res = await ky.get("api/auth/user")
+            const res = await fetchy.get("/api/auth/user")
             const data = await res.json()
             $session.user = data
             socket.disconnect().connect()

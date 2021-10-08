@@ -13,7 +13,6 @@ specifiers:
   '@types/tailwindcss': 2.2.1
   cookie: 0.4.1
   daisyui: 1.14.1
-  ky: 0.28.5
   lodash-es: 4.17.21
   luxon: 2.0.2
   node-fetch: 3.0.0
@@ -29,13 +28,13 @@ specifiers:
   svelte-local-storage-store: 0.2.4
   svelte-preprocess: 4.9.5
   tailwindcss: 2.2.16
+  type-fest: 2.3.4
   typescript: 4.4.3
   yup: 0.32.9
 
 dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.4
   cookie: 0.4.1
-  ky: 0.28.5
   lodash-es: 4.17.21
   luxon: 2.0.2
   nprogress: 0.2.0
@@ -64,6 +63,7 @@ devDependencies:
   svelte-check: 2.2.6_65f30197a7b9cd7acda714ff62780f9a
   svelte-preprocess: 4.9.5_164bcec27a346a6f0bcbe38640af9cb9
   tailwindcss: 2.2.16_postcss@8.3.8
+  type-fest: 2.3.4
   typescript: 4.4.3
 
 packages:
@@ -927,11 +927,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /ky/0.28.5:
-    resolution: {integrity: sha512-O5gg9kF4MeyfSw+YkgPAafOPwEUU6xcdGEJKUJmKpIPbLzk3oxUtY4OdBNekG7mawofzkyZ/ZHuR9ev5uZZdAA==}
-    engines: {node: '>=12'}
-    dev: false
-
   /lilconfig/2.0.3:
     resolution: {integrity: sha512-EHKqr/+ZvdKCifpNrJCKxBTgk5XupZA3y/aCPY9mxfgBzmgh93Mt/WqjjQ38oMxXuvDokaKiM3lAgvSH2sjtHg==}
     engines: {node: '>=10'}
@@ -1543,6 +1538,11 @@ packages:
   /toposort/2.0.2:
     resolution: {integrity: sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=}
     dev: false
+
+  /type-fest/2.3.4:
+    resolution: {integrity: sha512-2UdQc7cx8F4Ky81Xj7NYQKPhZVtDFbtorrkairIW66rW7xQj5msAhioXa04HqEdP4MD4K2G6QAF7Zyiw/Hju1Q==}
+    engines: {node: '>=12.20'}
+    dev: true
 
   /typescript/4.4.3:
     resolution: {integrity: sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==}

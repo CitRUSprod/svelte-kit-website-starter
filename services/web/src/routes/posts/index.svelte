@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
-    import { HTTPError } from "ky"
-    import { ky, qp, dt, getRedirectLoadOutput } from "$lib/utils"
+    import { fetchy, qp, dt } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
@@ -22,8 +21,8 @@
     }
 
     async function getPostsPage(query: QueryParams, f?: typeof fetch) {
-        const res = await ky.get("api/posts", {
-            searchParams: qp.removeDefault(query, defaultQuery),
+        const res = await fetchy.get("/api/posts", {
+            searchParams: new URLSearchParams(qp.removeDefault(query, defaultQuery) as any),
             fetch: f
         })
         const data: ItemsPage<Post> = await res.json()
@@ -33,17 +32,7 @@
     export const load: Load = async ({ page: p, fetch: f }) => {
         const query = qp.get(p.query, defaultQuery, ["sort", "order", "title"], ["perPage", "page"])
 
-        let page: ItemsPage<Post>
-
-        try {
-            page = await getPostsPage(query, f)
-        } catch (err: unknown) {
-            if (err instanceof HTTPError && err.response.status === 401) {
-                return getRedirectLoadOutput(p)
-            }
-
-            throw err
-        }
+        const page = await getPostsPage(query, f)
 
         return {
             props: { page, query }
@@ -112,7 +101,7 @@
                 modals.postCreating.waiting = true
 
                 try {
-                    await ky.post("api/posts", {
+                    await fetchy.post("/api/posts", {
                         json: {
                             title: modals.postCreating.title.trim(),
                             body: modals.postCreating.body.trim()

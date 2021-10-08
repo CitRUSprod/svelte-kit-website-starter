@@ -17,7 +17,6 @@
     "dependencies": {
         "@fortawesome/free-solid-svg-icons": "5.15.4",
         "cookie": "0.4.1",
-        "ky": "0.28.5",
         "lodash-es": "4.17.21",
         "luxon": "2.0.2",
         "nprogress": "0.2.0",
@@ -46,6 +45,7 @@
         "svelte-check": "2.2.6",
         "svelte-preprocess": "4.9.5",
         "tailwindcss": "2.2.16",
+        "type-fest": "2.3.4",
         "typescript": "4.4.3"
     }
 }
