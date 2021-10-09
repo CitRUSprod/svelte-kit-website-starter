@@ -27,8 +27,8 @@
         "yup": "0.32.9"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "1.0.0-next.52",
-        "@sveltejs/kit": "1.0.0-next.177",
+        "@sveltejs/adapter-node": "1.0.0-next.53",
+        "@sveltejs/kit": "1.0.0-next.180",
         "@types/cookie": "0.4.1",
         "@types/lodash-es": "4.17.5",
         "@types/luxon": "2.0.5",
