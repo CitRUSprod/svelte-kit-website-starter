@@ -16,7 +16,7 @@
     "devDependencies": {
         "@types/faker": "5.5.8",
         "@types/http-errors": "1.8.1",
-        "@types/node": "16.10.2",
+        "@types/node": "16.10.3",
         "@types/nodemailer": "6.4.4",
         "@types/uuid": "8.3.1",
         "defu": "5.0.0",
@@ -33,7 +33,7 @@
     },
     "dependencies": {
         "argon2": "0.28.2",
-        "fastify": "3.21.6",
+        "fastify": "3.22.0",
         "fastify-auth": "1.1.0",
         "fastify-cookie": "5.3.1",
         "fastify-jwt": "3.1.0",
@@ -45,7 +45,7 @@
         "pg": "8.7.1",
         "reflect-metadata": "0.1.13",
         "socketio-jwt-auth": "0.2.1",
-        "typeorm": "0.2.37",
+        "typeorm": "0.2.38",
         "uuid": "8.3.2"
     }
 }

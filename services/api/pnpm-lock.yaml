@@ -3,7 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@types/faker': 5.5.8
   '@types/http-errors': 1.8.1
-  '@types/node': 16.10.2
+  '@types/node': 16.10.3
   '@types/nodemailer': 6.4.4
   '@types/uuid': 8.3.1
   argon2: 0.28.2
@@ -12,7 +12,7 @@ specifiers:
   esbuild-node-externals: 1.3.0
   esbuild-plugin-clean: 0.5.0
   estrella: 1.4.1
-  fastify: 3.21.6
+  fastify: 3.22.0
   fastify-auth: 1.1.0
   fastify-cookie: 5.3.1
   fastify-jwt: 3.1.0
@@ -28,14 +28,14 @@ specifiers:
   ts-node: 10.2.1
   tsconfig-paths: 3.11.0
   type-fest: 2.3.4
-  typeorm: 0.2.37
+  typeorm: 0.2.38
   typeorm-seeding: 1.6.1
   typescript: 4.4.3
   uuid: 8.3.2
 
 dependencies:
   argon2: 0.28.2
-  fastify: 3.21.6
+  fastify: 3.22.0
   fastify-auth: 1.1.0
   fastify-cookie: 5.3.1
   fastify-jwt: 3.1.0
@@ -47,13 +47,13 @@ dependencies:
   pg: 8.7.1
   reflect-metadata: 0.1.13
   socketio-jwt-auth: 0.2.1
-  typeorm: 0.2.37_pg@8.7.1
+  typeorm: 0.2.38_pg@8.7.1
   uuid: 8.3.2
 
 devDependencies:
   '@types/faker': 5.5.8
   '@types/http-errors': 1.8.1
-  '@types/node': 16.10.2
+  '@types/node': 16.10.3
   '@types/nodemailer': 6.4.4
   '@types/uuid': 8.3.1
   defu: 5.0.0
@@ -62,10 +62,10 @@ devDependencies:
   esbuild-plugin-clean: 0.5.0
   estrella: 1.4.1
   source-map-support: 0.5.20
-  ts-node: 10.2.1_0088345bf6ed8e5566f4f4a984ba8f5e
+  ts-node: 10.2.1_8304ecd715830f7c190b4d1dea90b100
   tsconfig-paths: 3.11.0
   type-fest: 2.3.4
-  typeorm-seeding: 1.6.1_typeorm@0.2.37
+  typeorm-seeding: 1.6.1_typeorm@0.2.38
   typescript: 4.4.3
 
 packages:
@@ -194,6 +194,10 @@ packages:
 
   /@types/node/16.10.2:
     resolution: {integrity: sha512-zCclL4/rx+W5SQTzFs9wyvvyCwoK9QtBpratqz2IYJ3O8Umrn0m3nsTv0wQBk9sRGpvUe9CwPDrQFB10f1FIjQ==}
+
+  /@types/node/16.10.3:
+    resolution: {integrity: sha512-ho3Ruq+fFnBrZhUYI46n/bV2GjwzSkwuT4dTf0GkuNFmnb8nq4ny2z9JEVemFi6bdEJanHLlYfy9c6FN9B9McQ==}
+    dev: true
 
   /@types/node/16.7.10:
     resolution: {integrity: sha512-S63Dlv4zIPb8x6MMTgDq5WWRJQe56iBEY0O3SOFA9JrRienkOVDXSXBjjJw6HTNQYSE2JI6GMCR6LVbIMHJVvA==}
@@ -464,7 +468,6 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-    dev: true
 
   /chownr/2.0.0:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
@@ -876,8 +879,8 @@ packages:
       yup: 0.32.9
     dev: false
 
-  /fastify/3.21.6:
-    resolution: {integrity: sha512-PextZFavEZaqn2ZYbVGBPAI0AiElnVdfqo9sN1wlOi0mhGtYuec4KT82MHe5npCf3Lz++6i7jLl7YKyYidPrMg==}
+  /fastify/3.22.0:
+    resolution: {integrity: sha512-JWNf/S90SOiOp6SwhMFdTT43+jT/gB2Yi2tPHQ/e7Kaua9PzFLm7Qmwhe2jBA3X6HPDKNugrRd7oPYeIb1Q3Zg==}
     dependencies:
       '@fastify/ajv-compiler': 1.1.0
       abstract-logging: 2.0.1
@@ -2009,7 +2012,7 @@ packages:
     resolution: {integrity: sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=}
     dev: false
 
-  /ts-node/10.2.1_0088345bf6ed8e5566f4f4a984ba8f5e:
+  /ts-node/10.2.1_8304ecd715830f7c190b4d1dea90b100:
     resolution: {integrity: sha512-hCnyOyuGmD5wHleOQX6NIjJtYVIO8bPP8F2acWkB4W06wdlkgyvJtubO/I9NkI88hCFECbsEgoLc0VNkYmcSfw==}
     engines: {node: '>=12.0.0'}
     hasBin: true
@@ -2029,7 +2032,7 @@ packages:
       '@tsconfig/node12': 1.0.9
       '@tsconfig/node14': 1.0.1
       '@tsconfig/node16': 1.0.2
-      '@types/node': 16.10.2
+      '@types/node': 16.10.3
       acorn: 8.5.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -2057,7 +2060,7 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /typeorm-seeding/1.6.1_typeorm@0.2.37:
+  /typeorm-seeding/1.6.1_typeorm@0.2.38:
     resolution: {integrity: sha512-xJIW1pp72hv6npPqbQ7xDvawcDmS60EDUjK++UCfiqT0WE4xTzCn+QK1ZijLkD3GYCqFPuFt4nmeyRJn6VO2Vw==}
     hasBin: true
     peerDependencies:
@@ -2068,7 +2071,7 @@ packages:
       glob: 7.1.6
       ora: 4.0.3
       reflect-metadata: 0.1.13
-      typeorm: 0.2.37_pg@8.7.1
+      typeorm: 0.2.38_pg@8.7.1
       yargs: 15.3.1
     dev: true
 
@@ -2127,6 +2130,79 @@ packages:
       app-root-path: 3.0.0
       buffer: 6.0.3
       chalk: 4.1.1
+      cli-highlight: 2.1.11
+      debug: 4.3.2
+      dotenv: 8.6.0
+      glob: 7.1.7
+      js-yaml: 4.1.0
+      mkdirp: 1.0.4
+      pg: 8.7.1
+      reflect-metadata: 0.1.13
+      sha.js: 2.4.11
+      tslib: 2.1.0
+      xml2js: 0.4.23
+      yargonaut: 1.1.4
+      yargs: 17.1.1
+      zen-observable-ts: 1.1.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /typeorm/0.2.38_pg@8.7.1:
+    resolution: {integrity: sha512-M6Y3KQcAREQcphOVJciywf4mv6+A0I/SeR+lWNjKsjnQ+a3XcMwGYMGL0Jonsx3H0Cqlf/3yYqVki1jIXSK/xg==}
+    hasBin: true
+    peerDependencies:
+      '@sap/hana-client': '*'
+      better-sqlite3: '*'
+      hdb-pool: '*'
+      ioredis: '*'
+      mongodb: ^3.6.0
+      mssql: '*'
+      mysql2: '*'
+      oracledb: '*'
+      pg: '*'
+      pg-native: '*'
+      pg-query-stream: '*'
+      redis: '*'
+      sql.js: '*'
+      sqlite3: '*'
+      typeorm-aurora-data-api-driver: '*'
+    peerDependenciesMeta:
+      '@sap/hana-client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      hdb-pool:
+        optional: true
+      ioredis:
+        optional: true
+      mongodb:
+        optional: true
+      mssql:
+        optional: true
+      mysql2:
+        optional: true
+      oracledb:
+        optional: true
+      pg:
+        optional: true
+      pg-native:
+        optional: true
+      pg-query-stream:
+        optional: true
+      redis:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
+      typeorm-aurora-data-api-driver:
+        optional: true
+    dependencies:
+      '@sqltools/formatter': 1.2.3
+      app-root-path: 3.0.0
+      buffer: 6.0.3
+      chalk: 4.1.2
       cli-highlight: 2.1.11
       debug: 4.3.2
       dotenv: 8.6.0
