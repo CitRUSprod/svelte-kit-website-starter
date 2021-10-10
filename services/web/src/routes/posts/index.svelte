@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, qp, dt } from "$lib/utils"
+    import { fetchy, HttpError, qp, dt } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post, ItemsPage } from "$lib/types"
@@ -110,8 +110,13 @@
                     await updatePostsPage()
                     toasts.add("success", "Post has been successfully created")
                     modals.postCreating.visible = false
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.postCreating.waiting = false

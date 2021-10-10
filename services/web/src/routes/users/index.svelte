@@ -1,6 +1,14 @@
 <script lang="ts" context="module">
     import { Role } from "$lib/enums"
-    import { fetchy, qp, dt, hasAccess, getRoleName, createRedirectResponse } from "$lib/utils"
+    import {
+        fetchy,
+        HttpError,
+        qp,
+        dt,
+        hasAccess,
+        getRoleName,
+        createRedirectResponse
+    } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User, ItemsPage } from "$lib/types"
@@ -127,8 +135,13 @@
                     await updateUsersPage()
                     toasts.add("success", "User has been successfully edited")
                     modals.userEditing.visible = false
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.userEditing.waiting = false

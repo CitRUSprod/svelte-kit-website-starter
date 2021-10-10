@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, vld, dt, getRoleName, createRedirectResponse } from "$lib/utils"
+    import { fetchy, HttpError, vld, dt, getRoleName, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session, User } from "$lib/types"
@@ -66,8 +66,13 @@
                     await updateUser()
                     toasts.add("success", "User has been successfully edited")
                     modals.userEditing.visible = false
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.userEditing.waiting = false
@@ -100,8 +105,13 @@
                     })
                     toasts.add("success", "Password has been successfully changed")
                     modals.passwordChanging.visible = false
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.passwordChanging.waiting = false
@@ -155,8 +165,13 @@
         try {
             await fetchy.post("/api/auth/verification")
             toasts.add("success", "A confirmation email was sent to your email address")
-        } catch (err: any) {
-            toasts.add("error", err.response?.data?.message ?? err.message)
+        } catch (err: unknown) {
+            if (err instanceof HttpError) {
+                const data = await err.response.json()
+                toasts.add("error", data.message)
+            } else {
+                console.error(err)
+            }
         }
 
         emailSending = false

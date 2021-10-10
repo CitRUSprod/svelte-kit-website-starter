@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, vld, createRedirectResponse } from "$lib/utils"
+    import { fetchy, HttpError, vld, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
@@ -55,8 +55,13 @@
             })
             toasts.add("success", "You have successfully registered")
             goto("/auth/login")
-        } catch (err: any) {
-            toasts.add("error", err.response?.data?.message ?? err.message)
+        } catch (err: unknown) {
+            if (err instanceof HttpError) {
+                const data = await err.response.json()
+                toasts.add("error", data.message)
+            } else {
+                console.error(err)
+            }
         }
 
         waiting = false

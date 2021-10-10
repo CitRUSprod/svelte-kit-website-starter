@@ -14,7 +14,7 @@
     import * as yup from "yup"
     import { goto } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { fetchy, vld } from "$lib/utils"
+    import { fetchy, HttpError, vld } from "$lib/utils"
 
     export let token: string
 
@@ -41,8 +41,13 @@
             })
             toasts.add("success", "Password has been successfully reset")
             goto("/auth/login")
-        } catch (err: any) {
-            toasts.add("error", err.response?.data?.message ?? err.message)
+        } catch (err: unknown) {
+            if (err instanceof HttpError) {
+                const data = await err.response.json()
+                toasts.add("error", data.message)
+            } else {
+                console.error(err)
+            }
         }
 
         waiting = false

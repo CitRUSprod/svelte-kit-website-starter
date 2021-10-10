@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, vld, dt, hasAccess, createRedirectResponse } from "$lib/utils"
+    import { fetchy, HttpError, vld, dt, hasAccess, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Post } from "$lib/types"
@@ -66,8 +66,13 @@
                     await updatePost()
                     toasts.add("success", "Post has been successfully edited")
                     modals.postEditing.visible = false
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.postEditing.waiting = false
@@ -90,8 +95,13 @@
                     toasts.add("success", "Post has been successfully edited")
                     modals.postRemoving.visible = false
                     goto("/posts", { replaceState: true })
-                } catch (err: any) {
-                    toasts.add("error", err.response?.data?.message ?? err.message)
+                } catch (err: unknown) {
+                    if (err instanceof HttpError) {
+                        const data = await err.response.json()
+                        toasts.add("error", data.message)
+                    } else {
+                        console.error(err)
+                    }
                 }
 
                 modals.postEditing.waiting = false

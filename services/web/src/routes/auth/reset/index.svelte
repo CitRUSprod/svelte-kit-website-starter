@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, createRedirectResponse } from "$lib/utils"
+    import { fetchy, HttpError, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
@@ -46,8 +46,13 @@
             })
             toasts.add("success", "A reset link was sent to your email address")
             goto("/")
-        } catch (err: any) {
-            toasts.add("error", err.response?.data?.message ?? err.message)
+        } catch (err: unknown) {
+            if (err instanceof HttpError) {
+                const data = await err.response.json()
+                toasts.add("error", data.message)
+            } else {
+                console.error(err)
+            }
         }
 
         waiting = false
