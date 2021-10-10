@@ -26,7 +26,7 @@ export class HttpError extends Error {
 }
 
 class Fetchy {
-    private async _get(
+    private async _fetch(
         method: string,
         url: string,
         options: Options = {},
@@ -67,7 +67,7 @@ class Fetchy {
 
                 if (cookie.length) options.headers.set("cookie", cookie.join("; "))
 
-                const res = await this._get(method, url, options, retryNumber + 1, cookieArray)
+                const res = await this._fetch(method, url, options, retryNumber + 1, cookieArray)
                 return res
             }
 
@@ -76,23 +76,23 @@ class Fetchy {
     }
 
     public get(url: string, options?: Options) {
-        return this._get("get", url, options)
+        return this._fetch("GET", url, options)
     }
 
     public post(url: string, options?: Options) {
-        return this._get("post", url, options)
+        return this._fetch("POST", url, options)
     }
 
     public put(url: string, options?: Options) {
-        return this._get("put", url, options)
+        return this._fetch("PUT", url, options)
     }
 
     public delete(url: string, options?: Options) {
-        return this._get("delete", url, options)
+        return this._fetch("DELETE", url, options)
     }
 
     public patch(url: string, options?: Options) {
-        return this._get("patch", url, options)
+        return this._fetch("PATCH", url, options)
     }
 }
 
