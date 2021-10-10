@@ -2,7 +2,6 @@ import { FastifyPluginCallback } from "fastify"
 import { BadRequest } from "http-errors"
 import { User, RefreshToken } from "$/db/entities"
 import { TokenTtl } from "$/enums"
-import { vld } from "$/utils"
 
 interface LoginData {
     email: string
@@ -18,13 +17,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         schema: app.createYupSchema(yup => ({
             body: yup
                 .object({
-                    email: yup
-                        .string()
-                        .trim()
-                        .lowercase()
-                        .max(64)
-                        .test(v => vld.isEmail(v!))
-                        .required(),
+                    email: yup.string().trim().lowercase().max(64).email().required(),
                     password: yup.string().trim().min(8).required()
                 })
                 .required()

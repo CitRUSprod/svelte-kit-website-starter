@@ -118,7 +118,7 @@
                 .trim()
                 .lowercase()
                 .max(64)
-                .test(v => vld.isEmail(v!))
+                .email()
                 .required()
                 .isValidSync(modals.userEditing.email) &&
             yup

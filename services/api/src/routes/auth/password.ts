@@ -4,7 +4,7 @@ import { BadRequest, InternalServerError } from "http-errors"
 import { v4 as createUuid } from "uuid"
 import { User, ResetToken } from "$/db/entities"
 import { Payload } from "$/types"
-import { vld, sendMail } from "$/utils"
+import { sendMail } from "$/utils"
 
 const websiteDomain = process.env.WEBSITE_DOMAIN!
 
@@ -59,13 +59,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         schema: app.createYupSchema(yup => ({
             body: yup
                 .object({
-                    email: yup
-                        .string()
-                        .trim()
-                        .lowercase()
-                        .max(64)
-                        .test(v => vld.isEmail(v!))
-                        .required()
+                    email: yup.string().trim().lowercase().max(64).email().required()
                 })
                 .required()
         })),

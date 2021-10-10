@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, vld, createRedirectResponse } from "$lib/utils"
+    import { fetchy, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
@@ -30,7 +30,7 @@
             .trim()
             .lowercase()
             .max(64)
-            .test(v => vld.isEmail(v!))
+            .email()
             .required()
             .isValidSync(email)
     }

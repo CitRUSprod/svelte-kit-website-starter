@@ -94,12 +94,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
                 }),
                 body: yup
                     .object({
-                        email: yup
-                            .string()
-                            .trim()
-                            .lowercase()
-                            .max(64)
-                            .test(v => vld.isEmail(v!)),
+                        email: yup.string().trim().lowercase().max(64).email(),
                         username: yup
                             .string()
                             .trim()

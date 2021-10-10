@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { fetchy, socket, vld, createRedirectResponse } from "$lib/utils"
+    import { fetchy, socket, createRedirectResponse } from "$lib/utils"
 
     import type { Load } from "@sveltejs/kit"
     import type { Session } from "$lib/types"
@@ -27,14 +27,8 @@
 
     $: validators = {
         completedLoginForm:
-            yup
-                .string()
-                .trim()
-                .lowercase()
-                .max(64)
-                .test(v => vld.isEmail(v!))
-                .required()
-                .isValidSync(email) && yup.string().trim().min(8).required().isValidSync(password)
+            yup.string().trim().lowercase().max(64).email().required().isValidSync(email) &&
+            yup.string().trim().min(8).required().isValidSync(password)
     }
 
     async function login() {

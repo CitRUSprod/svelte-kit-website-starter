@@ -17,13 +17,7 @@ const route: FastifyPluginCallback = (app, opts, done) => {
         schema: app.createYupSchema(yup => ({
             body: yup
                 .object({
-                    email: yup
-                        .string()
-                        .trim()
-                        .lowercase()
-                        .max(64)
-                        .test(v => vld.isEmail(v!))
-                        .required(),
+                    email: yup.string().trim().lowercase().max(64).email().required(),
                     username: yup
                         .string()
                         .trim()

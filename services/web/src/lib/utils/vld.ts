@@ -2,10 +2,6 @@ export function isWordChars(str: string) {
     return /^\w*$/.test(str)
 }
 
-export function isEmail(str: string) {
-    return /^[a-z\d][a-z\d.]*[a-z\d]@[a-z\d][a-z\d-]*[a-z\d]\.[a-z]{2,11}$/.test(str)
-}
-
 export function isEqualT(str1: string, str2: string) {
     return str1.trim() === str2.trim()
 }

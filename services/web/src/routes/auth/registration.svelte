@@ -30,14 +30,7 @@
     $: validators = {
         completedRegistrationForm:
             vld.isEqualT(password, passwordConfirmation) &&
-            yup
-                .string()
-                .trim()
-                .lowercase()
-                .max(64)
-                .test(v => vld.isEmail(v!))
-                .required()
-                .isValidSync(email) &&
+            yup.string().trim().lowercase().max(64).email().required().isValidSync(email) &&
             yup
                 .string()
                 .trim()
