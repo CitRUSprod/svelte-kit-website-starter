@@ -3,8 +3,8 @@
     import { Button } from "$lib/components"
 
     import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
-    import { session, theme } from "$lib/stores"
     import { Role } from "$lib/enums"
+    import { session, theme } from "$lib/stores"
     import { hasAccess } from "$lib/utils"
 
     const { dark } = theme

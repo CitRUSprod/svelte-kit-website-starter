@@ -30,8 +30,8 @@
     import * as yup from "yup"
     import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
     import { goto } from "$app/navigation"
-    import { toasts, session } from "$lib/stores"
     import { Role } from "$lib/enums"
+    import { toasts, session } from "$lib/stores"
 
     export let post: Post
 

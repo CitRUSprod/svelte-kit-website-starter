@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { Button } from "$lib/components"
     import FaIcon from "svelte-fa"
+    import { Button } from "$lib/components"
 
     import { fly, fade } from "svelte/transition"
     import {
