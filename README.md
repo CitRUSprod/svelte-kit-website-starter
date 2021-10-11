@@ -69,3 +69,36 @@ All settings for docker-compose are written to a `.env` file. If it doesn't exis
 ```sh
 scripts/clone-env
 ```
+
+### Restore a database backup
+
+Backups are automatic. They are placed in `volumes/pgbackups` in `daily`, `weekly` and `monthly` folders. To restore a backup use this command:
+
+```sh
+scripts/pgbackups-restore [daily/weekly/monthly]/db-[date]-[time].sql.gz
+```
+
+### Migrations and seeds
+
+Migrations and seeds are in `services/api/src/db` in `migrations` and `seeds` folders. To work with them, you need to go to the api service directory:
+
+```sh
+# Development
+cd services/api
+
+# Production
+scripts/prod exec api sh
+```
+
+Then you can enter any of the following commands:
+
+```sh
+# Migrations
+pnpm db:migrations:run # Run migrations
+pnpm db:migrations:revert # Revert migrations
+
+# Seeds
+pnpm db:seeds:run # Run all seeds
+pnpm db:seeds:run -- -s [seed] # Run needed seed
+pnpm db:seeds:run -- -s CreateAdmin # Run CreateAdmin seed
+```
