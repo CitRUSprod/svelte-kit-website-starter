@@ -42,7 +42,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "registrationDate",
-                        type: "timestamp"
+                        type: "timestamptz"
                     }
                 ]
             })
@@ -69,7 +69,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "expirationDate",
-                        type: "timestamp"
+                        type: "timestamptz"
                     }
                 ],
                 foreignKeys: [
@@ -104,7 +104,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "expirationDate",
-                        type: "timestamp"
+                        type: "timestamptz"
                     }
                 ],
                 foreignKeys: [
@@ -139,7 +139,7 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "expirationDate",
-                        type: "timestamp"
+                        type: "timestamptz"
                     }
                 ],
                 foreignKeys: [
@@ -176,11 +176,11 @@ export class CreateTables1631300660485 implements MigrationInterface {
                     },
                     {
                         name: "creationDate",
-                        type: "timestamp"
+                        type: "timestamptz"
                     },
                     {
                         name: "editingDate",
-                        type: "timestamp",
+                        type: "timestamptz",
                         isNullable: true
                     }
                 ],

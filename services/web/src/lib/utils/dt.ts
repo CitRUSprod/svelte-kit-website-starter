@@ -1,9 +1,10 @@
 import { DateTime } from "luxon"
+import { browser } from "$app/env"
 
 export function getFullDateAndTime(date: string) {
-    return DateTime.fromISO(date).toFormat("yyyy-MM-dd HH:mm")
+    return browser ? DateTime.fromISO(date).toFormat("yyyy-MM-dd HH:mm") : ""
 }
 
 export function getFullDate(date: string) {
-    return DateTime.fromISO(date).toFormat("LLLL d, yyyy")
+    return browser ? DateTime.fromISO(date).toFormat("LLLL d, yyyy") : ""
 }

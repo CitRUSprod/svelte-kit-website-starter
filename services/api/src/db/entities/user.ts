@@ -24,7 +24,7 @@ export class User {
     @Column("boolean")
     public verified!: boolean
 
-    @Column("timestamp")
+    @Column("timestamptz")
     public registrationDate!: Date
 
     public verifyPassword(password: string) {

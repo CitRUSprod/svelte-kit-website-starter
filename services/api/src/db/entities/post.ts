@@ -26,10 +26,10 @@ export class Post {
     @Column("text")
     public body!: string
 
-    @Column("timestamp")
+    @Column("timestamptz")
     public creationDate!: Date
 
-    @Column("timestamp", { nullable: true })
+    @Column("timestamptz", { nullable: true })
     public editingDate!: Date | null
 
     @BeforeInsert()

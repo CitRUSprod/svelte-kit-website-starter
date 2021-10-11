@@ -30,7 +30,7 @@ export class RefreshToken {
     @JoinColumn()
     public user!: User
 
-    @Column("timestamp")
+    @Column("timestamptz")
     public expirationDate!: Date
 
     @BeforeInsert()
