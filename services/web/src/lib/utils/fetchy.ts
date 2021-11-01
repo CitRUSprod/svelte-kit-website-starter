@@ -57,7 +57,7 @@ class Fetchy {
             if (response.status === 401 && retryNumber < 2) {
                 const refreshUrl = new URL("/api/auth/refresh", baseUrl)
                 const req = new Request(refreshUrl.toString(), {
-                    method: "post",
+                    method: "POST",
                     headers: request.headers
                 })
 
