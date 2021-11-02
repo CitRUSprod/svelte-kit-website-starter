@@ -1,6 +1,6 @@
 services:
     nginx:
-        image: nginx:1.21.1-alpine
+        image: nginx:1.21.3-alpine
         restart: always
         environment:
             WEBSITE_PORT: ${WEBSITE_PORT}
@@ -10,13 +10,13 @@ services:
         build:
             context: ../../services/web
             args:
-                NODE_IMAGE: node:16.8.0-alpine
+                NODE_IMAGE: node:16.13.0-alpine
         restart: always
     api:
         build:
             context: ../../services/api
             args:
-                NODE_IMAGE: node:16.8.0-alpine
+                NODE_IMAGE: node:16.13.0-alpine
                 POSTGRES_HOST: postgres
                 POSTGRES_USER: ${POSTGRES_USER}
                 POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -35,7 +35,7 @@ services:
             MAILER_PASSWORD: ${MAILER_PASSWORD}
             MAILER_NAME: ${MAILER_NAME}
     postgres:
-        image: postgres:13.4-alpine
+        image: postgres:14.0-alpine
         restart: always
         ports:
             - ${POSTGRES_PORT}:5432
