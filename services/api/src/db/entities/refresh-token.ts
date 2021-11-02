@@ -38,8 +38,8 @@ export class RefreshToken {
         this.expirationDate = getExpirationDate()
     }
 
-    @BeforeInsert()
     // eslint-disable-next-line class-methods-use-this
+    @BeforeInsert()
     public async removeExpiredTokens() {
         const refreshTokensRepository = getRepository(RefreshToken)
         const refreshTokens = await refreshTokensRepository.find({

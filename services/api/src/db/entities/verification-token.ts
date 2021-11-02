@@ -38,8 +38,8 @@ export class VerificationToken {
         this.expirationDate = getExpirationDate()
     }
 
-    @BeforeInsert()
     // eslint-disable-next-line class-methods-use-this
+    @BeforeInsert()
     public async removeExpiredTokens() {
         const verificationTokensRepository = getRepository(VerificationToken)
         const verificationTokens = await verificationTokensRepository.find({
