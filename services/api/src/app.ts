@@ -80,7 +80,7 @@ app.register(typeorm, { ...typeormConfig, entities: Object.values(entities), mig
 
 app.register(routes)
 
-app.listen(port, "0.0.0.0", (err: Error | undefined) => {
+app.listen(port, "0.0.0.0", err => {
     if (err) throw err
 
     initSockets(app, jwtSecret)

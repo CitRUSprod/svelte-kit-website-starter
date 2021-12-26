@@ -131,7 +131,7 @@
     }
 
     function toShortStr(str: string) {
-        const s = str.substr(0, 100).trimEnd()
+        const s = str.substring(0, 100).trimEnd()
         return s.length < str.length ? `${s}...` : str
     }
 </script>
