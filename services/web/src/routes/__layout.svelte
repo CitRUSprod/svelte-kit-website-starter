@@ -14,15 +14,15 @@
 </script>
 
 <script lang="ts">
-    import { ThePageProgressBar, TheHeader, TheContent, TheToastContainer } from "./_components"
+    import { PageProgressBar, Header, Content, ToastContainer } from "./_components"
 </script>
 
-<ThePageProgressBar />
-<TheHeader />
-<TheContent>
+<PageProgressBar />
+<Header />
+<Content>
     <slot />
-</TheContent>
-<TheToastContainer />
+</Content>
+<ToastContainer />
 
 <style lang="postcss" global>
     @import "tailwindcss/tailwind";
