@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
     import { browser } from "$app/env"
-    import { theme } from "$lib/stores"
+    import { darkTheme } from "$lib/stores"
 
     import type { Load } from "@sveltejs/kit"
 
     export const load: Load = () => {
         if (browser) {
-            theme.sync()
+            darkTheme.sync()
         }
 
         return {}

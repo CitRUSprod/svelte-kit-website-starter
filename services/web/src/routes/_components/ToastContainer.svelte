@@ -4,8 +4,6 @@
     import { fly, fade } from "svelte/transition"
     import { toasts } from "$lib/stores"
 
-    const { list } = toasts
-
     function getIconByType(type: string) {
         switch (type) {
             case "success":
@@ -21,7 +19,7 @@
 </script>
 
 <div class="fixed right-4 bottom-3 flex flex-col-reverse w-80 text-white z-[1000]">
-    {#each $list as toast (toast.id)}
+    {#each $toasts as toast (toast.id)}
         <div
             class="alert flex-row justify-center my-1 bg-opacity-20 rounded-lg select-none {[
                 'alert-success',

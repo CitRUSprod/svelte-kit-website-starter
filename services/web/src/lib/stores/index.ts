@@ -1,3 +1,3 @@
 export { session } from "./session"
-export { theme } from "./theme"
+export { darkTheme } from "./dark-theme"
 export { toasts } from "./toasts"

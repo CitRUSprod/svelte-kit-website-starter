@@ -1,10 +1,8 @@
 <script lang="ts">
     import { Button, Icon } from "$lib/components"
     import { Role } from "$lib/enums"
-    import { session, theme } from "$lib/stores"
+    import { session, darkTheme } from "$lib/stores"
     import { hasAccess } from "$lib/utils"
-
-    const { dark } = theme
 </script>
 
 <div class="bg-neutral shadow-lg text-neutral-content mb-2 navbar">
@@ -27,8 +25,8 @@
         {:else}
             <Button class="rounded-btn btn-ghost btn-sm" href="/auth/login">Login</Button>
         {/if}
-        <Button class="rounded-btn btn-ghost btn-sm" on:click={theme.toggle}>
-            <svelte:component this={$dark ? Icon.Sun : Icon.Moon} />
+        <Button class="rounded-btn btn-ghost btn-sm" on:click={darkTheme.toggle}>
+            <svelte:component this={$darkTheme ? Icon.Sun : Icon.Moon} />
         </Button>
     </div>
 </div>
