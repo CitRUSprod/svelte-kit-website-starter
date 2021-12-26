@@ -24,11 +24,9 @@
 </script>
 
 <script lang="ts">
-    import FaIcon from "svelte-fa"
-    import { Button, CommonModal } from "$lib/components"
+    import { Button, CommonModal, Icon } from "$lib/components"
 
     import * as yup from "yup"
-    import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
     import { goto } from "$app/navigation"
     import { Role } from "$lib/enums"
     import { toasts, session } from "$lib/stores"
@@ -150,10 +148,10 @@
                 {#if post.author.id === $session.user?.id || hasAccess($session.user, Role.Admin)}
                     <div>
                         <Button class="btn-warning" on:click={modals.postEditing.open}>
-                            <FaIcon icon={faPencilAlt} />
+                            <Icon.Pen />
                         </Button>
                         <Button class="btn-error" on:click={modals.postRemoving.open}>
-                            <FaIcon icon={faTrash} />
+                            <Icon.Trash />
                         </Button>
                     </div>
                 {/if}

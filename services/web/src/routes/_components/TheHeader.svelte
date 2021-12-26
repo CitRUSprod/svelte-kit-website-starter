@@ -1,8 +1,5 @@
 <script lang="ts">
-    import FaIcon from "svelte-fa"
-    import { Button } from "$lib/components"
-
-    import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
+    import { Button, Icon } from "$lib/components"
     import { Role } from "$lib/enums"
     import { session, theme } from "$lib/stores"
     import { hasAccess } from "$lib/utils"
@@ -31,7 +28,7 @@
             <Button class="rounded-btn btn-ghost btn-sm" href="/auth/login">Login</Button>
         {/if}
         <Button class="rounded-btn btn-ghost btn-sm" on:click={theme.toggle}>
-            <FaIcon icon={$dark ? faSun : faMoon} />
+            <svelte:component this={$dark ? Icon.Sun : Icon.Moon} />
         </Button>
     </div>
 </div>

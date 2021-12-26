@@ -1,15 +1,7 @@
 <script lang="ts">
-    import FaIcon from "svelte-fa"
-    import { Button } from "$lib/components"
+    import { Button, Icon } from "$lib/components"
 
     import { fly, fade } from "svelte/transition"
-    import {
-        faTimes,
-        faCheck,
-        faTimesCircle,
-        faExclamationTriangle,
-        faInfoCircle
-    } from "@fortawesome/free-solid-svg-icons"
     import { toasts } from "$lib/stores"
 
     const { list } = toasts
@@ -17,13 +9,13 @@
     function getIconByType(type: string) {
         switch (type) {
             case "success":
-                return faCheck
+                return Icon.Success
             case "error":
-                return faTimesCircle
+                return Icon.Error
             case "warning":
-                return faExclamationTriangle
+                return Icon.Warning
             default:
-                return faInfoCircle
+                return Icon.Info
         }
     }
 </script>
@@ -41,7 +33,7 @@
             out:fade
         >
             <div>
-                <FaIcon icon={getIconByType(toast.type)} />
+                <svelte:component this={getIconByType(toast.type)} />
             </div>
             <div class="flex-grow px-3">
                 <div class="break-text">{toast.text}</div>
@@ -51,7 +43,7 @@
                     class="btn-ghost btn-circle btn-sm"
                     on:click={() => toasts.remove(toast.id)}
                 >
-                    <FaIcon icon={faTimes} />
+                    <Icon.Close />
                 </Button>
             </div>
         </div>

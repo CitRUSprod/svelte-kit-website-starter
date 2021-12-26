@@ -41,12 +41,10 @@
 </script>
 
 <script lang="ts">
-    import FaIcon from "svelte-fa"
-    import { Button, CommonModal, CommonPagination } from "$lib/components"
+    import { Button, CommonModal, CommonPagination, Icon } from "$lib/components"
 
     import * as _ from "lodash-es"
     import * as yup from "yup"
-    import { faSearch } from "@fortawesome/free-solid-svg-icons"
     import { toasts, session } from "$lib/stores"
 
     export let page: ItemsPage<Post>
@@ -150,7 +148,7 @@
             on:input={_.debounce(onInputTitle, 500)}
         />
         <div class="absolute top-0 right-0 p-4 pointer-events-none">
-            <FaIcon icon={faSearch} />
+            <Icon.Search />
         </div>
     </div>
     <select class="select select-primary" bind:value={sorting} on:change={onChangeSorting}>

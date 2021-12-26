@@ -61,11 +61,9 @@
 </script>
 
 <script lang="ts">
-    import FaIcon from "svelte-fa"
-    import { Button, CommonModal, CommonPagination } from "$lib/components"
+    import { Button, CommonModal, CommonPagination, Icon } from "$lib/components"
 
     import * as _ from "lodash-es"
-    import { faSearch, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
     import { toasts } from "$lib/stores"
 
     export let page: ItemsPage<User>
@@ -169,7 +167,7 @@
             on:input={_.debounce(onInputUsername, 500)}
         />
         <div class="absolute top-0 right-0 p-4 pointer-events-none">
-            <FaIcon icon={faSearch} />
+            <Icon.Search />
         </div>
     </div>
     <div class="relative w-full">
@@ -180,7 +178,7 @@
             on:input={_.debounce(onInputEmail, 500)}
         />
         <div class="absolute top-0 right-0 p-4 pointer-events-none">
-            <FaIcon icon={faSearch} />
+            <Icon.Search />
         </div>
     </div>
     <select class="select select-primary" bind:value={sorting} on:change={onChangeSorting}>
@@ -214,7 +212,7 @@
                     <td>{dt.getFullDate(user.registrationDate)}</td>
                     <td class="text-right">
                         <Button on:click={() => modals.userEditing.open(user)}>
-                            <FaIcon icon={faPencilAlt} />
+                            <Icon.Pen />
                         </Button>
                     </td>
                 </tr>

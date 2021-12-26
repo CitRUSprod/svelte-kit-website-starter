@@ -1,15 +1,9 @@
 <script lang="ts">
-    import FaIcon from "svelte-fa"
     import Button from "./Button.svelte"
     import Pagination from "./Pagination.svelte"
+    import * as Icon from "./Icon"
 
     import { createEventDispatcher } from "svelte"
-    import {
-        faAngleDoubleLeft,
-        faAngleDoubleRight,
-        faAngleLeft,
-        faAngleRight
-    } from "@fortawesome/free-solid-svg-icons"
 
     export let currentPage: number
     export let pageCount: number
@@ -47,14 +41,14 @@
     <Pagination class="btn-group" {currentPage} {pageCount} {length} let:pageNumber>
         <svelte:fragment slot="before">
             <Button class="btn-info" href={getUrl(1, query)} disabled={currentPage === 1}>
-                <FaIcon icon={faAngleDoubleLeft} />
+                <Icon.AngleDoubleLeft />
             </Button>
             <Button
                 class="btn-info !mx-1"
                 href={getUrl(currentPage - 1, query)}
                 disabled={currentPage === 1}
             >
-                <FaIcon icon={faAngleLeft} />
+                <Icon.AngleLeft />
             </Button>
         </svelte:fragment>
         {#if currentPage === pageNumber}
@@ -68,14 +62,14 @@
                 href={getUrl(currentPage + 1, query)}
                 disabled={currentPage === pageCount}
             >
-                <FaIcon icon={faAngleRight} />
+                <Icon.AngleRight />
             </Button>
             <Button
                 class="btn-info"
                 href={getUrl(pageCount, query)}
                 disabled={currentPage === pageCount}
             >
-                <FaIcon icon={faAngleDoubleRight} />
+                <Icon.AngleDoubleRight />
             </Button>
         </svelte:fragment>
     </Pagination>
