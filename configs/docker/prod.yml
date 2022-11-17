@@ -3,8 +3,6 @@ services:
         extends:
             file: ./base.yml
             service: nginx
-        ports:
-            - ${WEBSITE_PORT}:${WEBSITE_PORT}
         environment:
             WEB_HOST: web
             API_HOST: api
@@ -20,15 +18,3 @@ services:
         extends:
             file: ./base.yml
             service: api
-        depends_on:
-            - postgres
-    postgres:
-        extends:
-            file: ./base.yml
-            service: postgres
-    pgbackups:
-        extends:
-            file: ./base.yml
-            service: pgbackups
-        depends_on:
-            - postgres
