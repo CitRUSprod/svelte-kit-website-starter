@@ -11,6 +11,7 @@ services:
             context: ../../services/web
             args:
                 NODE_IMAGE: node:18.1.0-alpine
+                PUBLIC_TITLE: ${PUBLIC_TITLE}
         restart: always
     api:
         build:

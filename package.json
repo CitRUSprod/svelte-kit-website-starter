@@ -4,12 +4,16 @@
     "scripts": {
         "validate": "pnpm --parallel validate",
         "commit": "git-cz",
-        "eslint": "eslint --color",
+        "stylelint": "stylelint --color",
+        "stylelint:fix": "pnpm stylelint --fix",
+        "stylelint:all": "pnpm stylelint \"**/*.svelte\"",
+        "stylelint:fix:all": "pnpm stylelint:all --fix",
+        "eslint": "eslint --color --no-error-on-unmatched-pattern",
         "eslint:fix": "pnpm eslint --fix",
-        "eslint:all": "pnpm eslint \"**/*.{md,json,y?(a)ml,js,ts}\"",
+        "eslint:all": "pnpm eslint \"**/*.{md,json,y?(a)ml,js,ts,svelte}\"",
         "eslint:fix:all": "pnpm eslint:all --fix",
-        "lint": "pnpm eslint:all",
-        "format": "pnpm eslint:fix:all",
+        "lint": "pnpm stylelint:all && pnpm eslint:all",
+        "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
         "ci": "pnpm validate && pnpm lint",
         "prepare": "husky install"
     },
@@ -26,13 +30,22 @@
         }
     },
     "lint-staged": {
-        "*.{md,json,y?(a)ml,js,ts}": "pnpm eslint:fix"
+        "*.svelte": "pnpm stylelint:fix",
+        "*.{md,json,y?(a)ml,js,ts,svelte}": "pnpm eslint:fix"
     },
     "prettier": "./configs/prettier/index.js",
+    "stylelint": {
+        "extends": "./configs/stylelint/index.js",
+        "ignoreFiles": [
+            "**/.svelte-kit/**/*",
+            "**/dist/**/*"
+        ]
+    },
     "eslintConfig": {
         "extends": "./configs/eslint/index.js",
         "ignorePatterns": [
             "!.travis.yml",
+            ".svelte-kit",
             "/volumes",
             "dist",
             "pnpm-lock.yaml"
@@ -41,6 +54,7 @@
     "devDependencies": {
         "@citrus-linting/eslint-config": "0.20.0",
         "@citrus-linting/prettier-config": "0.5.0",
+        "@citrus-linting/stylelint-config": "0.4.0",
         "@commitlint/cli": "17.2.0",
         "@types/eslint": "8.4.10",
         "@types/prettier": "2.7.1",
@@ -52,9 +66,17 @@
         "eslint": "8.27.0",
         "eslint-config-prettier": "8.5.0",
         "eslint-plugin-prettier": "4.2.1",
+        "eslint-plugin-svelte": "2.13.0",
         "husky": "8.0.2",
         "lint-staged": "13.0.3",
+        "postcss-html": "1.5.0",
         "prettier": "2.7.1",
+        "prettier-plugin-svelte": "2.8.0",
+        "stylelint": "14.15.0",
+        "stylelint-config-prettier": "9.0.4",
+        "stylelint-prettier": "2.0.0",
+        "svelte": "3.53.1",
+        "svelte-eslint-parser": "0.21.0",
         "typescript": "4.8.4"
     }
 }

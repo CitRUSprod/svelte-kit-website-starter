@@ -1,6 +1,11 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
-    extends: ["@citrus-linting", "@citrus-linting/eslint-config/typescript", "prettier"],
+    extends: [
+        "@citrus-linting",
+        "@citrus-linting/eslint-config/typescript",
+        "@citrus-linting/eslint-config/svelte-typescript",
+        "prettier"
+    ],
     plugins: ["prettier"],
     rules: {
         "prettier/prettier": [2]
@@ -25,6 +30,16 @@ const config = {
             files: ["*.ts"],
             parserOptions: {
                 project: "./services/*/tsconfig.json"
+            }
+        },
+        {
+            files: ["*.svelte"],
+            parserOptions: {
+                project: "./services/*/tsconfig.eslint.json"
+            },
+            rules: {
+                "svelte/indent": 0,
+                "svelte/first-attribute-linebreak": 0
             }
         }
     ]
