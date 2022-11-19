@@ -27,6 +27,13 @@ const config = {
             }
         },
         {
+            files: ["*.html"],
+            parser: "any-eslint-parser",
+            rules: {
+                "prettier/prettier": [2, { parser: "html" }]
+            }
+        },
+        {
             files: ["*.ts"],
             parserOptions: {
                 project: "./services/*/tsconfig.json"
