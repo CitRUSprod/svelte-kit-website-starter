@@ -2,6 +2,7 @@
 .svelte-kit
 .vscode
 *.log
+/services/api/storage
 /volumes
 dist
 node_modules

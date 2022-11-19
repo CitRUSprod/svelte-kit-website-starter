@@ -7,7 +7,7 @@ services:
             WEB_HOST: web
             API_HOST: api
         depends_on:
-            - "web"
+            - web
     web:
         extends:
             file: ./base.yml
@@ -18,3 +18,9 @@ services:
         extends:
             file: ./base.yml
             service: api
+        depends_on:
+            - postgres
+    postgres:
+        extends:
+            file: ./base.yml
+            service: postgres
