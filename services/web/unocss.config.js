@@ -1,3 +1,4 @@
+import path from "path"
 import { extractorSvelte, presetUno, presetIcons, transformerDirectives } from "unocss"
 import { colors } from "@unocss/preset-wind"
 import { presetBetterNestedColors } from "unocss-preset-better-nested-colors"
@@ -54,6 +55,7 @@ const config = {
         }),
         presetIcons()
     ],
+    include: [path.join(__dirname, "src/**/*.svelte")],
     transformers: [transformerDirectives()],
     preprocess(matcher) {
         const prefix = "u:"

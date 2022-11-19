@@ -16,7 +16,6 @@
 <slot />
 <ToastContainer />
 
-<!-- eslint-disable @ota-meshi/svelte/valid-compile -->
 <style global lang="postcss">
     html {
         @apply u\:overflow-x-hidden;
@@ -42,5 +41,9 @@
 
     h3 {
         @apply u\:text-lg;
+    }
+
+    #app {
+        @apply u\:contents;
     }
 </style>

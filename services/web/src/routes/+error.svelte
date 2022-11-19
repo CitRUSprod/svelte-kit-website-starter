@@ -11,7 +11,7 @@
 
 <main class="u:relative u:flex-1">
     <Content.Center>
-        <div class="u:border-error u:rounded-lg u:border u:text-center u:p-8">
+        <div class="u:p-8 u:border-error u:rounded-lg u:border u:text-center">
             <h1>{$t("routes.error.error")} {$page.status}</h1>
             {#if $page.error}
                 <h2>{$page.error.message}</h2>
