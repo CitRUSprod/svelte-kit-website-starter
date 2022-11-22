@@ -37,7 +37,7 @@ export const logoutCookies = Type.Strict(
 
 export type LogoutCookies = Static<typeof logoutCookies>
 
-export const refreshCookies = Type.Strict(
+export const refreshTokensCookies = Type.Strict(
     Type.Object(
         {
             refreshToken: schemas.models.refreshToken.token()
@@ -46,4 +46,4 @@ export const refreshCookies = Type.Strict(
     )
 )
 
-export type RefreshCookies = Static<typeof refreshCookies>
+export type RefreshTokensCookies = Static<typeof refreshTokensCookies>

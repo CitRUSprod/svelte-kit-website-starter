@@ -50,15 +50,15 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: ["auth"]
         },
         async handler(req, reply) {
-            let cookies: schemas.RefreshCookies
+            let cookies: schemas.RefreshTokensCookies
 
             try {
-                cookies = parseByAjvSchema(schemas.refreshCookies, req.cookies, "cookies")
+                cookies = parseByAjvSchema(schemas.refreshTokensCookies, req.cookies, "cookies")
             } catch (err: any) {
                 throw new Unauthorized(err.message)
             }
 
-            const data = await handlers.refresh(app, { cookies })
+            const data = await handlers.refreshTokens(app, { cookies })
             await reply.sendData(data)
         }
     })

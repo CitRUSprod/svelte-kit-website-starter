@@ -77,7 +77,7 @@ export const logout: RouteHandler<{ cookies: schemas.LogoutCookies }> = async (
     return { cookies: localCookies }
 }
 
-export const refresh: RouteHandler<{ cookies: schemas.RefreshCookies }> = async (
+export const refreshTokens: RouteHandler<{ cookies: schemas.RefreshTokensCookies }> = async (
     app,
     { cookies }
 ) => {
