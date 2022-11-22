@@ -3,8 +3,11 @@ import { getLocaleAndRoute } from "$lib/utils"
 
 import type { LayoutLoad } from "./$types"
 
-export const load: LayoutLoad = async ({ url }) => {
-    const { locale, route } = getLocaleAndRoute(url.pathname)
+export const load: LayoutLoad = async e => {
+    const { locale, route } = getLocaleAndRoute(e.url.pathname)
     await loadTranslations(locale!, route)
-    return { route }
+
+    const { user } = e.data
+
+    return { route, user }
 }

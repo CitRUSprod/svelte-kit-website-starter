@@ -1,7 +1,9 @@
 import { defaultLocale, locales } from "$lib/locales"
-import { getLocaleAndRoute } from "$lib/utils"
+import { getLocaleAndRoute, setCookies } from "$lib/utils"
+import * as api from "$lib/api"
 
 import type { Handle } from "@sveltejs/kit"
+import type { User } from "$lib/types"
 
 const supportedLocales = locales.get()
 
@@ -18,6 +20,17 @@ export const handle: Handle = async ({ event: e, resolve }) => {
 
         return new Response(undefined, { status: 301, headers })
     }
+
+    let user: User | null = null
+
+    try {
+        const res = await api.profile.getUser({ headers: e.request.headers })
+        setCookies(e.cookies, res.headers)
+
+        user = res.data
+    } catch {}
+
+    e.locals.user = user
 
     const response = await resolve(e, {
         transformPageChunk({ html }) {

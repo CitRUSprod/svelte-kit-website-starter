@@ -2,10 +2,16 @@
     import { PageProgressBar, ToastContainer } from "./_components"
 
     import { browser } from "$app/environment"
-    import { darkTheme } from "$lib/stores"
+    import { darkTheme, user } from "$lib/stores"
+
+    import type { LayoutData } from "./$types"
 
     import "uno.css"
     import "@unocss/reset/tailwind.css"
+
+    export let data: LayoutData
+
+    $: $user = data.user
 
     if (browser) {
         darkTheme.sync()

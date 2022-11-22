@@ -1,4 +1,9 @@
 /// <reference types="@sveltejs/kit" />
-/// <reference types="unplugin-icons/types/svelte" />
 
-declare namespace App {}
+declare namespace App {
+    type User = import("$lib/types").User
+
+    interface Locals {
+        user: User | null
+    }
+}
