@@ -4,6 +4,8 @@ FROM ${NODE_IMAGE}
 
 ARG PUBLIC_TITLE
 
+ARG PUBLIC_BASE_URL
+
 WORKDIR /app
 
 RUN npm add -g pnpm

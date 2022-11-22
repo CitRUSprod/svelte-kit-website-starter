@@ -12,6 +12,7 @@ services:
             args:
                 NODE_IMAGE: node:18.1.0-alpine
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
+                PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
         restart: always
     api:
         build:

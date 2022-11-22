@@ -5,7 +5,8 @@ import { parseByAjvSchema } from "./ajv"
 const schema = Type.Strict(
     Type.Object(
         {
-            PUBLIC_TITLE: Type.String({ minLength: 1, transform: ["trim"] })
+            PUBLIC_TITLE: Type.String({ minLength: 1, transform: ["trim"] }),
+            PUBLIC_BASE_URL: Type.String({ minLength: 10, transform: ["trim"] })
         },
         { additionalProperties: false }
     )

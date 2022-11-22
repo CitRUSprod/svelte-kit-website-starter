@@ -1,7 +1,8 @@
 import basicAxios, { type AxiosResponseHeaders, type RawAxiosResponseHeaders } from "axios"
 import { browser, dev } from "$app/environment"
+import { env } from "$lib/utils"
 
-const baseUrl = browser ? location.origin : `http://${dev ? "localhost" : "nginx"}:6700`
+const baseUrl = browser || dev ? env.PUBLIC_BASE_URL : "http://nginx:6700"
 
 export function getHeader<T = string>(
     headers: AxiosResponseHeaders | RawAxiosResponseHeaders,
@@ -39,40 +40,45 @@ export const axios = basicAxios.create({
 axios.interceptors.response.use(
     res => res,
     async err => {
-        if (err.response.status === 401) {
-            const cookies = getHeader(err.response.headers, "cookie")?.split("; ") ?? []
+        if (err.response) {
+            const url = new URL(err.response.config.url, baseUrl).toString()
 
-            const response = await basicAxios.post(
-                "/api/auth/refresh",
-                {},
-                {
-                    baseURL: baseUrl,
-                    headers: headersToJson(err.response.config.headers)
-                }
-            )
+            if (err.response.status === 401 && url.startsWith(baseUrl)) {
+                const cookies = getHeader(err.response.headers, "cookie")?.split("; ") ?? []
 
-            const tokensSetCookies = getHeader<Array<string>>(response.headers, "set-cookie") ?? []
-
-            if (cookies.length > 0 || tokensSetCookies.length > 0) {
-                setHeader(
-                    err.response.config.headers,
-                    "cookie",
-                    [...cookies, ...tokensSetCookies.map(c => c.split("; ")[0])].join("; ")
+                const response = await basicAxios.post(
+                    "/api/auth/refresh",
+                    {},
+                    {
+                        baseURL: baseUrl,
+                        headers: headersToJson(err.response.config.headers)
+                    }
                 )
+
+                const tokensSetCookies =
+                    getHeader<Array<string>>(response.headers, "set-cookie") ?? []
+
+                if (cookies.length > 0 || tokensSetCookies.length > 0) {
+                    setHeader(
+                        err.response.config.headers,
+                        "cookie",
+                        [...cookies, ...tokensSetCookies.map(c => c.split("; ")[0])].join("; ")
+                    )
+                }
+
+                const res = await basicAxios({
+                    ...err.response.config,
+                    headers: headersToJson(err.response.config.headers)
+                })
+
+                const setCookie = getHeader<Array<string>>(res.headers, "set-cookie") ?? []
+
+                if (setCookie.length > 0 || tokensSetCookies.length > 0) {
+                    setHeader(res.headers, "set-cookie", [...setCookie, ...tokensSetCookies])
+                }
+
+                return res
             }
-
-            const res = await basicAxios({
-                ...err.response.config,
-                headers: headersToJson(err.response.config.headers)
-            })
-
-            const setCookie = getHeader<Array<string>>(res.headers, "set-cookie") ?? []
-
-            if (setCookie.length > 0 || tokensSetCookies.length > 0) {
-                setHeader(res.headers, "set-cookie", [...setCookie, ...tokensSetCookies])
-            }
-
-            return res
         }
 
         throw err
