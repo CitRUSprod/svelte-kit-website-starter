@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { FastifyAuthFunction } from "@fastify/auth"
+import { HttpError, InternalServerError } from "http-errors"
 import { UserPayload, UserData } from "$/types"
 
 declare module "fastify" {
@@ -8,7 +9,8 @@ declare module "fastify" {
     }
 
     interface FastifyRequest {
-        userData?: UserData | null
+        userData?: UserData
+        authError?: HttpError
     }
 }
 
@@ -20,11 +22,26 @@ declare module "@fastify/jwt" {
 
 export const setUserData: FastifyPluginCallback = (app, options, done) => {
     app.decorate<FastifyInstance["setUserData"]>("setUserData", async req => {
-        const payload = await req.jwtVerify<UserPayload>()
-        req.userData = await app.prisma.user.findFirst({
-            where: { id: payload.id },
-            include: { role: true }
-        })
+        let payload: UserPayload | undefined
+
+        try {
+            payload = await req.jwtVerify<UserPayload>()
+        } catch (err: any) {
+            req.authError = err
+        }
+
+        if (payload) {
+            const user = await app.prisma.user.findFirst({
+                where: { id: payload.id },
+                include: { role: true }
+            })
+
+            if (user === null) {
+                throw new InternalServerError("User with such ID was not found")
+            } else {
+                req.userData = user
+            }
+        }
     })
 
     done()

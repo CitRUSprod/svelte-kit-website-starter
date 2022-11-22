@@ -4,7 +4,7 @@ import { getItemsPage, models } from "$/utils"
 import { UserData, PartialUserData, RouteHandler } from "$/types"
 import * as schemas from "./schemas"
 
-export const getUsers: RouteHandler<{ userData: UserData; query: schemas.GetUsersQuery }> = async (
+export const getUsers: RouteHandler<{ userData?: UserData; query: schemas.GetUsersQuery }> = async (
     app,
     { userData, query }
 ) => {
@@ -23,8 +23,10 @@ export const getUsers: RouteHandler<{ userData: UserData; query: schemas.GetUser
             include: { role: true }
         })
 
-        for (const user of users) {
-            if (!userData.role.permissions.includes(Permission.GetOtherUserEmail)) delete user.email
+        if (!userData?.role.permissions.includes(Permission.GetOtherUserEmail)) {
+            for (const user of users) {
+                delete user.email
+            }
         }
 
         return { totalItems, items: users.map(models.user.dto) }
@@ -33,12 +35,12 @@ export const getUsers: RouteHandler<{ userData: UserData; query: schemas.GetUser
     return { payload: page }
 }
 
-export const getUser: RouteHandler<{ userData: UserData; params: schemas.GetUserParams }> = async (
+export const getUser: RouteHandler<{ userData?: UserData; params: schemas.GetUserParams }> = async (
     app,
     { userData, params }
 ) => {
     const user: PartialUserData = await models.user.get(app, params.id)
-    if (!userData.role.permissions.includes(Permission.GetOtherUserEmail)) delete user.email
+    if (!userData?.role.permissions.includes(Permission.GetOtherUserEmail)) delete user.email
     return { payload: models.user.dto(user) }
 }
 
