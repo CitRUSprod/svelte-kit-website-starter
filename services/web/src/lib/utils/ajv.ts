@@ -1,10 +1,9 @@
-import Ajv from "ajv"
+import Ajv, { type ErrorObject } from "ajv"
 import ajvKeywords from "ajv-keywords"
 import ajvFormats from "ajv-formats"
 import { AggregateAjvError } from "@segment/ajv-human-errors"
+import { Type, type Static, type TSchema } from "@sinclair/typebox"
 
-import type { ErrorObject } from "ajv"
-import type { Static, TSchema } from "@sinclair/typebox"
 import type { JsonValue } from "type-fest"
 
 export const ajv = new Ajv({
@@ -16,7 +15,7 @@ export const ajv = new Ajv({
 })
 
 ajvKeywords(ajv, ["transform"])
-ajvFormats(ajv, [])
+ajvFormats(ajv, ["email"])
 
 export function normalizeAjvErrors(errors: Array<ErrorObject>, scope?: string) {
     const humanErrors = new AggregateAjvError(errors) as any
@@ -37,4 +36,15 @@ export function parseByAjvSchema<T extends TSchema>(
     } else {
         throw normalizeAjvErrors(validate.errors!, scope)
     }
+}
+
+export function createValidator<T extends TSchema>(schema: T) {
+    function validator(value: Static<typeof schema>) {
+        const validate = ajv.compile(Type.Strict(Type.Object({ value: schema })))
+        const obj = { value }
+        const valid = validate(obj)
+        return { valid, value: obj.value }
+    }
+
+    return validator
 }

@@ -1,5 +1,24 @@
 import { axios, createAxiosConfig } from "$lib/utils"
 
+interface RegisterData {
+    headers?: Headers
+    email: string
+    username: string
+    password: string
+}
+
+export function register(data: RegisterData) {
+    return axios.post<undefined>(
+        "/api/auth/register",
+        {
+            email: data.email,
+            username: data.username,
+            password: data.password
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
 interface LoginData {
     headers?: Headers
     email: string

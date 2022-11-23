@@ -10,7 +10,9 @@
 
     onMount(() => {
         if (autofocus) {
-            input.focus()
+            setTimeout(() => {
+                input.focus()
+            })
         }
     })
 </script>

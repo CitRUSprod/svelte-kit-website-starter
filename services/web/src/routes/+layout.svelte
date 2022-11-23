@@ -1,6 +1,7 @@
 <script lang="ts">
     import { PageProgressBar, ToastContainer } from "./_components"
 
+    import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query"
     import { browser } from "$app/environment"
     import { darkTheme, user } from "$lib/stores"
 
@@ -11,6 +12,8 @@
 
     export let data: LayoutData
 
+    const client = new QueryClient()
+
     $: $user = data.user
 
     if (browser) {
@@ -19,7 +22,9 @@
 </script>
 
 <PageProgressBar />
-<slot />
+<QueryClientProvider {client}>
+    <slot />
+</QueryClientProvider>
 <ToastContainer />
 
 <style global lang="postcss">

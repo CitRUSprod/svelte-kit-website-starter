@@ -7,6 +7,7 @@ specifiers:
   '@sinclair/typebox': 0.25.8
   '@sveltejs/adapter-node': 1.0.0-next.100
   '@sveltejs/kit': 1.0.0-next.551
+  '@sveltestack/svelte-query': 1.6.0
   '@types/node': 18.11.9
   '@types/nprogress': 0.2.0
   '@types/set-cookie-parser': 2.4.2
@@ -38,6 +39,7 @@ dependencies:
   '@rgossiaux/svelte-headlessui': 1.0.2_svelte@3.53.1
   '@segment/ajv-human-errors': 2.1.2_ajv@8.11.2
   '@sinclair/typebox': 0.25.8
+  '@sveltestack/svelte-query': 1.6.0
   ajv: 8.11.2
   ajv-formats: 2.1.1_ajv@8.11.2
   ajv-keywords: 5.1.0_ajv@8.11.2
@@ -371,6 +373,15 @@ packages:
 
   /@sveltekit-i18n/parser-default/1.0.3:
     resolution: {integrity: sha512-HheveklTjp3hxpYQhoHfyA6B4bQaUeSV5MQf2usIv/58UF2jY/YqhCAWj9bDBjufbuZc5pSz4BXvdX3WVT+viA==}
+    dev: false
+
+  /@sveltestack/svelte-query/1.6.0:
+    resolution: {integrity: sha512-C0wWuh6av1zu3Pzwrg6EQmX3BhDZQ4gMAdYu6Tfv4bjbEZTB00uEDz52z92IZdONh+iUKuyo0xRZ2e16k2Xifg==}
+    peerDependencies:
+      broadcast-channel: ^4.5.0
+    peerDependenciesMeta:
+      broadcast-channel:
+        optional: true
     dev: false
 
   /@tsconfig/node10/1.0.9:
