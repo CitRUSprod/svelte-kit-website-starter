@@ -40,7 +40,14 @@ export const getUser: RouteHandler<{ userData?: UserData; params: schemas.GetUse
     { userData, params }
 ) => {
     const user: PartialUserData = await models.user.get(app, params.id)
-    if (!userData?.role.permissions.includes(Permission.GetOtherUserEmail)) delete user.email
+
+    if (userData) {
+        const goodPermissions = userData.role.permissions.includes(Permission.GetOtherUserEmail)
+        if (userData.id !== user.id && !goodPermissions) delete user.email
+    } else {
+        delete user.email
+    }
+
     return { payload: models.user.dto(user) }
 }
 
