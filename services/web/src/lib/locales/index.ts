@@ -1,7 +1,5 @@
 import { derived } from "svelte/store"
-import I18n from "sveltekit-i18n"
-
-import type { Config } from "sveltekit-i18n"
+import I18n, { type Config } from "sveltekit-i18n"
 
 export const defaultLocale = "en" as string
 
