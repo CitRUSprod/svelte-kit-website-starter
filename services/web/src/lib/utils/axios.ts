@@ -1,6 +1,6 @@
 import basicAxios, { type AxiosResponseHeaders, type RawAxiosResponseHeaders } from "axios"
 import { browser, dev } from "$app/environment"
-import { env } from "$lib/utils"
+import { env, uniqCookies } from "$lib/utils"
 
 const baseUrl = browser || dev ? env.PUBLIC_BASE_URL : "http://nginx:6700"
 
@@ -44,8 +44,6 @@ axios.interceptors.response.use(
             const url = new URL(err.response.config.url, baseUrl).toString()
 
             if (err.response.status === 401 && url.startsWith(baseUrl)) {
-                const cookies = getHeader(err.response.headers, "cookie")?.split("; ") ?? []
-
                 const response = await basicAxios.post(
                     "/api/auth/refresh",
                     {},
@@ -55,6 +53,7 @@ axios.interceptors.response.use(
                     }
                 )
 
+                const cookies = getHeader(err.response.config.headers, "cookie")?.split("; ") ?? []
                 const tokensSetCookies =
                     getHeader<Array<string>>(response.headers, "set-cookie") ?? []
 
@@ -62,7 +61,10 @@ axios.interceptors.response.use(
                     setHeader(
                         err.response.config.headers,
                         "cookie",
-                        [...cookies, ...tokensSetCookies.map(c => c.split("; ")[0])].join("; ")
+                        uniqCookies([
+                            ...cookies,
+                            ...tokensSetCookies.map(c => c.split("; ")[0])
+                        ]).join("; ")
                     )
                 }
 
@@ -74,7 +76,11 @@ axios.interceptors.response.use(
                 const setCookie = getHeader<Array<string>>(res.headers, "set-cookie") ?? []
 
                 if (setCookie.length > 0 || tokensSetCookies.length > 0) {
-                    setHeader(res.headers, "set-cookie", [...setCookie, ...tokensSetCookies])
+                    setHeader(
+                        res.headers,
+                        "set-cookie",
+                        uniqCookies([...setCookie, ...tokensSetCookies])
+                    )
                 }
 
                 return res

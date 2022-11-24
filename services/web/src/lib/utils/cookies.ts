@@ -2,7 +2,9 @@ import { parse } from "set-cookie-parser"
 import { getHeader } from "$lib/utils"
 
 import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
-import type { Cookies } from "@sveltejs/kit"
+import type { Cookies, ServerLoadEvent } from "@sveltejs/kit"
+
+const cookieList = ["accessToken", "refreshToken"]
 
 export function setCookies(
     cookies: Cookies,
@@ -13,5 +15,33 @@ export function setCookies(
 
     for (const { name, value, sameSite, ...opts } of newCookies) {
         cookies.set(name, value, opts)
+    }
+}
+
+export function uniqCookies(cookies: Array<string>) {
+    const cookiesObject: Record<string, string> = {}
+
+    for (const cookie of cookies) {
+        const parsedCookie = parse(cookie)[0]
+        cookiesObject[parsedCookie.name] = cookie
+    }
+
+    return Object.values(cookiesObject)
+}
+
+export function setCookiesInHeaders(e: ServerLoadEvent) {
+    const newCookies: Array<string> = []
+
+    for (const key of cookieList) {
+        const value = e.cookies.get(key)
+        if (value) newCookies.push(`${key}=${value}`)
+    }
+
+    const oldCookies = e.request.headers.get("cookie")
+
+    const cookies = uniqCookies([...(oldCookies?.split("; ") ?? []), ...newCookies])
+
+    if (cookies.length > 0) {
+        e.request.headers.set("cookie", cookies.join("; "))
     }
 }
