@@ -2,7 +2,7 @@
     import { Button } from "$lib/components"
 
     import classNames from "classnames"
-    import { darkTheme, user } from "$lib/stores"
+    import { darkTheme, userData } from "$lib/stores"
     import { t, currentLocale, locales, localePath } from "$lib/locales"
     import { env } from "$lib/utils"
 
@@ -18,8 +18,8 @@
         </h2>
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
-        {#if $user}
-            <Button href={$localePath(`/users/${$user.id}`)} type="primary">Profile</Button>
+        {#if $userData}
+            <Button href={$localePath(`/users/${$userData.id}`)} type="primary">Profile</Button>
         {/if}
         <Button href={$localePath("/todo")} type="primary">{$t("components.header.todo")}</Button>
         <Button href={$localePath("/lorem")} type="primary">Lorem</Button>
@@ -46,7 +46,7 @@
         <Button icon type="primary" on:click={darkTheme.toggle}>
             <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl" />
         </Button>
-        {#if $user}
+        {#if $userData}
             <Button href={$localePath("/auth/logout")} type="primary">Logout</Button>
         {:else}
             <Button href={$localePath("/auth/login")} type="primary">Login</Button>

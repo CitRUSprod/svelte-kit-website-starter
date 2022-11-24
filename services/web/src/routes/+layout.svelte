@@ -3,7 +3,7 @@
 
     import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query"
     import { browser } from "$app/environment"
-    import { darkTheme, user } from "$lib/stores"
+    import { darkTheme, userData } from "$lib/stores"
 
     import type { LayoutData } from "./$types"
 
@@ -14,7 +14,7 @@
 
     const client = new QueryClient()
 
-    $: $user = data.user
+    $: $userData = data.user
 
     if (browser) {
         darkTheme.sync()
