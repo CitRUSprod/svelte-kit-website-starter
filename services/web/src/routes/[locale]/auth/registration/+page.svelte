@@ -24,9 +24,7 @@
         vldResultPassword.valid &&
         vldResultPassword.value === vldResultPasswordConfirmation.value
 
-    const queryRegister = useQuery("register", {
-        enabled: false,
-        retry: false,
+    const queryRegister = useQuery("auth.register", {
         queryFn() {
             return api.auth.register({
                 email: vldResultEmail.value,

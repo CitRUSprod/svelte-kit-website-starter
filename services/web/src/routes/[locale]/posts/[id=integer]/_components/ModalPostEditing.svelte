@@ -1,25 +1,27 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
+    import { useQuery } from "@sveltestack/svelte-query"
     import { t } from "$lib/locales"
+    import { vld } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { Post } from "$lib/types"
 
-    export let post: Readonly<Post>
+    export let post: Post
 
     let visible = false
-    let loading = false
 
     let title = ""
     let content = ""
 
-    $: trimmedTitle = title.trim()
-    $: trimmedContent = content.trim()
+    $: vldResultTitle = vld.title(title)
+    $: vldResultContent = vld.content(content)
 
-    $: disabled =
-        !(trimmedTitle && trimmedContent) ||
-        (trimmedTitle === post.title && trimmedContent === post.content)
+    $: completedForm =
+        vldResultTitle.valid &&
+        vldResultContent.valid &&
+        (vldResultTitle.value !== post.title || vldResultContent.value !== post.content)
 
     export function open() {
         title = post.title
@@ -32,27 +34,31 @@
         visible = false
     }
 
-    async function editPost() {
-        if (!disabled) {
-            loading = true
-            await api.posts.editPost({
+    const queryUpdatePost = useQuery("posts.updatePost", {
+        queryFn() {
+            return api.posts.updatePost({
                 id: post.id,
-                title: trimmedTitle,
-                content: trimmedContent
+                title: vldResultTitle.value,
+                content: vldResultContent.value
             })
-            loading = false
+        },
+        async onSuccess() {
             close()
         }
-    }
+    })
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-200" persistent={loading} bind:visible>
+<Modal
+    class="u:flex u:flex-col u:gap-4 u:w-200"
+    persistent={$queryUpdatePost.isLoading}
+    bind:visible
+>
     <div>
         <h1 class="u:text-center">{$t("components.modal-post-editing.post-editing")}</h1>
     </div>
     <div>
         <TextField
-            disabled={loading}
+            disabled={$queryUpdatePost.isLoading}
             label={$t("components.modal-post-editing.title")}
             placeholder={$t("components.modal-post-editing.enter-title")}
             bind:value={title}
@@ -61,17 +67,22 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={loading}
+            disabled={$queryUpdatePost.isLoading}
             label={$t("components.modal-post-editing.content")}
             placeholder={$t("components.modal-post-editing.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={loading} text type="error" on:click={close}>
+        <Button disabled={$queryUpdatePost.isLoading} text type="error" on:click={close}>
             {$t("components.modal-post-editing.cancel")}
         </Button>
-        <Button {disabled} {loading} type="success" on:click={editPost}>
+        <Button
+            disabled={!completedForm}
+            loading={$queryUpdatePost.isLoading}
+            type="success"
+            on:click={() => $queryUpdatePost.refetch()}
+        >
             {$t("components.modal-post-editing.save")}
         </Button>
     </div>

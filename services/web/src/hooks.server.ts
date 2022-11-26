@@ -21,16 +21,16 @@ export const handle: Handle = async ({ event: e, resolve }) => {
         return new Response(undefined, { status: 301, headers })
     }
 
-    let user: User | null = null
+    let userData: User | null = null
 
     try {
         const res = await api.profile.getUser({ headers: e.request.headers })
         setCookies(e.cookies, res.headers)
 
-        user = res.data
+        userData = res.data
     } catch {}
 
-    e.locals.user = user
+    e.locals.userData = userData
 
     const response = await resolve(e, {
         transformPageChunk({ html }) {

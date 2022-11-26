@@ -1,44 +1,64 @@
-import { get } from "svelte/store"
-import { posts } from "$lib/stores"
+import { axios, createAxiosConfig } from "$lib/utils"
 
-function wait() {
-    return new Promise(r => {
-        setTimeout(r, 1000)
-    })
+import type { ItemsPage, Post } from "$lib/types"
+
+interface GetPostsData {
+    headers?: Headers
+}
+
+export function getPosts(data: GetPostsData = {}) {
+    return axios.get<ItemsPage<Post>>("/api/posts", createAxiosConfig(data.headers))
+}
+
+interface GetPostData {
+    headers?: Headers
+    id: number
+}
+
+export function getPost(data: GetPostData) {
+    return axios.get<Post>(`/api/posts/${data.id}`, createAxiosConfig(data.headers))
 }
 
 interface CreatePostData {
+    headers?: Headers
     title: string
     content: string
 }
 
-export async function createPost(data: CreatePostData) {
-    await wait()
-    posts.add(data.title, data.content)
-    const post = get(posts).at(-1)!
-    return post
+export function createPost(data: CreatePostData) {
+    return axios.post<Post>(
+        "/api/posts",
+        {
+            title: data.title,
+            content: data.content
+        },
+        createAxiosConfig(data.headers)
+    )
 }
 
-interface EditPostData {
+interface UpdatePostData {
+    headers?: Headers
     id: number
-    title: string
-    content: string
+    title?: string
+    content?: string
 }
 
-export async function editPost(data: EditPostData) {
-    await wait()
-    posts.edit(data.id, data.title, data.content)
-    const post = get(posts).find(p => p.id === data.id)!
-    return post
+export function updatePost(data: UpdatePostData) {
+    return axios.patch<Post>(
+        `/api/posts/${data.id}`,
+        {
+            title: data.title,
+            content: data.content
+        },
+        createAxiosConfig(data.headers)
+    )
 }
 
-interface RemovePostData {
+interface DeletePostData {
+    headers?: Headers
     id: number
 }
 
-export async function removePost(data: RemovePostData) {
-    await wait()
-    const post = get(posts).find(p => p.id === data.id)!
-    posts.remove(data.id)
-    return post
+export function deletePost(data: DeletePostData) {
+    return axios.delete<Post>(`/api/posts/${data.id}`, createAxiosConfig(data.headers))
 }

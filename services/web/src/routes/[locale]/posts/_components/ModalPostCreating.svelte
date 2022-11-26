@@ -1,20 +1,23 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
+    import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
+    import { vld } from "$lib/utils"
     import * as api from "$lib/api"
 
+    export let getPostsRefetch: () => Promise<unknown>
+
     let visible = false
-    let loading = false
 
     let title = ""
     let content = ""
 
-    $: trimmedTitle = title.trim()
-    $: trimmedContent = content.trim()
+    $: vldResultTitle = vld.title(title)
+    $: vldResultContent = vld.content(content)
 
-    $: disabled = !(trimmedTitle && trimmedContent)
+    $: completedForm = vldResultTitle.valid && vldResultContent.valid
 
     export function open() {
         title = ""
@@ -27,27 +30,32 @@
         visible = false
     }
 
-    async function createPost() {
-        if (!disabled) {
-            loading = true
-            const post = await api.posts.createPost({
-                title: trimmedTitle,
-                content: trimmedContent
+    const queryCreatePost = useQuery("posts.createPost", {
+        queryFn() {
+            return api.posts.createPost({
+                title: vldResultTitle.value,
+                content: vldResultContent.value
             })
-            loading = false
+        },
+        async onSuccess({ data }) {
+            await getPostsRefetch()
             close()
-            goto($localePath(`/posts/${post.id}`))
+            await goto($localePath(`/posts/${data.id}`))
         }
-    }
+    })
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-200" persistent={loading} bind:visible>
+<Modal
+    class="u:flex u:flex-col u:gap-4 u:w-200"
+    persistent={$queryCreatePost.isLoading}
+    bind:visible
+>
     <div>
         <h1 class="u:text-center">{$t("components.modal-post-creating.post-creating")}</h1>
     </div>
     <div>
         <TextField
-            disabled={loading}
+            disabled={$queryCreatePost.isLoading}
             label={$t("components.modal-post-creating.title")}
             placeholder={$t("components.modal-post-creating.enter-title")}
             bind:value={title}
@@ -56,17 +64,22 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={loading}
+            disabled={$queryCreatePost.isLoading}
             label={$t("components.modal-post-creating.content")}
             placeholder={$t("components.modal-post-creating.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={loading} text type="error" on:click={close}>
+        <Button disabled={$queryCreatePost.isLoading} text type="error" on:click={close}>
             {$t("components.modal-post-creating.cancel")}
         </Button>
-        <Button {disabled} {loading} type="success" on:click={createPost}>
+        <Button
+            disabled={!completedForm}
+            loading={$queryCreatePost.isLoading}
+            type="success"
+            on:click={() => $queryCreatePost.refetch()}
+        >
             {$t("components.modal-post-creating.create")}
         </Button>
     </div>

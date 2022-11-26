@@ -16,9 +16,7 @@
 
     $: completedForm = vldResultEmail.valid && vldResultPassword.valid
 
-    const queryLogin = useQuery("login", {
-        enabled: false,
-        retry: false,
+    const queryLogin = useQuery("auth.login", {
         queryFn() {
             return api.auth.login({
                 email: vldResultEmail.value,

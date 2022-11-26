@@ -7,7 +7,7 @@ export const load: LayoutLoad = async e => {
     const { locale, route } = getLocaleAndRoute(e.url.pathname)
     await loadTranslations(locale!, route)
 
-    const { user } = e.data
+    const { userData } = e.data
 
-    return { route, user }
+    return { route, userData }
 }

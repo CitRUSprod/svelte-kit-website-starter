@@ -12,9 +12,16 @@
 
     export let data: LayoutData
 
-    const client = new QueryClient()
+    const client = new QueryClient({
+        defaultOptions: {
+            queries: {
+                enabled: false,
+                retry: false
+            }
+        }
+    })
 
-    $: $userData = data.user
+    $: $userData = data.userData
 
     if (browser) {
         darkTheme.sync()

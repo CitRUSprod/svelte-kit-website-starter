@@ -10,3 +10,9 @@ export const username = createValidator(
 )
 
 export const password = createValidator(Type.String({ minLength: 8, transform: ["trim"] }))
+
+export const title = createValidator(
+    Type.String({ minLength: 1, maxLength: 100, transform: ["trim"] })
+)
+
+export const content = createValidator(Type.String({ minLength: 1, transform: ["trim"] }))
