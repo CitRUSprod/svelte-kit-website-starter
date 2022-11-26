@@ -3,7 +3,7 @@
 
     import { useQuery } from "@sveltestack/svelte-query"
     import { t } from "$lib/locales"
-    import { vld } from "$lib/utils"
+    import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
     import type { Post } from "$lib/types"
@@ -15,8 +15,8 @@
     let title = ""
     let content = ""
 
-    $: vldResultTitle = vld.title(title)
-    $: vldResultContent = vld.content(content)
+    $: vldResultTitle = vld.post.title(title)
+    $: vldResultContent = vld.post.content(content)
 
     $: completedForm =
         vldResultTitle.valid &&

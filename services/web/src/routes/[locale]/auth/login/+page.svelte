@@ -5,14 +5,14 @@
     import { invalidateAll } from "$app/navigation"
     import { localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
-    import { vld } from "$lib/utils"
+    import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
     let email = "admin@example.com"
     let password = "12345678"
 
-    $: vldResultEmail = vld.email(email)
-    $: vldResultPassword = vld.password(password)
+    $: vldResultEmail = vld.user.email(email)
+    $: vldResultPassword = vld.user.password(password)
 
     $: completedForm = vldResultEmail.valid && vldResultPassword.valid
 

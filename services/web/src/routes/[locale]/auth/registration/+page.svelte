@@ -5,7 +5,7 @@
     import { goto } from "$app/navigation"
     import { localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
-    import { vld } from "$lib/utils"
+    import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
     let email = ""
@@ -13,10 +13,10 @@
     let password = ""
     let passwordConfirmation = ""
 
-    $: vldResultEmail = vld.email(email)
-    $: vldResultUsername = vld.username(username)
-    $: vldResultPassword = vld.password(password)
-    $: vldResultPasswordConfirmation = vld.password(passwordConfirmation)
+    $: vldResultEmail = vld.user.email(email)
+    $: vldResultUsername = vld.user.username(username)
+    $: vldResultPassword = vld.user.password(password)
+    $: vldResultPasswordConfirmation = vld.user.password(passwordConfirmation)
 
     $: completedForm =
         vldResultEmail.valid &&

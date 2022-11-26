@@ -4,7 +4,7 @@
     import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
-    import { vld } from "$lib/utils"
+    import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
     export let getPostsRefetch: () => Promise<unknown>
@@ -14,8 +14,8 @@
     let title = ""
     let content = ""
 
-    $: vldResultTitle = vld.title(title)
-    $: vldResultContent = vld.content(content)
+    $: vldResultTitle = vld.post.title(title)
+    $: vldResultContent = vld.post.content(content)
 
     $: completedForm = vldResultTitle.valid && vldResultContent.valid
 
