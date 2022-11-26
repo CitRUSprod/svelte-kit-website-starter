@@ -45,7 +45,6 @@ const config: Config = {
         ["routes/_components/header", undefined],
         ["routes/error", undefined],
         ["routes/home", ["/"]],
-        ["routes/todo", ["/todo"]],
         ["routes/simple-layout", ["/simple-layout"]],
         ["routes/posts/index", ["/posts"]],
         ["routes/posts/_components/modal-post-creating", ["/posts"]],
