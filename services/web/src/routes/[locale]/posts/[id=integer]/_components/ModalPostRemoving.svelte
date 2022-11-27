@@ -1,8 +1,11 @@
 <script lang="ts">
     import { Button, Modal } from "$lib/components"
 
+    import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
-    import { t } from "$lib/locales"
+    import { goto } from "$app/navigation"
+    import { t, localePath } from "$lib/locales"
+    import { toasts } from "$lib/stores"
     import * as api from "$lib/api"
 
     import type { Post } from "$lib/types"
@@ -20,12 +23,26 @@
     }
 
     const queryDeletePost = useQuery("posts.deletePost", {
-        queryFn() {
-            return api.posts.deletePost({ id: post.id })
+        async queryFn() {
+            const res = await api.posts.deletePost({ id: post.id })
+            return res.data
         },
         async onSuccess() {
+            toasts.add("success", "Post successfully removed")
             close()
+            await goto($localePath("/posts"))
+        },
+        onError(err: any) {
+            if (err.response) {
+                toasts.add("error", err.response.data.message)
+            } else {
+                toasts.add("error", "An error has occurred")
+            }
         }
+    })
+
+    onDestroy(() => {
+        $queryDeletePost.remove()
     })
 </script>
 

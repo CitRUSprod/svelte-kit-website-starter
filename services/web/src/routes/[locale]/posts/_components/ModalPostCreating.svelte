@@ -1,13 +1,13 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
+    import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
+    import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
-
-    export let getPostsRefetch: () => Promise<unknown>
 
     let visible = false
 
@@ -31,17 +31,29 @@
     }
 
     const queryCreatePost = useQuery("posts.createPost", {
-        queryFn() {
-            return api.posts.createPost({
+        async queryFn() {
+            const res = await api.posts.createPost({
                 title: vldResultTitle.value,
                 content: vldResultContent.value
             })
+            return res.data
         },
-        async onSuccess({ data }) {
-            await getPostsRefetch()
+        async onSuccess(localPost) {
+            toasts.add("success", "Post successfully created")
             close()
-            await goto($localePath(`/posts/${data.id}`))
+            await goto($localePath(`/posts/${localPost.id}`))
+        },
+        onError(err: any) {
+            if (err.response) {
+                toasts.add("error", err.response.data.message)
+            } else {
+                toasts.add("error", "An error has occurred")
+            }
         }
+    })
+
+    onDestroy(() => {
+        $queryCreatePost.remove()
     })
 </script>
 

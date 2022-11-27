@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
+    import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { invalidateAll } from "$app/navigation"
     import { localePath } from "$lib/locales"
@@ -17,11 +18,12 @@
     $: completedForm = vldResultEmail.valid && vldResultPassword.valid
 
     const queryLogin = useQuery("auth.login", {
-        queryFn() {
-            return api.auth.login({
+        async queryFn() {
+            const res = await api.auth.login({
                 email: vldResultEmail.value,
                 password: vldResultPassword.value
             })
+            return res.data
         },
         async onSuccess() {
             toasts.add("success", "You have successfully logged in")
@@ -43,6 +45,10 @@
             input.focus()
         }
     }
+
+    onDestroy(() => {
+        $queryLogin.remove()
+    })
 </script>
 
 <svelte:head>

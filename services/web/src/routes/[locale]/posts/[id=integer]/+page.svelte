@@ -32,5 +32,5 @@
     </div>
 </Content.Default>
 
-<ModalPostEditing bind:this={modalPostEditing} post={data.post} />
+<ModalPostEditing bind:this={modalPostEditing} bind:post={data.post} />
 <ModalPostRemoving bind:this={modalPostRemoving} post={data.post} />

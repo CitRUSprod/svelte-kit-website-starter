@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
+    import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { localePath } from "$lib/locales"
@@ -25,12 +26,13 @@
         vldResultPassword.value === vldResultPasswordConfirmation.value
 
     const queryRegister = useQuery("auth.register", {
-        queryFn() {
-            return api.auth.register({
+        async queryFn() {
+            const res = await api.auth.register({
                 email: vldResultEmail.value,
                 username: vldResultUsername.value,
                 password: vldResultPassword.value
             })
+            return res.data
         },
         async onSuccess() {
             toasts.add("success", "You have successfully registered")
@@ -52,6 +54,10 @@
             input.focus()
         }
     }
+
+    onDestroy(() => {
+        $queryRegister.remove()
+    })
 </script>
 
 <svelte:head>

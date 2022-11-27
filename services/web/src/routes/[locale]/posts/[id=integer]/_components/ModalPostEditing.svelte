@@ -1,8 +1,10 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
+    import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { t } from "$lib/locales"
+    import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -35,16 +37,30 @@
     }
 
     const queryUpdatePost = useQuery("posts.updatePost", {
-        queryFn() {
-            return api.posts.updatePost({
+        async queryFn() {
+            const res = await api.posts.updatePost({
                 id: post.id,
                 title: vldResultTitle.value,
                 content: vldResultContent.value
             })
+            return res.data
         },
-        async onSuccess() {
+        onSuccess(localPost) {
+            post = localPost
+            toasts.add("success", "Post successfully edited")
             close()
+        },
+        onError(err: any) {
+            if (err.response) {
+                toasts.add("error", err.response.data.message)
+            } else {
+                toasts.add("error", "An error has occurred")
+            }
         }
+    })
+
+    onDestroy(() => {
+        $queryUpdatePost.remove()
     })
 </script>
 
