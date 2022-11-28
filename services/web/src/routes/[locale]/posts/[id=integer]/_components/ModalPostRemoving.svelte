@@ -48,7 +48,7 @@
 
 <Modal
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$queryDeletePost.isLoading}
+    persistent={$queryDeletePost.isFetching}
     bind:visible
 >
     <div>
@@ -58,11 +58,11 @@
         <p>{$t("components.modal-post-removing.post-removing-question")}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryDeletePost.isLoading} text type="success" on:click={close}>
+        <Button disabled={$queryDeletePost.isFetching} text type="success" on:click={close}>
             {$t("components.modal-post-removing.cancel")}
         </Button>
         <Button
-            loading={$queryDeletePost.isLoading}
+            loading={$queryDeletePost.isFetching}
             type="error"
             on:click={() => $queryDeletePost.refetch()}
         >

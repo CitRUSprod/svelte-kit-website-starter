@@ -66,7 +66,7 @@
 
 <Modal
     class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$queryUpdatePost.isLoading}
+    persistent={$queryUpdatePost.isFetching}
     bind:visible
 >
     <div>
@@ -74,7 +74,7 @@
     </div>
     <div>
         <TextField
-            disabled={$queryUpdatePost.isLoading}
+            disabled={$queryUpdatePost.isFetching}
             label={$t("components.modal-post-editing.title")}
             placeholder={$t("components.modal-post-editing.enter-title")}
             bind:value={title}
@@ -83,19 +83,19 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$queryUpdatePost.isLoading}
+            disabled={$queryUpdatePost.isFetching}
             label={$t("components.modal-post-editing.content")}
             placeholder={$t("components.modal-post-editing.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryUpdatePost.isLoading} text type="error" on:click={close}>
+        <Button disabled={$queryUpdatePost.isFetching} text type="error" on:click={close}>
             {$t("components.modal-post-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$queryUpdatePost.isLoading}
+            loading={$queryUpdatePost.isFetching}
             type="success"
             on:click={() => $queryUpdatePost.refetch()}
         >

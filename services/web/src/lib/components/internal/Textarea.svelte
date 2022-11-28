@@ -19,6 +19,7 @@
     {readonly}
     bind:value
     {...$$restProps}
+    on:input
     on:keypress
     on:focus
     on:blur

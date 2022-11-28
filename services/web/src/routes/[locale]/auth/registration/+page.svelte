@@ -74,7 +74,7 @@
         <div>
             <TextField
                 autofocus
-                disabled={$queryRegister.isLoading}
+                disabled={$queryRegister.isFetching}
                 label="Email"
                 bind:value={email}
                 on:keypress={onEnter}
@@ -82,7 +82,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isLoading}
+                disabled={$queryRegister.isFetching}
                 label="Username"
                 bind:value={username}
                 on:keypress={onEnter}
@@ -90,7 +90,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isLoading}
+                disabled={$queryRegister.isFetching}
                 label="Password"
                 valueType="password"
                 bind:value={password}
@@ -99,7 +99,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isLoading}
+                disabled={$queryRegister.isFetching}
                 label="Password confirmation"
                 valueType="password"
                 bind:value={passwordConfirmation}
@@ -110,7 +110,7 @@
             <Button href={$localePath("/auth/login")} text>Login</Button>
             <Button
                 disabled={!completedForm}
-                loading={$queryRegister.isLoading}
+                loading={$queryRegister.isFetching}
                 type="primary"
                 on:click={() => $queryRegister.refetch()}
             >

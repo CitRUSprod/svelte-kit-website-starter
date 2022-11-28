@@ -24,6 +24,7 @@
         type="number"
         bind:value
         {...$$restProps}
+        on:input
         on:keypress
         on:focus
         on:blur
@@ -35,6 +36,7 @@
         {readonly}
         bind:value
         {...$$restProps}
+        on:input
         on:keypress
         on:focus
         on:blur

@@ -63,6 +63,7 @@
         {placeholder}
         {readonly}
         bind:value
+        on:input
         on:keypress
         on:focus
         on:blur

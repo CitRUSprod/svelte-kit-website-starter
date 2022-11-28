@@ -4,10 +4,20 @@ import type { ItemsPage, Post } from "$lib/types"
 
 interface GetPostsData {
     headers?: Headers
+    page?: number
+    perPage?: number
+    title?: string
 }
 
 export function getPosts(data: GetPostsData = {}) {
-    return axios.get<ItemsPage<Post>>("/api/posts", createAxiosConfig(data.headers))
+    return axios.get<ItemsPage<Post>>("/api/posts", {
+        params: {
+            page: data.page,
+            perPage: data.perPage,
+            title: data.title
+        },
+        ...createAxiosConfig(data.headers)
+    })
 }
 
 interface GetPostData {

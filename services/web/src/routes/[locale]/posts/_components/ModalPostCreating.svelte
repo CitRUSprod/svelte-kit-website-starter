@@ -59,7 +59,7 @@
 
 <Modal
     class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$queryCreatePost.isLoading}
+    persistent={$queryCreatePost.isFetching}
     bind:visible
 >
     <div>
@@ -67,7 +67,7 @@
     </div>
     <div>
         <TextField
-            disabled={$queryCreatePost.isLoading}
+            disabled={$queryCreatePost.isFetching}
             label={$t("components.modal-post-creating.title")}
             placeholder={$t("components.modal-post-creating.enter-title")}
             bind:value={title}
@@ -76,19 +76,19 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$queryCreatePost.isLoading}
+            disabled={$queryCreatePost.isFetching}
             label={$t("components.modal-post-creating.content")}
             placeholder={$t("components.modal-post-creating.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryCreatePost.isLoading} text type="error" on:click={close}>
+        <Button disabled={$queryCreatePost.isFetching} text type="error" on:click={close}>
             {$t("components.modal-post-creating.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$queryCreatePost.isLoading}
+            loading={$queryCreatePost.isFetching}
             type="success"
             on:click={() => $queryCreatePost.refetch()}
         >
