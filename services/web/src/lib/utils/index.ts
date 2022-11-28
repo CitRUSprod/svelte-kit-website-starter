@@ -6,3 +6,4 @@ export * from "./axios"
 export * from "./cookies"
 
 export * as qp from "./qp"
+export * as dt from "./dt"

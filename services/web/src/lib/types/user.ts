@@ -1,10 +1,4 @@
-export enum Permission {
-    DeleteOtherUserPost = "DeleteOtherUserPost",
-    BanUser = "BanUser",
-    CreateRole = "CreateRole",
-    GetOtherUserEmail = "GetOtherUserEmail",
-    AssignRole = "AssignRole"
-}
+import type { Permission } from "$lib/enums"
 
 export interface Role {
     id: number

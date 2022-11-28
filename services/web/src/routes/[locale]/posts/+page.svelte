@@ -7,7 +7,7 @@
     import { useQuery } from "@sveltestack/svelte-query"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
-    import { qp } from "$lib/utils"
+    import { qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { PageData } from "./$types"
@@ -52,6 +52,11 @@
         await $queryGetPosts.refetch()
     }
 
+    async function onTitleInput() {
+        pagination.page = 1
+        await refetchPage()
+    }
+
     async function setPage(localPage: number) {
         pagination.page = localPage
         await refetchPage()
@@ -73,7 +78,7 @@
             placeholder="Enter title..."
             rightIconClass="u:i-material-symbols-search"
             bind:value={filters.title}
-            on:input={_.debounce(refetchPage, 500)}
+            on:input={_.debounce(onTitleInput, 500)}
         />
         <Button type="success" on:click={modalPostCreating.open}>
             {$t("routes.posts.create-post")}
@@ -91,6 +96,11 @@
                     </div>
                     <div>
                         <p class="u:truncate">{post.content}</p>
+                    </div>
+                    <div class="u:my-2 u:border-t u:border-primary" />
+                    <div class="u:flex u:justify-between">
+                        <span class="u:text-sm">Author: {post.author.username}</span>
+                        <span class="u:text-sm">{dt.getFullDateAndTime(post.creationDate)}</span>
                     </div>
                 </a>
             {/each}
