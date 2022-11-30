@@ -44,7 +44,9 @@
         }
     })
 
-    onDestroy(() => {})
+    onDestroy(() => {
+        $queryResetPassword.remove()
+    })
 </script>
 
 <svelte:head>
