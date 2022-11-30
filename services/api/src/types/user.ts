@@ -7,4 +7,4 @@ export interface UserPayload {
 
 export type UserData = User & { role: Role }
 
-export type PartialUserData = SetOptional<UserData, "email">
+export type PartialUserData = SetOptional<UserData, "email" | "confirmedEmail">

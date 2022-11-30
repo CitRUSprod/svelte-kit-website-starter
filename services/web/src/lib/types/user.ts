@@ -11,7 +11,7 @@ export interface User {
     email?: string
     username: string
     role: Role
-    confirmedEmail: boolean
+    confirmedEmail?: boolean
     banned: boolean
     registrationDate: string
     avatar: string | null

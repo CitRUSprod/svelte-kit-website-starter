@@ -26,6 +26,7 @@ export const getUsers: RouteHandler<{ userData?: UserData; query: schemas.GetUse
         if (!userData?.role.permissions.includes(Permission.GetOtherUserEmail)) {
             for (const user of users) {
                 delete user.email
+                delete user.confirmedEmail
             }
         }
 
@@ -41,11 +42,16 @@ export const getUser: RouteHandler<{ userData?: UserData; params: schemas.GetUse
 ) => {
     const user: PartialUserData = await models.user.get(app, params.id)
 
+    function removeEmailFields() {
+        delete user.email
+        delete user.confirmedEmail
+    }
+
     if (userData) {
         const goodPermissions = userData.role.permissions.includes(Permission.GetOtherUserEmail)
-        if (userData.id !== user.id && !goodPermissions) delete user.email
+        if (userData.id !== user.id && !goodPermissions) removeEmailFields()
     } else {
-        delete user.email
+        removeEmailFields()
     }
 
     return { payload: models.user.dto(user) }
