@@ -9,8 +9,8 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let email = "admin@example.com"
-    let password = "12345678"
+    let email = ""
+    let password = ""
 
     $: vldResultEmail = vld.user.email(email)
     $: vldResultPassword = vld.user.password(password)
@@ -81,7 +81,9 @@
             />
         </div>
         <div>
-            <a class="u:hover:underline" href={$localePath("/auth/reset")}>Forgot password?</a>
+            <a class="u:hover:underline" href={$localePath("/profile/password")}>
+                Forgot password?
+            </a>
         </div>
         <div class="u:flex u:justify-between">
             <Button href={$localePath("/auth/registration")} text>Registration</Button>
