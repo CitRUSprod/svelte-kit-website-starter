@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Content, Button } from "$lib/components"
+    import { ModalProfileEditing, ModalPasswordChanging } from "./_components"
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
@@ -10,6 +11,9 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
+
+    let modalProfileEditing: ModalProfileEditing
+    let modalPasswordChanging: ModalPasswordChanging
 
     const querySendConfirmationEmail = useQuery("profile.sendConfirmationEmail", {
         async queryFn() {
@@ -50,8 +54,10 @@
             <li><b>Registration date:</b> {dt.getFullDateAndTime(data.user.registrationDate)}</li>
         </ul>
     </div>
-    {#if $userData}
+    {#if $userData?.id === data.user.id}
         <div>
+            <Button type="warning" on:click={modalProfileEditing.open}>Edit</Button>
+            <Button type="warning" on:click={modalPasswordChanging.open}>Change password</Button>
             {#if !$userData.confirmedEmail}
                 <Button
                     loading={$querySendConfirmationEmail.isFetching}
@@ -64,3 +70,6 @@
         </div>
     {/if}
 </Content.Default>
+
+<ModalProfileEditing bind:this={modalProfileEditing} bind:user={data.user} />
+<ModalPasswordChanging bind:this={modalPasswordChanging} />
