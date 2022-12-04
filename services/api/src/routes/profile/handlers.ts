@@ -14,12 +14,25 @@ export const updateUser: RouteHandler<{
     userData: UserData
     body: schemas.UpdateUserBody
 }> = async (app, { userData, body }) => {
+    if (body.email) {
+        const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
+        if (userByEmail) throw new BadRequest("User with such email already exists")
+    }
+
+    if (body.username) {
+        const userByUsername = await app.prisma.user.findFirst({
+            where: { username: body.username }
+        })
+        if (userByUsername) throw new BadRequest("User with such username already exists")
+    }
+
     const updatedUser = await app.prisma.user.update({
         where: { id: userData.id },
         data: {
             email: body.email,
             username: body.username,
-            confirmedEmail: body.email === undefined ? undefined : false
+            confirmedEmail:
+                body.email === undefined || body.email === userData.email ? undefined : false
         },
         include: { role: true }
     })
