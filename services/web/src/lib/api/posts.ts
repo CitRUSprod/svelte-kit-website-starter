@@ -6,6 +6,8 @@ interface GetPostsData {
     headers?: Headers
     page?: number
     perPage?: number
+    sort?: string
+    order?: string
     title?: string
 }
 
@@ -14,6 +16,8 @@ export function getPosts(data: GetPostsData = {}) {
         params: {
             page: data.page,
             perPage: data.perPage,
+            sort: data.sort,
+            order: data.order,
             title: data.title
         },
         ...createAxiosConfig(data.headers)

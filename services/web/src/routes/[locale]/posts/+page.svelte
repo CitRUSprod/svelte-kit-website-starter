@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Content, Button, TextField, SimplePagination } from "$lib/components"
+    import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
     import { ModalPostCreating } from "./_components"
 
     import * as _ from "lodash-es"
@@ -10,28 +10,39 @@
     import { qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
+    import type { DropdownMenuItem } from "$lib/types"
     import type { PageData } from "./$types"
 
     export let data: PageData
 
     let modalPostCreating: ModalPostCreating
 
-    const pagination = {
-        page: data.query.page
-    }
-
-    const filters = {
+    const params = {
+        page: data.query.page,
+        perPage: data.query.perPage,
+        sortAndOrder: `${data.query.sort}-${data.query.order}`,
         title: data.query.title
     }
+
+    const sortings: Array<DropdownMenuItem> = [
+        { text: "Creation date (Earliest)", value: "creationDate-asc" },
+        { text: "Creation date (Latest)", value: "creationDate-desc" },
+        { text: "Title (A-Z)", value: "title-asc" },
+        { text: "Title (Z-A)", value: "title-desc" }
+    ]
 
     const queryGetPosts = useQuery("posts.getPosts", {
         initialData: data.itemsPage,
         async queryFn() {
+            const [sort, order] = params.sortAndOrder.split("-")
             const res = await api.posts.getPosts(
                 qp.removeDefault(
                     {
-                        page: pagination.page,
-                        title: filters.title
+                        page: params.page,
+                        perPage: params.perPage,
+                        sort,
+                        order,
+                        title: params.title
                     },
                     data.defaultQuery
                 )
@@ -48,17 +59,34 @@
     })
 
     async function refetchPage() {
-        qp.setForCurrentPage({ page: pagination.page, title: filters.title })
+        const [sort, order] = params.sortAndOrder.split("-")
+        qp.setForCurrentPage(
+            qp.removeDefault(
+                {
+                    page: params.page,
+                    perPage: params.perPage,
+                    sort,
+                    order,
+                    title: params.title
+                },
+                data.defaultQuery
+            )
+        )
         await $queryGetPosts.refetch()
     }
 
     async function onTitleInput() {
-        pagination.page = 1
+        params.page = 1
+        await refetchPage()
+    }
+
+    async function onSortingChange() {
+        params.page = 1
         await refetchPage()
     }
 
     async function setPage(localPage: number) {
-        pagination.page = localPage
+        params.page = localPage
         await refetchPage()
     }
 
@@ -73,16 +101,26 @@
 
 <Content.Default title={$t("routes.posts.posts")}>
     <div class="u:flex u:justify-between u:gap-2">
-        <TextField
-            label="Search"
-            placeholder="Enter title..."
-            rightIconClass="u:i-material-symbols-search"
-            bind:value={filters.title}
-            on:input={_.debounce(onTitleInput, 500)}
-        />
-        <Button type="success" on:click={modalPostCreating.open}>
-            {$t("routes.posts.create-post")}
-        </Button>
+        <div class="u:flex u:gap-2">
+            <TextField
+                label="Search"
+                placeholder="Enter title..."
+                rightIconClass="u:i-material-symbols-search"
+                bind:value={params.title}
+                on:input={_.debounce(onTitleInput, 500)}
+            />
+            <DropdownMenu
+                items={sortings}
+                label="Sorting"
+                bind:value={params.sortAndOrder}
+                on:change={onSortingChange}
+            />
+        </div>
+        <div>
+            <Button type="success" on:click={modalPostCreating.open}>
+                {$t("routes.posts.create-post")}
+            </Button>
+        </div>
     </div>
     {#if $queryGetPosts.data}
         <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
