@@ -28,6 +28,7 @@
         "typescript": "4.8.4",
         "unocss": "0.46.5",
         "unocss-preset-better-nested-colors": "1.0.0",
+        "unocss-preset-scrollbar": "0.2.1",
         "vite": "3.2.4",
         "vite-plugin-dynamic-import": "1.2.3"
     },
@@ -45,6 +46,7 @@
         "luxon": "3.1.0",
         "nprogress": "0.2.0",
         "set-cookie-parser": "2.5.1",
+        "socket.io-client": "4.5.4",
         "svelte-local-storage-store": "0.3.1",
         "sveltekit-i18n": "2.2.2",
         "tslib": "2.4.1"

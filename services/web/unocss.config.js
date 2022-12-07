@@ -2,6 +2,7 @@ import path from "path"
 import { extractorSvelte, presetUno, presetIcons, transformerDirectives } from "unocss"
 import { colors } from "@unocss/preset-wind"
 import { presetBetterNestedColors } from "unocss-preset-better-nested-colors"
+import { presetScrollbar } from "unocss-preset-scrollbar"
 
 function getColors([lightColor, lightShade], [darkColor, darkShade]) {
     return {
@@ -53,6 +54,7 @@ const config = {
                 ...specialColors
             }
         }),
+        presetScrollbar(),
         presetIcons()
     ],
     include: [path.join(__dirname, "src/**/*.svelte")],
@@ -60,6 +62,10 @@ const config = {
     preprocess(matcher) {
         const prefix = "u:"
         return matcher.startsWith(prefix) ? matcher.slice(prefix.length) : undefined
+    },
+    shortcuts: {
+        "basic-scrollbar":
+            "scrollbar scrollbar-w-4px scrollbar-track-color-zinc-200 dark:scrollbar-track-color-zinc-700 scrollbar-thumb-color-zinc-400 dark:scrollbar-thumb-color-zinc-900 scrollbar-rounded"
     }
 }
 

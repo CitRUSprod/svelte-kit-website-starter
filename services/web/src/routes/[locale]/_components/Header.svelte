@@ -21,6 +21,7 @@
         {#if $userData}
             <Button href={$localePath(`/users/${$userData.id}`)} type="primary">Profile</Button>
         {/if}
+        <Button href={$localePath("/chat")} type="primary">Chat</Button>
         <Button href={$localePath("/lorem")} type="primary">Lorem</Button>
         <Button href={$localePath("/simple-layout")} type="primary">
             {$t("components.header.simple-layout")}

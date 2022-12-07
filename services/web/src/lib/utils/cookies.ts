@@ -14,6 +14,7 @@ export function setCookies(
     const newCookies = parse(rawCookies)
 
     for (const { name, value, sameSite, ...opts } of newCookies) {
+        if (!("httpOnly" in opts)) opts.httpOnly = false
         cookies.set(name, value, opts)
     }
 }

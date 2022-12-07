@@ -6,6 +6,7 @@
     import { invalidateAll } from "$app/navigation"
     import { localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { socket } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -26,6 +27,7 @@
             return res.data
         },
         async onSuccess() {
+            socket.disconnect().connect()
             toasts.add("success", "You have successfully logged in")
             await invalidateAll()
         },

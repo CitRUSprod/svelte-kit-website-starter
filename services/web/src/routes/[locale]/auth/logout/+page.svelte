@@ -4,8 +4,10 @@
     import { browser } from "$app/environment"
     import { invalidateAll } from "$app/navigation"
     import { toasts } from "$lib/stores"
+    import { socket } from "$lib/utils"
 
     if (browser) {
+        socket.disconnect().connect()
         toasts.add("success", "You have successfully logged out")
         invalidateAll()
     }
