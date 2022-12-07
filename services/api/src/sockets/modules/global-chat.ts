@@ -1,3 +1,4 @@
+import { v4 as createUuid } from "uuid"
 import { SocketModule } from "$/types"
 
 interface RawChatMessage {
@@ -5,6 +6,7 @@ interface RawChatMessage {
 }
 
 interface ChatMessage {
+    uuid: string
     user: {
         id: number
         username: string
@@ -12,9 +14,9 @@ interface ChatMessage {
     text: string
 }
 
-export const globalChat: SocketModule = (socket, user) => {
-    const globalChatHistory: Array<ChatMessage> = []
+const globalChatHistory: Array<ChatMessage> = []
 
+export const globalChat: SocketModule = (socket, user) => {
     socket.on("global-chat:join", () => {
         socket.join("global-chat")
         socket.emit("global-chat:get-history", globalChatHistory)
@@ -27,6 +29,7 @@ export const globalChat: SocketModule = (socket, user) => {
     if (user) {
         socket.on("global-chat:send", (rawMsg: RawChatMessage) => {
             const msg: ChatMessage = {
+                uuid: createUuid(),
                 user: {
                     id: user.id,
                     username: user.username

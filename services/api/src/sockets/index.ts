@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import socketIoJwtAuth from "socketio-jwt-auth"
+import { authenticate } from "socketio-jwt-auth"
 import { User } from "@prisma/client"
 import { env } from "$/utils"
 import { UserPayload } from "$/types"
@@ -12,20 +12,23 @@ function getUserFromSocket(socket: any) {
 
 export function initSockets(app: FastifyInstance) {
     app.io.use(
-        socketIoJwtAuth.authenticate(
+        authenticate(
             { secret: env.JWT_SECRET, succeedWithoutToken: true },
             async (payload: UserPayload, done) => {
                 if (Object.keys(payload).length) {
-                    const user = await app.prisma.user.findFirst({ where: { id: payload.id } })
+                    const user = await app.prisma.user.findFirst({
+                        where: { id: payload.id },
+                        include: { role: true }
+                    })
 
                     if (user) {
                         done(null, user)
                     } else {
                         done(null, null, "User not found")
                     }
+                } else {
+                    done()
                 }
-
-                done()
             }
         )
     )
