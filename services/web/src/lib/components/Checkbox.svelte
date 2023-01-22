@@ -7,6 +7,7 @@
     export let type: ElementType = "default"
     export let label: string | undefined = undefined
     export let disabled = false
+    export let readonly = false
     export let checked = false as boolean
 
     let klass: string | undefined = undefined
@@ -15,7 +16,7 @@
     $: types = getElementTypeObject(type)
 
     function click() {
-        if (!disabled) {
+        if (!readonly && !disabled) {
             checked = !checked
         }
     }
@@ -23,9 +24,11 @@
 
 <button
     class={classNames(
-        "u:inline-flex u:items-center u:w-auto u:gap-1 u:align-top u:cursor-pointer",
+        "u:inline-flex u:items-center u:w-auto u:gap-1 u:align-top",
         {
-            "u:opacity-50": disabled
+            "u:cursor-pointer": !disabled && !readonly,
+            "u:opacity-50 u:cursor-not-allowed": disabled,
+            "u:cursor-[default]": readonly
         },
         klass
     )}

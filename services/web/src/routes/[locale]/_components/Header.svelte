@@ -29,6 +29,7 @@
         <Button href={$localePath("/posts")} type="primary">
             {$t("components.header.posts")}
         </Button>
+        <Button href={$localePath("/users")} type="primary">Users</Button>
         <div class="u:flex u:items-center u:gap-1 u:mx-1">
             {#each $locales as locale, index (locale)}
                 <Button
