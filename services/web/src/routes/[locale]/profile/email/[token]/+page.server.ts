@@ -10,6 +10,6 @@ export const load: PageServerLoad = async e => {
             emailConfirmationToken: e.params.token
         })
     } catch {
-        throw redirect(302, `/${e.params.locale}`)
+        throw redirect(302, `/${e.params.locale}`) as unknown
     }
 }

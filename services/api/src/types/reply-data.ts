@@ -1,5 +1,5 @@
 import { CookieSerializeOptions } from "@fastify/cookie"
-import { JsonObject } from "type-fest"
+import { JsonifiableObject } from "$/types"
 
 export interface ReplyCookie {
     name: string
@@ -8,6 +8,6 @@ export interface ReplyCookie {
 }
 
 export interface ReplyData {
-    payload?: JsonObject
+    payload?: JsonifiableObject
     cookies?: Array<ReplyCookie>
 }

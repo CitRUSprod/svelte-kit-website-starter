@@ -11,6 +11,6 @@ export const load: PageServerLoad = async e => {
         })
         return { post: res.data }
     } catch {
-        throw redirect(302, `/${e.params.locale}/posts`)
+        throw redirect(302, `/${e.params.locale}/posts`) as unknown
     }
 }

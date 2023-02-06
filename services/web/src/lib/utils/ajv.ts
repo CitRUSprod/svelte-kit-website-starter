@@ -4,7 +4,7 @@ import ajvFormats from "ajv-formats"
 import { AggregateAjvError } from "@segment/ajv-human-errors"
 import { Type, type Static, type TSchema } from "@sinclair/typebox"
 
-import type { JsonObject } from "type-fest"
+import type { JsonifiableObject } from "$lib/types"
 
 export const ajv = new Ajv({
     removeAdditional: true,
@@ -25,7 +25,7 @@ export function normalizeAjvErrors(errors: Array<ErrorObject>, scope?: string) {
 
 export function parseByAjvSchema<T extends TSchema>(
     schema: T,
-    data: JsonObject,
+    data: JsonifiableObject,
     scope?: string
 ): Static<T> {
     const newData = JSON.parse(JSON.stringify(data))

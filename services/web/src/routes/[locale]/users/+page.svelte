@@ -168,7 +168,7 @@
                         <td>{dt.getFullDate(user.registrationDate)}</td>
                         <td>
                             <Button
-                                href={$localePath(`/users/${String(user.id)}`)}
+                                href={$localePath(`/users/${user.id}`)}
                                 rel="noopener noreferrer"
                                 target="_blank"
                                 type="info"

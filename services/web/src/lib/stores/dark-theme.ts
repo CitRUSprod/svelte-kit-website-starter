@@ -1,11 +1,11 @@
 import { get } from "svelte/store"
-import { writable } from "svelte-local-storage-store"
+import { persisted } from "svelte-local-storage-store"
 
 function setDarkClass(value: boolean) {
     document.documentElement.classList[value ? "add" : "remove"]("dark")
 }
 
-const { subscribe, update } = writable("dark-theme", false)
+const { subscribe, update } = persisted("dark-theme", false)
 
 function sync() {
     setDarkClass(get({ subscribe }))

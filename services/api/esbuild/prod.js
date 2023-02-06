@@ -1,5 +1,5 @@
 const { defu } = require("defu")
-const { build } = require("esbuild")
+const { context } = require("esbuild")
 const baseConfig = require("./base")
 
 /** @type {import("esbuild").BuildOptions} */
@@ -10,4 +10,10 @@ const prodConfig = {
     }
 }
 
-build(defu(baseConfig, prodConfig))
+async function start() {
+    const ctx = await context(defu(baseConfig, prodConfig))
+    await ctx.rebuild()
+    await ctx.dispose()
+}
+
+start()

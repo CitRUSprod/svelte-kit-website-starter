@@ -1,13 +1,12 @@
 const path = require("path")
 const { defu } = require("defu")
-const { build } = require("esbuild")
+const { context } = require("esbuild")
 const { run } = require("esbuild-plugin-run")
 const baseConfig = require("./base")
 
 /** @type {import("esbuild").BuildOptions} */
 const devConfig = {
     sourcemap: "inline",
-    watch: true,
     define: {
         "process.env.NODE_ENV": JSON.stringify("development")
     },
@@ -15,4 +14,9 @@ const devConfig = {
     inject: [path.join(__dirname, "sourcemaps.js")]
 }
 
-build(defu(baseConfig, devConfig))
+async function start() {
+    const ctx = await context(defu(baseConfig, devConfig))
+    await ctx.watch()
+}
+
+start()

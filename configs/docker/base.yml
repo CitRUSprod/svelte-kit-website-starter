@@ -1,6 +1,6 @@
 services:
     nginx:
-        image: nginx:1.23.2-alpine
+        image: nginx:1.23.3-alpine
         restart: always
         ports:
             - ${WEBSITE_PORT}:6700
@@ -10,7 +10,7 @@ services:
         build:
             context: ../../services/web
             args:
-                NODE_IMAGE: node:18.1.0-alpine
+                NODE_IMAGE: node:18.14.0-alpine
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
                 PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
         restart: always
@@ -18,7 +18,7 @@ services:
         build:
             context: ../../services/api
             args:
-                NODE_IMAGE: node:18.1.0-alpine
+                NODE_IMAGE: node:18.14.0-alpine
         restart: always
         environment:
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
