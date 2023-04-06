@@ -88,7 +88,7 @@
             <img
                 class="u:w-full u:h-full u:object-cover"
                 alt="avatar"
-                src={data.user.avatar ?? "/images/no-avatar.png"}
+                src={data.user.avatar ?? "/img/no-avatar.png"}
             />
         </div>
         <div>
