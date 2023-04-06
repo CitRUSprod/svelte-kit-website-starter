@@ -137,6 +137,7 @@
                     class="u:children:p-2 u:children:border u:children:border-default u:children:bg-zinc-200 u:dark:children:bg-zinc-700"
                 >
                     <th>ID</th>
+                    <th>Avatar</th>
                     <th>Username</th>
                     {#if $userData?.role.permissions.includes(Permission.GetOtherUserEmail)}
                         <th>Email</th>
@@ -154,6 +155,15 @@
                         class="u:children:p-2 u:children:border u:children:border-default u:children:text-center u:children:hover:bg-zinc-100 u:dark:children:hover:bg-zinc-900 u:children:duration-200"
                     >
                         <td>{user.id}</td>
+                        <td class="u:w-0">
+                            <div class="u:w-20 u:h-20 u:overflow-hidden">
+                                <img
+                                    class="u:w-full u:h-full u:object-cover"
+                                    alt="avatar"
+                                    src={user.avatar ?? "/img/no-avatar.png"}
+                                />
+                            </div>
+                        </td>
                         <td>{user.username}</td>
                         {#if $userData?.role.permissions.includes(Permission.GetOtherUserEmail)}
                             <td>{user.email}</td>
