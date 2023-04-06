@@ -24,7 +24,6 @@
         "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top u:select-none",
         "u:active:transform",
         "u:disabled:cursor-not-allowed",
-        "u:focus:outline-none",
         {
             "u:px-4 u:rounded": !icon,
             "u:w-10 u:rounded-full": icon,
