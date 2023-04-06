@@ -33,13 +33,9 @@ interface UploadAvatarData {
 }
 
 export function uploadAvatar(data: UploadAvatarData) {
-    return axios.post<undefined>(
-        "/api/profile/avatar",
-        {
-            img: data.img
-        },
-        createAxiosConfig(data.headers)
-    )
+    const fd = new FormData()
+    fd.append("img", data.img)
+    return axios.post<undefined>("/api/profile/avatar", fd, createAxiosConfig(data.headers))
 }
 
 interface DeleteAvatarData {

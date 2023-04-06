@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { BadRequest } from "http-errors"
+import { ImgPath } from "$/enums"
 import { JsonifiableObject, PartialUserData } from "$/types"
 
 export function dto(user: PartialUserData): JsonifiableObject {
@@ -15,7 +16,7 @@ export function dto(user: PartialUserData): JsonifiableObject {
         confirmedEmail: user.confirmedEmail,
         banned: user.banned,
         registrationDate: user.registrationDate,
-        avatar: user.avatar
+        avatar: user.avatar && `/api/files/${ImgPath.Avatars}/${user.avatar}`
     }
 }
 

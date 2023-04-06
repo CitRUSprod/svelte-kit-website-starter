@@ -1,13 +1,14 @@
+import { sequence } from "@sveltejs/kit/hooks"
 import { defaultLocale, locales } from "$lib/locales"
 import { getLocaleAndRoute, setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
-import type { Handle } from "@sveltejs/kit"
+import type { Handle, HandleServerError } from "@sveltejs/kit"
 import type { User } from "$lib/types"
 
 const supportedLocales = locales.get()
 
-export const handle: Handle = async ({ event: e, resolve }) => {
+const localeHandle: Handle = async ({ event: e, resolve }) => {
     const { locale, route } = getLocaleAndRoute(e.url.pathname)
 
     if (!locale) {
@@ -21,6 +22,16 @@ export const handle: Handle = async ({ event: e, resolve }) => {
         return new Response(undefined, { status: 301, headers })
     }
 
+    const response = await resolve(e, {
+        transformPageChunk({ html }) {
+            return html.replace(/<html.*>/, `<html lang="${locale}">`)
+        }
+    })
+
+    return response
+}
+
+const authHandle: Handle = async ({ event: e, resolve }) => {
     let userData: User | null = null
 
     try {
@@ -32,11 +43,13 @@ export const handle: Handle = async ({ event: e, resolve }) => {
 
     e.locals.userData = userData
 
-    const response = await resolve(e, {
-        transformPageChunk({ html }) {
-            return html.replace(/<html.*>/, `<html lang="${locale}">`)
-        }
-    })
+    const response = await resolve(e)
 
     return response
 }
+
+export const handle = sequence(localeHandle, authHandle)
+
+export const handleError: HandleServerError = ({ error: err }) => ({
+    message: (err as any).message
+})

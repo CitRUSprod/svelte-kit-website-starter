@@ -1,7 +1,8 @@
 import { BadRequest } from "http-errors"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
-import { env, writeImage, sendEmail, models } from "$/utils"
+import { ImgPath } from "$/enums"
+import { env, isImgFile, writeFile, removeFile, sendEmail, models } from "$/utils"
 import { UserData, RouteHandler } from "$/types"
 import * as schemas from "./schemas"
 import * as utils from "./utils"
@@ -14,12 +15,12 @@ export const updateUser: RouteHandler<{
     userData: UserData
     body: schemas.UpdateUserBody
 }> = async (app, { userData, body }) => {
-    if (body.email) {
+    if (body.email && body.email !== userData.email) {
         const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
         if (userByEmail) throw new BadRequest("User with such email already exists")
     }
 
-    if (body.username) {
+    if (body.username && body.username !== userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
             where: { username: body.username }
         })
@@ -44,9 +45,11 @@ export const uploadAvatar: RouteHandler<{
     userData: UserData
     body: schemas.UploadAvatarBody
 }> = async (app, { userData, body }) => {
-    if (userData.avatar) await utils.deleteAvatar(userData.avatar)
+    if (!isImgFile(body.img)) throw new BadRequest("File is not an image")
 
-    const avatar = await writeImage(body.img)
+    const avatar = await writeFile(ImgPath.Avatars, body.img)
+
+    if (userData.avatar) await removeFile(ImgPath.Avatars, userData.avatar)
 
     await app.prisma.user.update({
         where: { id: userData.id },
@@ -61,7 +64,7 @@ export const deleteAvatar: RouteHandler<{
 }> = async (app, { userData }) => {
     if (!userData.avatar) throw new BadRequest("You do not have an avatar")
 
-    await utils.deleteAvatar(userData.avatar)
+    await removeFile(ImgPath.Avatars, userData.avatar)
 
     await app.prisma.user.update({
         where: { id: userData.id },
