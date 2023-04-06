@@ -109,7 +109,13 @@
     </div>
     {#if $userData?.id === data.user.id}
         <div>
-            <Button type="warning" on:click={() => avatarInput.click()}>Upload avatar</Button>
+            <Button
+                loading={$queryUploadAvatar.isFetching}
+                type="warning"
+                on:click={() => avatarInput.click()}
+            >
+                Upload avatar
+            </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
             {#if data.user.avatar}
                 <Button type="error" on:click={modalAvatarRemoving.open}>Remove avatar</Button>
