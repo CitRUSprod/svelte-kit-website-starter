@@ -232,8 +232,4 @@
     {/if}
 </Content.Default>
 
-<ModalRoleAssigning
-    bind:this={modalRoleAssigning}
-    roles={data.roles}
-    on:roleAssigned={refetchPage}
-/>
+<ModalRoleAssigning bind:this={modalRoleAssigning} roles={data.roles} on:assignRole={refetchPage} />

@@ -39,7 +39,7 @@
             return res.data
         },
         onSuccess() {
-            dispatch("roleAssigned")
+            dispatch("assignRole")
             toasts.add("success", "Role successfully edited")
             close()
         },
