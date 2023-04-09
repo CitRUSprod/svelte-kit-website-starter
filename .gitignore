@@ -4,5 +4,7 @@
 *.log
 /services/api/files
 /volumes
+/storage/*
+!/storage/.gitkeep
 dist
 node_modules

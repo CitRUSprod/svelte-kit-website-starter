@@ -5,8 +5,10 @@ import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
 import { ImgSize, ImgExtension } from "$/enums"
 
-function getAbsPath(...paths: Array<string>) {
-    return path.join(__dirname, "../files", ...paths)
+const isDev = process.env.NODE_ENV === "development"
+
+export function getAbsFilesPath(...paths: Array<string>) {
+    return path.join(__dirname, `${isDev ? "../../../storage" : ".."}/files`, ...paths)
 }
 
 function getExt(file: MultipartFile) {
@@ -24,7 +26,7 @@ export async function writeFile(dirPath: string, file: MultipartFile) {
     const buffer = await file.toBuffer()
 
     const fileName = `${createUuid()}${ext}`
-    const absDirPath = getAbsPath(dirPath)
+    const absDirPath = getAbsFilesPath(dirPath)
     const absFilePath = path.join(absDirPath, fileName)
 
     await fs.ensureDir(absDirPath)
@@ -53,5 +55,5 @@ export async function writeFile(dirPath: string, file: MultipartFile) {
 }
 
 export async function removeFile(dirPath: string, fileName: string) {
-    await fs.remove(getAbsPath(dirPath, fileName))
+    await fs.remove(getAbsFilesPath(dirPath, fileName))
 }

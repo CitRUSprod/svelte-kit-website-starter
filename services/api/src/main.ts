@@ -1,4 +1,3 @@
-import path from "path"
 import fastify from "fastify"
 import swagger from "@fastify/swagger"
 import swaggerUi from "@fastify/swagger-ui"
@@ -11,7 +10,7 @@ import socketIo from "fastify-socket.io"
 import { decorators } from "$/decorators"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
-import { env, ajv, normalizeAjvErrors } from "$/utils"
+import { env, getAbsFilesPath, ajv, normalizeAjvErrors } from "$/utils"
 
 const port = 6702
 
@@ -33,7 +32,7 @@ if (env.ENABLE_DOCS) {
     })
 }
 
-app.register(staticPlugin, { root: path.join(__dirname, "../files"), prefix: "/files" })
+app.register(staticPlugin, { root: getAbsFilesPath(), prefix: "/files" })
     .register(multipart, { attachFieldsToBody: true })
     .register(jwt, { secret: env.JWT_SECRET, cookie: { cookieName: "accessToken", signed: false } })
     .register(cookie)
