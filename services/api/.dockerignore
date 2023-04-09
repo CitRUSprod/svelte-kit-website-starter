@@ -1,5 +1,4 @@
 .dockerignore
-/storage
 dist
 Dockerfile
 node_modules
