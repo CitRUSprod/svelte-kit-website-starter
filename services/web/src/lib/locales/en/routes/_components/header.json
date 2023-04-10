@@ -1,4 +1,9 @@
 {
+    "chat": "Chat",
+    "login": "Login",
+    "logout": "Logout",
     "posts": "Posts",
-    "simple-layout": "Simple layout"
+    "profile": "Profile",
+    "simple-layout": "Simple layout",
+    "users": "Users"
 }

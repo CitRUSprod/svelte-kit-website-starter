@@ -3,6 +3,7 @@
 
     import { onDestroy, createEventDispatcher } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as api from "$lib/api"
 
@@ -63,26 +64,26 @@
     bind:visible
 >
     <div>
-        <h1 class="u:text-center">Role assigning</h1>
+        <h1 class="u:text-center">{$t("components.modal-role-assigning.role-assigning")}</h1>
     </div>
     <div>
         <DropdownMenu
             disabled={$queryAssignRoleToUser.isFetching}
             {items}
-            label="Role"
+            label={$t("components.modal-role-assigning.role")}
             bind:value={roleId}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$queryAssignRoleToUser.isFetching} text type="error" on:click={close}>
-            Cancel
+            {$t("components.modal-role-assigning.cancel")}
         </Button>
         <Button
             loading={$queryAssignRoleToUser.isFetching}
             type="success"
             on:click={() => $queryAssignRoleToUser.refetch()}
         >
-            Save
+            {$t("components.modal-role-assigning.save")}
         </Button>
     </div>
 </Modal>

@@ -24,11 +24,12 @@
         title: data.query.title
     }
 
-    const sortings: Array<DropdownMenuItem> = [
-        { text: "Creation date (Earliest)", value: "creationDate-asc" },
-        { text: "Creation date (Latest)", value: "creationDate-desc" },
-        { text: "Title (A-Z)", value: "title-asc" },
-        { text: "Title (Z-A)", value: "title-desc" }
+    let sortings: Array<DropdownMenuItem>
+    $: sortings = [
+        { text: $t("routes.posts.creation-date-asc"), value: "creationDate-asc" },
+        { text: $t("routes.posts.creation-date-desc"), value: "creationDate-desc" },
+        { text: $t("routes.posts.title-asc"), value: "title-asc" },
+        { text: $t("routes.posts.title-desc"), value: "title-desc" }
     ]
 
     const queryGetPosts = useQuery("posts.getPosts", {
@@ -103,15 +104,15 @@
     <div class="u:flex u:justify-between u:gap-2">
         <div class="u:flex u:gap-2">
             <TextField
-                label="Search"
-                placeholder="Enter title..."
+                label={$t("routes.posts.search")}
+                placeholder={$t("routes.posts.enter-title")}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={params.title}
                 on:input={_.debounce(onTitleInput, 500)}
             />
             <DropdownMenu
                 items={sortings}
-                label="Sorting"
+                label={$t("routes.posts.sorting")}
                 bind:value={params.sortAndOrder}
                 on:change={onSortingChange}
             />
@@ -137,7 +138,9 @@
                     </div>
                     <div class="u:my-2 u:border-t u:border-primary" />
                     <div class="u:flex u:justify-between">
-                        <span class="u:text-sm">Author: {post.author.username}</span>
+                        <span class="u:text-sm">
+                            {$t("routes.posts.author")}: {post.author.username}
+                        </span>
                         <span class="u:text-sm">{dt.getFullDateAndTime(post.creationDate)}</span>
                     </div>
                 </a>

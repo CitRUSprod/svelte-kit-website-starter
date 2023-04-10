@@ -28,14 +28,20 @@
     <div>
         <ul>
             <ul>
-                <b>Author:</b>
+                <b>{$t("routes.posts.[id].author")}:</b>
                 <a class="u:hover:underline" href={$localePath(`/users/${data.post.author.id}`)}>
                     {data.post.author.username}
                 </a>
             </ul>
-            <ul><b>Created:</b> {dt.getFullDateAndTime(data.post.creationDate)}</ul>
+            <ul>
+                <b>{$t("routes.posts.[id].created")}:</b>
+                {dt.getFullDateAndTime(data.post.creationDate)}
+            </ul>
             {#if data.post.editingDate}
-                <ul><b>Edited:</b> {dt.getFullDateAndTime(data.post.editingDate)}</ul>
+                <ul>
+                    <b>{$t("routes.posts.[id].edited")}:</b>
+                    {dt.getFullDateAndTime(data.post.editingDate)}
+                </ul>
             {/if}
         </ul>
     </div>

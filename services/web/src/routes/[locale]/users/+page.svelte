@@ -4,7 +4,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
-    import { localePath } from "$lib/locales"
+    import { t, localePath } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
     import { Permission } from "$lib/enums"
     import { qp, dt } from "$lib/utils"
@@ -126,10 +126,10 @@
 </script>
 
 <svelte:head>
-    <title>Users</title>
+    <title>{$t("routes.users.users")}</title>
 </svelte:head>
 
-<Content.Default title="Users">
+<Content.Default title={$t("routes.users.users")}>
     {#if $queryGetUsers.data}
         <table>
             <thead>
@@ -137,16 +137,16 @@
                     class="u:children:p-2 u:children:border u:children:border-default u:children:bg-zinc-200 u:dark:children:bg-zinc-700"
                 >
                     <th>ID</th>
-                    <th>Avatar</th>
-                    <th>Username</th>
+                    <th>{$t("routes.users.avatar")}</th>
+                    <th>{$t("routes.users.username")}</th>
                     {#if $userData?.role.permissions.includes(Permission.GetOtherUserEmail)}
-                        <th>Email</th>
-                        <th>Confirmed email</th>
+                        <th>{$t("routes.users.email")}</th>
+                        <th>{$t("routes.users.confirmed-email")}</th>
                     {/if}
-                    <th>Role</th>
-                    <th>Banned</th>
-                    <th>Registration date</th>
-                    <th>Actions</th>
+                    <th>{$t("routes.users.role")}</th>
+                    <th>{$t("routes.users.banned")}</th>
+                    <th>{$t("routes.users.registration-date")}</th>
+                    <th>{$t("routes.users.actions")}</th>
                 </tr>
             </thead>
             <tbody>
@@ -159,7 +159,7 @@
                             <div class="u:w-20 u:h-20 u:overflow-hidden">
                                 <img
                                     class="u:w-full u:h-full u:object-cover"
-                                    alt="avatar"
+                                    alt={$t("routes.users.avatar")}
                                     src={user.avatar ?? "/img/no-avatar.png"}
                                 />
                             </div>
@@ -183,7 +183,7 @@
                                 target="_blank"
                                 type="info"
                             >
-                                Open
+                                {$t("routes.users.open")}
                             </Button>
                             {#if $userData?.role.permissions.includes(Permission.AssignRole)}
                                 {#if !user.banned}
@@ -191,7 +191,7 @@
                                         type="warning"
                                         on:click={() => modalRoleAssigning.open(user)}
                                     >
-                                        Assign role
+                                        {$t("routes.users.assign-role")}
                                     </Button>
                                 {/if}
                             {/if}
@@ -203,7 +203,7 @@
                                         type="error"
                                         on:click={() => unbanUser(user.id)}
                                     >
-                                        Unban
+                                        {$t("routes.users.unban")}
                                     </Button>
                                 {:else}
                                     <Button
@@ -212,7 +212,7 @@
                                         type="error"
                                         on:click={() => banUser(user.id)}
                                     >
-                                        Ban
+                                        {$t("routes.users.ban")}
                                     </Button>
                                 {/if}
                             {/if}

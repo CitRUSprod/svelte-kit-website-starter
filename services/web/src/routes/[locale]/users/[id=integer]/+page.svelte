@@ -4,6 +4,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
     import { dt } from "$lib/utils"
     import * as api from "$lib/api"
@@ -79,29 +80,35 @@
 </script>
 
 <svelte:head>
-    <title>Profile</title>
+    <title>{$t("routes.users.[id].profile")}</title>
 </svelte:head>
 
-<Content.Default title="Profile">
+<Content.Default title={$t("routes.users.[id].profile")}>
     <div class="u:flex u:gap-4">
         <div class="u:w-50 u:h-50 u:overflow-hidden">
             <img
                 class="u:w-full u:h-full u:object-cover"
-                alt="avatar"
+                alt={$t("routes.users.[id].avatar")}
                 src={data.user.avatar ?? "/img/no-avatar.png"}
             />
         </div>
         <div>
             <ul>
-                <li><b>Username:</b> {data.user.username}</li>
+                <li><b>{$t("routes.users.[id].username")}:</b> {data.user.username}</li>
                 {#if data.user.email}
-                    <li><b>Email:</b> {data.user.email}</li>
+                    <li><b>{$t("routes.users.[id].email")}:</b> {data.user.email}</li>
+                    <li>
+                        <b>{$t("routes.users.[id].confirmed-email")}:</b>
+                        {$t(`routes.users.[id].${data.user.confirmedEmail ? "yes" : "no"}`)}
+                    </li>
                 {/if}
-                <li><b>Role:</b> {data.user.role.name}</li>
-                <li><b>Confirmed email:</b> {data.user.confirmedEmail ? "yes" : "no"}</li>
-                <li><b>Banned:</b> {data.user.banned ? "yes" : "no"}</li>
+                <li><b>{$t("routes.users.[id].role")}:</b> {data.user.role.name}</li>
                 <li>
-                    <b>Registration date:</b>
+                    <b>{$t("routes.users.[id].banned")}:</b>
+                    {$t(`routes.users.[id].${data.user.banned ? "yes" : "no"}`)}
+                </li>
+                <li>
+                    <b>{$t("routes.users.[id].registration-date")}:</b>
                     {dt.getFullDateAndTime(data.user.registrationDate)}
                 </li>
             </ul>
@@ -114,21 +121,27 @@
                 type="warning"
                 on:click={() => avatarInput.click()}
             >
-                Upload avatar
+                {$t("routes.users.[id].upload-avatar")}
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
             {#if data.user.avatar}
-                <Button type="error" on:click={modalAvatarRemoving.open}>Remove avatar</Button>
+                <Button type="error" on:click={modalAvatarRemoving.open}>
+                    {$t("routes.users.[id].remove-avatar")}
+                </Button>
             {/if}
-            <Button type="warning" on:click={modalProfileEditing.open}>Edit</Button>
-            <Button type="warning" on:click={modalPasswordChanging.open}>Change password</Button>
+            <Button type="warning" on:click={modalProfileEditing.open}>
+                {$t("routes.users.[id].edit")}
+            </Button>
+            <Button type="warning" on:click={modalPasswordChanging.open}>
+                {$t("routes.users.[id].change-password")}
+            </Button>
             {#if !$userData.confirmedEmail}
                 <Button
                     loading={$querySendConfirmationEmail.isFetching}
                     type="success"
                     on:click={() => $querySendConfirmationEmail.refetch()}
                 >
-                    Verify email
+                    {$t("routes.users.[id].verify-email")}
                 </Button>
             {/if}
         </div>

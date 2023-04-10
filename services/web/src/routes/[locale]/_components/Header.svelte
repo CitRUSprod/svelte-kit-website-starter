@@ -19,9 +19,13 @@
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
         {#if $userData}
-            <Button href={$localePath(`/users/${$userData.id}`)} type="primary">Profile</Button>
+            <Button href={$localePath(`/users/${$userData.id}`)} type="primary">
+                {$t("components.header.profile")}
+            </Button>
         {/if}
-        <Button href={$localePath("/chat")} type="primary">Chat</Button>
+        <Button href={$localePath("/chat")} type="primary">
+            {$t("components.header.chat")}
+        </Button>
         <Button href={$localePath("/lorem")} type="primary">Lorem</Button>
         <Button href={$localePath("/simple-layout")} type="primary">
             {$t("components.header.simple-layout")}
@@ -29,7 +33,9 @@
         <Button href={$localePath("/posts")} type="primary">
             {$t("components.header.posts")}
         </Button>
-        <Button href={$localePath("/users")} type="primary">Users</Button>
+        <Button href={$localePath("/users")} type="primary">
+            {$t("components.header.users")}
+        </Button>
         <div class="u:flex u:items-center u:gap-1 u:mx-1">
             {#each $locales as locale, index (locale)}
                 <Button
@@ -48,9 +54,13 @@
             <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl" />
         </Button>
         {#if $userData}
-            <Button href={$localePath("/auth/logout")} type="primary">Logout</Button>
+            <Button href={$localePath("/auth/logout")} type="primary">
+                {$t("components.header.logout")}
+            </Button>
         {:else}
-            <Button href={$localePath("/auth/login")} type="primary">Login</Button>
+            <Button href={$localePath("/auth/login")} type="primary">
+                {$t("components.header.login")}
+            </Button>
         {/if}
     </div>
 </header>

@@ -3,6 +3,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
@@ -68,17 +69,25 @@
     bind:visible
 >
     <div>
-        <h1 class="u:text-center">Profile editing</h1>
+        <h1 class="u:text-center">{$t("components.modal-profile-editing.profile-editing")}</h1>
     </div>
     <div>
-        <TextField disabled={$queryUpdateUser.isFetching} label="Username" bind:value={username} />
+        <TextField
+            disabled={$queryUpdateUser.isFetching}
+            label={$t("components.modal-profile-editing.username")}
+            bind:value={username}
+        />
     </div>
     <div>
-        <TextField disabled={$queryUpdateUser.isFetching} label="Email" bind:value={email} />
+        <TextField
+            disabled={$queryUpdateUser.isFetching}
+            label={$t("components.modal-profile-editing.email")}
+            bind:value={email}
+        />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$queryUpdateUser.isFetching} text type="error" on:click={close}>
-            Cancel
+            {$t("components.modal-profile-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
@@ -86,7 +95,7 @@
             type="success"
             on:click={() => $queryUpdateUser.refetch()}
         >
-            Save
+            {$t("components.modal-profile-editing.save")}
         </Button>
     </div>
 </Modal>

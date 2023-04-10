@@ -3,6 +3,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as api from "$lib/api"
 
@@ -50,21 +51,21 @@
     bind:visible
 >
     <div>
-        <h1>Removing an avatar</h1>
+        <h1>{$t("components.modal-avatar-removing.avatar-removing")}</h1>
     </div>
     <div>
-        <p>Are you sure you want to remove your avatar?</p>
+        <p>{$t("components.modal-avatar-removing.avatar-removing-question")}</p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$queryDeleteAvatar.isFetching} text type="success" on:click={close}>
-            Cancel
+            {$t("components.modal-avatar-removing.cancel")}
         </Button>
         <Button
             loading={$queryDeleteAvatar.isFetching}
             type="error"
             on:click={() => $queryDeleteAvatar.refetch()}
         >
-            Remove
+            {$t("components.modal-avatar-removing.remove")}
         </Button>
     </div>
 </Modal>

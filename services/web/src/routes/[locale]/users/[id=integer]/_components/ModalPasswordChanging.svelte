@@ -3,6 +3,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
@@ -63,12 +64,12 @@
     bind:visible
 >
     <div>
-        <h1 class="u:text-center">Password changing</h1>
+        <h1 class="u:text-center">{$t("components.modal-password-changing.password-changing")}</h1>
     </div>
     <div>
         <TextField
             disabled={$queryChangePassword.isFetching}
-            label="Old password"
+            label={$t("components.modal-password-changing.old-password")}
             valueType="password"
             bind:value={oldPassword}
         />
@@ -76,14 +77,14 @@
     <div>
         <TextField
             disabled={$queryChangePassword.isFetching}
-            label="New password"
+            label={$t("components.modal-password-changing.new-password")}
             valueType="password"
             bind:value={newPassword}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$queryChangePassword.isFetching} text type="error" on:click={close}>
-            Cancel
+            {$t("components.modal-password-changing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
@@ -91,7 +92,7 @@
             type="success"
             on:click={() => $queryChangePassword.refetch()}
         >
-            Change
+            {$t("components.modal-password-changing.change")}
         </Button>
     </div>
 </Modal>
