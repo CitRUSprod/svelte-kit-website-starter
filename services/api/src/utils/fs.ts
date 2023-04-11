@@ -8,7 +8,7 @@ import { ImgSize, ImgExtension } from "$/enums"
 const isDev = process.env.NODE_ENV === "development"
 
 export function getAbsFilesPath(...paths: Array<string>) {
-    return path.join(__dirname, `${isDev ? "../../../storage" : ".."}/files`, ...paths)
+    return path.join(__dirname, `..${isDev ? "/../../storage" : ""}/files`, ...paths)
 }
 
 function getExt(file: MultipartFile) {
