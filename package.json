@@ -6,7 +6,7 @@
         "commit": "git-cz",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint --fix",
-        "stylelint:all": "pnpm stylelint \"**/*.svelte\" \"!volumes\"",
+        "stylelint:all": "pnpm stylelint \"**/*.svelte\" \"!storage\"",
         "stylelint:fix:all": "pnpm stylelint:all --fix",
         "eslint": "eslint --color --no-error-on-unmatched-pattern",
         "eslint:fix": "pnpm eslint --fix",
@@ -46,7 +46,7 @@
         "ignorePatterns": [
             "!.travis.yml",
             ".svelte-kit",
-            "/volumes",
+            "/storage",
             "dist",
             "pnpm-lock.yaml"
         ]

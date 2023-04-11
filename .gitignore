@@ -2,8 +2,6 @@
 .svelte-kit
 .vscode
 *.log
-/services/api/files
-/volumes
 /storage/*
 !/storage/.gitkeep
 dist
