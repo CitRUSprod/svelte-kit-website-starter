@@ -3,7 +3,7 @@
 
     import { browser } from "$app/environment"
     import { goto } from "$app/navigation"
-    import { localePath } from "$lib/locales"
+    import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
 
     if (browser) {
@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>Email confirmation</title>
+    <title>{$t("routes.profile.email.[token].email-confirmation")}</title>
 </svelte:head>
 
-<Content.Default title="Redirecting..." />
+<Content.Default title={$t("routes.profile.email.[token].redirecting")} />

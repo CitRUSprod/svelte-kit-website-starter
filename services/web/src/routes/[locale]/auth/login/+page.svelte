@@ -4,7 +4,7 @@
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { invalidateAll } from "$app/navigation"
-    import { localePath } from "$lib/locales"
+    import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { socket } from "$lib/utils"
     import * as vld from "$lib/validators"
@@ -54,7 +54,7 @@
 </script>
 
 <svelte:head>
-    <title>Login</title>
+    <title>{$t("routes.auth.login.login")}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -62,13 +62,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>Login</h1>
+            <h1>{$t("routes.auth.login.login")}</h1>
         </div>
         <div>
             <TextField
                 autofocus
                 disabled={$queryLogin.isFetching}
-                label="Email"
+                label={$t("routes.auth.login.email")}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -76,7 +76,7 @@
         <div>
             <TextField
                 disabled={$queryLogin.isFetching}
-                label="Password"
+                label={$t("routes.auth.login.password")}
                 valueType="password"
                 bind:value={password}
                 on:keypress={onEnter}
@@ -84,18 +84,20 @@
         </div>
         <div>
             <a class="u:hover:underline" href={$localePath("/profile/password")}>
-                Forgot password?
+                {$t("routes.auth.login.forgot-password")}
             </a>
         </div>
         <div class="u:flex u:justify-between">
-            <Button href={$localePath("/auth/registration")} text>Registration</Button>
+            <Button href={$localePath("/auth/registration")} text>
+                {$t("routes.auth.login.registration")}
+            </Button>
             <Button
                 disabled={!completedForm}
                 loading={$queryLogin.isFetching}
                 type="primary"
                 on:click={() => $queryLogin.refetch()}
             >
-                Login
+                {$t("routes.auth.login.do-login")}
             </Button>
         </div>
     </div>

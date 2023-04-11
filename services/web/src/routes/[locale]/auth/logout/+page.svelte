@@ -3,6 +3,7 @@
 
     import { browser } from "$app/environment"
     import { invalidateAll } from "$app/navigation"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { socket } from "$lib/utils"
 
@@ -14,7 +15,7 @@
 </script>
 
 <svelte:head>
-    <title>Logout</title>
+    <title>{$t("routes.auth.logout.logout")}</title>
 </svelte:head>
 
-<Content.Default title="Redirecting..." />
+<Content.Default title={$t("routes.auth.logout.redirecting")} />

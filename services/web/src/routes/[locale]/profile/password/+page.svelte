@@ -3,6 +3,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
@@ -36,7 +37,7 @@
 </script>
 
 <svelte:head>
-    <title>Password reset</title>
+    <title>{$t("routes.profile.password.password-reset")}</title>
 </svelte:head>
 
 <Content.Center>
@@ -44,13 +45,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>Password reset</h1>
+            <h1>{$t("routes.profile.password.password-reset")}</h1>
         </div>
         <div>
             <TextField
                 disabled={$querySendPasswordResetEmail.isFetching}
-                label="Email"
-                placeholder="Enter email..."
+                label={$t("routes.profile.password.email")}
+                placeholder={$t("routes.profile.password.enter-email")}
                 bind:value={email}
             />
         </div>
@@ -61,7 +62,7 @@
                 type="primary"
                 on:click={() => $querySendPasswordResetEmail.refetch()}
             >
-                Send reset link
+                {$t("routes.profile.password.send-reset-link")}
             </Button>
         </div>
     </div>

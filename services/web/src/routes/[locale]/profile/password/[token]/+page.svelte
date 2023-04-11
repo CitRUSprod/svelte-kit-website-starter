@@ -4,7 +4,7 @@
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
-    import { localePath } from "$lib/locales"
+    import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
@@ -50,7 +50,7 @@
 </script>
 
 <svelte:head>
-    <title>Password reset</title>
+    <title>{$t("routes.profile.password.[token].password-reset")}</title>
 </svelte:head>
 
 <Content.Center>
@@ -58,13 +58,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>Password reset</h1>
+            <h1>{$t("routes.profile.password.[token].password-reset")}</h1>
         </div>
         <div>
             <TextField
                 disabled={$queryResetPassword.isFetching}
-                label="New password"
-                placeholder="Enter a new password..."
+                label={$t("routes.profile.password.[token].new-password")}
+                placeholder={$t("routes.profile.password.[token].enter-new-password")}
                 valueType="password"
                 bind:value={newPassword}
             />
@@ -72,8 +72,8 @@
         <div>
             <TextField
                 disabled={$queryResetPassword.isFetching}
-                label="New password confirmation"
-                placeholder="Enter a new password again..."
+                label={$t("routes.profile.password.[token].new-password-confirmation")}
+                placeholder={$t("routes.profile.password.[token].enter-new-password-again")}
                 valueType="password"
                 bind:value={newPasswordConfirmation}
             />
@@ -85,7 +85,7 @@
                 type="primary"
                 on:click={() => $queryResetPassword.refetch()}
             >
-                Reset
+                {$t("routes.profile.password.[token].reset")}
             </Button>
         </div>
     </div>

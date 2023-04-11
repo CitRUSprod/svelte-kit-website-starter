@@ -4,7 +4,7 @@
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
-    import { localePath } from "$lib/locales"
+    import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
@@ -61,7 +61,7 @@
 </script>
 
 <svelte:head>
-    <title>Registration</title>
+    <title>{$t("routes.auth.registration.registration")}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -69,13 +69,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>Registration</h1>
+            <h1>{$t("routes.auth.registration.registration")}</h1>
         </div>
         <div>
             <TextField
                 autofocus
                 disabled={$queryRegister.isFetching}
-                label="Email"
+                label={$t("routes.auth.registration.email")}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -83,7 +83,7 @@
         <div>
             <TextField
                 disabled={$queryRegister.isFetching}
-                label="Username"
+                label={$t("routes.auth.registration.username")}
                 bind:value={username}
                 on:keypress={onEnter}
             />
@@ -91,7 +91,7 @@
         <div>
             <TextField
                 disabled={$queryRegister.isFetching}
-                label="Password"
+                label={$t("routes.auth.registration.password")}
                 valueType="password"
                 bind:value={password}
                 on:keypress={onEnter}
@@ -100,21 +100,23 @@
         <div>
             <TextField
                 disabled={$queryRegister.isFetching}
-                label="Password confirmation"
+                label={$t("routes.auth.registration.password-confirmation")}
                 valueType="password"
                 bind:value={passwordConfirmation}
                 on:keypress={onEnter}
             />
         </div>
         <div class="u:flex u:justify-between">
-            <Button href={$localePath("/auth/login")} text>Login</Button>
+            <Button href={$localePath("/auth/login")} text>
+                {$t("routes.auth.registration.login")}
+            </Button>
             <Button
                 disabled={!completedForm}
                 loading={$queryRegister.isFetching}
                 type="primary"
                 on:click={() => $queryRegister.refetch()}
             >
-                Register
+                {$t("routes.auth.registration.register")}
             </Button>
         </div>
     </div>
