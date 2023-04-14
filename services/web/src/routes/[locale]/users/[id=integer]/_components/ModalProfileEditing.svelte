@@ -46,14 +46,17 @@
         },
         onSuccess(localUser) {
             user = localUser
-            toasts.add("success", "Profile successfully edited")
+            toasts.add(
+                "success",
+                $t("components.modal-profile-editing.profile-edited-successfully")
+            )
             close()
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

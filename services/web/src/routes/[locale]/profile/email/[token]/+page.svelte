@@ -7,7 +7,7 @@
     import { toasts } from "$lib/stores"
 
     if (browser) {
-        toasts.add("success", "Email successfully verified")
+        toasts.add("success", $t("routes.profile.email.[token].email-verified-successfully"))
         goto($localePath("/"), {
             replaceState: true,
             invalidateAll: true

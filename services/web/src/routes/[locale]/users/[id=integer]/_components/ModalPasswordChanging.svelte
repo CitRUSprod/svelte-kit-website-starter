@@ -41,14 +41,17 @@
             return res.data
         },
         onSuccess() {
-            toasts.add("success", "Password successfully changed")
+            toasts.add(
+                "success",
+                $t("components.modal-password-changing.password-changed-successfully")
+            )
             close()
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

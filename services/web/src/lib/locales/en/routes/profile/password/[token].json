@@ -4,5 +4,6 @@
     "new-password": "New password",
     "new-password-confirmation": "New password confirmation",
     "password-reset": "Password reset",
+    "password-reset-successfully": "Password has been successfully reset",
     "reset": "Reset"
 }

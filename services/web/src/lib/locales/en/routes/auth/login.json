@@ -2,6 +2,7 @@
     "do-login": "Login",
     "email": "Email",
     "forgot-password": "Forgot password?",
+    "logged-in-successfully": "You have successfully logged in",
     "login": "Login",
     "password": "Password",
     "registration": "Registration"

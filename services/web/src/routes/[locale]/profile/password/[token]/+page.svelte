@@ -32,14 +32,14 @@
             return res.data
         },
         async onSuccess() {
-            toasts.add("success", "Password has been successfully reset")
+            toasts.add("success", $t("routes.profile.password.[token].password-reset-successfully"))
             await goto($localePath("/auth/login"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

@@ -54,7 +54,7 @@
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

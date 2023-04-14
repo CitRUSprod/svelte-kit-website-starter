@@ -20,13 +20,13 @@
             return res.data
         },
         onSuccess() {
-            toasts.add("success", "A reset link was sent to your email address")
+            toasts.add("success", $t("routes.profile.password.reset-link-sent"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

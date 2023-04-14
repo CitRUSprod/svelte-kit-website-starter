@@ -28,7 +28,7 @@
             return res.data
         },
         async onSuccess() {
-            toasts.add("success", "Post successfully removed")
+            toasts.add("success", $t("components.modal-post-removing.post-removed-successfully"))
             close()
             await goto($localePath("/posts"))
         },
@@ -36,7 +36,7 @@
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

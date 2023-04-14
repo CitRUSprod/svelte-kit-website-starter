@@ -10,6 +10,8 @@
     "registration-date": "Registration date",
     "role": "Role",
     "unban": "Unban",
+    "user-banned-successfully": "User successfully banned",
+    "user-unbanned-successfully": "User successfully unbanned",
     "username": "Username",
     "users": "Users"
 }

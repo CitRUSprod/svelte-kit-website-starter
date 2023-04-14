@@ -28,14 +28,17 @@
         },
         async onSuccess() {
             user.avatar = null
-            toasts.add("success", "Avatar successfully removed")
+            toasts.add(
+                "success",
+                $t("components.modal-avatar-removing.avatar-removed-successfully")
+            )
             close()
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

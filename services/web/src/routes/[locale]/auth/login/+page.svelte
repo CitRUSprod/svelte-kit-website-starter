@@ -28,14 +28,14 @@
         },
         async onSuccess() {
             socket.disconnect().connect()
-            toasts.add("success", "You have successfully logged in")
+            toasts.add("success", $t("routes.auth.login.logged-in-successfully"))
             await invalidateAll()
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

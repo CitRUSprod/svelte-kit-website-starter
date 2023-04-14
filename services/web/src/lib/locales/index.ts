@@ -41,6 +41,7 @@ function createAllLoaders(...args: Array<[string, NonNullable<Config["loaders"]>
 
 const config: Config = {
     loaders: createAllLoaders(
+        ["global", undefined],
         ["components/alert", undefined],
         ["components/chat", undefined],
         ["routes/_components/header", undefined],

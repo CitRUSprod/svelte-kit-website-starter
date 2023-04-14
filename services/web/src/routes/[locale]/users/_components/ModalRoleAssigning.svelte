@@ -41,14 +41,14 @@
         },
         onSuccess() {
             dispatch("assignRole")
-            toasts.add("success", "Role successfully edited")
+            toasts.add("success", $t("components.modal-role-assigning.role-edited-successfully"))
             close()
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

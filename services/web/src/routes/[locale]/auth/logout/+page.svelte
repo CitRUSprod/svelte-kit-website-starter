@@ -9,7 +9,7 @@
 
     if (browser) {
         socket.disconnect().connect()
-        toasts.add("success", "You have successfully logged out")
+        toasts.add("success", $t("routes.auth.logout.logged-out-successfully"))
         invalidateAll()
     }
 </script>

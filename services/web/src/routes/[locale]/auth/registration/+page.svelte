@@ -35,14 +35,14 @@
             return res.data
         },
         async onSuccess() {
-            toasts.add("success", "You have successfully registered")
+            toasts.add("success", $t("routes.auth.registration.registered-successfully"))
             await goto($localePath("/auth/login"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

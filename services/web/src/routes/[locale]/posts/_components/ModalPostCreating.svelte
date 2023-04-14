@@ -39,7 +39,7 @@
             return res.data
         },
         async onSuccess(localPost) {
-            toasts.add("success", "Post successfully created")
+            toasts.add("success", $t("components.modal-post-creating.post-created-successfully"))
             close()
             await goto($localePath(`/posts/${localPost.id}`))
         },
@@ -47,7 +47,7 @@
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

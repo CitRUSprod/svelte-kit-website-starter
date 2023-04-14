@@ -1,6 +1,7 @@
 {
-    "avatar-removing-question": "Are you sure you want to remove your avatar?",
+    "avatar-removed-successfully": "Avatar successfully removed",
     "avatar-removing": "Removing an avatar",
+    "avatar-removing-question": "Are you sure you want to remove your avatar?",
     "cancel": "Cancel",
     "remove": "Remove"
 }

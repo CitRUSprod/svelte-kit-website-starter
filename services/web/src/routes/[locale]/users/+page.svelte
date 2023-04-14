@@ -39,7 +39,7 @@
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })
@@ -56,13 +56,13 @@
             return res.data
         },
         onSuccess() {
-            toasts.add("success", "User successfully banned")
+            toasts.add("success", $t("routes.users.user-banned-successfully"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })
@@ -85,13 +85,13 @@
             return res.data
         },
         onSuccess() {
-            toasts.add("success", "User successfully unbanned")
+            toasts.add("success", $t("routes.users.user-unbanned-successfully"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })

@@ -38,13 +38,13 @@
                 id: data.user.id
             })
             data.user = res.data
-            toasts.add("success", "Avatar successfully updated")
+            toasts.add("success", $t("routes.users.[id].avatar-updated-successfully"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })
@@ -55,13 +55,13 @@
             return res.data
         },
         onSuccess() {
-            toasts.add("success", "A confirmation email was sent to your email address")
+            toasts.add("success", $t("routes.users.[id].confirmation-email-sent"))
         },
         onError(err: any) {
             if (err.response) {
                 toasts.add("error", err.response.data.message)
             } else {
-                toasts.add("error", "An error has occurred")
+                toasts.add("error", $t("global.error-occurred"))
             }
         }
     })
