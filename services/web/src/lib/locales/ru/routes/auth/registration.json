@@ -1,0 +1,10 @@
+{
+    "email": "Электронная почта",
+    "login": "Вход",
+    "password": "Пароль",
+    "password-confirmation": "Подтверждение пароля",
+    "register": "Зарегистрироваться",
+    "registered-successfully": "Вы успешно зарегистрировались",
+    "registration": "Регистрация",
+    "username": "Имя пользователя"
+}

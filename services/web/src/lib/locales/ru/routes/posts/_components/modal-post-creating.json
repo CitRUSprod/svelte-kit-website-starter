@@ -4,6 +4,7 @@
     "create": "Создать",
     "enter-content": "Введите содержание...",
     "enter-title": "Введите заголовок...",
+    "post-created-successfully": "Пост успешно создан",
     "post-creating": "Создание поста",
     "title": "Заголовок"
 }
