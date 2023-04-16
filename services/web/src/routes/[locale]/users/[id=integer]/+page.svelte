@@ -4,7 +4,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
-    import { t } from "$lib/locales"
+    import { t, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
     import { dt } from "$lib/utils"
     import * as api from "$lib/api"
@@ -109,7 +109,7 @@
                 </li>
                 <li>
                     <b>{$t("routes.users.[id].registration-date")}:</b>
-                    {dt.getFullDateAndTime(data.user.registrationDate)}
+                    {dt.getFullDateAndTime(data.user.registrationDate, $currentLocale)}
                 </li>
             </ul>
         </div>

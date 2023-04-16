@@ -2,7 +2,7 @@
     import { Content, Button } from "$lib/components"
     import { ModalPostEditing, ModalPostRemoving } from "./_components"
 
-    import { t, localePath } from "$lib/locales"
+    import { t, localePath, currentLocale } from "$lib/locales"
     import { userData } from "$lib/stores"
     import { Permission } from "$lib/enums"
     import { dt } from "$lib/utils"
@@ -35,12 +35,12 @@
             </ul>
             <ul>
                 <b>{$t("routes.posts.[id].created")}:</b>
-                {dt.getFullDateAndTime(data.post.creationDate)}
+                {dt.getFullDateAndTime(data.post.creationDate, $currentLocale)}
             </ul>
             {#if data.post.editingDate}
                 <ul>
                     <b>{$t("routes.posts.[id].edited")}:</b>
-                    {dt.getFullDateAndTime(data.post.editingDate)}
+                    {dt.getFullDateAndTime(data.post.editingDate, $currentLocale)}
                 </ul>
             {/if}
         </ul>

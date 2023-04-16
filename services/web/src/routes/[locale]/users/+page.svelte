@@ -4,7 +4,7 @@
 
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
-    import { t, localePath } from "$lib/locales"
+    import { t, localePath, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
     import { Permission } from "$lib/enums"
     import { qp, dt } from "$lib/utils"
@@ -175,7 +175,7 @@
                         <td>
                             <Checkbox checked={user.banned} readonly />
                         </td>
-                        <td>{dt.getFullDate(user.registrationDate)}</td>
+                        <td>{dt.getFullDate(user.registrationDate, $currentLocale)}</td>
                         <td>
                             <Button
                                 href={$localePath(`/users/${user.id}`)}

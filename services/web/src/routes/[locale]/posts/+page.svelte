@@ -5,7 +5,7 @@
     import * as _ from "lodash-es"
     import { onDestroy } from "svelte"
     import { useQuery } from "@sveltestack/svelte-query"
-    import { t, localePath } from "$lib/locales"
+    import { t, localePath, currentLocale } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
@@ -141,7 +141,9 @@
                         <span class="u:text-sm">
                             {$t("routes.posts.author")}: {post.author.username}
                         </span>
-                        <span class="u:text-sm">{dt.getFullDateAndTime(post.creationDate)}</span>
+                        <span class="u:text-sm">
+                            {dt.getFullDateAndTime(post.creationDate, $currentLocale)}
+                        </span>
                     </div>
                 </a>
             {/each}
