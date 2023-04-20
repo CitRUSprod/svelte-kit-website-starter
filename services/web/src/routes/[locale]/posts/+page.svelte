@@ -3,11 +3,8 @@
     import { ModalPostCreating } from "./_components"
 
     import * as _ from "lodash-es"
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { t, localePath, currentLocale } from "$lib/locales"
-    import { toasts } from "$lib/stores"
-    import { qp, dt } from "$lib/utils"
+    import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { DropdownMenuItem } from "$lib/types"
@@ -17,13 +14,6 @@
 
     let modalPostCreating: ModalPostCreating
 
-    const params = {
-        page: data.query.page,
-        perPage: data.query.perPage,
-        sortAndOrder: `${data.query.sort}-${data.query.order}`,
-        title: data.query.title
-    }
-
     let sortings: Array<DropdownMenuItem>
     $: sortings = [
         { text: $t("routes.posts.creation-date-asc"), value: "creationDate-asc" },
@@ -32,11 +22,17 @@
         { text: $t("routes.posts.title-desc"), value: "title-desc" }
     ]
 
-    const queryGetPosts = useQuery("posts.getPosts", {
+    const qcGetPosts = createQueryController({
         initialData: data.itemsPage,
-        async queryFn() {
+        params: {
+            page: data.query.page,
+            perPage: data.query.perPage,
+            sortAndOrder: `${data.query.sort}-${data.query.order}`,
+            title: data.query.title
+        },
+        fn(params) {
             const [sort, order] = params.sortAndOrder.split("-")
-            const res = await api.posts.getPosts(
+            return api.posts.getPosts(
                 qp.removeDefault(
                     {
                         page: params.page,
@@ -48,52 +44,40 @@
                     data.defaultQuery
                 )
             )
-            return res.data
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function refetchPage() {
-        const [sort, order] = params.sortAndOrder.split("-")
+        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-")
         qp.setForCurrentPage(
             qp.removeDefault(
                 {
-                    page: params.page,
-                    perPage: params.perPage,
+                    page: qcGetPosts.params.page,
+                    perPage: qcGetPosts.params.perPage,
                     sort,
                     order,
-                    title: params.title
+                    title: qcGetPosts.params.title
                 },
                 data.defaultQuery
             )
         )
-        await $queryGetPosts.refetch()
+        await qcGetPosts.refresh()
     }
 
     async function onTitleInput() {
-        params.page = 1
+        qcGetPosts.params.page = 1
         await refetchPage()
     }
 
     async function onSortingChange() {
-        params.page = 1
+        qcGetPosts.params.page = 1
         await refetchPage()
     }
 
     async function setPage(localPage: number) {
-        params.page = localPage
+        qcGetPosts.params.page = localPage
         await refetchPage()
     }
-
-    onDestroy(() => {
-        $queryGetPosts.remove()
-    })
 </script>
 
 <svelte:head>
@@ -107,13 +91,13 @@
                 label={$t("routes.posts.search")}
                 placeholder={$t("routes.posts.enter-title")}
                 rightIconClass="u:i-material-symbols-search"
-                bind:value={params.title}
+                bind:value={qcGetPosts.params.title}
                 on:input={_.debounce(onTitleInput, 500)}
             />
             <DropdownMenu
                 items={sortings}
                 label={$t("routes.posts.sorting")}
-                bind:value={params.sortAndOrder}
+                bind:value={qcGetPosts.params.sortAndOrder}
                 on:change={onSortingChange}
             />
         </div>
@@ -123,9 +107,9 @@
             </Button>
         </div>
     </div>
-    {#if $queryGetPosts.data}
+    {#if $qcGetPosts.data}
         <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
-            {#each $queryGetPosts.data.items as post (post.id)}
+            {#each $qcGetPosts.data.items as post (post.id)}
                 <a
                     class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
                     href={$localePath(`/posts/${post.id}`)}
@@ -150,9 +134,9 @@
         </div>
         <div class="u:flex u:justify-center">
             <SimplePagination
-                loading={$queryGetPosts.isFetching}
-                page={$queryGetPosts.data.page}
-                pages={$queryGetPosts.data.pages}
+                loading={$qcGetPosts.loading}
+                page={$qcGetPosts.data.page}
+                pages={$qcGetPosts.data.pages}
                 on:setPage={e => setPage(e.detail)}
             />
         </div>

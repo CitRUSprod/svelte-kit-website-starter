@@ -1,12 +1,10 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { invalidateAll } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
-    import { socket } from "$lib/utils"
+    import { socket, createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -18,39 +16,27 @@
 
     $: completedForm = vldResultEmail.valid && vldResultPassword.valid
 
-    const queryLogin = useQuery("auth.login", {
-        async queryFn() {
-            const res = await api.auth.login({
+    const qcLogin = createQueryController({
+        fn() {
+            return api.auth.login({
                 email: vldResultEmail.value,
                 password: vldResultPassword.value
             })
-            return res.data
         },
         async onSuccess() {
             socket.disconnect().connect()
             toasts.add("success", $t("routes.auth.login.logged-in-successfully"))
             await invalidateAll()
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && completedForm) {
-            await $queryLogin.refetch()
+            await qcLogin.refresh()
             const input = e.target as HTMLInputElement
             input.focus()
         }
     }
-
-    onDestroy(() => {
-        $queryLogin.remove()
-    })
 </script>
 
 <svelte:head>
@@ -67,7 +53,7 @@
         <div>
             <TextField
                 autofocus
-                disabled={$queryLogin.isFetching}
+                disabled={$qcLogin.loading}
                 label={$t("routes.auth.login.email")}
                 bind:value={email}
                 on:keypress={onEnter}
@@ -75,7 +61,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryLogin.isFetching}
+                disabled={$qcLogin.loading}
                 label={$t("routes.auth.login.password")}
                 valueType="password"
                 bind:value={password}
@@ -93,9 +79,9 @@
             </Button>
             <Button
                 disabled={!completedForm}
-                loading={$queryLogin.isFetching}
+                loading={$qcLogin.loading}
                 type="primary"
-                on:click={() => $queryLogin.refetch()}
+                on:click={qcLogin.refresh}
             >
                 {$t("routes.auth.login.do-login")}
             </Button>

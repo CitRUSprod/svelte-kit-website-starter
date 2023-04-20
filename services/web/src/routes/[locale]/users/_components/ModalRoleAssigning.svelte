@@ -1,10 +1,10 @@
 <script lang="ts">
     import { Button, DropdownMenu, Modal } from "$lib/components"
 
-    import { onDestroy, createEventDispatcher } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
+    import { createEventDispatcher } from "svelte"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { User, Role } from "$lib/types"
@@ -31,36 +31,24 @@
         visible = false
     }
 
-    const queryAssignRoleToUser = useQuery("users.assignRoleToUser", {
-        async queryFn() {
-            const res = await api.users.assignRoleToUser({
+    const qcAssignRoleToUser = createQueryController({
+        fn() {
+            return api.users.assignRoleToUser({
                 id: userId,
                 roleId
             })
-            return res.data
         },
         onSuccess() {
             dispatch("assignRole")
             toasts.add("success", $t("components.modal-role-assigning.role-edited-successfully"))
             close()
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $queryAssignRoleToUser.remove()
     })
 </script>
 
 <Modal
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$queryAssignRoleToUser.isFetching}
+    persistent={$qcAssignRoleToUser.loading}
     bind:visible
 >
     <div>
@@ -68,20 +56,20 @@
     </div>
     <div>
         <DropdownMenu
-            disabled={$queryAssignRoleToUser.isFetching}
+            disabled={$qcAssignRoleToUser.loading}
             {items}
             label={$t("components.modal-role-assigning.role")}
             bind:value={roleId}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryAssignRoleToUser.isFetching} text type="error" on:click={close}>
+        <Button disabled={$qcAssignRoleToUser.loading} text type="error" on:click={close}>
             {$t("components.modal-role-assigning.cancel")}
         </Button>
         <Button
-            loading={$queryAssignRoleToUser.isFetching}
+            loading={$qcAssignRoleToUser.loading}
             type="success"
-            on:click={() => $queryAssignRoleToUser.refetch()}
+            on:click={qcAssignRoleToUser.refresh}
         >
             {$t("components.modal-role-assigning.save")}
         </Button>

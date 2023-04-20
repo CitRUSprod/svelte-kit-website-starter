@@ -1,10 +1,9 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -12,27 +11,15 @@
 
     $: vldResultEmail = vld.user.email(email)
 
-    const querySendPasswordResetEmail = useQuery("profile.sendPasswordResetEmail", {
-        async queryFn() {
-            const res = await api.profile.sendPasswordResetEmail({
+    const qcSendPasswordResetEmail = createQueryController({
+        fn() {
+            return api.profile.sendPasswordResetEmail({
                 email: vldResultEmail.value
             })
-            return res.data
         },
         onSuccess() {
             toasts.add("success", $t("routes.profile.password.reset-link-sent"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $querySendPasswordResetEmail.remove()
     })
 </script>
 
@@ -49,7 +36,7 @@
         </div>
         <div>
             <TextField
-                disabled={$querySendPasswordResetEmail.isFetching}
+                disabled={$qcSendPasswordResetEmail.loading}
                 label={$t("routes.profile.password.email")}
                 placeholder={$t("routes.profile.password.enter-email")}
                 bind:value={email}
@@ -58,9 +45,9 @@
         <div>
             <Button
                 disabled={!vldResultEmail.valid}
-                loading={$querySendPasswordResetEmail.isFetching}
+                loading={$qcSendPasswordResetEmail.loading}
                 type="primary"
-                on:click={() => $querySendPasswordResetEmail.refetch()}
+                on:click={qcSendPasswordResetEmail.refresh}
             >
                 {$t("routes.profile.password.send-reset-link")}
             </Button>

@@ -1,10 +1,9 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -36,45 +35,29 @@
         visible = false
     }
 
-    const queryUpdatePost = useQuery("posts.updatePost", {
-        async queryFn() {
-            const res = await api.posts.updatePost({
+    const qcUpdatePost = createQueryController({
+        fn() {
+            return api.posts.updatePost({
                 id: post.id,
                 title: vldResultTitle.value,
                 content: vldResultContent.value
             })
-            return res.data
         },
         onSuccess(localPost) {
             post = localPost
             toasts.add("success", $t("components.modal-post-editing.post-edited-successfully"))
             close()
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $queryUpdatePost.remove()
     })
 </script>
 
-<Modal
-    class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$queryUpdatePost.isFetching}
-    bind:visible
->
+<Modal class="u:flex u:flex-col u:gap-4 u:w-200" persistent={$qcUpdatePost.loading} bind:visible>
     <div>
         <h1 class="u:text-center">{$t("components.modal-post-editing.post-editing")}</h1>
     </div>
     <div>
         <TextField
-            disabled={$queryUpdatePost.isFetching}
+            disabled={$qcUpdatePost.loading}
             label={$t("components.modal-post-editing.title")}
             placeholder={$t("components.modal-post-editing.enter-title")}
             bind:value={title}
@@ -83,21 +66,21 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$queryUpdatePost.isFetching}
+            disabled={$qcUpdatePost.loading}
             label={$t("components.modal-post-editing.content")}
             placeholder={$t("components.modal-post-editing.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryUpdatePost.isFetching} text type="error" on:click={close}>
+        <Button disabled={$qcUpdatePost.loading} text type="error" on:click={close}>
             {$t("components.modal-post-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$queryUpdatePost.isFetching}
+            loading={$qcUpdatePost.loading}
             type="success"
-            on:click={() => $queryUpdatePost.refetch()}
+            on:click={qcUpdatePost.refresh}
         >
             {$t("components.modal-post-editing.save")}
         </Button>

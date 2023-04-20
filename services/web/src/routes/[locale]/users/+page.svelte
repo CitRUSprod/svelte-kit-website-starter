@@ -2,12 +2,10 @@
     import { Content, Button, Checkbox, SimplePagination } from "$lib/components"
     import { ModalRoleAssigning } from "./_components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { t, localePath, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
     import { Permission } from "$lib/enums"
-    import { qp, dt } from "$lib/utils"
+    import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { PageData } from "./$types"
@@ -16,15 +14,14 @@
 
     let modalRoleAssigning: ModalRoleAssigning
 
-    const params = {
-        page: data.query.page,
-        perPage: data.query.perPage
-    }
-
-    const queryGetUsers = useQuery("users.getUsers", {
+    const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
-        async queryFn() {
-            const res = await api.users.getUsers(
+        params: {
+            page: data.query.page,
+            perPage: data.query.perPage
+        },
+        fn(params) {
+            return api.users.getUsers(
                 qp.removeDefault(
                     {
                         page: params.page,
@@ -33,96 +30,66 @@
                     data.defaultQuery
                 )
             )
-            return res.data
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
-    const queryDataBanUser = {
-        id: 0
-    }
-
-    const queryBanUser = useQuery("users.banUser", {
-        async queryFn() {
-            const res = await api.users.banUser({
-                id: queryDataBanUser.id
+    const qcBanUser = createQueryController({
+        params: {
+            id: 0
+        },
+        fn(params) {
+            return api.users.banUser({
+                id: params.id
             })
-            return res.data
         },
         onSuccess() {
             toasts.add("success", $t("routes.users.user-banned-successfully"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function banUser(id: number) {
-        queryDataBanUser.id = id
-        await $queryBanUser.refetch()
-        await $queryGetUsers.refetch()
+        qcBanUser.params.id = id
+        await qcBanUser.refresh()
+        await qcGetUsers.refresh()
     }
 
-    const queryDataUnbanUser = {
-        id: 0
-    }
-
-    const queryUnbanUser = useQuery("users.unbanUser", {
-        async queryFn() {
-            const res = await api.users.unbanUser({
-                id: queryDataUnbanUser.id
+    const qcUnbanUser = createQueryController({
+        params: {
+            id: 0
+        },
+        fn(params) {
+            return api.users.unbanUser({
+                id: params.id
             })
-            return res.data
         },
         onSuccess() {
             toasts.add("success", $t("routes.users.user-unbanned-successfully"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function unbanUser(id: number) {
-        queryDataUnbanUser.id = id
-        await $queryUnbanUser.refetch()
-        await $queryGetUsers.refetch()
+        qcUnbanUser.params.id = id
+        await qcUnbanUser.refresh()
+        await qcGetUsers.refresh()
     }
 
     async function refetchPage() {
         qp.setForCurrentPage(
             qp.removeDefault(
                 {
-                    page: params.page,
-                    perPage: params.perPage
+                    page: qcGetUsers.params.page,
+                    perPage: qcGetUsers.params.perPage
                 },
                 data.defaultQuery
             )
         )
-        await $queryGetUsers.refetch()
+        await qcGetUsers.refresh()
     }
 
     async function setPage(localPage: number) {
-        params.page = localPage
+        qcGetUsers.params.page = localPage
         await refetchPage()
     }
-
-    onDestroy(() => {
-        $queryGetUsers.remove()
-    })
 </script>
 
 <svelte:head>
@@ -130,7 +97,7 @@
 </svelte:head>
 
 <Content.Default title={$t("routes.users.users")}>
-    {#if $queryGetUsers.data}
+    {#if $qcGetUsers.data}
         <table>
             <thead>
                 <tr
@@ -150,7 +117,7 @@
                 </tr>
             </thead>
             <tbody>
-                {#each $queryGetUsers.data.items as user (user.id)}
+                {#each $qcGetUsers.data.items as user (user.id)}
                     <tr
                         class="u:children:p-2 u:children:border u:children:border-default u:children:text-center u:children:hover:bg-zinc-100 u:dark:children:hover:bg-zinc-900 u:children:duration-200"
                     >
@@ -198,8 +165,8 @@
                             {#if $userData?.role.permissions.includes(Permission.BanUser)}
                                 {#if user.banned}
                                     <Button
-                                        loading={$queryUnbanUser.isFetching &&
-                                            queryDataUnbanUser.id === user.id}
+                                        loading={$qcUnbanUser.loading &&
+                                            qcUnbanUser.params.id === user.id}
                                         type="error"
                                         on:click={() => unbanUser(user.id)}
                                     >
@@ -207,8 +174,8 @@
                                     </Button>
                                 {:else}
                                     <Button
-                                        loading={$queryBanUser.isFetching &&
-                                            queryDataBanUser.id === user.id}
+                                        loading={$qcBanUser.loading &&
+                                            qcBanUser.params.id === user.id}
                                         type="error"
                                         on:click={() => banUser(user.id)}
                                     >
@@ -223,9 +190,9 @@
         </table>
         <div class="u:flex u:justify-center">
             <SimplePagination
-                loading={$queryGetUsers.isFetching}
-                page={$queryGetUsers.data.page}
-                pages={$queryGetUsers.data.pages}
+                loading={$qcGetUsers.loading}
+                page={$qcGetUsers.data.page}
+                pages={$qcGetUsers.data.pages}
                 on:setPage={e => setPage(e.detail)}
             />
         </div>

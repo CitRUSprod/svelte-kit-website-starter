@@ -2,11 +2,9 @@
     import { Content, Button } from "$lib/components"
     import { ModalAvatarRemoving, ModalProfileEditing, ModalPasswordChanging } from "./_components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { t, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
-    import { dt } from "$lib/utils"
+    import { createQueryController, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { PageData } from "./$types"
@@ -18,17 +16,15 @@
     let modalProfileEditing: ModalProfileEditing
     let modalPasswordChanging: ModalPasswordChanging
 
-    const queryDataUploadAvatar = {
-        img: null as File | null
-    }
-
-    const queryUploadAvatar = useQuery("profile.uploadAvatar", {
-        async queryFn() {
-            if (queryDataUploadAvatar.img) {
-                const res = await api.profile.uploadAvatar({
-                    img: queryDataUploadAvatar.img
+    const qcUploadAvatar = createQueryController({
+        params: {
+            img: null as File | null
+        },
+        fn(params) {
+            if (params.img) {
+                return api.profile.uploadAvatar({
+                    img: params.img
                 })
-                return res.data
             } else {
                 throw new Error("File is not selected")
             }
@@ -39,44 +35,25 @@
             })
             data.user = res.data
             toasts.add("success", $t("routes.users.[id].avatar-updated-successfully"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
-    const querySendConfirmationEmail = useQuery("profile.sendConfirmationEmail", {
-        async queryFn() {
-            const res = await api.profile.sendConfirmationEmail()
-            return res.data
+    const qcSendConfirmationEmail = createQueryController({
+        fn() {
+            return api.profile.sendConfirmationEmail()
         },
         onSuccess() {
             toasts.add("success", $t("routes.users.[id].confirmation-email-sent"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function onSelectFile(e: { currentTarget: HTMLInputElement }) {
         if (e.currentTarget.files && e.currentTarget.files.length > 0) {
             const file = e.currentTarget.files[0]
-            queryDataUploadAvatar.img = file
-            await $queryUploadAvatar.refetch()
+            qcUploadAvatar.params.img = file
+            await qcUploadAvatar.refresh()
         }
     }
-
-    onDestroy(() => {
-        $querySendConfirmationEmail.remove()
-    })
 </script>
 
 <svelte:head>
@@ -117,7 +94,7 @@
     {#if $userData?.id === data.user.id}
         <div>
             <Button
-                loading={$queryUploadAvatar.isFetching}
+                loading={$qcUploadAvatar.loading}
                 type="warning"
                 on:click={() => avatarInput.click()}
             >
@@ -137,9 +114,9 @@
             </Button>
             {#if !$userData.confirmedEmail}
                 <Button
-                    loading={$querySendConfirmationEmail.isFetching}
+                    loading={$qcSendConfirmationEmail.loading}
                     type="success"
-                    on:click={() => $querySendConfirmationEmail.refetch()}
+                    on:click={qcSendConfirmationEmail.refresh}
                 >
                     {$t("routes.users.[id].verify-email")}
                 </Button>

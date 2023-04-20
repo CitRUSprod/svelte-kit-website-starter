@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -23,29 +22,17 @@
         vldResultNewPassword.valid &&
         vldResultNewPassword.value === vldResultNewPasswordConfirmation.value
 
-    const queryResetPassword = useQuery("profile.resetPassword", {
-        async queryFn() {
-            const res = await api.profile.resetPassword({
+    const qcResetPassword = createQueryController({
+        fn() {
+            return api.profile.resetPassword({
                 passwordResetToken: data.token,
                 newPassword: vldResultNewPassword.value
             })
-            return res.data
         },
         async onSuccess() {
             toasts.add("success", $t("routes.profile.password.[token].password-reset-successfully"))
             await goto($localePath("/auth/login"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $queryResetPassword.remove()
     })
 </script>
 
@@ -62,7 +49,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryResetPassword.isFetching}
+                disabled={$qcResetPassword.loading}
                 label={$t("routes.profile.password.[token].new-password")}
                 placeholder={$t("routes.profile.password.[token].enter-new-password")}
                 valueType="password"
@@ -71,7 +58,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryResetPassword.isFetching}
+                disabled={$qcResetPassword.loading}
                 label={$t("routes.profile.password.[token].new-password-confirmation")}
                 placeholder={$t("routes.profile.password.[token].enter-new-password-again")}
                 valueType="password"
@@ -81,9 +68,9 @@
         <div>
             <Button
                 disabled={!completedForm}
-                loading={$queryResetPassword.isFetching}
+                loading={$qcResetPassword.loading}
                 type="primary"
-                on:click={() => $queryResetPassword.refetch()}
+                on:click={qcResetPassword.refresh}
             >
                 {$t("routes.profile.password.[token].reset")}
             </Button>

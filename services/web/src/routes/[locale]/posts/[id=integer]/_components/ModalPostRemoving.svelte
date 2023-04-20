@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Button, Modal } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { Post } from "$lib/types"
@@ -22,35 +21,19 @@
         visible = false
     }
 
-    const queryDeletePost = useQuery("posts.deletePost", {
-        async queryFn() {
-            const res = await api.posts.deletePost({ id: post.id })
-            return res.data
+    const qcDeletePost = createQueryController({
+        fn() {
+            return api.posts.deletePost({ id: post.id })
         },
         async onSuccess() {
             toasts.add("success", $t("components.modal-post-removing.post-removed-successfully"))
             close()
             await goto($localePath("/posts"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $queryDeletePost.remove()
     })
 </script>
 
-<Modal
-    class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$queryDeletePost.isFetching}
-    bind:visible
->
+<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcDeletePost.loading} bind:visible>
     <div>
         <h1>{$t("components.modal-post-removing.post-removing")}</h1>
     </div>
@@ -58,14 +41,10 @@
         <p>{$t("components.modal-post-removing.post-removing-question")}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryDeletePost.isFetching} text type="success" on:click={close}>
+        <Button disabled={$qcDeletePost.loading} text type="success" on:click={close}>
             {$t("components.modal-post-removing.cancel")}
         </Button>
-        <Button
-            loading={$queryDeletePost.isFetching}
-            type="error"
-            on:click={() => $queryDeletePost.refetch()}
-        >
+        <Button loading={$qcDeletePost.loading} type="error" on:click={qcDeletePost.refresh}>
             {$t("components.modal-post-removing.remove")}
         </Button>
     </div>

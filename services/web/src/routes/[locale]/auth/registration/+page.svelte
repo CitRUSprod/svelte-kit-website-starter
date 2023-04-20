@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -25,39 +24,27 @@
         vldResultPassword.valid &&
         vldResultPassword.value === vldResultPasswordConfirmation.value
 
-    const queryRegister = useQuery("auth.register", {
-        async queryFn() {
-            const res = await api.auth.register({
+    const qcRegister = createQueryController({
+        fn() {
+            return api.auth.register({
                 email: vldResultEmail.value,
                 username: vldResultUsername.value,
                 password: vldResultPassword.value
             })
-            return res.data
         },
         async onSuccess() {
             toasts.add("success", $t("routes.auth.registration.registered-successfully"))
             await goto($localePath("/auth/login"))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
     })
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && completedForm) {
-            await $queryRegister.refetch()
+            await qcRegister.refresh()
             const input = e.target as HTMLInputElement
             input.focus()
         }
     }
-
-    onDestroy(() => {
-        $queryRegister.remove()
-    })
 </script>
 
 <svelte:head>
@@ -74,7 +61,7 @@
         <div>
             <TextField
                 autofocus
-                disabled={$queryRegister.isFetching}
+                disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.email")}
                 bind:value={email}
                 on:keypress={onEnter}
@@ -82,7 +69,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isFetching}
+                disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.username")}
                 bind:value={username}
                 on:keypress={onEnter}
@@ -90,7 +77,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isFetching}
+                disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.password")}
                 valueType="password"
                 bind:value={password}
@@ -99,7 +86,7 @@
         </div>
         <div>
             <TextField
-                disabled={$queryRegister.isFetching}
+                disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.password-confirmation")}
                 valueType="password"
                 bind:value={passwordConfirmation}
@@ -112,9 +99,9 @@
             </Button>
             <Button
                 disabled={!completedForm}
-                loading={$queryRegister.isFetching}
+                loading={$qcRegister.loading}
                 type="primary"
-                on:click={() => $queryRegister.refetch()}
+                on:click={qcRegister.refresh}
             >
                 {$t("routes.auth.registration.register")}
             </Button>

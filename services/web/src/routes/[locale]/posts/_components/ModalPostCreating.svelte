@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Button, TextField, TextArea, Modal } from "$lib/components"
 
-    import { onDestroy } from "svelte"
-    import { useQuery } from "@sveltestack/svelte-query"
     import { goto } from "$app/navigation"
     import { t, localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -30,44 +29,28 @@
         visible = false
     }
 
-    const queryCreatePost = useQuery("posts.createPost", {
-        async queryFn() {
-            const res = await api.posts.createPost({
+    const qcCreatePost = createQueryController({
+        fn() {
+            return api.posts.createPost({
                 title: vldResultTitle.value,
                 content: vldResultContent.value
             })
-            return res.data
         },
         async onSuccess(localPost) {
             toasts.add("success", $t("components.modal-post-creating.post-created-successfully"))
             close()
             await goto($localePath(`/posts/${localPost.id}`))
-        },
-        onError(err: any) {
-            if (err.response) {
-                toasts.add("error", err.response.data.message)
-            } else {
-                toasts.add("error", $t("global.error-occurred"))
-            }
         }
-    })
-
-    onDestroy(() => {
-        $queryCreatePost.remove()
     })
 </script>
 
-<Modal
-    class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$queryCreatePost.isFetching}
-    bind:visible
->
+<Modal class="u:flex u:flex-col u:gap-4 u:w-200" persistent={$qcCreatePost.loading} bind:visible>
     <div>
         <h1 class="u:text-center">{$t("components.modal-post-creating.post-creating")}</h1>
     </div>
     <div>
         <TextField
-            disabled={$queryCreatePost.isFetching}
+            disabled={$qcCreatePost.loading}
             label={$t("components.modal-post-creating.title")}
             placeholder={$t("components.modal-post-creating.enter-title")}
             bind:value={title}
@@ -76,21 +59,21 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$queryCreatePost.isFetching}
+            disabled={$qcCreatePost.loading}
             label={$t("components.modal-post-creating.content")}
             placeholder={$t("components.modal-post-creating.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$queryCreatePost.isFetching} text type="error" on:click={close}>
+        <Button disabled={$qcCreatePost.loading} text type="error" on:click={close}>
             {$t("components.modal-post-creating.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$queryCreatePost.isFetching}
+            loading={$qcCreatePost.loading}
             type="success"
-            on:click={() => $queryCreatePost.refetch()}
+            on:click={qcCreatePost.refresh}
         >
             {$t("components.modal-post-creating.create")}
         </Button>
