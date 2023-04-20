@@ -1,6 +1,7 @@
 import path from "path"
-import { extractorSvelte, presetUno, presetIcons, transformerDirectives } from "unocss"
+import { presetUno, presetIcons, transformerDirectives } from "unocss"
 import { colors } from "@unocss/preset-wind"
+import extractorSvelte from "@unocss/extractor-svelte"
 import { presetBetterNestedColors } from "unocss-preset-better-nested-colors"
 import { presetScrollbar } from "unocss-preset-scrollbar"
 
