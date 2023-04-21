@@ -8,9 +8,7 @@
     import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
-    import type { PageData } from "./$types"
-
-    export let data: PageData
+    export let data
 
     let modalRoleAssigning: ModalRoleAssigning
 
@@ -145,7 +143,7 @@
                         <td>{dt.getFullDate(user.registrationDate, $currentLocale)}</td>
                         <td>
                             <Button
-                                href={$localePath(`/users/${user.id}`)}
+                                href={$localePath(`/users/${String(user.id)}`)}
                                 rel="noopener noreferrer"
                                 target="_blank"
                                 type="info"

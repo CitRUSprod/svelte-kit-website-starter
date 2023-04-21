@@ -2,11 +2,10 @@ import { redirect } from "@sveltejs/kit"
 import { setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
-import type { PageServerLoad } from "./$types"
-
-export const load: PageServerLoad = async e => {
+export async function load(e) {
     if (!e.locals.userData) {
-        throw redirect(302, `/${e.params.locale}`) as unknown
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw redirect(302, `/${e.params.locale as string}`)
     }
 
     const res = await api.auth.logout({ headers: e.request.headers })

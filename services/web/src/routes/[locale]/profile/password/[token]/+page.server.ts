@@ -1,3 +1,3 @@
-import type { PageServerLoad } from "./$types"
-
-export const load: PageServerLoad = e => ({ token: e.params.token })
+export function load(e) {
+    return { token: e.params.token }
+}

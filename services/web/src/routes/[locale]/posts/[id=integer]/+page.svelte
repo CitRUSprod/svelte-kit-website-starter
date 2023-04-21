@@ -7,9 +7,7 @@
     import { Permission } from "$lib/enums"
     import { dt } from "$lib/utils"
 
-    import type { PageData } from "./$types"
-
-    export let data: PageData
+    export let data
 
     let modalPostEditing: ModalPostEditing
     let modalPostRemoving: ModalPostRemoving
@@ -29,7 +27,10 @@
         <ul>
             <ul>
                 <b>{$t("routes.posts.[id].author")}:</b>
-                <a class="u:hover:underline" href={$localePath(`/users/${data.post.author.id}`)}>
+                <a
+                    class="u:hover:underline"
+                    href={$localePath(`/users/${String(data.post.author.id)}`)}
+                >
                     {data.post.author.username}
                 </a>
             </ul>

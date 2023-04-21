@@ -8,9 +8,8 @@
     import * as api from "$lib/api"
 
     import type { DropdownMenuItem } from "$lib/types"
-    import type { PageData } from "./$types"
 
-    export let data: PageData
+    export let data
 
     let modalPostCreating: ModalPostCreating
 
@@ -27,7 +26,7 @@
         params: {
             page: data.query.page,
             perPage: data.query.perPage,
-            sortAndOrder: `${data.query.sort}-${data.query.order}`,
+            sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
             title: data.query.title
         },
         fn(params) {
@@ -112,7 +111,7 @@
             {#each $qcGetPosts.data.items as post (post.id)}
                 <a
                     class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
-                    href={$localePath(`/posts/${post.id}`)}
+                    href={$localePath(`/posts/${String(post.id)}`)}
                 >
                     <div>
                         <h3>{post.title}</h3>

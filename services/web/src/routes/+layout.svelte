@@ -4,12 +4,10 @@
     import { browser } from "$app/environment"
     import { darkTheme, userData } from "$lib/stores"
 
-    import type { LayoutData } from "./$types"
-
     import "uno.css"
     import "@unocss/reset/tailwind.css"
 
-    export let data: LayoutData
+    export let data
 
     $: $userData = data.userData
 

@@ -1,8 +1,6 @@
 import * as api from "$lib/api"
 
-import type { PageServerLoad } from "./$types"
-
-export const load: PageServerLoad = async e => {
+export async function load(e) {
     const res = await api.users.getUser({
         headers: e.request.headers,
         id: parseInt(e.params.id)

@@ -1,6 +1,4 @@
-import type { LayoutLoad } from "./$types"
-
-export const load: LayoutLoad = async ({ parent: p }) => {
+export async function load({ parent: p }) {
     const { route } = await p()
     return { route }
 }

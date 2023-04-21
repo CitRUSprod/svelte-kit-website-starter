@@ -1,9 +1,7 @@
 import { redirect } from "@sveltejs/kit"
 import * as api from "$lib/api"
 
-import type { PageServerLoad } from "./$types"
-
-export const load: PageServerLoad = async e => {
+export async function load(e) {
     try {
         const res = await api.posts.getPost({
             headers: e.request.headers,
@@ -11,6 +9,7 @@ export const load: PageServerLoad = async e => {
         })
         return { post: res.data }
     } catch {
-        throw redirect(302, `/${e.params.locale}/posts`) as unknown
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw redirect(302, `/${e.params.locale as string}/posts`)
     }
 }

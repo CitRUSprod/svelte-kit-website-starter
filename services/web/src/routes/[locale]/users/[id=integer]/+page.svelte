@@ -7,9 +7,7 @@
     import { createQueryController, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
-    import type { PageData } from "./$types"
-
-    export let data: PageData
+    export let data
 
     let avatarInput: HTMLInputElement
     let modalAvatarRemoving: ModalAvatarRemoving

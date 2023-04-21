@@ -3,7 +3,7 @@ import { defaultLocale, locales } from "$lib/locales"
 import { getLocaleAndRoute, setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
-import type { Handle, HandleServerError } from "@sveltejs/kit"
+import type { Handle } from "@sveltejs/kit"
 import type { User } from "$lib/types"
 
 const supportedLocales = locales.get()
@@ -50,6 +50,15 @@ const authHandle: Handle = async ({ event: e, resolve }) => {
 
 export const handle = sequence(localeHandle, authHandle)
 
-export const handleError: HandleServerError = ({ error: err }) => ({
-    message: (err as any).message
-})
+export function handleError({ error }) {
+    if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+    ) {
+        return { message: error.message }
+    } else {
+        return { message: "Unexpected error" }
+    }
+}

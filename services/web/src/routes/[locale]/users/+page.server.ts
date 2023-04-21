@@ -1,8 +1,6 @@
 import { qp } from "$lib/utils"
 import * as api from "$lib/api"
 
-import type { PageServerLoad } from "./$types"
-
 interface QueryParams {
     page: number
     perPage: number
@@ -13,7 +11,7 @@ const defaultQuery: QueryParams = {
     perPage: 10
 }
 
-export const load: PageServerLoad = async e => {
+export async function load(e) {
     const query = qp.get(e.url.searchParams, defaultQuery, [], ["page", "perPage"])
 
     const getUsersRes = await api.users.getUsers({

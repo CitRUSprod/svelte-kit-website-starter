@@ -8,9 +8,7 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    import type { PageData } from "./$types"
-
-    export let data: PageData
+    export let data
 
     let newPassword = ""
     let newPasswordConfirmation = ""

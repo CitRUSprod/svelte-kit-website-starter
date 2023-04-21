@@ -1,9 +1,7 @@
 <script lang="ts">
     import { Header, Footer } from "./_components"
 
-    import type { LayoutData } from "./$types"
-
-    export let data: LayoutData
+    export let data
 </script>
 
 <Header route={data.route} />
