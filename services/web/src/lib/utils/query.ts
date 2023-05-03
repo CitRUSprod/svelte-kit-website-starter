@@ -31,7 +31,7 @@ interface QueryControllerOptions<T, K extends QueryControllerParams | undefined>
 export function createQueryController<T, K extends QueryControllerParams | undefined = undefined>(
     options: QueryControllerOptions<T, K>
 ) {
-    const { subscribe, update } = writable<QueryControllerStoreData<T>>({
+    const { subscribe, update, set } = writable<QueryControllerStoreData<T>>({
         data: options.initialData,
         error: undefined,
         loading: false
@@ -91,6 +91,8 @@ export function createQueryController<T, K extends QueryControllerParams | undef
 
     const queryController = {
         subscribe,
+        update,
+        set,
         ...(options.params ? { params: options.params } : {}),
         refresh
     }

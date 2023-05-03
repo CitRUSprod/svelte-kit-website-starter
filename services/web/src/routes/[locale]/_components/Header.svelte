@@ -2,8 +2,7 @@
     import { Button } from "$lib/components"
 
     import classNames from "classnames"
-    import { page } from "$app/stores"
-    import { darkTheme, userData } from "$lib/stores"
+    import { darkTheme, userData, pageSearchParams } from "$lib/stores"
     import { t, currentLocale, locales, localePath } from "$lib/locales"
     import { env } from "$lib/utils"
 
@@ -41,7 +40,7 @@
             {#each $locales as locale, index (locale)}
                 <Button
                     class={classNames("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
-                    href={$localePath(`${route}${$page.url.search}`, locale)}
+                    href={$localePath(`${route}${$pageSearchParams}`, locale)}
                     type="primary"
                 >
                     {locale.toUpperCase()}

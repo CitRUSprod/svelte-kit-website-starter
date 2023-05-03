@@ -1,3 +1,5 @@
+import { pageSearchParams } from "$lib/stores"
+
 export function get<T extends Record<string, any>>(
     params: URLSearchParams,
     defaultParams: T,
@@ -43,6 +45,8 @@ export function setForCurrentPage(query: Record<string, any>) {
             url.searchParams.delete(key)
         }
     }
+
+    pageSearchParams.set(url.search)
 
     history.pushState(null, "", url.toString())
 }

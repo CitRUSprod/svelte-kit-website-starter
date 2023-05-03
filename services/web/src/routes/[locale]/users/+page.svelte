@@ -31,6 +31,14 @@
         }
     })
 
+    function watchForData(d: typeof data) {
+        qcGetUsers.params.page = d.query.page
+        qcGetUsers.params.perPage = d.query.perPage
+        $qcGetUsers.data = d.itemsPage
+    }
+
+    $: watchForData(data)
+
     const qcBanUser = createQueryController({
         params: {
             id: 0

@@ -2,6 +2,7 @@
     import { PageProgressBar, ToastContainer } from "./_components"
 
     import { browser } from "$app/environment"
+    import { invalidateAll, afterNavigate } from "$app/navigation"
     import { darkTheme, userData } from "$lib/stores"
 
     import "uno.css"
@@ -14,6 +15,17 @@
     if (browser) {
         darkTheme.sync()
     }
+
+    afterNavigate(n => {
+        if (n.from && n.to) {
+            const from = `${n.from.url.origin}${n.from.url.pathname}`
+            const to = `${n.to.url.origin}${n.to.url.pathname}`
+
+            if (from === to) {
+                invalidateAll()
+            }
+        }
+    })
 </script>
 
 <PageProgressBar />

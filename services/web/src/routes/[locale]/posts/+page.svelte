@@ -46,6 +46,16 @@
         }
     })
 
+    function watchForData(d: typeof data) {
+        qcGetPosts.params.page = d.query.page
+        qcGetPosts.params.perPage = d.query.perPage
+        qcGetPosts.params.sortAndOrder = `${d.query.sort as string}-${d.query.order as string}`
+        qcGetPosts.params.title = d.query.title
+        $qcGetPosts.data = d.itemsPage
+    }
+
+    $: watchForData(data)
+
     async function refetchPage() {
         const [sort, order] = qcGetPosts.params.sortAndOrder.split("-")
         qp.setForCurrentPage(
