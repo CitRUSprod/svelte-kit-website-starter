@@ -6,6 +6,10 @@ export interface Role {
     permissions: Array<Permission>
 }
 
+export interface RoleWithProtected extends Role {
+    protected: boolean
+}
+
 export interface User {
     id: number
     email?: string
