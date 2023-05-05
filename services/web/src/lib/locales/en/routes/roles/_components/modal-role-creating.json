@@ -1,0 +1,11 @@
+{
+    "add": "Add",
+    "cancel": "Cancel",
+    "create": "Create",
+    "empty": "empty",
+    "name": "Name",
+    "permission": "Permission",
+    "permissions": "Permissions",
+    "role-created-successfully": "Role successfully created",
+    "role-creating": "Creating a role"
+}

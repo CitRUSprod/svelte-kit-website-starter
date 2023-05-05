@@ -1,0 +1,7 @@
+{
+    "cancel": "Отмена",
+    "remove": "Удалить",
+    "role-removed-successfully": "Роль успешно удалена",
+    "role-removing": "Удаление роли",
+    "role-removing-question": "Вы уверены, что хотите удалить роль <b>{{role}}</b>?"
+}

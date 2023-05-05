@@ -38,7 +38,9 @@
             {$t("components.header.users")}
         </Button>
         {#if $userData?.role.permissions.includes(Permission.AssignRole)}
-            <Button href={$localePath("/roles")} type="primary">Роли</Button>
+            <Button href={$localePath("/roles")} type="primary">
+                {$t("components.header.roles")}
+            </Button>
         {/if}
         <div class="u:flex u:items-center u:gap-1 u:mx-1">
             {#each $locales as locale, index (locale)}

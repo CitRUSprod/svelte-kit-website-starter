@@ -2,6 +2,7 @@
     import { Content, Button } from "$lib/components"
     import { ModalRoleCreating, ModalRoleEditing, ModalRoleRemoving } from "./_components"
 
+    import { t } from "$lib/locales"
     import { userData } from "$lib/stores"
     import { Permission } from "$lib/enums"
     import { createQueryController } from "$lib/utils"
@@ -22,20 +23,20 @@
 </script>
 
 <svelte:head>
-    <title>Роли</title>
+    <title>{$t("routes.roles.roles")}</title>
 </svelte:head>
 
-<Content.Default title="Роли">
+<Content.Default title={$t("routes.roles.roles")}>
     {#if $qcGetRoles.data}
         <table>
             <thead>
                 <tr
                     class="u:children:p-2 u:children:border u:children:border-default u:children:bg-zinc-200 u:dark:children:bg-zinc-700"
                 >
-                    <th>Название</th>
-                    <th>Разрешения</th>
+                    <th>{$t("routes.roles.name")}</th>
+                    <th>{$t("routes.roles.permissions")}</th>
                     {#if $userData?.role.permissions.includes(Permission.CreateRole)}
-                        <th>Действия</th>
+                        <th>{$t("routes.roles.actions")}</th>
                     {/if}
                 </tr>
             </thead>
@@ -49,7 +50,7 @@
                             {#if role.permissions.length > 0}
                                 {role.permissions.join(", ")}
                             {:else}
-                                <span class="u:opacity-30">(пусто)</span>
+                                <span class="u:opacity-30">({$t("routes.roles.empty")})</span>
                             {/if}
                         </td>
                         {#if $userData?.role.permissions.includes(Permission.CreateRole)}
@@ -59,13 +60,13 @@
                                         type="warning"
                                         on:click={() => modalRoleEditing.open(role)}
                                     >
-                                        Изменить
+                                        {$t("routes.roles.edit")}
                                     </Button>
                                     <Button
                                         type="error"
                                         on:click={() => modalRoleRemoving.open(role)}
                                     >
-                                        Удалить
+                                        {$t("routes.roles.remove")}
                                     </Button>
                                 {/if}
                             </td>
@@ -75,7 +76,9 @@
             </tbody>
         </table>
         <div class="u:flex u:justify-center">
-            <Button type="success" on:click={modalRoleCreating.open}>Создать роль</Button>
+            <Button type="success" on:click={modalRoleCreating.open}>
+                {$t("routes.roles.create-role")}
+            </Button>
         </div>
     {/if}
 </Content.Default>

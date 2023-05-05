@@ -65,7 +65,11 @@ const config: Config = {
         ["routes/users/[id]/index", [/^\/users\/\d+$/]],
         ["routes/users/[id]/_components/modal-avatar-removing", [/^\/users\/\d+$/]],
         ["routes/users/[id]/_components/modal-password-changing", [/^\/users\/\d+$/]],
-        ["routes/users/[id]/_components/modal-profile-editing", [/^\/users\/\d+$/]]
+        ["routes/users/[id]/_components/modal-profile-editing", [/^\/users\/\d+$/]],
+        ["routes/roles/index", ["/roles"]],
+        ["routes/roles/_components/modal-role-creating", ["/roles"]],
+        ["routes/roles/_components/modal-role-editing", ["/roles"]],
+        ["routes/roles/_components/modal-role-removing", ["/roles"]]
     )
 }
 

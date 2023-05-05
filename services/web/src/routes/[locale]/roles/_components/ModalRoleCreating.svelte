@@ -2,6 +2,7 @@
     import { Button, TextField, DropdownMenu, Modal } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
+    import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
@@ -46,7 +47,7 @@
         },
         async onSuccess() {
             dispatch("createRole")
-            toasts.add("success", "Роль успешно создана")
+            toasts.add("success", $t("components.modal-role-creating.role-created-successfully"))
             close()
         }
     })
@@ -66,17 +67,21 @@
 
 <Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcCreateRole.loading} bind:visible>
     <div>
-        <h1 class="u:text-center">Создание роли</h1>
+        <h1 class="u:text-center">{$t("components.modal-role-creating.role-creating")}</h1>
     </div>
     <div>
-        <TextField disabled={$qcCreateRole.loading} label="Название" bind:value={name} />
+        <TextField
+            disabled={$qcCreateRole.loading}
+            label={$t("components.modal-role-creating.name")}
+            bind:value={name}
+        />
     </div>
     <div>
         <div class="u:relative u:border u:border-default u:rounded">
             <div
                 class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-default u:text-xs u:select-none u:pointer-events-none u:z-1"
             >
-                Разрешения
+                {$t("components.modal-role-creating.permissions")}
             </div>
             <div class="u:flex u:flex-wrap u:gap-1 u:p-3">
                 {#each selectedPermissions as permission (permission)}
@@ -91,7 +96,9 @@
                         </button>
                     </div>
                 {:else}
-                    <div class="u:w-full u:text-center u:opacity-30">(пусто)</div>
+                    <div class="u:w-full u:text-center u:opacity-30">
+                        ({$t("components.modal-role-creating.empty")})
+                    </div>
                 {/each}
             </div>
         </div>
@@ -101,7 +108,7 @@
             <DropdownMenu
                 disabled={items.length === 0 || $qcCreateRole.loading}
                 {items}
-                label="Разрешение"
+                label={$t("components.modal-role-creating.permission")}
                 bind:value={currentPermission}
             />
         </div>
@@ -111,19 +118,21 @@
                 type="success"
                 on:click={addPermission}
             >
-                Добавить
+                {$t("components.modal-role-creating.add")}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreateRole.loading} text type="error" on:click={close}>Отмена</Button>
+        <Button disabled={$qcCreateRole.loading} text type="error" on:click={close}>
+            {$t("components.modal-role-creating.cancel")}
+        </Button>
         <Button
             disabled={!vldResultName.valid}
             loading={$qcCreateRole.loading}
             type="success"
             on:click={qcCreateRole.refresh}
         >
-            Создать
+            {$t("components.modal-role-creating.create")}
         </Button>
     </div>
 </Modal>
