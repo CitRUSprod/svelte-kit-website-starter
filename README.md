@@ -89,3 +89,26 @@ All environment variables are written to the `.env` file. If it doesn't exist, j
 ```sh
 scripts/clone-env
 ```
+
+### Migrations and seeds
+
+The project uses `prisma` to work with the database.
+
+Migrations and seeds are located in `services/api/src/prisma` in the `migrations` folder and `seeds.ts` file. To work with them, you need to go to the api service directory:
+
+```sh
+# Development
+cd services/api
+
+# Production
+scripts/prod exec api sh
+```
+
+Then you can enter any of the following commands:
+
+```sh
+pnpm prisma:migrations:create # Create migrations
+pnpm prisma:migrations:run # Run migrations
+pnpm prisma:migrations:reset # Reset migrations
+pnpm prisma:seeds:run # Run seeds
+```
