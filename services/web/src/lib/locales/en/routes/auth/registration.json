@@ -1,0 +1,10 @@
+{
+    "email": "Email",
+    "login": "Login",
+    "password": "Password",
+    "password-confirmation": "Password confirmation",
+    "register": "Register",
+    "registered-successfully": "You have successfully registered",
+    "registration": "Registration",
+    "username": "Username"
+}

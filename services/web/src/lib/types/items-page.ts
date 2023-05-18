@@ -1,7 +1,7 @@
-export interface ItemsPage<T = any> {
-    pageNumber: number
-    pageCount: number
-    itemsPerPage: number
-    itemCount: number
+export interface ItemsPage<T> {
+    page: number
+    pages: number
+    perPage: number
+    totalItems: number
     items: Array<T>
 }

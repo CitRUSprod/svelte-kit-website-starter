@@ -1,0 +1,12 @@
+{
+    "author": "Author",
+    "create-post": "Create a new post",
+    "creation-date-asc": "Creation date (Earliest)",
+    "creation-date-desc": "Creation date (Latest)",
+    "enter-title": "Enter title...",
+    "posts": "Posts",
+    "search": "Search",
+    "sorting": "Sorting",
+    "title-asc": "Title (A-Z)",
+    "title-desc": "Title (Z-A)"
+}

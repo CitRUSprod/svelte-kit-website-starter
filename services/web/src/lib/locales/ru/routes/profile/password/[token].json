@@ -1,0 +1,9 @@
+{
+    "enter-new-password": "Введите новый пароль...",
+    "enter-new-password-again": "Введите новый пароль снова...",
+    "new-password": "Новый пароль",
+    "new-password-confirmation": "Подтверждение нового пароля",
+    "password-reset": "Сброс пароля",
+    "password-reset-successfully": "Пароль успешно сброшен",
+    "reset": "Сбросить"
+}

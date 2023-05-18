@@ -1,11 +1,22 @@
-import type { Role } from "$lib/enums"
+import type { Permission } from "$lib/enums"
+
+export interface Role {
+    id: number
+    name: string
+    permissions: Array<Permission>
+}
+
+export interface RoleWithProtected extends Role {
+    protected: boolean
+}
 
 export interface User {
     id: number
-    email: string
+    email?: string
     username: string
-    password: string
     role: Role
-    verified: boolean
+    confirmedEmail?: boolean
+    banned: boolean
     registrationDate: string
+    avatar: string | null
 }

@@ -20,17 +20,17 @@ const config = {
             parser: "any-eslint-parser"
         },
         {
-            files: ["*.html"],
-            parser: "any-eslint-parser",
-            rules: {
-                "prettier/prettier": [2, { parser: "html" }]
-            }
-        },
-        {
             files: ["*.md"],
             parser: "any-eslint-parser",
             rules: {
                 "prettier/prettier": [2, { parser: "markdown" }]
+            }
+        },
+        {
+            files: ["*.html"],
+            parser: "any-eslint-parser",
+            rules: {
+                "prettier/prettier": [2, { parser: "html" }]
             }
         },
         {
@@ -45,9 +45,8 @@ const config = {
                 project: "./services/*/tsconfig.eslint.json"
             },
             rules: {
-                "@ota-meshi/svelte/valid-compile": 0,
-                "@ota-meshi/svelte/indent": 0,
-                "@ota-meshi/svelte/first-attribute-linebreak": 0
+                "svelte/indent": 0,
+                "svelte/first-attribute-linebreak": 0
             }
         }
     ]

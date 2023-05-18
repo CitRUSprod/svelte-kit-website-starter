@@ -1,3 +1,5 @@
+import { pageSearchParams } from "$lib/stores"
+
 export function get<T extends Record<string, any>>(
     params: URLSearchParams,
     defaultParams: T,
@@ -21,9 +23,7 @@ export function get<T extends Record<string, any>>(
 export function removeDefault<T extends Record<string, any>>(params: T, defaultParams: T) {
     const result: Record<string, any> = {}
 
-    const keys = Object.keys(params)
-
-    for (const key of keys) {
+    for (const key of Object.keys(params)) {
         if (params[key] !== defaultParams[key]) {
             result[key] = params[key]
         }
@@ -35,15 +35,18 @@ export function removeDefault<T extends Record<string, any>>(params: T, defaultP
 export function setForCurrentPage(query: Record<string, any>) {
     const url = new URL(location.href)
     url.search = ""
-    const keys = Object.keys(query)
 
-    for (const key of keys) {
-        if (query[key]) {
-            url.searchParams.set(key, query[key])
+    for (const key of Object.keys(query)) {
+        const value = query[key]
+
+        if (value) {
+            url.searchParams.set(key, value.toString())
         } else {
             url.searchParams.delete(key)
         }
     }
+
+    pageSearchParams.set(url.search)
 
     history.pushState(null, "", url.toString())
 }

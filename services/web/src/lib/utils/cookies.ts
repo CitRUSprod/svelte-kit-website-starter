@@ -1,40 +1,48 @@
-import { parse } from "cookie"
+import { parse } from "set-cookie-parser"
+import { getHeader } from "$lib/utils"
 
-export { parse }
+import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
+import type { Cookies, ServerLoadEvent } from "@sveltejs/kit"
 
-export function getSetFromHeaders(headers: Headers | Record<string, any>): Array<string> {
-    const header = "set-cookie"
-    const setCookie =
-        headers instanceof Headers ? headers.get(header)?.split(", ") : headers[header]
+const cookieList = ["accessToken", "refreshToken"]
 
-    if (Array.isArray(setCookie)) {
-        return setCookie
-    } else {
-        return setCookie ? [setCookie] : []
+export function setCookies(
+    cookies: Cookies,
+    headers: AxiosResponseHeaders | RawAxiosResponseHeaders
+) {
+    const rawCookies = getHeader<Array<string>>(headers, "set-cookie") ?? []
+    const newCookies = parse(rawCookies)
+
+    for (const { name, value, sameSite, ...opts } of newCookies) {
+        if (!("httpOnly" in opts)) opts.httpOnly = false
+        cookies.set(name, value, opts)
     }
 }
 
-export function getKeyValuePairs(cookieArray: Array<string>) {
-    return cookieArray.map(c => c.split("; ")[0])
+export function uniqCookies(cookies: Array<string>) {
+    const cookiesObject: Record<string, string> = {}
+
+    for (const cookie of cookies) {
+        const parsedCookie = parse(cookie)[0]
+        cookiesObject[parsedCookie.name] = cookie
+    }
+
+    return Object.values(cookiesObject)
 }
 
-export function merge(...cookieArrays: Array<Array<string> | undefined>) {
-    const cookieArray: Array<string> = []
+export function setCookiesInHeaders(e: ServerLoadEvent) {
+    const newCookies: Array<string> = []
 
-    for (const arr of cookieArrays) {
-        if (arr) {
-            cookieArray.push(...arr)
-        }
+    for (const key of cookieList) {
+        const value = e.cookies.get(key)
+        if (value) newCookies.push(`${key}=${value}`)
     }
 
-    const obj: Record<string, string> = {}
+    const oldCookies = e.request.headers.get("cookie")
 
-    for (const cookie of cookieArray) {
-        const name = cookie.split("=")[0]
-        obj[name] = cookie
+    const cookies = uniqCookies([...(oldCookies?.split("; ") ?? []), ...newCookies])
+
+    if (cookies.length > 0) {
+        e.request.headers.set("cookie", cookies.join("; "))
     }
-
-    const result = Object.values(obj)
-
-    return result
 }

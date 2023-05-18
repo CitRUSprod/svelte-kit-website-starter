@@ -1,7 +1,7 @@
 /** @type {import("stylelint").Configuration} */
 const config = {
     customSyntax: "postcss-html",
-    extends: ["@citrus-linting/stylelint-config", "stylelint-config-prettier"],
+    extends: ["@citrus-linting/stylelint-config"],
     plugins: ["stylelint-prettier"],
     rules: {
         "prettier/prettier": true,

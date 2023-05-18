@@ -1,22 +1,67 @@
 import { FastifyPluginCallback } from "fastify"
-import registrationRoute from "./registration"
-import loginRoute from "./login"
-import logoutRoute from "./logout"
-import refreshRoute from "./refresh"
-import userRoute from "./user"
-import passwordRoute from "./password"
-import verificationRoute from "./verification"
+import { Unauthorized } from "http-errors"
+import { parseByAjvSchema } from "$/utils"
+import * as schemas from "./schemas"
+import * as handlers from "./handlers"
 
-const route: FastifyPluginCallback = (app, opts, done) => {
-    app.register(registrationRoute, { prefix: "/registration" })
-        .register(loginRoute, { prefix: "/login" })
-        .register(logoutRoute, { prefix: "/logout" })
-        .register(refreshRoute, { prefix: "/refresh" })
-        .register(userRoute, { prefix: "/user" })
-        .register(passwordRoute, { prefix: "/password" })
-        .register(verificationRoute, { prefix: "/verification" })
+export const authRoutes: FastifyPluginCallback = (app, options, done) => {
+    app.post<{ Body: schemas.RegisterBody }>("/register", {
+        schema: {
+            tags: ["auth"],
+            body: schemas.registerBody
+        },
+        async handler(req, reply) {
+            const data = await handlers.register(app, { body: req.body })
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{ Body: schemas.LoginBody }>("/login", {
+        schema: {
+            tags: ["auth"],
+            body: schemas.loginBody
+        },
+        async handler(req, reply) {
+            const data = await handlers.login(app, { body: req.body })
+            await reply.sendData(data)
+        }
+    })
+
+    app.post("/logout", {
+        schema: {
+            tags: ["auth"]
+        },
+        async handler(req, reply) {
+            let cookies: schemas.LogoutCookies
+
+            try {
+                cookies = parseByAjvSchema(schemas.logoutCookies, req.cookies, "cookies")
+            } catch (err: any) {
+                throw new Unauthorized(err.message)
+            }
+
+            const data = await handlers.logout(app, { cookies })
+            await reply.sendData(data)
+        }
+    })
+
+    app.post("/refresh", {
+        schema: {
+            tags: ["auth"]
+        },
+        async handler(req, reply) {
+            let cookies: schemas.RefreshTokensCookies
+
+            try {
+                cookies = parseByAjvSchema(schemas.refreshTokensCookies, req.cookies, "cookies")
+            } catch (err: any) {
+                throw new Unauthorized(err.message)
+            }
+
+            const data = await handlers.refreshTokens(app, { cookies })
+            await reply.sendData(data)
+        }
+    })
 
     done()
 }
-
-export default route

@@ -1,32 +1,35 @@
 <script lang="ts">
+    import { onDestroy } from "svelte"
     import NProgress from "nprogress"
-    import { navigating } from "$app/stores"
+    import { beforeNavigate, afterNavigate } from "$app/navigation"
 
     NProgress.configure({
         showSpinner: false
     })
 
-    function watchForChanging(changing: boolean) {
-        if (changing) {
-            NProgress.start()
-        } else {
-            NProgress.done()
-        }
-    }
+    beforeNavigate(() => {
+        NProgress.start()
+    })
 
-    $: watchForChanging(!!$navigating)
+    afterNavigate(() => {
+        NProgress.done()
+    })
+
+    onDestroy(() => {
+        NProgress.done()
+    })
 </script>
 
 {#if false}
     <div />
 {/if}
 
-<style lang="postcss" global>
+<style global lang="postcss">
     #nprogress {
-        @apply pointer-events-none;
+        @apply u\:pointer-events-none;
+    }
 
-        .bar {
-            @apply fixed top-0 left-0 w-full h-[2px] bg-green-500 z-[1000];
-        }
+    #nprogress .bar {
+        @apply u\:fixed u\:top-0 u\:left-0 u\:w-full u\:h-0.5 u\:bg-green-500 u\:z-1000;
     }
 </style>

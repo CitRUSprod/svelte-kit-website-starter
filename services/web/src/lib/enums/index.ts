@@ -1,1 +1,1 @@
-export { Role } from "./role"
+export * from "./permission"

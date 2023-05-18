@@ -1,26 +1,44 @@
 <script lang="ts">
-    import { fade } from "svelte/transition"
+    import { Dialog, Transition, TransitionChild } from "@rgossiaux/svelte-headlessui"
 
-    export let visible: boolean
+    import classNames from "classnames"
+
+    export let visible = false
     export let persistent = false
 
-    let klass = ""
+    let klass: string | undefined = undefined
     export { klass as class }
 
-    function hide() {
+    function close() {
         if (!persistent) {
             visible = false
         }
     }
 </script>
 
-{#if visible}
-    <div class="fixed top-0 left-0 w-full h-full z-[1000]" transition:fade>
-        <input class="modal-toggle" type="checkbox" bind:checked={visible} />
-        <div class="modal" on:click={hide}>
-            <div class="modal-box {klass}" on:click|stopPropagation>
-                <slot />
+<Transition appear show={visible}>
+    <Dialog on:close={close}>
+        <TransitionChild
+            enter="u:ease-out u:duration-300"
+            enterFrom="u:opacity-0"
+            enterTo="u:opacity-100"
+            leave="u:ease-in u:duration-200"
+            leaveFrom="u:opacity-100"
+            leaveTo="u:opacity-0"
+        >
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div
+                class="u:fixed u:inset-0 u:flex u:justify-center u:items-center u:p-4 u:bg-black u:bg-opacity-30"
+                on:click={close}
+            >
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div
+                    class={classNames("u:p-8 u:bg-content u:shadow-md u:rounded-md", klass)}
+                    on:click|stopPropagation
+                >
+                    <slot />
+                </div>
             </div>
-        </div>
-    </div>
-{/if}
+        </TransitionChild>
+    </Dialog>
+</Transition>

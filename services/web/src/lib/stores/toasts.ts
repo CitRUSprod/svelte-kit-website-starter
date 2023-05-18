@@ -11,7 +11,7 @@ interface Toast {
 type Toasts = Array<Readonly<Toast>>
 
 const writableToasts = writable<Toasts>([])
-const { subscribe } = derived(writableToasts, l => l as Readonly<Toasts>)
+const { subscribe } = derived(writableToasts, toasts => toasts as Readonly<Toasts>)
 
 const { update } = writableToasts
 

@@ -2,6 +2,7 @@
 .svelte-kit
 .vscode
 *.log
-/volumes
+/storage/*
+!/storage/.gitkeep
 dist
 node_modules
