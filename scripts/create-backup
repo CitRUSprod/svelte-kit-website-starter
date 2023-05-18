@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+SCRIPTS_DIR=$(dirname "$0")
+ROOT_DIR=$SCRIPTS_DIR/..
+STORAGE_DIR=$ROOT_DIR/storage
+
+cd "$STORAGE_DIR" || exit
+sudo mkdir -p backups
+sudo tar -zcvf backups/"$(date -u +'%Y-%m-%d_%H-%M-%S')".tar.gz postgres files > /dev/null
+
+exit 0

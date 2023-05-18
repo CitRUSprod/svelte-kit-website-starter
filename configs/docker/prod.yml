@@ -24,3 +24,7 @@ services:
         extends:
             file: ./base.yml
             service: postgres
+    backups:
+        extends:
+            file: ./base.yml
+            service: backups

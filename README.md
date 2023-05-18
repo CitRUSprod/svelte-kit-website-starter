@@ -112,3 +112,17 @@ pnpm prisma:migrations:run # Run migrations
 pnpm prisma:migrations:reset # Reset migrations
 pnpm prisma:seeds:run # Run seeds
 ```
+
+### Backups
+
+Backups are placed in `storage/backups` folder. They are automatic in production mode. For manual backup you can use this command:
+
+```sh
+scripts/create-backup
+```
+
+To restore a database from backup you can use this command:
+
+```sh
+scripts/restore-backup [YYYY-MM-DD_hh-mm-ss] # For example 2020-05-12_21-35-00
+```
