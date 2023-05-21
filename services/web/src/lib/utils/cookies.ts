@@ -4,8 +4,6 @@ import { getHeader } from "$lib/utils"
 import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
 import type { Cookies, ServerLoadEvent } from "@sveltejs/kit"
 
-const cookieList = ["accessToken", "refreshToken"]
-
 export function setCookies(
     cookies: Cookies,
     headers: AxiosResponseHeaders | RawAxiosResponseHeaders
@@ -32,10 +30,10 @@ export function uniqCookies(cookies: Array<string>) {
 
 export function setCookiesInHeaders(e: ServerLoadEvent) {
     const newCookies: Array<string> = []
+    const cookieList = e.cookies.getAll()
 
-    for (const key of cookieList) {
-        const value = e.cookies.get(key)
-        if (value) newCookies.push(`${key}=${value}`)
+    for (const cookie of cookieList) {
+        newCookies.push(`${cookie.name}=${cookie.value}`)
     }
 
     const oldCookies = e.request.headers.get("cookie")
