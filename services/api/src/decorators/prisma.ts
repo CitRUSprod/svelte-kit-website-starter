@@ -23,7 +23,7 @@ const actionsWithMany: Array<Prisma.PrismaAction> = [
 ]
 
 function setAllPermissionsForAdmin(role?: Role) {
-    if (role?.name === "admin") {
+    if (role?.id === 2) {
         role.permissions = Object.keys(Permission) as Array<Permission>
     }
 }
