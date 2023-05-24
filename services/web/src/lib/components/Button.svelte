@@ -19,7 +19,8 @@
     $: types = getElementTypeObject(type)
 </script>
 
-<button
+<svelte:element
+    this={href !== undefined && !disabled ? "a" : "button"}
     class={classNames(
         "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top u:select-none",
         "u:active:transform",
@@ -55,6 +56,9 @@
         klass
     )}
     disabled={disabled || loading}
+    {href}
+    {rel}
+    {target}
     on:click
 >
     <slot />
@@ -77,16 +81,5 @@
         >
             <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin" />
         </div>
-    {:else if href !== undefined && !disabled}
-        <!-- svelte-ignore a11y-missing-content -->
-        <a
-            class={classNames("u:absolute u:top-0 u:left-0 u:w-full u:h-full", {
-                "u:rounded": !icon,
-                "u:rounded-full": icon
-            })}
-            {href}
-            {rel}
-            {target}
-        />
     {/if}
-</button>
+</svelte:element>
