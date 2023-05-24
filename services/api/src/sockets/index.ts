@@ -5,6 +5,8 @@ import { env } from "$/utils"
 import { UserPayload } from "$/types"
 import { initModules } from "./modules"
 
+const socketTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
+
 function getUserFromSocket(socket: any) {
     const { logged_in: loggedIn, ...user } = socket.request.user
     return loggedIn ? (user as User) : null
@@ -36,5 +38,14 @@ export function initSockets(app: FastifyInstance) {
     app.io.on("connection", socket => {
         const user = getUserFromSocket(socket)
         initModules(socket, user)
+
+        socketTimeouts[socket.id] = setTimeout(() => {
+            socket.disconnect()
+        }, 24 * 60 * 60 * 1000)
+
+        socket.on("disconnect", () => {
+            clearTimeout(socketTimeouts[socket.id])
+            delete socketTimeouts[socket.id]
+        })
     })
 }
