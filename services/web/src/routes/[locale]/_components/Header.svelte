@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Button } from "$lib/components"
 
-    import classNames from "classnames"
+    import cn from "classnames"
     import { darkTheme, userData, pageSearchParams } from "$lib/stores"
     import { t, currentLocale, locales, localePath } from "$lib/locales"
     import { Permission } from "$lib/enums"
@@ -45,7 +45,7 @@
         <div class="u:flex u:items-center u:gap-1 u:mx-1">
             {#each $locales as locale, index (locale)}
                 <Button
-                    class={classNames("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
+                    class={cn("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
                     href={$localePath(`${route}${$pageSearchParams}`, locale)}
                     variant="primary"
                 >

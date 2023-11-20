@@ -2,7 +2,7 @@
     import Button from "./Button.svelte"
 
     import { createEventDispatcher } from "svelte"
-    import classNames from "classnames"
+    import cn from "classnames"
     import { t } from "$lib/locales"
     import { getElementBasicVariantObject } from "$lib/utils"
 
@@ -40,7 +40,7 @@
 
 {#if visible}
     <div
-        class={classNames(
+        class={cn(
             "u:flex u:w-full u:rounded-md u:bg-content u:border-2",
             {
                 "u:border-success": variants.success,
@@ -52,18 +52,15 @@
         )}
     >
         <div
-            class={classNames(
-                "u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter",
-                {
-                    "u:bg-success": variants.success,
-                    "u:bg-error": variants.error,
-                    "u:bg-warning": variants.warning,
-                    "u:bg-info": variants.info
-                }
-            )}
+            class={cn("u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter", {
+                "u:bg-success": variants.success,
+                "u:bg-error": variants.error,
+                "u:bg-warning": variants.warning,
+                "u:bg-info": variants.info
+            })}
         >
             <i
-                class={classNames("u:text-xl", {
+                class={cn("u:text-xl", {
                     "u:i-fa-solid-check": variants.success,
                     "u:i-fa-solid-times-circle": variants.error,
                     "u:i-fa-solid-exclamation-triangle": variants.warning,
@@ -74,7 +71,7 @@
         <div class="u:flex u:flex-1 u:justify-between">
             <div class="u:px-4 u:py-2">
                 <b
-                    class={classNames({
+                    class={cn({
                         "u:text-success": variants.success,
                         "u:text-error": variants.error,
                         "u:text-warning": variants.warning,

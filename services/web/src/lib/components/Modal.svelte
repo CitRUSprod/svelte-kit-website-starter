@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Dialog, Transition, TransitionChild } from "@rgossiaux/svelte-headlessui"
 
-    import classNames from "classnames"
+    import cn from "classnames"
 
     export let visible = false
     export let persistent = false
@@ -33,7 +33,7 @@
             >
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div
-                    class={classNames("u:p-8 u:bg-content u:shadow-md u:rounded-md", klass)}
+                    class={cn("u:p-8 u:bg-content u:shadow-md u:rounded-md", klass)}
                     on:click|stopPropagation
                 >
                     <slot />

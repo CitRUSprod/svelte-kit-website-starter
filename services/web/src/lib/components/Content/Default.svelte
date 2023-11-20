@@ -1,5 +1,5 @@
 <script lang="ts">
-    import classNames from "classnames"
+    import cn from "classnames"
 
     export let title: string
 
@@ -11,7 +11,7 @@
     <div>
         <h1>{title}</h1>
     </div>
-    <div class={classNames("u:grid u:gap-4 u:my-4", klass)}>
+    <div class={cn("u:grid u:gap-4 u:my-4", klass)}>
         <slot />
     </div>
 </div>

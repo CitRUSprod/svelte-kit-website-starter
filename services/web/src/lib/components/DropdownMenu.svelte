@@ -1,5 +1,5 @@
 <script lang="ts">
-    import classNames from "classnames"
+    import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
     import type { DropdownMenuItem, ElementVariant } from "$lib/types"
@@ -19,7 +19,7 @@
 </script>
 
 <div
-    class={classNames(
+    class={cn(
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
@@ -44,7 +44,7 @@
         <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`} />
     {/if}
     <select
-        class={classNames(
+        class={cn(
             "u:w-full u:h-10 u:px-3 u:bg-content u:text-content-inverse u:border u:rounded u:outline-none u:appearance-none u:cursor-pointer",
             "u:disabled:cursor-not-allowed",
             {

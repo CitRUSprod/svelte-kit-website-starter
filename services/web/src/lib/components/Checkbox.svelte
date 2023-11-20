@@ -1,5 +1,5 @@
 <script lang="ts">
-    import classNames from "classnames"
+    import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
     import type { ElementVariant } from "$lib/types"
@@ -23,7 +23,7 @@
 </script>
 
 <button
-    class={classNames(
+    class={cn(
         "u:inline-flex u:items-center u:w-auto u:gap-1 u:align-top",
         {
             "u:cursor-pointer": !disabled && !readonly,
@@ -35,7 +35,7 @@
     on:click={click}
 >
     <span
-        class={classNames(
+        class={cn(
             "u:flex u:justify-center u:items-center u:w-6 u:h-6 u:text-content-lighter u:border u:rounded u:select-none",
             {
                 "u:bg-content": !checked,

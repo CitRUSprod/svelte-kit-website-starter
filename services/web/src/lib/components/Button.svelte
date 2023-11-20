@@ -1,5 +1,5 @@
 <script lang="ts">
-    import classNames from "classnames"
+    import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
     import type { ElementVariant } from "$lib/types"
@@ -21,7 +21,7 @@
 
 <svelte:element
     this={href !== undefined && !disabled ? "a" : "button"}
-    class={classNames(
+    class={cn(
         "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top u:select-none",
         "u:active:transform",
         "u:disabled:cursor-not-allowed",
@@ -64,7 +64,7 @@
     <slot />
     {#if loading}
         <div
-            class={classNames(
+            class={cn(
                 "u:absolute u:top-0 u:left-0 u:flex u:justify-center u:items-center u:w-full u:h-full",
                 {
                     "u:rounded": !icon,

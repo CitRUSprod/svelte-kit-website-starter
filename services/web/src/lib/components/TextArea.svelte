@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Textarea } from "./internal"
 
-    import classNames from "classnames"
+    import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
     import type { ElementVariant } from "$lib/types"
@@ -22,7 +22,7 @@
 </script>
 
 <div
-    class={classNames(
+    class={cn(
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
@@ -44,7 +44,7 @@
         </div>
     {/if}
     <Textarea
-        class={classNames(
+        class={cn(
             "u:w-full u:h-40 u:px-3 u:py-2 u:bg-content u:text-content-inverse u:border u:rounded u:placeholder-opacity-80 u:outline-none",
             "u:dark:placeholder-opacity-80",
             "u:disabled:cursor-not-allowed",
