@@ -1,6 +1,6 @@
 export * from "./jsonifiable"
 export * from "./dropdown-menu-item"
-export * from "./element-type"
+export * from "./element-variant"
 export * from "./items-page"
 export * from "./user"
 export * from "./chat"

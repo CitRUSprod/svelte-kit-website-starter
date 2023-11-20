@@ -111,7 +111,7 @@
             />
         </div>
         <div>
-            <Button type="success" on:click={modalPostCreating.open}>
+            <Button variant="success" on:click={modalPostCreating.open}>
                 {$t("routes.posts.create-post")}
             </Button>
         </div>

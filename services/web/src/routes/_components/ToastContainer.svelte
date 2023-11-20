@@ -11,7 +11,7 @@
             <Alert
                 class="u:my-1 u:shadow-md u:select-none"
                 closable
-                type={toast.type}
+                variant={toast.variant}
                 on:close={() => toasts.remove(toast.id)}
             >
                 {toast.text}

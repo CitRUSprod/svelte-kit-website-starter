@@ -55,10 +55,10 @@
         </p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteRole.loading} text type="success" on:click={close}>
+        <Button disabled={$qcDeleteRole.loading} text variant="success" on:click={close}>
             {$t("components.modal-role-removing.cancel")}
         </Button>
-        <Button loading={$qcDeleteRole.loading} type="error" on:click={qcDeleteRole.refresh}>
+        <Button loading={$qcDeleteRole.loading} variant="error" on:click={qcDeleteRole.refresh}>
             {$t("components.modal-role-removing.remove")}
         </Button>
     </div>

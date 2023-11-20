@@ -57,13 +57,13 @@
                             <td>
                                 {#if !role.protected}
                                     <Button
-                                        type="warning"
+                                        variant="warning"
                                         on:click={() => modalRoleEditing.open(role)}
                                     >
                                         {$t("routes.roles.edit")}
                                     </Button>
                                     <Button
-                                        type="error"
+                                        variant="error"
                                         on:click={() => modalRoleRemoving.open(role)}
                                     >
                                         {$t("routes.roles.remove")}
@@ -76,7 +76,7 @@
             </tbody>
         </table>
         <div class="u:flex u:justify-center">
-            <Button type="success" on:click={modalRoleCreating.open}>
+            <Button variant="success" on:click={modalRoleCreating.open}>
                 {$t("routes.roles.create-role")}
             </Button>
         </div>

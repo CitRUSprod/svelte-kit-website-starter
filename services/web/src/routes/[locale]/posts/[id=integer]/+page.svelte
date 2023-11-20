@@ -48,16 +48,16 @@
     </div>
     {#if $userData?.id === data.post.author.id}
         <div>
-            <Button type="warning" on:click={modalPostEditing.open}>
+            <Button variant="warning" on:click={modalPostEditing.open}>
                 {$t("routes.posts.[id].edit")}
             </Button>
-            <Button type="error" on:click={modalPostRemoving.open}>
+            <Button variant="error" on:click={modalPostRemoving.open}>
                 {$t("routes.posts.[id].remove")}
             </Button>
         </div>
     {:else if $userData?.role.permissions.includes(Permission.DeleteOtherUserPost)}
         <div>
-            <Button type="error" on:click={modalPostRemoving.open}>
+            <Button variant="error" on:click={modalPostRemoving.open}>
                 {$t("routes.posts.[id].remove")}
             </Button>
         </div>

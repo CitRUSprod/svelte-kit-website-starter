@@ -50,7 +50,7 @@
                 disabled={$qcResetPassword.loading}
                 label={$t("routes.profile.password.[token].new-password")}
                 placeholder={$t("routes.profile.password.[token].enter-new-password")}
-                valueType="password"
+                type="password"
                 bind:value={newPassword}
             />
         </div>
@@ -59,7 +59,7 @@
                 disabled={$qcResetPassword.loading}
                 label={$t("routes.profile.password.[token].new-password-confirmation")}
                 placeholder={$t("routes.profile.password.[token].enter-new-password-again")}
-                valueType="password"
+                type="password"
                 bind:value={newPasswordConfirmation}
             />
         </div>
@@ -67,7 +67,7 @@
             <Button
                 disabled={!completedForm}
                 loading={$qcResetPassword.loading}
-                type="primary"
+                variant="primary"
                 on:click={qcResetPassword.refresh}
             >
                 {$t("routes.profile.password.[token].reset")}

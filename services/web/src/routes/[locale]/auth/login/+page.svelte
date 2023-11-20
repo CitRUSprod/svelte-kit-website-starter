@@ -63,7 +63,7 @@
             <TextField
                 disabled={$qcLogin.loading}
                 label={$t("routes.auth.login.password")}
-                valueType="password"
+                type="password"
                 bind:value={password}
                 on:keypress={onEnter}
             />
@@ -80,7 +80,7 @@
             <Button
                 disabled={!completedForm}
                 loading={$qcLogin.loading}
-                type="primary"
+                variant="primary"
                 on:click={qcLogin.refresh}
             >
                 {$t("routes.auth.login.do-login")}

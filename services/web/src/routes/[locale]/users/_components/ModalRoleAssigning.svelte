@@ -63,12 +63,12 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcAssignRoleToUser.loading} text type="error" on:click={close}>
+        <Button disabled={$qcAssignRoleToUser.loading} text variant="error" on:click={close}>
             {$t("components.modal-role-assigning.cancel")}
         </Button>
         <Button
             loading={$qcAssignRoleToUser.loading}
-            type="success"
+            variant="success"
             on:click={qcAssignRoleToUser.refresh}
         >
             {$t("components.modal-role-assigning.save")}

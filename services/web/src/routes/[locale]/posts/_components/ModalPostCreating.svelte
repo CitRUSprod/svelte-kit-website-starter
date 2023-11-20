@@ -66,13 +66,13 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreatePost.loading} text type="error" on:click={close}>
+        <Button disabled={$qcCreatePost.loading} text variant="error" on:click={close}>
             {$t("components.modal-post-creating.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcCreatePost.loading}
-            type="success"
+            variant="success"
             on:click={qcCreatePost.refresh}
         >
             {$t("components.modal-post-creating.create")}

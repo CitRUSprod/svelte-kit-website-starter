@@ -60,7 +60,7 @@
         <TextField
             disabled={$qcChangePassword.loading}
             label={$t("components.modal-password-changing.old-password")}
-            valueType="password"
+            type="password"
             bind:value={oldPassword}
         />
     </div>
@@ -68,18 +68,18 @@
         <TextField
             disabled={$qcChangePassword.loading}
             label={$t("components.modal-password-changing.new-password")}
-            valueType="password"
+            type="password"
             bind:value={newPassword}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcChangePassword.loading} text type="error" on:click={close}>
+        <Button disabled={$qcChangePassword.loading} text variant="error" on:click={close}>
             {$t("components.modal-password-changing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcChangePassword.loading}
-            type="success"
+            variant="success"
             on:click={qcChangePassword.refresh}
         >
             {$t("components.modal-password-changing.change")}

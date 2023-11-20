@@ -93,27 +93,27 @@
         <div>
             <Button
                 loading={$qcUploadAvatar.loading}
-                type="warning"
+                variant="warning"
                 on:click={() => avatarInput.click()}
             >
                 {$t("routes.users.[id].upload-avatar")}
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
             {#if data.user.avatar}
-                <Button type="error" on:click={modalAvatarRemoving.open}>
+                <Button variant="error" on:click={modalAvatarRemoving.open}>
                     {$t("routes.users.[id].remove-avatar")}
                 </Button>
             {/if}
-            <Button type="warning" on:click={modalProfileEditing.open}>
+            <Button variant="warning" on:click={modalProfileEditing.open}>
                 {$t("routes.users.[id].edit")}
             </Button>
-            <Button type="warning" on:click={modalPasswordChanging.open}>
+            <Button variant="warning" on:click={modalPasswordChanging.open}>
                 {$t("routes.users.[id].change-password")}
             </Button>
             {#if !$userData.confirmedEmail}
                 <Button
                     loading={$qcSendConfirmationEmail.loading}
-                    type="success"
+                    variant="success"
                     on:click={qcSendConfirmationEmail.refresh}
                 >
                     {$t("routes.users.[id].verify-email")}

@@ -46,7 +46,7 @@
             <Button
                 disabled={!vldResultEmail.valid}
                 loading={$qcSendPasswordResetEmail.loading}
-                type="primary"
+                variant="primary"
                 on:click={qcSendPasswordResetEmail.refresh}
             >
                 {$t("routes.profile.password.send-reset-link")}

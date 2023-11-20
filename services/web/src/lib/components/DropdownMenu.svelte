@@ -1,10 +1,10 @@
 <script lang="ts">
     import classNames from "classnames"
-    import { getElementTypeObject } from "$lib/utils"
+    import { getElementVariantObject } from "$lib/utils"
 
-    import type { DropdownMenuItem, ElementType } from "$lib/types"
+    import type { DropdownMenuItem, ElementVariant } from "$lib/types"
 
-    export let type: ElementType = "default"
+    export let variant: ElementVariant = "default"
     export let label: string | undefined = undefined
     export let disabled = false
     export let value: string | number | null | undefined = undefined
@@ -15,7 +15,7 @@
     let klass: string | undefined = undefined
     export { klass as class }
 
-    $: types = getElementTypeObject(type)
+    $: variants = getElementVariantObject(variant)
 </script>
 
 <div
@@ -23,12 +23,12 @@
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
-            "u:text-default": types.default,
-            "u:text-primary": types.primary,
-            "u:text-success": types.success,
-            "u:text-error": types.error,
-            "u:text-warning": types.warning,
-            "u:text-info": types.info
+            "u:text-default": variants.default,
+            "u:text-primary": variants.primary,
+            "u:text-success": variants.success,
+            "u:text-error": variants.error,
+            "u:text-warning": variants.warning,
+            "u:text-info": variants.info
         },
         klass
     )}
@@ -50,12 +50,12 @@
             {
                 "u:pl-10": leftIconClass,
                 "u:pr-10": rightIconClass,
-                "u:border-default": types.default,
-                "u:border-primary": types.primary,
-                "u:border-success": types.success,
-                "u:border-error": types.error,
-                "u:border-warning": types.warning,
-                "u:border-info": types.info
+                "u:border-default": variants.default,
+                "u:border-primary": variants.primary,
+                "u:border-success": variants.success,
+                "u:border-error": variants.error,
+                "u:border-warning": variants.warning,
+                "u:border-info": variants.info
             }
         )}
         {disabled}

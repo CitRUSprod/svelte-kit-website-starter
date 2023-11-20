@@ -1,10 +1,10 @@
 import { writable, derived } from "svelte/store"
 
-type Type = "success" | "error" | "warning" | "info"
+import type { ElementBasicVariant } from "$lib/types"
 
 interface Toast {
     id: number
-    type: Type
+    variant: ElementBasicVariant
     text: string
 }
 
@@ -27,12 +27,12 @@ function remove(id: number) {
     })
 }
 
-function add(type: Type, text: string, timeout = 5000) {
+function add(variant: ElementBasicVariant, text: string, timeout = 5000) {
     update(toasts => {
         const id = Date.now()
         const toast: Toast = {
             id,
-            type,
+            variant,
             text: text.trim()
         }
         toasts.push(toast)

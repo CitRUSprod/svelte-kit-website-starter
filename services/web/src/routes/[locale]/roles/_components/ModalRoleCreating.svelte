@@ -115,7 +115,7 @@
         <div>
             <Button
                 disabled={!currentPermission || $qcCreateRole.loading}
-                type="success"
+                variant="success"
                 on:click={addPermission}
             >
                 {$t("components.modal-role-creating.add")}
@@ -123,13 +123,13 @@
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreateRole.loading} text type="error" on:click={close}>
+        <Button disabled={$qcCreateRole.loading} text variant="error" on:click={close}>
             {$t("components.modal-role-creating.cancel")}
         </Button>
         <Button
             disabled={!vldResultName.valid}
             loading={$qcCreateRole.loading}
-            type="success"
+            variant="success"
             on:click={qcCreateRole.refresh}
         >
             {$t("components.modal-role-creating.create")}

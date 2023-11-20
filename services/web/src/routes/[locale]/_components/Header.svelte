@@ -20,25 +20,25 @@
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
         {#if $userData}
-            <Button href={$localePath(`/users/${$userData.id}`)} type="primary">
+            <Button href={$localePath(`/users/${$userData.id}`)} variant="primary">
                 {$t("components.header.profile")}
             </Button>
         {/if}
-        <Button href={$localePath("/chat")} type="primary">
+        <Button href={$localePath("/chat")} variant="primary">
             {$t("components.header.chat")}
         </Button>
-        <Button href={$localePath("/lorem")} type="primary">Lorem</Button>
-        <Button href={$localePath("/simple-layout")} type="primary">
+        <Button href={$localePath("/lorem")} variant="primary">Lorem</Button>
+        <Button href={$localePath("/simple-layout")} variant="primary">
             {$t("components.header.simple-layout")}
         </Button>
-        <Button href={$localePath("/posts")} type="primary">
+        <Button href={$localePath("/posts")} variant="primary">
             {$t("components.header.posts")}
         </Button>
-        <Button href={$localePath("/users")} type="primary">
+        <Button href={$localePath("/users")} variant="primary">
             {$t("components.header.users")}
         </Button>
         {#if $userData?.role.permissions.includes(Permission.AssignRole)}
-            <Button href={$localePath("/roles")} type="primary">
+            <Button href={$localePath("/roles")} variant="primary">
                 {$t("components.header.roles")}
             </Button>
         {/if}
@@ -47,7 +47,7 @@
                 <Button
                     class={classNames("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
                     href={$localePath(`${route}${$pageSearchParams}`, locale)}
-                    type="primary"
+                    variant="primary"
                 >
                     {locale.toUpperCase()}
                 </Button>
@@ -56,15 +56,15 @@
                 {/if}
             {/each}
         </div>
-        <Button icon type="primary" on:click={darkTheme.toggle}>
+        <Button icon variant="primary" on:click={darkTheme.toggle}>
             <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl" />
         </Button>
         {#if $userData}
-            <Button href={$localePath("/auth/logout")} type="primary">
+            <Button href={$localePath("/auth/logout")} variant="primary">
                 {$t("components.header.logout")}
             </Button>
         {:else}
-            <Button href={$localePath("/auth/login")} type="primary">
+            <Button href={$localePath("/auth/login")} variant="primary">
                 {$t("components.header.login")}
             </Button>
         {/if}

@@ -72,13 +72,13 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateUser.loading} text type="error" on:click={close}>
+        <Button disabled={$qcUpdateUser.loading} text variant="error" on:click={close}>
             {$t("components.modal-profile-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcUpdateUser.loading}
-            type="success"
+            variant="success"
             on:click={qcUpdateUser.refresh}
         >
             {$t("components.modal-profile-editing.save")}

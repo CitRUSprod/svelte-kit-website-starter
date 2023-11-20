@@ -1,10 +1,10 @@
 <script lang="ts">
     import classNames from "classnames"
-    import { getElementTypeObject } from "$lib/utils"
+    import { getElementVariantObject } from "$lib/utils"
 
-    import type { ElementType } from "$lib/types"
+    import type { ElementVariant } from "$lib/types"
 
-    export let type: ElementType = "default"
+    export let variant: ElementVariant = "default"
     export let href = undefined as string | undefined
     export let target: string | undefined = undefined
     export let rel: string | undefined = undefined
@@ -16,7 +16,7 @@
     let klass: string | undefined = undefined
     export { klass as class }
 
-    $: types = getElementTypeObject(type)
+    $: variants = getElementVariantObject(variant)
 </script>
 
 <svelte:element
@@ -34,24 +34,24 @@
                 text,
             "u:active:scale-90": !disabled && !loading,
             "u:disabled:opacity-50": disabled,
-            "u:bg-default": !text && types.default,
-            "u:bg-primary": !text && types.primary,
-            "u:bg-success": !text && types.success,
-            "u:bg-error": !text && types.error,
-            "u:bg-warning": !text && types.warning,
-            "u:bg-info": !text && types.info,
-            "u:hover:bg-default-lighter u:active:bg-default-darker": !disabled && types.default,
-            "u:hover:bg-primary-lighter u:active:bg-primary-darker": !disabled && types.primary,
-            "u:hover:bg-success-lighter u:active:bg-success-darker": !disabled && types.success,
-            "u:hover:bg-error-lighter u:active:bg-error-darker": !disabled && types.error,
-            "u:hover:bg-warning-lighter u:active:bg-warning-darker": !disabled && types.warning,
-            "u:hover:bg-info-lighter u:active:bg-info-darker": !disabled && types.info,
-            "u:text-default": !loading && text && types.default,
-            "u:text-primary": !loading && text && types.primary,
-            "u:text-success": !loading && text && types.success,
-            "u:text-error": !loading && text && types.error,
-            "u:text-warning": !loading && text && types.warning,
-            "u:text-info": !loading && text && types.info
+            "u:bg-default": !text && variants.default,
+            "u:bg-primary": !text && variants.primary,
+            "u:bg-success": !text && variants.success,
+            "u:bg-error": !text && variants.error,
+            "u:bg-warning": !text && variants.warning,
+            "u:bg-info": !text && variants.info,
+            "u:hover:bg-default-lighter u:active:bg-default-darker": !disabled && variants.default,
+            "u:hover:bg-primary-lighter u:active:bg-primary-darker": !disabled && variants.primary,
+            "u:hover:bg-success-lighter u:active:bg-success-darker": !disabled && variants.success,
+            "u:hover:bg-error-lighter u:active:bg-error-darker": !disabled && variants.error,
+            "u:hover:bg-warning-lighter u:active:bg-warning-darker": !disabled && variants.warning,
+            "u:hover:bg-info-lighter u:active:bg-info-darker": !disabled && variants.info,
+            "u:text-default": !loading && text && variants.default,
+            "u:text-primary": !loading && text && variants.primary,
+            "u:text-success": !loading && text && variants.success,
+            "u:text-error": !loading && text && variants.error,
+            "u:text-warning": !loading && text && variants.warning,
+            "u:text-info": !loading && text && variants.info
         },
         klass
     )}
@@ -70,12 +70,12 @@
                     "u:rounded": !icon,
                     "u:rounded-full": icon,
                     "u:text-content-lighter": !text,
-                    "u:text-default": text && types.default,
-                    "u:text-primary": text && types.primary,
-                    "u:text-success": text && types.success,
-                    "u:text-error": text && types.error,
-                    "u:text-warning": text && types.warning,
-                    "u:text-info": text && types.info
+                    "u:text-default": text && variants.default,
+                    "u:text-primary": text && variants.primary,
+                    "u:text-success": text && variants.success,
+                    "u:text-error": text && variants.error,
+                    "u:text-warning": text && variants.warning,
+                    "u:text-info": text && variants.info
                 }
             )}
         >

@@ -79,7 +79,7 @@
             <TextField
                 disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.password")}
-                valueType="password"
+                type="password"
                 bind:value={password}
                 on:keypress={onEnter}
             />
@@ -88,7 +88,7 @@
             <TextField
                 disabled={$qcRegister.loading}
                 label={$t("routes.auth.registration.password-confirmation")}
-                valueType="password"
+                type="password"
                 bind:value={passwordConfirmation}
                 on:keypress={onEnter}
             />
@@ -100,7 +100,7 @@
             <Button
                 disabled={!completedForm}
                 loading={$qcRegister.loading}
-                type="primary"
+                variant="primary"
                 on:click={qcRegister.refresh}
             >
                 {$t("routes.auth.registration.register")}

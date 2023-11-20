@@ -43,10 +43,10 @@
         <p>{$t("components.modal-avatar-removing.avatar-removing-question")}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteAvatar.loading} text type="success" on:click={close}>
+        <Button disabled={$qcDeleteAvatar.loading} text variant="success" on:click={close}>
             {$t("components.modal-avatar-removing.cancel")}
         </Button>
-        <Button loading={$qcDeleteAvatar.loading} type="error" on:click={qcDeleteAvatar.refresh}>
+        <Button loading={$qcDeleteAvatar.loading} variant="error" on:click={qcDeleteAvatar.refresh}>
             {$t("components.modal-avatar-removing.remove")}
         </Button>
     </div>

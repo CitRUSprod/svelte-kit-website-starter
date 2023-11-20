@@ -15,17 +15,21 @@
 </script>
 
 <div class="u:flex-inline u:gap-1">
-    <Button disabled={loading || page <= 1} type="primary" on:click={() => setPage(1)}>
+    <Button disabled={loading || page <= 1} variant="primary" on:click={() => setPage(1)}>
         <i class="u:i-ic-baseline-keyboard-double-arrow-left u:mx--2 u:text-3xl" />
     </Button>
-    <Button disabled={loading || page <= 1} type="primary" on:click={() => setPage(page - 1)}>
+    <Button disabled={loading || page <= 1} variant="primary" on:click={() => setPage(page - 1)}>
         <i class="u:i-ic-baseline-keyboard-arrow-left u:mx--2 u:text-3xl" />
     </Button>
-    <Button {loading} type="primary">{page}</Button>
-    <Button disabled={loading || page >= pages} type="primary" on:click={() => setPage(page + 1)}>
+    <Button {loading} variant="primary">{page}</Button>
+    <Button
+        disabled={loading || page >= pages}
+        variant="primary"
+        on:click={() => setPage(page + 1)}
+    >
         <i class="u:i-ic-baseline-keyboard-arrow-right u:mx--2 u:text-3xl" />
     </Button>
-    <Button disabled={loading || page >= pages} type="primary" on:click={() => setPage(pages)}>
+    <Button disabled={loading || page >= pages} variant="primary" on:click={() => setPage(pages)}>
         <i class="u:i-ic-baseline-keyboard-double-arrow-right u:mx--2 u:text-3xl" />
     </Button>
 </div>

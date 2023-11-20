@@ -4,23 +4,23 @@
     import { createEventDispatcher } from "svelte"
     import classNames from "classnames"
     import { t } from "$lib/locales"
-    import { getElementBasicTypeObject } from "$lib/utils"
+    import { getElementBasicVariantObject } from "$lib/utils"
 
-    import type { ElementBasicType } from "$lib/types"
+    import type { ElementBasicVariant } from "$lib/types"
 
-    export let type: ElementBasicType
+    export let variant: ElementBasicVariant
     export let visible = true
     export let closable = false
 
     let klass: string | undefined = undefined
     export { klass as class }
 
-    $: types = getElementBasicTypeObject(type)
+    $: variants = getElementBasicVariantObject(variant)
 
     const dispatch = createEventDispatcher()
 
-    function getTextByType(localType: string) {
-        switch (localType) {
+    function getTextByVariant(localVariant: string) {
+        switch (localVariant) {
             case "success":
                 return $t("components.alert.success")
             case "error":
@@ -43,10 +43,10 @@
         class={classNames(
             "u:flex u:w-full u:rounded-md u:bg-content u:border-2",
             {
-                "u:border-success": types.success,
-                "u:border-error": types.error,
-                "u:border-warning": types.warning,
-                "u:border-info": types.info
+                "u:border-success": variants.success,
+                "u:border-error": variants.error,
+                "u:border-warning": variants.warning,
+                "u:border-info": variants.info
             },
             klass
         )}
@@ -55,19 +55,19 @@
             class={classNames(
                 "u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter",
                 {
-                    "u:bg-success": types.success,
-                    "u:bg-error": types.error,
-                    "u:bg-warning": types.warning,
-                    "u:bg-info": types.info
+                    "u:bg-success": variants.success,
+                    "u:bg-error": variants.error,
+                    "u:bg-warning": variants.warning,
+                    "u:bg-info": variants.info
                 }
             )}
         >
             <i
                 class={classNames("u:text-xl", {
-                    "u:i-fa-solid-check": types.success,
-                    "u:i-fa-solid-times-circle": types.error,
-                    "u:i-fa-solid-exclamation-triangle": types.warning,
-                    "u:i-fa-solid-info-circle": types.info
+                    "u:i-fa-solid-check": variants.success,
+                    "u:i-fa-solid-times-circle": variants.error,
+                    "u:i-fa-solid-exclamation-triangle": variants.warning,
+                    "u:i-fa-solid-info-circle": variants.info
                 })}
             />
         </div>
@@ -75,13 +75,13 @@
             <div class="u:px-4 u:py-2">
                 <b
                     class={classNames({
-                        "u:text-success": types.success,
-                        "u:text-error": types.error,
-                        "u:text-warning": types.warning,
-                        "u:text-info": types.info
+                        "u:text-success": variants.success,
+                        "u:text-error": variants.error,
+                        "u:text-warning": variants.warning,
+                        "u:text-info": variants.info
                     })}
                 >
-                    {getTextByType(type)}
+                    {getTextByVariant(variant)}
                 </b>
                 <p class="u:text-content-inverse u:text-sm">
                     <slot />
@@ -89,7 +89,7 @@
             </div>
             {#if closable}
                 <div class="u:pr-2 u:py-2">
-                    <Button icon text {type} on:click={close}>
+                    <Button icon text {variant} on:click={close}>
                         <i class="u:i-fa-solid-times u:text-xl" />
                     </Button>
                 </div>

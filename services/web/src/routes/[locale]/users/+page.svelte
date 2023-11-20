@@ -154,14 +154,14 @@
                                 href={$localePath(`/users/${String(user.id)}`)}
                                 rel="noopener noreferrer"
                                 target="_blank"
-                                type="info"
+                                variant="info"
                             >
                                 {$t("routes.users.open")}
                             </Button>
                             {#if $userData?.role.permissions.includes(Permission.AssignRole)}
                                 {#if !user.banned}
                                     <Button
-                                        type="warning"
+                                        variant="warning"
                                         on:click={() => modalRoleAssigning.open(user)}
                                     >
                                         {$t("routes.users.assign-role")}
@@ -173,7 +173,7 @@
                                     <Button
                                         loading={$qcUnbanUser.loading &&
                                             qcUnbanUser.params.id === user.id}
-                                        type="error"
+                                        variant="error"
                                         on:click={() => unbanUser(user.id)}
                                     >
                                         {$t("routes.users.unban")}
@@ -182,7 +182,7 @@
                                     <Button
                                         loading={$qcBanUser.loading &&
                                             qcBanUser.params.id === user.id}
-                                        type="error"
+                                        variant="error"
                                         on:click={() => banUser(user.id)}
                                     >
                                         {$t("routes.users.ban")}
