@@ -26,14 +26,14 @@
             leaveFrom="u:opacity-100"
             leaveTo="u:opacity-0"
         >
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div
                 class="u:fixed u:inset-0 u:flex u:justify-center u:items-center u:p-4 u:bg-black u:bg-opacity-30"
+                role="none"
                 on:click={close}
             >
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div
                     class={cn("u:p-8 u:bg-content u:shadow-md u:rounded-md", klass)}
+                    role="none"
                     on:click|stopPropagation
                 >
                     <slot />

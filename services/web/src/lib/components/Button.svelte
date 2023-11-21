@@ -58,6 +58,8 @@
     disabled={disabled || loading}
     {href}
     {rel}
+    role="button"
+    tabindex="0"
     {target}
     on:click
 >

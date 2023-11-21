@@ -58,7 +58,11 @@ const config = {
         presetScrollbar(),
         presetIcons()
     ],
-    include: [path.join(__dirname, "src/**/*.svelte")],
+    content: {
+        pipeline: {
+            include: [path.join(__dirname, "src/**/*.svelte")]
+        }
+    },
     transformers: [transformerDirectives()],
     preprocess(matcher) {
         const prefix = "u:"
