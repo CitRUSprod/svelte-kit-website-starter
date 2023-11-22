@@ -52,7 +52,7 @@
         ]
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "0.21.1",
+        "@citrus-linting/eslint-config": "0.22.0",
         "@citrus-linting/prettier-config": "0.6.0",
         "@citrus-linting/stylelint-config": "0.5.3",
         "@commitlint/cli": "18.4.3",
@@ -76,6 +76,6 @@
         "stylelint-prettier": "4.0.2",
         "svelte": "4.2.7",
         "svelte-eslint-parser": "0.33.1",
-        "typescript": "5.3.2"
+        "typescript": "5.2.2"
     }
 }

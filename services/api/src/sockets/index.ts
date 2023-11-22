@@ -39,9 +39,12 @@ export function initSockets(app: FastifyInstance) {
         const user = getUserFromSocket(socket)
         initModules(socket, user)
 
-        socketTimeouts[socket.id] = setTimeout(() => {
-            socket.disconnect()
-        }, 24 * 60 * 60 * 1000)
+        socketTimeouts[socket.id] = setTimeout(
+            () => {
+                socket.disconnect()
+            },
+            24 * 60 * 60 * 1000
+        )
 
         socket.on("disconnect", () => {
             clearTimeout(socketTimeouts[socket.id])

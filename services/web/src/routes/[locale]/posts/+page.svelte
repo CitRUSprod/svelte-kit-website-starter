@@ -2,7 +2,7 @@
     import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
     import { ModalPostCreating } from "./_components"
 
-    import * as _ from "lodash-es"
+    import * as lodash from "lodash-es"
     import { t, localePath, currentLocale } from "$lib/locales"
     import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
@@ -101,7 +101,7 @@
                 placeholder={$t("routes.posts.enter-title")}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={qcGetPosts.params.title}
-                on:input={_.debounce(onTitleInput, 500)}
+                on:input={lodash.debounce(onTitleInput, 500)}
             />
             <DropdownMenu
                 items={sortings}
