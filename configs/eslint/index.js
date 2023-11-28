@@ -36,13 +36,13 @@ const config = {
         {
             files: ["*.ts"],
             parserOptions: {
-                project: "./services/*/tsconfig.json"
+                project: "./{apps,packages}/*/tsconfig.json"
             }
         },
         {
             files: ["*.svelte"],
             parserOptions: {
-                project: "./services/*/tsconfig.eslint.json"
+                project: "./{apps,packages}/*/tsconfig.eslint.json"
             },
             rules: {
                 "svelte/indent": 0,

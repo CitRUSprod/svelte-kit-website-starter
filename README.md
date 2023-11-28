@@ -24,7 +24,7 @@ Run the project by entering these commands and open http://localhost:6700 in you
 ```sh
 # Development
 scripts/dev up -d
-pnpm --parallel dev # or "cd services/[service]" and "pnpm dev"
+pnpm dev # or "cd apps/[app]" and "pnpm dev"
 
 # Production
 scripts/start
@@ -35,8 +35,8 @@ scripts/start
 ```sh
 scripts/dev up -d # Start
 scripts/dev down # Stop
-scripts/dev logs [service] # View service logs
-scripts/dev exec [service] sh # Enter the service container
+scripts/dev logs [app] # View app logs
+scripts/dev exec [app] sh # Enter the app container
 scripts/dev [docker compose command] # Any docker compose command
 ```
 
@@ -45,8 +45,8 @@ scripts/dev [docker compose command] # Any docker compose command
 ```sh
 scripts/prod up -d # Start
 scripts/prod down # Stop
-scripts/prod logs [service] # View service logs
-scripts/prod exec [service] sh # Enter the service container
+scripts/prod logs [app] # View app logs
+scripts/prod exec [app] sh # Enter the app container
 scripts/prod [docker compose command] # Any docker compose command
 
 # or shortcuts
@@ -94,11 +94,11 @@ scripts/clone-env
 
 The project uses `prisma` to work with the database.
 
-Migrations and seeds are located in `services/api/src/prisma` in the `migrations` folder and `seeds.ts` file. To work with them, you need to go to the api service directory:
+Migrations and seeds are located in `apps/api/src/prisma` in the `migrations` folder and `seeds.ts` file. To work with them, you need to go to the api app directory:
 
 ```sh
 # Development
-cd services/api
+cd apps/api
 
 # Production
 scripts/prod exec api sh

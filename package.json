@@ -2,7 +2,9 @@
     "name": "svelte-kit-website-starter",
     "private": true,
     "scripts": {
-        "validate": "pnpm --parallel validate",
+        "dev": "pnpm --parallel dev",
+        "build": "pnpm --parallel build",
+        "check-types": "pnpm --parallel check-types",
         "commit": "git-cz",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint --fix",
@@ -14,7 +16,7 @@
         "eslint:fix:all": "pnpm eslint:all --fix",
         "lint": "pnpm stylelint:all && pnpm eslint:all",
         "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
-        "ci": "pnpm validate && pnpm lint",
+        "ci": "pnpm check-types && pnpm lint",
         "prepare": "husky install"
     },
     "engines": {

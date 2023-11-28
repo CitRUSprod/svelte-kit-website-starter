@@ -1,0 +1,5 @@
+{
+    "name": "@local/configs",
+    "private": true,
+    "type": "module"
+}

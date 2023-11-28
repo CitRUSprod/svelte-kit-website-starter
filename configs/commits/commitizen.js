@@ -27,7 +27,8 @@ function convertCommitTypes(typesObject = {}) {
 const config = {
     types: convertCommitTypes(types),
     scopes: [
-        ...getScopes("services"),
+        ...getScopes("apps"),
+        ...getScopes("packages"),
         {
             name: "(empty)",
             value: false
