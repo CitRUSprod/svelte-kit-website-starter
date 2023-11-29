@@ -1,7 +1,12 @@
 **/*
+
 !/apps
 !/packages
 !.npmrc
 !package.json
 !pnpm-lock.yaml
 !pnpm-workspace.yaml
+
+**/node_modules
+**/.svelte-kit
+**/dist

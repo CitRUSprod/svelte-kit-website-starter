@@ -20,8 +20,8 @@
         "prepare": "husky install"
     },
     "engines": {
-        "node": ">=18",
-        "pnpm": ">=7"
+        "node": "20.10.0",
+        "pnpm": "8.10.5"
     },
     "config": {
         "commitizen": {
@@ -47,10 +47,10 @@
         "extends": "./configs/eslint/index.js",
         "ignorePatterns": [
             "!.travis.yml",
+            "pnpm-lock.yaml",
             ".svelte-kit",
-            "/storage",
             "dist",
-            "pnpm-lock.yaml"
+            "/storage"
         ]
     },
     "devDependencies": {

@@ -1,8 +1,12 @@
-.env
-.svelte-kit
 .vscode
+
 *.log
-/storage/*
-!/storage/.gitkeep
+
+.env
+
+.svelte-kit
 dist
 node_modules
+
+/storage/*
+!/storage/.gitkeep
