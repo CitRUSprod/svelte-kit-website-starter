@@ -4,9 +4,9 @@
 
 .env
 
+node_modules
 .svelte-kit
 dist
-node_modules
 
 /storage/*
 !/storage/.gitkeep

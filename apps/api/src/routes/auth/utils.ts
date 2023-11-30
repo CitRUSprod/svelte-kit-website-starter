@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { Unauthorized } from "http-errors"
+import { UnauthorizedError } from "http-errors-enhanced"
 import { TokenTtl } from "$/enums"
 import { UserPayload } from "$/types"
 
@@ -19,7 +19,7 @@ export function getPayload(app: FastifyInstance, token: string): UserPayload {
         const { iat, exp, ...payload } = app.jwt.verify<PayloadWithTimestamps>(token)
         return payload
     } catch (err: any) {
-        throw new Unauthorized(err.message)
+        throw new UnauthorizedError(err.message)
     }
 }
 

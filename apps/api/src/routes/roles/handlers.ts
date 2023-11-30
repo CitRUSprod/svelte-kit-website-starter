@@ -1,4 +1,4 @@
-import { BadRequest } from "http-errors"
+import { BadRequestError } from "http-errors-enhanced"
 import { models } from "$/utils"
 import { RouteHandler } from "$/types"
 import * as schemas from "./schemas"
@@ -18,7 +18,7 @@ export const updateRole: RouteHandler<{
     body: schemas.UpdateRoleBody
 }> = async (app, { params, body }) => {
     const role = await models.role.get(app, params.id)
-    if (role.protected) throw new BadRequest("Role with such ID is protected")
+    if (role.protected) throw new BadRequestError("Role with such ID is protected")
 
     const updatedRole = await app.prisma.role.update({ where: { id: params.id }, data: body })
     return { payload: models.role.dto(updatedRole) }
@@ -29,7 +29,7 @@ export const deleteRole: RouteHandler<{ params: schemas.UpdateRoleParams }> = as
     { params }
 ) => {
     const role = await models.role.get(app, params.id)
-    if (role.protected) throw new BadRequest("Role with such ID is protected")
+    if (role.protected) throw new BadRequestError("Role with such ID is protected")
 
     const updatedRole = await app.prisma.role.delete({ where: { id: params.id } })
     return { payload: models.role.dto(updatedRole) }

@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { BadRequest } from "http-errors"
+import { BadRequestError } from "http-errors-enhanced"
 import { ImgPath } from "$/enums"
 import { JsonifiableObject, PartialUserData } from "$/types"
 
@@ -22,6 +22,6 @@ export function dto(user: PartialUserData): JsonifiableObject {
 
 export async function get(app: FastifyInstance, id: number) {
     const user = await app.prisma.user.findFirst({ where: { id }, include: { role: true } })
-    if (!user) throw new BadRequest("User with such ID was not found")
+    if (!user) throw new BadRequestError("User with such ID was not found")
     return user
 }

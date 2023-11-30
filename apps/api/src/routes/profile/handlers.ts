@@ -1,4 +1,4 @@
-import { BadRequest } from "http-errors"
+import { BadRequestError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import { ImgPath } from "$/enums"
@@ -17,14 +17,14 @@ export const updateUser: RouteHandler<{
 }> = async (app, { userData, body }) => {
     if (body.email && body.email !== userData.email) {
         const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
-        if (userByEmail) throw new BadRequest("User with such email already exists")
+        if (userByEmail) throw new BadRequestError("User with such email already exists")
     }
 
     if (body.username && body.username !== userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
             where: { username: body.username }
         })
-        if (userByUsername) throw new BadRequest("User with such username already exists")
+        if (userByUsername) throw new BadRequestError("User with such username already exists")
     }
 
     const updatedUser = await app.prisma.user.update({
@@ -45,7 +45,7 @@ export const uploadAvatar: RouteHandler<{
     userData: UserData
     body: schemas.UploadAvatarBody
 }> = async (app, { userData, body }) => {
-    if (!isImgFile(body.img)) throw new BadRequest("File is not an image")
+    if (!isImgFile(body.img)) throw new BadRequestError("File is not an image")
 
     const avatar = await writeFile(ImgPath.Avatars, body.img)
 
@@ -62,7 +62,7 @@ export const uploadAvatar: RouteHandler<{
 export const deleteAvatar: RouteHandler<{
     userData: UserData
 }> = async (app, { userData }) => {
-    if (!userData.avatar) throw new BadRequest("You do not have an avatar")
+    if (!userData.avatar) throw new BadRequestError("You do not have an avatar")
 
     await removeFile(ImgPath.Avatars, userData.avatar)
 
@@ -78,7 +78,7 @@ export const sendConfirmationEmail: RouteHandler<{ userData: UserData }> = async
     app,
     { userData }
 ) => {
-    if (userData.confirmedEmail) throw new BadRequest("Email is already confirmed")
+    if (userData.confirmedEmail) throw new BadRequestError("Email is already confirmed")
 
     const token = createUuid()
 
@@ -121,7 +121,7 @@ export const confirmEmail: RouteHandler<{ params: schemas.ConfirmEmailParams }> 
     const emailConfirmationToken = await app.prisma.emailConfirmationToken.findFirst({
         where: { token: params.emailConfirmationToken }
     })
-    if (!emailConfirmationToken) throw new BadRequest("Email confirmation token expired")
+    if (!emailConfirmationToken) throw new BadRequestError("Email confirmation token expired")
 
     await app.prisma.user.update({
         where: { id: emailConfirmationToken.userId },
@@ -137,10 +137,12 @@ export const changePassword: RouteHandler<{
     userData: UserData
     body: schemas.ChangePasswordBody
 }> = async (app, { userData, body }) => {
-    if (body.oldPassword === body.newPassword) throw new BadRequest("Old and new passwords match")
+    if (body.oldPassword === body.newPassword) {
+        throw new BadRequestError("Old and new passwords match")
+    }
 
     const isCorrectPassword = await argon2.verify(userData.password, body.oldPassword)
-    if (!isCorrectPassword) throw new BadRequest("Incorrect old password")
+    if (!isCorrectPassword) throw new BadRequestError("Incorrect old password")
 
     const newPassword = await argon2.hash(body.newPassword)
     await app.prisma.user.update({
@@ -155,7 +157,7 @@ export const sendPasswordResetEmail: RouteHandler<{
     body: schemas.SendPasswordResetEmailBody
 }> = async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (!user) throw new BadRequest("User with such email was not found")
+    if (!user) throw new BadRequestError("User with such email was not found")
 
     const token = createUuid()
 
@@ -198,7 +200,7 @@ export const resetPassword: RouteHandler<{
     const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
         where: { token: params.passwordResetToken }
     })
-    if (!passwordResetToken) throw new BadRequest("Password reset token expired")
+    if (!passwordResetToken) throw new BadRequestError("Password reset token expired")
 
     const newPassword = await argon2.hash(body.newPassword)
     await app.prisma.user.update({

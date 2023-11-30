@@ -1,4 +1,5 @@
 import path from "path"
+import { fileURLToPath } from "url"
 import fs from "fs-extra"
 import { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
@@ -7,8 +8,10 @@ import { ImgSize, ImgExtension } from "$/enums"
 
 const isDev = process.env.NODE_ENV === "development"
 
+const dirname = path.dirname(fileURLToPath(import.meta.url))
+
 export function getAbsFilesPath(...paths: Array<string>) {
-    return path.join(__dirname, `..${isDev ? "/../../storage" : ""}/files`, ...paths)
+    return path.join(dirname, `..${isDev ? "/../../storage" : ""}/files`, ...paths)
 }
 
 function getExt(file: MultipartFile) {

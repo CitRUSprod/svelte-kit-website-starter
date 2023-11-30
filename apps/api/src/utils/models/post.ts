@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { BadRequest } from "http-errors"
+import { BadRequestError } from "http-errors-enhanced"
 import { User, Post } from "@prisma/client"
 import { JsonifiableObject } from "$/types"
 
@@ -22,6 +22,6 @@ export async function get(app: FastifyInstance, id: number) {
         where: { id },
         include: { author: { include: { role: true } } }
     })
-    if (!post) throw new BadRequest("Post with such ID was not found")
+    if (!post) throw new BadRequestError("Post with such ID was not found")
     return post
 }

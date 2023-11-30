@@ -1,4 +1,4 @@
-import { Forbidden } from "http-errors"
+import { ForbiddenError } from "http-errors-enhanced"
 import { Prisma, Permission } from "@prisma/client"
 import { getItemsPage, models } from "$/utils"
 import { RouteHandler, UserData } from "$/types"
@@ -58,7 +58,7 @@ export const updatePost: RouteHandler<{
 
         return { payload: models.post.dto(updatedPost) }
     } else {
-        throw new Forbidden("No access")
+        throw new ForbiddenError("No access")
     }
 }
 
@@ -79,6 +79,6 @@ export const deletePost: RouteHandler<{
 
         return { payload: models.post.dto(deletedPost) }
     } else {
-        throw new Forbidden("No access")
+        throw new ForbiddenError("No access")
     }
 }

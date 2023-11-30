@@ -1,4 +1,4 @@
-import { BadRequest, InternalServerError } from "http-errors"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import { TokenTtl } from "$/enums"
 import { ReplyCookie, RouteHandler } from "$/types"
@@ -7,10 +7,10 @@ import * as utils from "./utils"
 
 export const register: RouteHandler<{ body: schemas.RegisterBody }> = async (app, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (userByEmail) throw new BadRequest("User with such email already exists")
+    if (userByEmail) throw new BadRequestError("User with such email already exists")
 
     const userByUsername = await app.prisma.user.findFirst({ where: { username: body.username } })
-    if (userByUsername) throw new BadRequest("User with such username already exists")
+    if (userByUsername) throw new BadRequestError("User with such username already exists")
 
     const password = await argon2.hash(body.password)
     await app.prisma.user.create({
@@ -22,10 +22,10 @@ export const register: RouteHandler<{ body: schemas.RegisterBody }> = async (app
 
 export const login: RouteHandler<{ body: schemas.LoginBody }> = async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (!user) throw new BadRequest("User with such email was not found")
+    if (!user) throw new BadRequestError("User with such email was not found")
 
     const isCorrectPassword = await argon2.verify(user.password, body.password)
-    if (!isCorrectPassword) throw new BadRequest("Incorrect password")
+    if (!isCorrectPassword) throw new BadRequestError("Incorrect password")
 
     await utils.deleteExpiredRefreshTokens(app)
 

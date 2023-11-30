@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { FastifyAuthFunction } from "@fastify/auth"
-import { InternalServerError } from "http-errors"
+import { InternalServerError } from "http-errors-enhanced"
 
 declare module "fastify" {
     interface FastifyInstance {

@@ -1,4 +1,4 @@
-import { BadRequest } from "http-errors"
+import { BadRequestError } from "http-errors-enhanced"
 import { Prisma, Permission } from "@prisma/client"
 import { getItemsPage, models } from "$/utils"
 import { UserData, PartialUserData, RouteHandler } from "$/types"
@@ -65,7 +65,7 @@ export const assignRoleToUser: RouteHandler<{ params: schemas.AssignRoleToUserPa
     const role = await models.role.get(app, params.roleId)
 
     if (user.roleId === params.roleId) {
-        throw new BadRequest(`User with such ID is already "${role.name}"`)
+        throw new BadRequestError(`User with such ID is already "${role.name}"`)
     }
 
     const updatedUser = await app.prisma.user.update({
@@ -79,7 +79,7 @@ export const assignRoleToUser: RouteHandler<{ params: schemas.AssignRoleToUserPa
 
 export const banUser: RouteHandler<{ params: schemas.BanUserParams }> = async (app, { params }) => {
     const user = await models.user.get(app, params.id)
-    if (user.banned) throw new BadRequest("User with such ID is already banned")
+    if (user.banned) throw new BadRequestError("User with such ID is already banned")
 
     const bannedUser = await app.prisma.user.update({
         where: { id: params.id },
@@ -95,7 +95,7 @@ export const unbanUser: RouteHandler<{ params: schemas.UnbanUserParams }> = asyn
     { params }
 ) => {
     const user = await models.user.get(app, params.id)
-    if (!user.banned) throw new BadRequest("User with such ID is not banned")
+    if (!user.banned) throw new BadRequestError("User with such ID is not banned")
 
     const unbannedUser = await app.prisma.user.update({
         where: { id: params.id },
