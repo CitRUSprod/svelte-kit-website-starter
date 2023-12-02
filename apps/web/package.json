@@ -35,6 +35,7 @@
         "vite-plugin-dynamic-import": "1.5.0"
     },
     "dependencies": {
+        "@local/utils": "workspace:*",
         "@rgossiaux/svelte-headlessui": "2.0.0",
         "@segment/ajv-human-errors": "2.11.3",
         "@sinclair/typebox": "0.31.28",

@@ -1,0 +1,22 @@
+{
+    "name": "@local/utils",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./dist/index.js"
+    },
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsup src/index.ts --clean --format esm --minify --dts",
+        "check-types": "tsc --pretty --noEmit"
+    },
+    "devDependencies": {
+        "@local/configs": "workspace:*",
+        "@types/node": "20.9.3",
+        "tsup": "8.0.1",
+        "typescript": "5.2.2"
+    },
+    "dependencies": {
+        "tslib": "2.6.2"
+    }
+}

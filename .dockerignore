@@ -2,11 +2,14 @@
 
 !/apps
 !/packages
+!.dockerignore
 !.npmrc
 !package.json
 !pnpm-lock.yaml
 !pnpm-workspace.yaml
+!turbo.json
 
 **/node_modules
+**/.turbo
 **/.svelte-kit
 **/dist

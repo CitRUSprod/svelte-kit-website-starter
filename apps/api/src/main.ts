@@ -48,7 +48,6 @@ async function start() {
         port
     })
     initSockets(app)
-    // throw new Error("Pepega")
     console.log(`Running on http://localhost:${port}`)
 }
 

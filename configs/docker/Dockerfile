@@ -1,23 +1,28 @@
 ARG NODE_IMAGE
 FROM ${NODE_IMAGE} AS base
 WORKDIR /project
-RUN npm add -g pnpm@8.10.5
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json ./apps/web/
-COPY apps/api/package.json ./apps/api/
-COPY apps/api/src/prisma/schema.prisma ./apps/api/src/prisma/
-COPY packages/configs/package.json ./packages/configs/
+RUN corepack enable && corepack prepare pnpm@8.10.5 --activate
+ENV PNPM_HOME=/usr/local/bin
+
+FROM base AS preparer
+RUN pnpm add -g turbo@1.10.16
+COPY . .
+RUN turbo prune --docker web api
+
+FROM base AS installer
+COPY --from=preparer /project/out/json .
+COPY --from=preparer /project/out/full/apps/api/src/prisma/schema.prisma ./apps/api/src/prisma/
 RUN pnpm i
 COPY . .
 
-FROM base AS web
-WORKDIR /project/apps/web
+FROM installer AS web
 ARG PUBLIC_TITLE
 ARG PUBLIC_BASE_URL
-RUN pnpm build
+RUN pnpm build --filter=web...
+WORKDIR /project/apps/web
 CMD pnpm start
 
-FROM base AS api
+FROM installer AS api
+RUN pnpm build --filter=api...
 WORKDIR /project/apps/api
-RUN pnpm build
 CMD pnpm prisma:migrations:run && pnpm start

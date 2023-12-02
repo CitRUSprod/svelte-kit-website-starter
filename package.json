@@ -2,9 +2,10 @@
     "name": "svelte-kit-website-starter",
     "private": true,
     "scripts": {
-        "dev": "pnpm --parallel dev",
-        "build": "pnpm --parallel build",
-        "check-types": "pnpm --parallel check-types",
+        "turbo": "turbo --no-daemon",
+        "dev": "pnpm turbo dev",
+        "build": "pnpm turbo build",
+        "check-types": "pnpm turbo check-types",
         "commit": "git-cz",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint --fix",
@@ -78,6 +79,7 @@
         "stylelint-prettier": "4.0.2",
         "svelte": "4.2.7",
         "svelte-eslint-parser": "0.33.1",
+        "turbo": "1.10.16",
         "typescript": "5.2.2"
     }
 }

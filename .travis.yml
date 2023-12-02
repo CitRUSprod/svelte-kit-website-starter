@@ -19,4 +19,4 @@ install:
     - pnpm build
 
 script:
-    - pnpm ci
+    - pnpm run ci
