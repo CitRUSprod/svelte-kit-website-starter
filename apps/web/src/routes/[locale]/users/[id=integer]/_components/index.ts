@@ -1,3 +1,3 @@
-export { default as ModalAvatarRemoving } from "./ModalAvatarRemoving.svelte"
-export { default as ModalProfileEditing } from "./ModalProfileEditing.svelte"
-export { default as ModalPasswordChanging } from "./ModalPasswordChanging.svelte"
+export { default as DialogAvatarRemoving } from "./DialogAvatarRemoving.svelte"
+export { default as DialogProfileEditing } from "./DialogProfileEditing.svelte"
+export { default as DialogPasswordChanging } from "./DialogPasswordChanging.svelte"

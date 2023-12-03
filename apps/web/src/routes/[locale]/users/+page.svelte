@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Content, Button, Checkbox, SimplePagination } from "$lib/components"
-    import { ModalRoleAssigning } from "./_components"
+    import { DialogRoleAssigning } from "./_components"
 
     import { t, localePath, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
@@ -10,7 +10,7 @@
 
     export let data
 
-    let modalRoleAssigning: ModalRoleAssigning
+    let dialogRoleAssigning: DialogRoleAssigning
 
     const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
@@ -162,7 +162,7 @@
                                 {#if !user.banned}
                                     <Button
                                         variant="warning"
-                                        on:click={() => modalRoleAssigning.open(user)}
+                                        on:click={() => dialogRoleAssigning.open(user)}
                                     >
                                         {$t("routes.users.assign-role")}
                                     </Button>
@@ -205,4 +205,8 @@
     {/if}
 </Content.Default>
 
-<ModalRoleAssigning bind:this={modalRoleAssigning} roles={data.roles} on:assignRole={refetchPage} />
+<DialogRoleAssigning
+    bind:this={dialogRoleAssigning}
+    roles={data.roles}
+    on:assignRole={refetchPage}
+/>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, TextField, Modal } from "$lib/components"
+    import { Button, TextField, Dialog } from "$lib/components"
 
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
@@ -7,7 +7,7 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let visible = false
+    let dialog: Dialog
 
     let oldPassword = ""
     let newPassword = ""
@@ -24,11 +24,11 @@
         oldPassword = ""
         newPassword = ""
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcChangePassword = createQueryController({
@@ -41,25 +41,21 @@
         onSuccess() {
             toasts.add(
                 "success",
-                $t("components.modal-password-changing.password-changed-successfully")
+                $t("components.dialog-password-changing.password-changed-successfully")
             )
             close()
         }
     })
 </script>
 
-<Modal
-    class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcChangePassword.loading}
-    bind:visible
->
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-password-changing.password-changing")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-password-changing.password-changing")}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcChangePassword.loading}
-            label={$t("components.modal-password-changing.old-password")}
+            label={$t("components.dialog-password-changing.old-password")}
             type="password"
             bind:value={oldPassword}
         />
@@ -67,14 +63,14 @@
     <div>
         <TextField
             disabled={$qcChangePassword.loading}
-            label={$t("components.modal-password-changing.new-password")}
+            label={$t("components.dialog-password-changing.new-password")}
             type="password"
             bind:value={newPassword}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcChangePassword.loading} text variant="error" on:click={close}>
-            {$t("components.modal-password-changing.cancel")}
+            {$t("components.dialog-password-changing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
@@ -82,7 +78,7 @@
             variant="success"
             on:click={qcChangePassword.refresh}
         >
-            {$t("components.modal-password-changing.change")}
+            {$t("components.dialog-password-changing.change")}
         </Button>
     </div>
-</Modal>
+</Dialog>

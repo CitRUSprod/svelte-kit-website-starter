@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Content, Button } from "$lib/components"
-    import { ModalRoleCreating, ModalRoleEditing, ModalRoleRemoving } from "./_components"
+    import { DialogRoleCreating, DialogRoleEditing, DialogRoleRemoving } from "./_components"
 
     import { t } from "$lib/locales"
     import { userData } from "$lib/stores"
@@ -10,9 +10,9 @@
 
     export let data
 
-    let modalRoleCreating: ModalRoleCreating
-    let modalRoleEditing: ModalRoleEditing
-    let modalRoleRemoving: ModalRoleRemoving
+    let dialogRoleCreating: DialogRoleCreating
+    let dialogRoleEditing: DialogRoleEditing
+    let dialogRoleRemoving: DialogRoleRemoving
 
     const qcGetRoles = createQueryController({
         initialData: { items: data.roles },
@@ -58,13 +58,13 @@
                                 {#if !role.protected}
                                     <Button
                                         variant="warning"
-                                        on:click={() => modalRoleEditing.open(role)}
+                                        on:click={() => dialogRoleEditing.open(role)}
                                     >
                                         {$t("routes.roles.edit")}
                                     </Button>
                                     <Button
                                         variant="error"
-                                        on:click={() => modalRoleRemoving.open(role)}
+                                        on:click={() => dialogRoleRemoving.open(role)}
                                     >
                                         {$t("routes.roles.remove")}
                                     </Button>
@@ -76,21 +76,21 @@
             </tbody>
         </table>
         <div class="u:flex u:justify-center">
-            <Button variant="success" on:click={modalRoleCreating.open}>
+            <Button variant="success" on:click={dialogRoleCreating.open}>
                 {$t("routes.roles.create-role")}
             </Button>
         </div>
     {/if}
 </Content.Default>
 
-<ModalRoleCreating
-    bind:this={modalRoleCreating}
+<DialogRoleCreating
+    bind:this={dialogRoleCreating}
     permissions={data.permissions}
     on:createRole={qcGetRoles.refresh}
 />
-<ModalRoleEditing
-    bind:this={modalRoleEditing}
+<DialogRoleEditing
+    bind:this={dialogRoleEditing}
     permissions={data.permissions}
     on:editRole={qcGetRoles.refresh}
 />
-<ModalRoleRemoving bind:this={modalRoleRemoving} on:removeRole={qcGetRoles.refresh} />
+<DialogRoleRemoving bind:this={dialogRoleRemoving} on:removeRole={qcGetRoles.refresh} />

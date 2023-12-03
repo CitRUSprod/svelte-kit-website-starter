@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, TextField, DropdownMenu, Modal } from "$lib/components"
+    import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
     import { t } from "$lib/locales"
@@ -14,7 +14,7 @@
 
     const dispatch = createEventDispatcher()
 
-    let visible = false
+    let dialog: Dialog
 
     let name = ""
     let currentPermission: Permission | null = null
@@ -31,11 +31,11 @@
         currentPermission = null
         selectedPermissions = []
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcCreateRole = createQueryController({
@@ -47,7 +47,7 @@
         },
         async onSuccess() {
             dispatch("createRole")
-            toasts.add("success", $t("components.modal-role-creating.role-created-successfully"))
+            toasts.add("success", $t("components.dialog-role-creating.role-created-successfully"))
             close()
         }
     })
@@ -65,14 +65,14 @@
     }
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcCreateRole.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-role-creating.role-creating")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-role-creating.role-creating")}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcCreateRole.loading}
-            label={$t("components.modal-role-creating.name")}
+            label={$t("components.dialog-role-creating.name")}
             bind:value={name}
         />
     </div>
@@ -81,7 +81,7 @@
             <div
                 class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-default u:text-xs u:select-none u:pointer-events-none u:z-1"
             >
-                {$t("components.modal-role-creating.permissions")}
+                {$t("components.dialog-role-creating.permissions")}
             </div>
             <div class="u:flex u:flex-wrap u:gap-1 u:p-3">
                 {#each selectedPermissions as permission (permission)}
@@ -97,7 +97,7 @@
                     </div>
                 {:else}
                     <div class="u:w-full u:text-center u:opacity-30">
-                        ({$t("components.modal-role-creating.empty")})
+                        ({$t("components.dialog-role-creating.empty")})
                     </div>
                 {/each}
             </div>
@@ -108,7 +108,7 @@
             <DropdownMenu
                 disabled={items.length === 0 || $qcCreateRole.loading}
                 {items}
-                label={$t("components.modal-role-creating.permission")}
+                label={$t("components.dialog-role-creating.permission")}
                 bind:value={currentPermission}
             />
         </div>
@@ -118,13 +118,13 @@
                 variant="success"
                 on:click={addPermission}
             >
-                {$t("components.modal-role-creating.add")}
+                {$t("components.dialog-role-creating.add")}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcCreateRole.loading} text variant="error" on:click={close}>
-            {$t("components.modal-role-creating.cancel")}
+            {$t("components.dialog-role-creating.cancel")}
         </Button>
         <Button
             disabled={!vldResultName.valid}
@@ -132,7 +132,7 @@
             variant="success"
             on:click={qcCreateRole.refresh}
         >
-            {$t("components.modal-role-creating.create")}
+            {$t("components.dialog-role-creating.create")}
         </Button>
     </div>
-</Modal>
+</Dialog>

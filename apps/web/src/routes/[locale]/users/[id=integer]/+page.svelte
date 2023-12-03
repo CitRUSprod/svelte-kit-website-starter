@@ -1,6 +1,10 @@
 <script lang="ts">
     import { Content, Button } from "$lib/components"
-    import { ModalAvatarRemoving, ModalProfileEditing, ModalPasswordChanging } from "./_components"
+    import {
+        DialogAvatarRemoving,
+        DialogProfileEditing,
+        DialogPasswordChanging
+    } from "./_components"
 
     import { t, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
@@ -10,9 +14,9 @@
     export let data
 
     let avatarInput: HTMLInputElement
-    let modalAvatarRemoving: ModalAvatarRemoving
-    let modalProfileEditing: ModalProfileEditing
-    let modalPasswordChanging: ModalPasswordChanging
+    let dialogAvatarRemoving: DialogAvatarRemoving
+    let dialogProfileEditing: DialogProfileEditing
+    let dialogPasswordChanging: DialogPasswordChanging
 
     const qcUploadAvatar = createQueryController({
         params: {
@@ -100,14 +104,14 @@
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
             {#if data.user.avatar}
-                <Button variant="error" on:click={modalAvatarRemoving.open}>
+                <Button variant="error" on:click={dialogAvatarRemoving.open}>
                     {$t("routes.users.[id].remove-avatar")}
                 </Button>
             {/if}
-            <Button variant="warning" on:click={modalProfileEditing.open}>
+            <Button variant="warning" on:click={dialogProfileEditing.open}>
                 {$t("routes.users.[id].edit")}
             </Button>
-            <Button variant="warning" on:click={modalPasswordChanging.open}>
+            <Button variant="warning" on:click={dialogPasswordChanging.open}>
                 {$t("routes.users.[id].change-password")}
             </Button>
             {#if !$userData.confirmedEmail}
@@ -123,6 +127,6 @@
     {/if}
 </Content.Default>
 
-<ModalAvatarRemoving bind:this={modalAvatarRemoving} bind:user={data.user} />
-<ModalProfileEditing bind:this={modalProfileEditing} bind:user={data.user} />
-<ModalPasswordChanging bind:this={modalPasswordChanging} />
+<DialogAvatarRemoving bind:this={dialogAvatarRemoving} bind:user={data.user} />
+<DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
+<DialogPasswordChanging bind:this={dialogPasswordChanging} />

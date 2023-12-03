@@ -1,2 +1,2 @@
-export { default as ModalPostEditing } from "./ModalPostEditing.svelte"
-export { default as ModalPostRemoving } from "./ModalPostRemoving.svelte"
+export { default as DialogPostEditing } from "./DialogPostEditing.svelte"
+export { default as DialogPostRemoving } from "./DialogPostRemoving.svelte"

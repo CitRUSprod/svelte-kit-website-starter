@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, TextField, TextArea, Modal } from "$lib/components"
+    import { Button, TextField, TextArea, Dialog } from "$lib/components"
 
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
@@ -11,7 +11,7 @@
 
     export let post: Post
 
-    let visible = false
+    let dialog: Dialog
 
     let title = ""
     let content = ""
@@ -28,11 +28,11 @@
         title = post.title
         content = post.content
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcUpdatePost = createQueryController({
@@ -45,21 +45,21 @@
         },
         onSuccess(localPost) {
             post = localPost
-            toasts.add("success", $t("components.modal-post-editing.post-edited-successfully"))
+            toasts.add("success", $t("components.dialog-post-editing.post-edited-successfully"))
             close()
         }
     })
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-200" persistent={$qcUpdatePost.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-200">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-post-editing.post-editing")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-post-editing.post-editing")}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcUpdatePost.loading}
-            label={$t("components.modal-post-editing.title")}
-            placeholder={$t("components.modal-post-editing.enter-title")}
+            label={$t("components.dialog-post-editing.title")}
+            placeholder={$t("components.dialog-post-editing.enter-title")}
             bind:value={title}
         />
     </div>
@@ -67,14 +67,14 @@
         <TextArea
             class="u:resize-none"
             disabled={$qcUpdatePost.loading}
-            label={$t("components.modal-post-editing.content")}
-            placeholder={$t("components.modal-post-editing.enter-content")}
+            label={$t("components.dialog-post-editing.content")}
+            placeholder={$t("components.dialog-post-editing.enter-content")}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdatePost.loading} text variant="error" on:click={close}>
-            {$t("components.modal-post-editing.cancel")}
+            {$t("components.dialog-post-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
@@ -82,7 +82,7 @@
             variant="success"
             on:click={qcUpdatePost.refresh}
         >
-            {$t("components.modal-post-editing.save")}
+            {$t("components.dialog-post-editing.save")}
         </Button>
     </div>
-</Modal>
+</Dialog>

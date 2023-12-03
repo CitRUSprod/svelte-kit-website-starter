@@ -56,20 +56,20 @@ const config: Config = {
         ["routes/profile/password/index", ["/profile/password"]],
         ["routes/profile/password/[token]", [/^\/profile\/password\/[-\da-f]+$/]],
         ["routes/posts/index", ["/posts"]],
-        ["routes/posts/_components/modal-post-creating", ["/posts"]],
+        ["routes/posts/_components/dialog-post-creating", ["/posts"]],
         ["routes/posts/[id]/index", [/^\/posts\/\d+$/]],
-        ["routes/posts/[id]/_components/modal-post-editing", [/^\/posts\/\d+$/]],
-        ["routes/posts/[id]/_components/modal-post-removing", [/^\/posts\/\d+$/]],
+        ["routes/posts/[id]/_components/dialog-post-editing", [/^\/posts\/\d+$/]],
+        ["routes/posts/[id]/_components/dialog-post-removing", [/^\/posts\/\d+$/]],
         ["routes/users/index", ["/users"]],
-        ["routes/users/_components/modal-role-assigning", ["/users"]],
+        ["routes/users/_components/dialog-role-assigning", ["/users"]],
         ["routes/users/[id]/index", [/^\/users\/\d+$/]],
-        ["routes/users/[id]/_components/modal-avatar-removing", [/^\/users\/\d+$/]],
-        ["routes/users/[id]/_components/modal-password-changing", [/^\/users\/\d+$/]],
-        ["routes/users/[id]/_components/modal-profile-editing", [/^\/users\/\d+$/]],
+        ["routes/users/[id]/_components/dialog-avatar-removing", [/^\/users\/\d+$/]],
+        ["routes/users/[id]/_components/dialog-password-changing", [/^\/users\/\d+$/]],
+        ["routes/users/[id]/_components/dialog-profile-editing", [/^\/users\/\d+$/]],
         ["routes/roles/index", ["/roles"]],
-        ["routes/roles/_components/modal-role-creating", ["/roles"]],
-        ["routes/roles/_components/modal-role-editing", ["/roles"]],
-        ["routes/roles/_components/modal-role-removing", ["/roles"]]
+        ["routes/roles/_components/dialog-role-creating", ["/roles"]],
+        ["routes/roles/_components/dialog-role-editing", ["/roles"]],
+        ["routes/roles/_components/dialog-role-removing", ["/roles"]]
     )
 }
 

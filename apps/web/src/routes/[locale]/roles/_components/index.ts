@@ -1,3 +1,3 @@
-export { default as ModalRoleCreating } from "./ModalRoleCreating.svelte"
-export { default as ModalRoleEditing } from "./ModalRoleEditing.svelte"
-export { default as ModalRoleRemoving } from "./ModalRoleRemoving.svelte"
+export { default as DialogRoleCreating } from "./DialogRoleCreating.svelte"
+export { default as DialogRoleEditing } from "./DialogRoleEditing.svelte"
+export { default as DialogRoleRemoving } from "./DialogRoleRemoving.svelte"

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
-    import { ModalPostCreating } from "./_components"
+    import { DialogPostCreating } from "./_components"
 
     import * as lodash from "lodash-es"
     import { t, localePath, currentLocale } from "$lib/locales"
@@ -11,7 +11,7 @@
 
     export let data
 
-    let modalPostCreating: ModalPostCreating
+    let dialogPostCreating: DialogPostCreating
 
     let sortings: Array<DropdownMenuItem>
     $: sortings = [
@@ -111,7 +111,7 @@
             />
         </div>
         <div>
-            <Button variant="success" on:click={modalPostCreating.open}>
+            <Button variant="success" on:click={dialogPostCreating.open}>
                 {$t("routes.posts.create-post")}
             </Button>
         </div>
@@ -152,4 +152,4 @@
     {/if}
 </Content.Default>
 
-<ModalPostCreating bind:this={modalPostCreating} />
+<DialogPostCreating bind:this={dialogPostCreating} />

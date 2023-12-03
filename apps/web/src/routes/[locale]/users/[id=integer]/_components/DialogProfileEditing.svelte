@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, TextField, Modal } from "$lib/components"
+    import { Button, TextField, Dialog } from "$lib/components"
 
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
@@ -11,7 +11,7 @@
 
     export let user: User
 
-    let visible = false
+    let dialog: Dialog
 
     let username = ""
     let email = ""
@@ -28,11 +28,11 @@
         username = user.username
         email = user.email ?? ""
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcUpdateUser = createQueryController({
@@ -46,34 +46,34 @@
             user = localUser
             toasts.add(
                 "success",
-                $t("components.modal-profile-editing.profile-edited-successfully")
+                $t("components.dialog-profile-editing.profile-edited-successfully")
             )
             close()
         }
     })
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcUpdateUser.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-profile-editing.profile-editing")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-profile-editing.profile-editing")}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcUpdateUser.loading}
-            label={$t("components.modal-profile-editing.username")}
+            label={$t("components.dialog-profile-editing.username")}
             bind:value={username}
         />
     </div>
     <div>
         <TextField
             disabled={$qcUpdateUser.loading}
-            label={$t("components.modal-profile-editing.email")}
+            label={$t("components.dialog-profile-editing.email")}
             bind:value={email}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdateUser.loading} text variant="error" on:click={close}>
-            {$t("components.modal-profile-editing.cancel")}
+            {$t("components.dialog-profile-editing.cancel")}
         </Button>
         <Button
             disabled={!completedForm}
@@ -81,7 +81,7 @@
             variant="success"
             on:click={qcUpdateUser.refresh}
         >
-            {$t("components.modal-profile-editing.save")}
+            {$t("components.dialog-profile-editing.save")}
         </Button>
     </div>
-</Modal>
+</Dialog>

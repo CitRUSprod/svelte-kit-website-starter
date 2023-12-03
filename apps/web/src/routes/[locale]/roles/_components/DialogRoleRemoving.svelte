@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Modal } from "$lib/components"
+    import { Button, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
     import { t } from "$lib/locales"
@@ -11,18 +11,18 @@
 
     const dispatch = createEventDispatcher()
 
-    let visible = false
+    let dialog: Dialog
 
     let role: RoleWithProtected
 
     export function open(r: RoleWithProtected) {
         role = r
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcDeleteRole = createQueryController({
@@ -31,7 +31,7 @@
         },
         async onSuccess() {
             dispatch("removeRole")
-            toasts.add("success", $t("components.modal-role-removing.role-removed-successfully"))
+            toasts.add("success", $t("components.dialog-role-removing.role-removed-successfully"))
             close()
         }
     })
@@ -41,25 +41,25 @@
     }
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcDeleteRole.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1>{$t("components.modal-role-removing.role-removing")}</h1>
+        <h1>{$t("components.dialog-role-removing.role-removing")}</h1>
     </div>
     <div>
         <p>
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $t(
-                "components.modal-role-removing.role-removing-question",
+                "components.dialog-role-removing.role-removing-question",
                 defineAny({ role: role.name })
             )}
         </p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcDeleteRole.loading} text variant="success" on:click={close}>
-            {$t("components.modal-role-removing.cancel")}
+            {$t("components.dialog-role-removing.cancel")}
         </Button>
         <Button loading={$qcDeleteRole.loading} variant="error" on:click={qcDeleteRole.refresh}>
-            {$t("components.modal-role-removing.remove")}
+            {$t("components.dialog-role-removing.remove")}
         </Button>
     </div>
-</Modal>
+</Dialog>

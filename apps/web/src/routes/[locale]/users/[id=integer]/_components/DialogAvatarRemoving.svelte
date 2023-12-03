@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Modal } from "$lib/components"
+    import { Button, Dialog } from "$lib/components"
 
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
@@ -10,14 +10,14 @@
 
     export let user: User
 
-    let visible = false
+    let dialog: Dialog
 
     export function open() {
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcDeleteAvatar = createQueryController({
@@ -28,26 +28,26 @@
             user.avatar = null
             toasts.add(
                 "success",
-                $t("components.modal-avatar-removing.avatar-removed-successfully")
+                $t("components.dialog-avatar-removing.avatar-removed-successfully")
             )
             close()
         }
     })
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcDeleteAvatar.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1>{$t("components.modal-avatar-removing.avatar-removing")}</h1>
+        <h1>{$t("components.dialog-avatar-removing.avatar-removing")}</h1>
     </div>
     <div>
-        <p>{$t("components.modal-avatar-removing.avatar-removing-question")}</p>
+        <p>{$t("components.dialog-avatar-removing.avatar-removing-question")}</p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcDeleteAvatar.loading} text variant="success" on:click={close}>
-            {$t("components.modal-avatar-removing.cancel")}
+            {$t("components.dialog-avatar-removing.cancel")}
         </Button>
         <Button loading={$qcDeleteAvatar.loading} variant="error" on:click={qcDeleteAvatar.refresh}>
-            {$t("components.modal-avatar-removing.remove")}
+            {$t("components.dialog-avatar-removing.remove")}
         </Button>
     </div>
-</Modal>
+</Dialog>

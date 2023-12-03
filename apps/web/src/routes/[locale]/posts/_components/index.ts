@@ -1,1 +1,1 @@
-export { default as ModalPostCreating } from "./ModalPostCreating.svelte"
+export { default as DialogPostCreating } from "./DialogPostCreating.svelte"

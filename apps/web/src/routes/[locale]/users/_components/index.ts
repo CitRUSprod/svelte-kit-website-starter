@@ -1,1 +1,1 @@
-export { default as ModalRoleAssigning } from "./ModalRoleAssigning.svelte"
+export { default as DialogRoleAssigning } from "./DialogRoleAssigning.svelte"

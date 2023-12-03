@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, TextField, DropdownMenu, Modal } from "$lib/components"
+    import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
     import { t } from "$lib/locales"
@@ -15,7 +15,7 @@
 
     const dispatch = createEventDispatcher()
 
-    let visible = false
+    let dialog: Dialog
 
     let roleId = 0
     let name = ""
@@ -34,11 +34,11 @@
         currentPermission = null
         selectedPermissions = [...role.permissions]
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcUpdateRole = createQueryController({
@@ -51,7 +51,7 @@
         },
         async onSuccess() {
             dispatch("editRole")
-            toasts.add("success", $t("components.modal-role-editing.role-edited-successfully"))
+            toasts.add("success", $t("components.dialog-role-editing.role-edited-successfully"))
             close()
         }
     })
@@ -69,14 +69,14 @@
     }
 </script>
 
-<Modal class="u:flex u:flex-col u:gap-4 u:w-100" persistent={$qcUpdateRole.loading} bind:visible>
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-role-editing.role-editing")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-role-editing.role-editing")}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcUpdateRole.loading}
-            label={$t("components.modal-role-editing.name")}
+            label={$t("components.dialog-role-editing.name")}
             bind:value={name}
         />
     </div>
@@ -85,7 +85,7 @@
             <div
                 class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-default u:text-xs u:select-none u:pointer-events-none u:z-1"
             >
-                {$t("components.modal-role-editing.permissions")}
+                {$t("components.dialog-role-editing.permissions")}
             </div>
             <div class="u:flex u:flex-wrap u:gap-1 u:p-3">
                 {#each selectedPermissions as permission (permission)}
@@ -101,7 +101,7 @@
                     </div>
                 {:else}
                     <div class="u:w-full u:text-center u:opacity-30">
-                        ({$t("components.modal-role-editing.empty")})
+                        ({$t("components.dialog-role-editing.empty")})
                     </div>
                 {/each}
             </div>
@@ -112,7 +112,7 @@
             <DropdownMenu
                 disabled={items.length === 0 || $qcUpdateRole.loading}
                 {items}
-                label={$t("components.modal-role-editing.permission")}
+                label={$t("components.dialog-role-editing.permission")}
                 bind:value={currentPermission}
             />
         </div>
@@ -122,13 +122,13 @@
                 variant="success"
                 on:click={addPermission}
             >
-                {$t("components.modal-role-editing.add")}
+                {$t("components.dialog-role-editing.add")}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdateRole.loading} text variant="error" on:click={close}>
-            {$t("components.modal-role-editing.cancel")}
+            {$t("components.dialog-role-editing.cancel")}
         </Button>
         <Button
             disabled={!vldResultName.valid}
@@ -136,7 +136,7 @@
             variant="success"
             on:click={qcUpdateRole.refresh}
         >
-            {$t("components.modal-role-editing.save")}
+            {$t("components.dialog-role-editing.save")}
         </Button>
     </div>
-</Modal>
+</Dialog>

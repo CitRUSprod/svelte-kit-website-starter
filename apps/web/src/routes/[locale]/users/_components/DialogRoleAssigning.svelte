@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, DropdownMenu, Modal } from "$lib/components"
+    import { Button, DropdownMenu, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
     import { t } from "$lib/locales"
@@ -11,9 +11,9 @@
 
     export let roles: Array<Role>
 
-    const dispatch = createEventDispatcher()
+    let dialog: Dialog
 
-    let visible = false
+    const dispatch = createEventDispatcher()
 
     let userId = 0
     let roleId = 0
@@ -24,11 +24,11 @@
         userId = user.id
         roleId = user.role.id
 
-        visible = true
+        dialog.open()
     }
 
     export function close() {
-        visible = false
+        dialog.close()
     }
 
     const qcAssignRoleToUser = createQueryController({
@@ -40,38 +40,34 @@
         },
         onSuccess() {
             dispatch("assignRole")
-            toasts.add("success", $t("components.modal-role-assigning.role-edited-successfully"))
+            toasts.add("success", $t("components.dialog-role-assigning.role-edited-successfully"))
             close()
         }
     })
 </script>
 
-<Modal
-    class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcAssignRoleToUser.loading}
-    bind:visible
->
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
     <div>
-        <h1 class="u:text-center">{$t("components.modal-role-assigning.role-assigning")}</h1>
+        <h1 class="u:text-center">{$t("components.dialog-role-assigning.role-assigning")}</h1>
     </div>
     <div>
         <DropdownMenu
             disabled={$qcAssignRoleToUser.loading}
             {items}
-            label={$t("components.modal-role-assigning.role")}
+            label={$t("components.dialog-role-assigning.role")}
             bind:value={roleId}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcAssignRoleToUser.loading} text variant="error" on:click={close}>
-            {$t("components.modal-role-assigning.cancel")}
+            {$t("components.dialog-role-assigning.cancel")}
         </Button>
         <Button
             loading={$qcAssignRoleToUser.loading}
             variant="success"
             on:click={qcAssignRoleToUser.refresh}
         >
-            {$t("components.modal-role-assigning.save")}
+            {$t("components.dialog-role-assigning.save")}
         </Button>
     </div>
-</Modal>
+</Dialog>

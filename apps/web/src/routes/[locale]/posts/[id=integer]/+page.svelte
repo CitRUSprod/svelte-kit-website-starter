@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Content, Button } from "$lib/components"
-    import { ModalPostEditing, ModalPostRemoving } from "./_components"
+    import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
     import { t, localePath, currentLocale } from "$lib/locales"
     import { userData } from "$lib/stores"
@@ -9,8 +9,8 @@
 
     export let data
 
-    let modalPostEditing: ModalPostEditing
-    let modalPostRemoving: ModalPostRemoving
+    let dialogPostEditing: DialogPostEditing
+    let dialogPostRemoving: DialogPostRemoving
 </script>
 
 <svelte:head>
@@ -48,21 +48,21 @@
     </div>
     {#if $userData?.id === data.post.author.id}
         <div>
-            <Button variant="warning" on:click={modalPostEditing.open}>
+            <Button variant="warning" on:click={dialogPostEditing.open}>
                 {$t("routes.posts.[id].edit")}
             </Button>
-            <Button variant="error" on:click={modalPostRemoving.open}>
+            <Button variant="error" on:click={dialogPostRemoving.open}>
                 {$t("routes.posts.[id].remove")}
             </Button>
         </div>
     {:else if $userData?.role.permissions.includes(Permission.DeleteOtherUserPost)}
         <div>
-            <Button variant="error" on:click={modalPostRemoving.open}>
+            <Button variant="error" on:click={dialogPostRemoving.open}>
                 {$t("routes.posts.[id].remove")}
             </Button>
         </div>
     {/if}
 </Content.Default>
 
-<ModalPostEditing bind:this={modalPostEditing} bind:post={data.post} />
-<ModalPostRemoving bind:this={modalPostRemoving} post={data.post} />
+<DialogPostEditing bind:this={dialogPostEditing} bind:post={data.post} />
+<DialogPostRemoving bind:this={dialogPostRemoving} post={data.post} />
