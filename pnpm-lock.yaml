@@ -171,6 +171,9 @@ importers:
       '@local/configs':
         specifier: workspace:*
         version: link:../../packages/configs
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
       '@types/fs-extra':
         specifier: 11.0.4
         version: 11.0.4
@@ -283,6 +286,9 @@ importers:
       '@sveltejs/kit':
         specifier: 1.27.6
         version: 1.27.6(svelte@4.2.7)(vite@4.5.0)
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -358,6 +364,9 @@ importers:
       '@local/configs':
         specifier: workspace:*
         version: link:../configs
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
       '@types/node':
         specifier: 20.9.3
         version: 20.9.3
@@ -1957,6 +1966,10 @@ packages:
     resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
     dependencies:
       tslib: 2.6.2
+    dev: true
+
+  /@total-typescript/ts-reset@0.5.1:
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
     dev: true
 
   /@tsconfig/node10@1.0.9:

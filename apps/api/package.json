@@ -25,6 +25,7 @@
     },
     "devDependencies": {
         "@local/configs": "workspace:*",
+        "@total-typescript/ts-reset": "0.5.1",
         "@types/fs-extra": "11.0.4",
         "@types/node": "20.9.3",
         "@types/nodemailer": "6.4.14",
