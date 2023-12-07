@@ -13,7 +13,7 @@
         "stylelint:fix:all": "pnpm stylelint:all --fix",
         "eslint": "eslint --color --no-error-on-unmatched-pattern",
         "eslint:fix": "pnpm eslint --fix",
-        "eslint:all": "pnpm eslint \"**/*.{md,json,y?(a)ml,js,ts,svelte}\"",
+        "eslint:all": "pnpm eslint \"**/*.{html,md,json,y?(a)ml,js,ts,svelte}\"",
         "eslint:fix:all": "pnpm eslint:all --fix",
         "lint": "pnpm stylelint:all && pnpm eslint:all",
         "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
@@ -34,7 +34,7 @@
     },
     "lint-staged": {
         "*.svelte": "pnpm stylelint:fix",
-        "*.{md,json,y?(a)ml,js,ts,svelte}": "pnpm eslint:fix"
+        "*.{html,md,json,y?(a)ml,js,ts,svelte}": "pnpm eslint:fix"
     },
     "prettier": "./configs/prettier/index.js",
     "stylelint": {

@@ -5,13 +5,13 @@
     import type { ElementVariant } from "$lib/types"
 
     export let variant: ElementVariant = "default"
-    export let href = undefined as string | undefined
+    export let href: string | undefined = undefined
     export let target: string | undefined = undefined
     export let rel: string | undefined = undefined
-    export let text = false as boolean
+    export let text = false
     export let icon = false
-    export let disabled = false as boolean
-    export let loading = false as boolean
+    export let disabled = false
+    export let loading = false
 
     let klass: string | undefined = undefined
     export { klass as class }

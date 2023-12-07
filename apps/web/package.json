@@ -6,9 +6,11 @@
         "dev": "vite dev",
         "build": "vite build",
         "start": "PORT=6701 node dist",
-        "check-types": "svelte-check --tsconfig tsconfig.json"
+        "check-types": "svelte-check --tsconfig tsconfig.json",
+        "stories": "histoire dev"
     },
     "devDependencies": {
+        "@histoire/plugin-svelte": "0.17.6",
         "@iconify/json": "2.2.144",
         "@local/configs": "workspace:*",
         "@melt-ui/pp": "0.1.4",
@@ -24,6 +26,7 @@
         "@unocss/extractor-svelte": "0.57.7",
         "@unocss/preset-wind": "0.57.7",
         "@unocss/reset": "0.57.7",
+        "histoire": "0.17.6",
         "node-fetch": "3.3.2",
         "svelte": "4.2.7",
         "svelte-check": "3.6.0",
