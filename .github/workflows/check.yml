@@ -1,5 +1,11 @@
 name: Check
+
 on: [push, workflow_dispatch]
+
+env:
+    PUBLIC_TITLE: SvelteKit Website Starter
+    PUBLIC_BASE_URL: http://localhost:6700
+
 jobs:
     check:
         runs-on: ubuntu-22.04
