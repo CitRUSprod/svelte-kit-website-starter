@@ -67,7 +67,7 @@ pnpm commit
 Check types with `tsc`:
 
 ```sh
-pnpm validate
+pnpm check-types
 ```
 
 Lint with linters:

@@ -17,7 +17,7 @@
         "eslint:fix:all": "pnpm eslint:all --fix",
         "lint": "pnpm stylelint:all && pnpm eslint:all",
         "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
-        "ci": "pnpm check-types && pnpm lint",
+        "validate": "pnpm check-types && pnpm lint",
         "prepare": "husky install"
     },
     "engines": {
