@@ -1,26 +1,8 @@
-import { Type, TLiteralValue } from "@sinclair/typebox"
+import { z } from "zod"
 
-const order = ["asc", "desc"] as const
-
-export function sorting<T extends TLiteralValue>(field: T, ...fields: Array<T>) {
-    return Type.Object(
-        {
-            sort: Type.Optional(
-                Type.Union([Type.Literal(field), ...fields.map(f => Type.Literal(f))], {
-                    enum: [field, ...fields],
-                    transform: ["trim", "toEnumCase"]
-                })
-            ),
-            order: Type.Optional(
-                Type.Union(
-                    order.map(o => Type.Literal(o)),
-                    {
-                        enum: [...order],
-                        transform: ["trim", "toEnumCase"]
-                    }
-                )
-            )
-        },
-        { additionalProperties: false }
-    )
+export function sorting<T extends string>(field: T, ...fields: Array<T>) {
+    return z.object({
+        sort: z.enum([field, ...fields]).optional(),
+        order: z.enum(["asc", "desc"]).default("asc")
+    })
 }

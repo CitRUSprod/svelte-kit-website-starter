@@ -7,17 +7,22 @@ import jwt from "@fastify/jwt"
 import cookie from "@fastify/cookie"
 import auth from "@fastify/auth"
 import socketIo from "fastify-socket.io"
+import {
+    jsonSchemaTransform,
+    serializerCompiler,
+    validatorCompiler
+} from "fastify-type-provider-zod"
 import { decorators } from "$/decorators"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
-import { env, getAbsFilesPath, ajv, normalizeAjvErrors } from "$/utils"
+import { env, getAbsFilesPath } from "$/utils"
 
 const port = 6702
 
 const app = fastify()
 
-app.setValidatorCompiler(({ schema }) => ajv.compile(schema))
-app.setSchemaErrorFormatter((errors, scope) => normalizeAjvErrors(errors, scope))
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
 if (env.ENABLE_DOCS) {
     app.register(swagger, {
@@ -26,7 +31,8 @@ if (env.ENABLE_DOCS) {
                 title: "SvelteKit Website Starter API",
                 version: ""
             }
-        }
+        },
+        transform: jsonSchemaTransform
     }).register(swaggerUi, {
         routePrefix: "/docs"
     })

@@ -1,49 +1,29 @@
-import { Type, Static } from "@sinclair/typebox"
+import { z } from "zod"
 import * as schemas from "$/schemas"
 
-export const registerBody = Type.Strict(
-    Type.Object(
-        {
-            email: schemas.models.user.email(),
-            username: schemas.models.user.username(),
-            password: schemas.models.user.password()
-        },
-        { additionalProperties: false }
-    )
-)
+export const registerBody = z.object({
+    email: schemas.models.user.email(),
+    username: schemas.models.user.username(),
+    password: schemas.models.user.password()
+})
 
-export type RegisterBody = Static<typeof registerBody>
+export type RegisterBody = z.infer<typeof registerBody>
 
-export const loginBody = Type.Strict(
-    Type.Object(
-        {
-            email: schemas.models.user.email(),
-            password: schemas.models.user.password()
-        },
-        { additionalProperties: false }
-    )
-)
+export const loginBody = z.object({
+    email: schemas.models.user.email(),
+    password: schemas.models.user.password()
+})
 
-export type LoginBody = Static<typeof loginBody>
+export type LoginBody = z.infer<typeof loginBody>
 
-export const logoutCookies = Type.Strict(
-    Type.Object(
-        {
-            refreshToken: schemas.models.refreshToken.token()
-        },
-        { additionalProperties: false }
-    )
-)
+export const logoutCookies = z.object({
+    refreshToken: schemas.models.refreshToken.token()
+})
 
-export type LogoutCookies = Static<typeof logoutCookies>
+export type LogoutCookies = z.infer<typeof logoutCookies>
 
-export const refreshTokensCookies = Type.Strict(
-    Type.Object(
-        {
-            refreshToken: schemas.models.refreshToken.token()
-        },
-        { additionalProperties: false }
-    )
-)
+export const refreshTokensCookies = z.object({
+    refreshToken: schemas.models.refreshToken.token()
+})
 
-export type RefreshTokensCookies = Static<typeof refreshTokensCookies>
+export type RefreshTokensCookies = z.infer<typeof refreshTokensCookies>

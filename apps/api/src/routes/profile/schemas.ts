@@ -1,84 +1,49 @@
 import { MultipartFile } from "@fastify/multipart"
-import { Type, Static } from "@sinclair/typebox"
+import { z } from "zod"
 import * as schemas from "$/schemas"
 
-export const updateUserBody = Type.Strict(
-    Type.Object(
-        {
-            email: Type.Optional(schemas.models.user.email()),
-            username: Type.Optional(schemas.models.user.username())
-        },
-        { additionalProperties: false, minProperties: 1 }
-    )
-)
+export const updateUserBody = z.object({
+    email: schemas.models.user.email().optional(),
+    username: schemas.models.user.username().optional()
+})
 
-export type UpdateUserBody = Static<typeof updateUserBody>
+export type UpdateUserBody = z.infer<typeof updateUserBody>
 
-export const uploadAvatarBody = Type.Strict(
-    Type.Object(
-        {
-            img: schemas.file()
-        },
-        { additionalProperties: false }
-    )
-)
+export const uploadAvatarBody = z.object({
+    img: schemas.file()
+})
 
 export interface UploadAvatarBody {
     img: MultipartFile
 }
 
-export const confirmEmailParams = Type.Strict(
-    Type.Object(
-        {
-            emailConfirmationToken: schemas.models.emailConfirmationToken.token()
-        },
-        { additionalProperties: false }
-    )
-)
+export const confirmEmailParams = z.object({
+    emailConfirmationToken: schemas.models.emailConfirmationToken.token()
+})
 
-export type ConfirmEmailParams = Static<typeof confirmEmailParams>
+export type ConfirmEmailParams = z.infer<typeof confirmEmailParams>
 
-export const changePasswordBody = Type.Strict(
-    Type.Object(
-        {
-            oldPassword: schemas.models.user.password(),
-            newPassword: schemas.models.user.password()
-        },
-        { additionalProperties: false }
-    )
-)
+export const changePasswordBody = z.object({
+    oldPassword: schemas.models.user.password(),
+    newPassword: schemas.models.user.password()
+})
 
-export type ChangePasswordBody = Static<typeof changePasswordBody>
+export type ChangePasswordBody = z.infer<typeof changePasswordBody>
 
-export const sendPasswordResetEmailBody = Type.Strict(
-    Type.Object(
-        {
-            email: schemas.models.user.email()
-        },
-        { additionalProperties: false }
-    )
-)
+export const sendPasswordResetEmailBody = z.object({
+    email: schemas.models.user.email()
+})
 
-export type SendPasswordResetEmailBody = Static<typeof sendPasswordResetEmailBody>
+export type SendPasswordResetEmailBody = z.infer<typeof sendPasswordResetEmailBody>
 
-export const resetPasswordParams = Type.Strict(
-    Type.Object(
-        {
-            passwordResetToken: schemas.models.passwordResetToken.token()
-        },
-        { additionalProperties: false }
-    )
-)
+export const resetPasswordParams = z.object({
+    passwordResetToken: schemas.models.passwordResetToken.token()
+})
 
-export type ResetPasswordParams = Static<typeof resetPasswordParams>
+export type ResetPasswordParams = z.infer<typeof resetPasswordParams>
 
-export const resetPasswordBody = Type.Strict(
-    Type.Object(
-        {
-            newPassword: schemas.models.user.password()
-        },
-        { additionalProperties: false }
-    )
-)
+export const resetPasswordBody = z.object({
+    newPassword: schemas.models.user.password()
+})
 
-export type ResetPasswordBody = Static<typeof resetPasswordBody>
+export type ResetPasswordBody = z.infer<typeof resetPasswordBody>

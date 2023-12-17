@@ -1,72 +1,42 @@
-import { Type, Static } from "@sinclair/typebox"
+import { z } from "zod"
 import * as schemas from "$/schemas"
 
-export const getPostsQuery = Type.Strict(
-    Type.Object(
-        {
-            ...schemas.pagination().properties,
-            ...schemas.sorting("title", "creationDate").properties,
-            title: Type.Optional(schemas.models.post.title())
-        },
-        { additionalProperties: false }
-    )
-)
+export const getPostsQuery = z.object({
+    ...schemas.pagination().shape,
+    ...schemas.sorting("title", "creationDate").shape,
+    title: schemas.models.post.title().optional()
+})
 
-export type GetPostsQuery = Static<typeof getPostsQuery>
+export type GetPostsQuery = z.infer<typeof getPostsQuery>
 
-export const createPostBody = Type.Strict(
-    Type.Object(
-        {
-            title: schemas.models.post.title(),
-            content: schemas.models.post.content()
-        },
-        { additionalProperties: false }
-    )
-)
+export const createPostBody = z.object({
+    title: schemas.models.post.title(),
+    content: schemas.models.post.content()
+})
 
-export type CreatePostBody = Static<typeof createPostBody>
+export type CreatePostBody = z.infer<typeof createPostBody>
 
-export const getPostParams = Type.Strict(
-    Type.Object(
-        {
-            id: schemas.id()
-        },
-        { additionalProperties: false }
-    )
-)
+export const getPostParams = z.object({
+    id: schemas.id()
+})
 
-export type GetPostParams = Static<typeof getPostParams>
+export type GetPostParams = z.infer<typeof getPostParams>
 
-export const updatePostParams = Type.Strict(
-    Type.Object(
-        {
-            id: schemas.id()
-        },
-        { additionalProperties: false }
-    )
-)
+export const updatePostParams = z.object({
+    id: schemas.id()
+})
 
-export type UpdatePostParams = Static<typeof updatePostParams>
+export type UpdatePostParams = z.infer<typeof updatePostParams>
 
-export const updatePostBody = Type.Strict(
-    Type.Object(
-        {
-            title: Type.Optional(schemas.models.post.title()),
-            content: Type.Optional(schemas.models.post.content())
-        },
-        { additionalProperties: false, minProperties: 1 }
-    )
-)
+export const updatePostBody = z.object({
+    title: schemas.models.post.title().optional(),
+    content: schemas.models.post.content().optional()
+})
 
-export type UpdatePostBody = Static<typeof updatePostBody>
+export type UpdatePostBody = z.infer<typeof updatePostBody>
 
-export const deletePostParams = Type.Strict(
-    Type.Object(
-        {
-            id: schemas.id()
-        },
-        { additionalProperties: false }
-    )
-)
+export const deletePostParams = z.object({
+    id: schemas.id()
+})
 
-export type DeletePostParams = Static<typeof deletePostParams>
+export type DeletePostParams = z.infer<typeof deletePostParams>
