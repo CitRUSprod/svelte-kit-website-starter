@@ -113,21 +113,6 @@ importers:
       '@prisma/client':
         specifier: 5.6.0
         version: 5.6.0(prisma@5.6.0)
-      '@segment/ajv-human-errors':
-        specifier: 2.11.3
-        version: 2.11.3(ajv@8.12.0)
-      '@sinclair/typebox':
-        specifier: 0.31.28
-        version: 0.31.28
-      ajv:
-        specifier: 8.12.0
-        version: 8.12.0
-      ajv-formats:
-        specifier: 2.1.1
-        version: 2.1.1(ajv@8.12.0)
-      ajv-keywords:
-        specifier: 5.1.0
-        version: 5.1.0(ajv@8.12.0)
       argon2:
         specifier: 0.31.2
         version: 0.31.2
@@ -143,6 +128,9 @@ importers:
       fastify-socket.io:
         specifier: 4.0.0
         version: 4.0.0(socket.io@4.7.2)
+      fastify-type-provider-zod:
+        specifier: 1.1.9
+        version: 1.1.9(fastify@4.24.3)(zod@3.22.4)
       fs-extra:
         specifier: 11.1.1
         version: 11.1.1
@@ -167,6 +155,12 @@ importers:
       uuid:
         specifier: 9.0.1
         version: 9.0.1
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+      zod-validation-error:
+        specifier: 2.1.0
+        version: 2.1.0(zod@3.22.4)
     devDependencies:
       '@local/configs':
         specifier: workspace:*
@@ -222,21 +216,6 @@ importers:
       '@local/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@segment/ajv-human-errors':
-        specifier: 2.11.3
-        version: 2.11.3(ajv@8.12.0)
-      '@sinclair/typebox':
-        specifier: 0.31.28
-        version: 0.31.28
-      ajv:
-        specifier: 8.12.0
-        version: 8.12.0
-      ajv-formats:
-        specifier: 2.1.1
-        version: 2.1.1(ajv@8.12.0)
-      ajv-keywords:
-        specifier: 5.1.0
-        version: 5.1.0(ajv@8.12.0)
       axios:
         specifier: 1.6.2
         version: 1.6.2
@@ -267,6 +246,12 @@ importers:
       tslib:
         specifier: 2.6.2
         version: 2.6.2
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+      zod-validation-error:
+        specifier: 2.1.0
+        version: 2.1.0(zod@3.22.4)
     devDependencies:
       '@histoire/plugin-svelte':
         specifier: 0.17.6
@@ -2014,18 +1999,6 @@ packages:
     dev: true
     optional: true
 
-  /@segment/ajv-human-errors@2.11.3(ajv@8.12.0):
-    resolution: {integrity: sha512-UeeDR6wmSoIlQ5GKx7Cs1FmQfqf+r+VxpAa6xuJkh4EP/+0UHY+OFUqf9G+2NiD7ZQdWZihgqHBgyc3tXfpZnw==}
-    peerDependencies:
-      ajv: ^8.0.0
-    dependencies:
-      ajv: 8.12.0
-    dev: false
-
-  /@sinclair/typebox@0.31.28:
-    resolution: {integrity: sha512-/s55Jujywdw/Jpan+vsy6JZs1z2ZTGxTmbZTPiuSL2wz9mfzA2gN1zzaqmvfi4pq+uOt7Du85fkiwv5ymW84aQ==}
-    dev: false
-
   /@socket.io/component-emitter@3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
     dev: false
@@ -2746,15 +2719,6 @@ packages:
         optional: true
     dependencies:
       ajv: 8.12.0
-    dev: false
-
-  /ajv-keywords@5.1.0(ajv@8.12.0):
-    resolution: {integrity: sha512-YCS/JNFAUyr5vAuhk1DWm1CBxRHW9LbJ2ozWeemrIqpbsqKjHVxYPyi5GC0rjZIT5JxJ3virVTS8wk4i/Z+krw==}
-    peerDependencies:
-      ajv: ^8.8.2
-    dependencies:
-      ajv: 8.12.0
-      fast-deep-equal: 3.1.3
     dev: false
 
   /ajv@6.12.6:
@@ -4432,6 +4396,17 @@ packages:
     dependencies:
       fastify-plugin: 3.0.1
       socket.io: 4.7.2
+    dev: false
+
+  /fastify-type-provider-zod@1.1.9(fastify@4.24.3)(zod@3.22.4):
+    resolution: {integrity: sha512-Ztnu1ZWJEKJouZvdTyfgjuVqS+A4JLoCbWBvFqFhfnrg6YQvEvW+5cJvP98kNbuV5gjfpWmHSOTi3BpkidJPQg==}
+    peerDependencies:
+      fastify: ^4.0.0
+      zod: ^3.14.2
+    dependencies:
+      fastify: 4.24.3
+      zod: 3.22.4
+      zod-to-json-schema: 3.22.3(zod@3.22.4)
     dev: false
 
   /fastify@4.24.3:
@@ -7215,6 +7190,7 @@ packages:
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dev: true
 
   /source-map@0.8.0-beta.0:
@@ -8552,3 +8528,24 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zod-to-json-schema@3.22.3(zod@3.22.4):
+    resolution: {integrity: sha512-9isG8SqRe07p+Aio2ruBZmLm2Q6Sq4EqmXOiNpDxp+7f0LV6Q/LX65fs5Nn+FV/CzfF3NLBoksXbS2jNYIfpKw==}
+    peerDependencies:
+      zod: ^3.22.4
+    dependencies:
+      zod: 3.22.4
+    dev: false
+
+  /zod-validation-error@2.1.0(zod@3.22.4):
+    resolution: {integrity: sha512-VJh93e2wb4c3tWtGgTa0OF/dTt/zoPCPzXq4V11ZjxmEAFaPi/Zss1xIZdEB5RD8GD00U0/iVXgqkF77RV7pdQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      zod: ^3.18.0
+    dependencies:
+      zod: 3.22.4
+    dev: false
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false

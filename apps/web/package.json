@@ -43,11 +43,6 @@
     },
     "dependencies": {
         "@local/utils": "workspace:*",
-        "@segment/ajv-human-errors": "2.11.3",
-        "@sinclair/typebox": "0.31.28",
-        "ajv": "8.12.0",
-        "ajv-formats": "2.1.1",
-        "ajv-keywords": "5.1.0",
         "axios": "1.6.2",
         "classnames": "2.3.2",
         "lodash-es": "4.17.21",
@@ -57,6 +52,8 @@
         "socket.io-client": "4.7.2",
         "svelte-local-storage-store": "0.6.4",
         "sveltekit-i18n": "2.4.2",
-        "tslib": "2.6.2"
+        "tslib": "2.6.2",
+        "zod": "3.22.4",
+        "zod-validation-error": "2.1.0"
     }
 }

@@ -1,5 +1,5 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
 
 export function token() {
-    return Type.String({ minLength: 1, transform: ["trim"] })
+    return z.string().trim().length(36)
 }

@@ -1,7 +1,7 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
 
 export function file() {
-    return Type.Object({
-        file: Type.Unknown()
+    return z.object({
+        file: z.unknown()
     })
 }

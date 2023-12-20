@@ -1,9 +1,9 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
 
 export function title() {
-    return Type.String({ minLength: 1, maxLength: 100, transform: ["trim"] })
+    return z.string().trim().min(1).max(100)
 }
 
 export function content() {
-    return Type.String({ minLength: 1, transform: ["trim"] })
+    return z.string().trim().min(1)
 }

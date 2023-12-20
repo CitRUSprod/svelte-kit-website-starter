@@ -1,13 +1,13 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
 
 export function email() {
-    return Type.String({ format: "email", transform: ["trim", "toLowerCase"] })
+    return z.string().trim().toLowerCase().email()
 }
 
 export function username() {
-    return Type.String({ minLength: 3, maxLength: 32, transform: ["trim"] })
+    return z.string().trim().min(3).max(32)
 }
 
 export function password() {
-    return Type.String({ minLength: 8, transform: ["trim"] })
+    return z.string().trim().min(8)
 }

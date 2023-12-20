@@ -1,15 +1,22 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
+import { fromZodError } from "zod-validation-error"
 import * as publicEnv from "$env/static/public"
-import { parseByAjvSchema } from "./ajv"
 
-const schema = Type.Strict(
-    Type.Object(
-        {
-            PUBLIC_TITLE: Type.String({ minLength: 1, transform: ["trim"] }),
-            PUBLIC_BASE_URL: Type.String({ minLength: 10, transform: ["trim"] })
-        },
-        { additionalProperties: false }
-    )
-)
+const scheme = z.object({
+    PUBLIC_TITLE: z.string().trim().min(1),
+    PUBLIC_BASE_URL: z.string().trim().url()
+})
 
-export const env = parseByAjvSchema(schema, publicEnv, "env")
+let env: z.infer<typeof scheme>
+
+try {
+    env = scheme.parse(publicEnv)
+} catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+        throw fromZodError(err)
+    } else {
+        throw err
+    }
+}
+
+export { env }

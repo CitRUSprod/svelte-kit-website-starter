@@ -19,7 +19,7 @@ export const getUsers: RouteHandler<{ userData?: UserData; query: schemas.GetUse
             skip,
             take,
             where,
-            orderBy: query.sort ? { [query.sort]: query.order ?? "asc" } : undefined,
+            orderBy: query.sort ? { [query.sort]: query.order } : undefined,
             include: { role: true }
         })
 

@@ -1,21 +1,33 @@
-import { Type } from "@sinclair/typebox"
-import { parseByAjvSchema } from "./ajv"
+import { z } from "zod"
+import { fromZodError } from "zod-validation-error"
 
-const schema = Type.Strict(
-    Type.Object(
-        {
-            JWT_SECRET: Type.String({ minLength: 6, transform: ["trim"] }),
-            ENABLE_DOCS: Type.Boolean(),
-            MAILER_HOST: Type.String({ format: "hostname", transform: ["trim"] }),
-            MAILER_PORT: Type.Integer({ minimum: 1 }),
-            MAILER_EMAIL: Type.String({ format: "email", transform: ["trim"] }),
-            MAILER_PASSWORD: Type.String({ minLength: 1, transform: ["trim"] }),
-            MAILER_NAME: Type.String({ minLength: 1, transform: ["trim"] }),
-            EMAIL_CONFIRMATION_URL: Type.String({ format: "uri-template", transform: ["trim"] }),
-            PASSWORD_RESET_URL: Type.String({ format: "uri-template", transform: ["trim"] })
-        },
-        { additionalProperties: false }
-    )
-)
+const scheme = z.object({
+    JWT_SECRET: z.string().trim().min(6),
+    ENABLE_DOCS: z.coerce.boolean(),
+    MAILER_HOST: z
+        .string()
+        .trim()
+        .regex(
+            /^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/
+        ),
+    MAILER_PORT: z.coerce.number().int().min(1),
+    MAILER_EMAIL: z.string().trim().toLowerCase().email(),
+    MAILER_PASSWORD: z.string().trim().min(1),
+    MAILER_NAME: z.string().trim().min(1),
+    EMAIL_CONFIRMATION_URL: z.string().trim().url(),
+    PASSWORD_RESET_URL: z.string().trim().url()
+})
 
-export const env = parseByAjvSchema(schema, process.env, "env")
+let env: z.infer<typeof scheme>
+
+try {
+    env = scheme.parse(process.env)
+} catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+        throw fromZodError(err)
+    } else {
+        throw err
+    }
+}
+
+export { env }
