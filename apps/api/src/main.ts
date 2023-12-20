@@ -12,6 +12,9 @@ import {
     serializerCompiler,
     validatorCompiler
 } from "fastify-type-provider-zod"
+import { ZodError } from "zod"
+import { fromZodError } from "zod-validation-error"
+import { BadRequestError } from "http-errors-enhanced"
 import { decorators } from "$/decorators"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
@@ -23,6 +26,14 @@ const app = fastify()
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
+
+app.setErrorHandler((err: unknown) => {
+    if (err instanceof ZodError) {
+        return new BadRequestError(fromZodError(err).message)
+    } else {
+        return err
+    }
+})
 
 if (env.ENABLE_DOCS) {
     app.register(swagger, {
