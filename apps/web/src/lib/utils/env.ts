@@ -1,4 +1,4 @@
-import { z, ZodError } from "zod"
+import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 import * as publicEnv from "$env/static/public"
 
@@ -12,7 +12,7 @@ let env: z.infer<typeof scheme>
 try {
     env = scheme.parse(publicEnv)
 } catch (err: unknown) {
-    if (err instanceof ZodError) {
+    if (err instanceof z.ZodError) {
         throw fromZodError(err)
     } else {
         throw err

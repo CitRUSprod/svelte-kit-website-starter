@@ -1,4 +1,4 @@
-import { z, ZodError } from "zod"
+import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 
 const scheme = z.object({
@@ -23,7 +23,7 @@ let env: z.infer<typeof scheme>
 try {
     env = scheme.parse(process.env)
 } catch (err: unknown) {
-    if (err instanceof ZodError) {
+    if (err instanceof z.ZodError) {
         throw fromZodError(err)
     } else {
         throw err

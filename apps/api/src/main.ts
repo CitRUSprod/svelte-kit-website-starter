@@ -12,7 +12,7 @@ import {
     serializerCompiler,
     validatorCompiler
 } from "fastify-type-provider-zod"
-import { ZodError } from "zod"
+import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 import { BadRequestError } from "http-errors-enhanced"
 import { decorators } from "$/decorators"
@@ -28,7 +28,7 @@ app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
 app.setErrorHandler((err: unknown) => {
-    if (err instanceof ZodError) {
+    if (err instanceof z.ZodError) {
         return new BadRequestError(fromZodError(err).message)
     } else {
         return err
