@@ -1,6 +1,4 @@
-import { Type } from "@sinclair/typebox"
+import { z } from "zod"
 import { createValidator } from "$lib/utils"
 
-export const name = createValidator(
-    Type.String({ minLength: 1, transform: ["trim", "toLowerCase"] })
-)
+export const name = createValidator(z.string().trim().toLowerCase().min(1))
