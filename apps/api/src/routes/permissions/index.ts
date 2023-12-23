@@ -1,5 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
-import { Permission } from "@prisma/client"
+import * as enums from "$/enums"
 import * as handlers from "./handlers"
 
 export const permissionsRoutes: FastifyPluginCallback = (app, options, done) => {
@@ -10,7 +10,7 @@ export const permissionsRoutes: FastifyPluginCallback = (app, options, done) => 
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyPermission(Permission.CreateRole)
+            app.verifyPermission(enums.Permission.CreateRole)
         ]),
         async handler(req, reply) {
             const data = await handlers.getPermissions(app, {})

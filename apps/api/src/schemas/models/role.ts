@@ -1,4 +1,4 @@
-import { Permission } from "@prisma/client"
+import * as enums from "$/enums"
 import { z } from "zod"
 
 export function name() {
@@ -6,5 +6,5 @@ export function name() {
 }
 
 export function permissions() {
-    return z.array(z.nativeEnum(Permission))
+    return z.array(z.nativeEnum(enums.Permission))
 }

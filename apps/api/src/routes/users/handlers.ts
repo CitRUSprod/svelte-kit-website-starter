@@ -1,6 +1,7 @@
 import { BadRequestError } from "http-errors-enhanced"
-import { Prisma, Permission } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { getItemsPage, models } from "$/utils"
+import * as enums from "$/enums"
 import { UserData, PartialUserData, RouteHandler } from "$/types"
 import * as schemas from "./schemas"
 
@@ -23,7 +24,7 @@ export const getUsers: RouteHandler<{ userData?: UserData; query: schemas.GetUse
             include: { role: true }
         })
 
-        if (!userData?.role.permissions.includes(Permission.GetOtherUserEmail)) {
+        if (!userData?.role.permissions.includes(enums.Permission.GetOtherUserEmail)) {
             for (const user of users) {
                 delete user.email
                 delete user.confirmedEmail
@@ -48,7 +49,9 @@ export const getUser: RouteHandler<{ userData?: UserData; params: schemas.GetUse
     }
 
     if (userData) {
-        const goodPermissions = userData.role.permissions.includes(Permission.GetOtherUserEmail)
+        const goodPermissions = userData.role.permissions.includes(
+            enums.Permission.GetOtherUserEmail
+        )
         if (userData.id !== user.id && !goodPermissions) removeEmailFields()
     } else {
         removeEmailFields()

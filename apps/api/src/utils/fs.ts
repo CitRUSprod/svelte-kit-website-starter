@@ -4,7 +4,7 @@ import fs from "fs-extra"
 import { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
-import { ImgSize, ImgExtension } from "$/enums"
+import * as enums from "$/enums"
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -18,7 +18,7 @@ function getExt(file: MultipartFile) {
     return path.extname(file.filename).toLowerCase()
 }
 
-const imgExtList: Array<string> = Object.values(ImgExtension)
+const imgExtList: Array<string> = Object.values(enums.ImgExtension)
 
 export function isImgFile(file: MultipartFile) {
     return imgExtList.includes(getExt(file))
@@ -40,12 +40,12 @@ export async function writeFile(dirPath: string, file: MultipartFile) {
         const { width, height } = await img.metadata()
 
         if (width && height) {
-            if (width > ImgSize.MaxWidth) {
-                img.resize({ width: ImgSize.MaxWidth })
+            if (width > enums.ImgSize.MaxWidth) {
+                img.resize({ width: enums.ImgSize.MaxWidth })
             }
 
-            if (height > ImgSize.MaxHeight) {
-                img.resize({ height: ImgSize.MaxHeight })
+            if (height > enums.ImgSize.MaxHeight) {
+                img.resize({ height: enums.ImgSize.MaxHeight })
             }
         }
 

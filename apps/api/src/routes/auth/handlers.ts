@@ -1,6 +1,6 @@
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
-import { TokenTtl } from "$/enums"
+import * as enums from "$/enums"
 import { ReplyCookie, RouteHandler } from "$/types"
 import * as schemas from "./schemas"
 import * as utils from "./utils"
@@ -39,12 +39,12 @@ export const login: RouteHandler<{ body: schemas.LoginBody }> = async (app, { bo
             {
                 name: "accessToken",
                 value: tokens.access,
-                options: { path: "/", maxAge: TokenTtl.Access }
+                options: { path: "/", maxAge: enums.TokenTtl.Access }
             },
             {
                 name: "refreshToken",
                 value: tokens.refresh,
-                options: { path: "/", maxAge: TokenTtl.Refresh, httpOnly: true }
+                options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
             }
         ]
     }
@@ -103,7 +103,7 @@ export const refreshTokens: RouteHandler<{ cookies: schemas.RefreshTokensCookies
                 value: tokens.access,
                 options: {
                     path: "/",
-                    maxAge: TokenTtl.Access
+                    maxAge: enums.TokenTtl.Access
                 }
             },
             {
@@ -111,7 +111,7 @@ export const refreshTokens: RouteHandler<{ cookies: schemas.RefreshTokensCookies
                 value: tokens.refresh,
                 options: {
                     path: "/",
-                    maxAge: TokenTtl.Refresh,
+                    maxAge: enums.TokenTtl.Refresh,
                     httpOnly: true
                 }
             }

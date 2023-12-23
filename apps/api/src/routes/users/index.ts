@@ -1,5 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
-import { Permission } from "@prisma/client"
+import * as enums from "$/enums"
 import * as schemas from "./schemas"
 import * as handlers from "./handlers"
 
@@ -40,7 +40,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             app.setUserData,
             app.verifyAuth,
             app.verifyConfirmedEmail,
-            app.verifyPermission(Permission.AssignRole)
+            app.verifyPermission(enums.Permission.AssignRole)
         ]),
         async handler(req, reply) {
             const data = await handlers.assignRoleToUser(app, { params: req.params })
@@ -57,7 +57,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             app.setUserData,
             app.verifyAuth,
             app.verifyConfirmedEmail,
-            app.verifyPermission(Permission.BanUser)
+            app.verifyPermission(enums.Permission.BanUser)
         ]),
         async handler(req, reply) {
             const data = await handlers.banUser(app, { params: req.params })
@@ -74,7 +74,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             app.setUserData,
             app.verifyAuth,
             app.verifyConfirmedEmail,
-            app.verifyPermission(Permission.BanUser)
+            app.verifyPermission(enums.Permission.BanUser)
         ]),
         async handler(req, reply) {
             const data = await handlers.unbanUser(app, { params: req.params })

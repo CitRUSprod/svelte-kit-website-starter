@@ -1,6 +1,7 @@
 import { ForbiddenError } from "http-errors-enhanced"
-import { Prisma, Permission } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { getItemsPage, models } from "$/utils"
+import * as enums from "$/enums"
 import { RouteHandler, UserData } from "$/types"
 import * as schemas from "./schemas"
 
@@ -70,7 +71,7 @@ export const deletePost: RouteHandler<{
 
     if (
         post.authorId === userData.id ||
-        userData.role.permissions.includes(Permission.DeleteOtherUserPost)
+        userData.role.permissions.includes(enums.Permission.DeleteOtherUserPost)
     ) {
         const deletedPost = await app.prisma.post.delete({
             where: { id: params.id },

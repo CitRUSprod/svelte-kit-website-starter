@@ -1,12 +1,12 @@
 import { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { FastifyAuthFunction } from "@fastify/auth"
 import { ForbiddenError } from "http-errors-enhanced"
-import { Permission } from "@prisma/client"
+import * as enums from "$/enums"
 import { models } from "$/utils"
 
 declare module "fastify" {
     interface FastifyInstance {
-        verifyPermission(permission: Permission): FastifyAuthFunction
+        verifyPermission(permission: enums.Permission): FastifyAuthFunction
     }
 }
 
