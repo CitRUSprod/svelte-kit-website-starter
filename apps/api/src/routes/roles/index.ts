@@ -1,12 +1,12 @@
 import { FastifyPluginCallback } from "fastify"
 import * as enums from "$/enums"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 import * as handlers from "./handlers"
 
 export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get("/", {
+    app.get(common.roles.getRolesPath, {
         schema: {
-            tags: ["roles"]
+            tags: [common.roles.basePath]
         },
         async handler(req, reply) {
             const data = await handlers.getRoles(app, {})
@@ -14,10 +14,10 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Body: schemas.CreateRoleBody }>("/", {
+    app.post<{ Body: common.roles.CreateRoleBody }>(common.roles.createRolePath, {
         schema: {
-            tags: ["roles"],
-            body: schemas.createRoleBody
+            tags: [common.roles.basePath],
+            body: common.roles.createRoleBodySchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
@@ -31,28 +31,31 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.patch<{ Params: schemas.UpdateRoleParams; Body: schemas.UpdateRoleBody }>("/:id", {
-        schema: {
-            tags: ["roles"],
-            params: schemas.updateRoleParams,
-            body: schemas.updateRoleBody
-        },
-        preHandler: app.createPreHandler([
-            app.setUserData,
-            app.verifyAuth,
-            app.verifyConfirmedEmail,
-            app.verifyPermission(enums.Permission.CreateRole)
-        ]),
-        async handler(req, reply) {
-            const data = await handlers.updateRole(app, { params: req.params, body: req.body })
-            await reply.sendData(data)
+    app.patch<{ Params: common.roles.UpdateRoleParams; Body: common.roles.UpdateRoleBody }>(
+        common.roles.updateRolePath,
+        {
+            schema: {
+                tags: [common.roles.basePath],
+                params: common.roles.updateRoleParamsSchema(),
+                body: common.roles.updateRoleBodySchema()
+            },
+            preHandler: app.createPreHandler([
+                app.setUserData,
+                app.verifyAuth,
+                app.verifyConfirmedEmail,
+                app.verifyPermission(enums.Permission.CreateRole)
+            ]),
+            async handler(req, reply) {
+                const data = await handlers.updateRole(app, { params: req.params, body: req.body })
+                await reply.sendData(data)
+            }
         }
-    })
+    )
 
-    app.delete<{ Params: schemas.DeleteRoleParams }>("/:id", {
+    app.delete<{ Params: common.roles.DeleteRoleParams }>(common.roles.deleteRolePath, {
         schema: {
-            tags: ["roles"],
-            params: schemas.deleteRoleParams
+            tags: [common.roles.basePath],
+            params: common.roles.deleteRoleParamsSchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,

@@ -3,9 +3,12 @@ import { Prisma } from "@prisma/client"
 import { getItemsPage, models } from "$/utils"
 import * as enums from "$/enums"
 import { RouteHandler, UserData } from "$/types"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 
-export const getPosts: RouteHandler<{ query: schemas.GetPostsQuery }> = async (app, { query }) => {
+export const getPosts: RouteHandler<{ query: common.posts.GetPostsQuery }> = async (
+    app,
+    { query }
+) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
         const where: Prisma.PostWhereInput = {
             title: { contains: query.title, mode: "insensitive" }
@@ -28,7 +31,7 @@ export const getPosts: RouteHandler<{ query: schemas.GetPostsQuery }> = async (a
 
 export const createPost: RouteHandler<{
     userData: UserData
-    body: schemas.CreatePostBody
+    body: common.posts.CreatePostBody
 }> = async (app, { userData, body }) => {
     const post = await app.prisma.post.create({
         data: { ...body, authorId: userData.id, creationDate: new Date() },
@@ -38,15 +41,18 @@ export const createPost: RouteHandler<{
     return { payload: models.post.dto(post) }
 }
 
-export const getPost: RouteHandler<{ params: schemas.GetPostParams }> = async (app, { params }) => {
+export const getPost: RouteHandler<{ params: common.posts.GetPostParams }> = async (
+    app,
+    { params }
+) => {
     const post = await models.post.get(app, params.id)
     return { payload: models.post.dto(post) }
 }
 
 export const updatePost: RouteHandler<{
     userData: UserData
-    params: schemas.UpdatePostParams
-    body: schemas.UpdatePostBody
+    params: common.posts.UpdatePostParams
+    body: common.posts.UpdatePostBody
 }> = async (app, { userData, params, body }) => {
     const post = await models.post.get(app, params.id)
 
@@ -65,7 +71,7 @@ export const updatePost: RouteHandler<{
 
 export const deletePost: RouteHandler<{
     userData: UserData
-    params: schemas.DeletePostParams
+    params: common.posts.DeletePostParams
 }> = async (app, { userData, params }) => {
     const post = await models.post.get(app, params.id)
 

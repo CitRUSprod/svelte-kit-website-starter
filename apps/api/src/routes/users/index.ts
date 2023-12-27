@@ -1,13 +1,13 @@
 import { FastifyPluginCallback } from "fastify"
 import * as enums from "$/enums"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 import * as handlers from "./handlers"
 
 export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get<{ Querystring: schemas.GetUsersQuery }>("/", {
+    app.get<{ Querystring: common.users.GetUsersQuery }>(common.users.getUsersPath, {
         schema: {
-            tags: ["users"],
-            querystring: schemas.getUsersQuery
+            tags: [common.users.basePath],
+            querystring: common.users.getUsersQuerySchema()
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
@@ -16,10 +16,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.get<{ Params: schemas.GetUserParams }>("/:id", {
+    app.get<{ Params: common.users.GetUserParams }>(common.users.getUserPath, {
         schema: {
-            tags: ["users"],
-            params: schemas.getUserParams
+            tags: [common.users.basePath],
+            params: common.users.getUserParamsSchema()
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
@@ -31,10 +31,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: schemas.AssignRoleToUserParams }>("/:id/role/:roleId", {
+    app.post<{ Params: common.users.AssignRoleToUserParams }>(common.users.assignRoleToUserPath, {
         schema: {
-            tags: ["users"],
-            params: schemas.assignRoleToUserParams
+            tags: [common.users.basePath],
+            params: common.users.assignRoleToUserParamsSchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
@@ -48,10 +48,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: schemas.BanUserParams }>("/:id/ban", {
+    app.post<{ Params: common.users.BanUserParams }>(common.users.banUserPath, {
         schema: {
-            tags: ["users"],
-            params: schemas.banUserParams
+            tags: [common.users.basePath],
+            params: common.users.banUserParamsSchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
@@ -65,10 +65,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: schemas.UnbanUserParams }>("/:id/unban", {
+    app.post<{ Params: common.users.UnbanUserParams }>(common.users.unbanUserPath, {
         schema: {
-            tags: ["users"],
-            params: schemas.unbanUserParams
+            tags: [common.users.basePath],
+            params: common.users.unbanUserParamsSchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,

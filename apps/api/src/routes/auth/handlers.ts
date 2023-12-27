@@ -2,10 +2,10 @@ import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import * as enums from "$/enums"
 import { ReplyCookie, RouteHandler } from "$/types"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 import * as utils from "./utils"
 
-export const register: RouteHandler<{ body: schemas.RegisterBody }> = async (app, { body }) => {
+export const register: RouteHandler<{ body: common.auth.RegisterBody }> = async (app, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (userByEmail) throw new BadRequestError("User with such email already exists")
 
@@ -20,7 +20,7 @@ export const register: RouteHandler<{ body: schemas.RegisterBody }> = async (app
     return {}
 }
 
-export const login: RouteHandler<{ body: schemas.LoginBody }> = async (app, { body }) => {
+export const login: RouteHandler<{ body: common.auth.LoginBody }> = async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (!user) throw new BadRequestError("User with such email was not found")
 
@@ -50,7 +50,7 @@ export const login: RouteHandler<{ body: schemas.LoginBody }> = async (app, { bo
     }
 }
 
-export const logout: RouteHandler<{ cookies: schemas.LogoutCookies }> = async (
+export const logout: RouteHandler<{ cookies: common.auth.LogoutCookies }> = async (
     app,
     { cookies }
 ) => {
@@ -77,7 +77,7 @@ export const logout: RouteHandler<{ cookies: schemas.LogoutCookies }> = async (
     return { cookies: localCookies }
 }
 
-export const refreshTokens: RouteHandler<{ cookies: schemas.RefreshTokensCookies }> = async (
+export const refreshTokens: RouteHandler<{ cookies: common.auth.RefreshTokensCookies }> = async (
     app,
     { cookies }
 ) => {

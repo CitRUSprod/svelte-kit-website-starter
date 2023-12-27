@@ -1,12 +1,12 @@
 import { FastifyPluginCallback } from "fastify"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 import * as handlers from "./handlers"
 
 export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get<{ Querystring: schemas.GetPostsQuery }>("/", {
+    app.get<{ Querystring: common.posts.GetPostsQuery }>(common.posts.getPostsPath, {
         schema: {
-            tags: ["posts"],
-            querystring: schemas.getPostsQuery
+            tags: [common.posts.basePath],
+            querystring: common.posts.getPostsQuerySchema()
         },
         async handler(req, reply) {
             const data = await handlers.getPosts(app, { query: req.query })
@@ -14,10 +14,10 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Body: schemas.CreatePostBody }>("/", {
+    app.post<{ Body: common.posts.CreatePostBody }>(common.posts.createPostPath, {
         schema: {
-            tags: ["posts"],
-            body: schemas.createPostBody
+            tags: [common.posts.basePath],
+            body: common.posts.createPostBodySchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
@@ -31,10 +31,10 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.get<{ Params: schemas.GetPostParams }>("/:id", {
+    app.get<{ Params: common.posts.GetPostParams }>(common.posts.getPostPath, {
         schema: {
-            tags: ["posts"],
-            params: schemas.getPostParams
+            tags: [common.posts.basePath],
+            params: common.posts.getPostParamsSchema()
         },
         async handler(req, reply) {
             const data = await handlers.getPost(app, { params: req.params })
@@ -42,32 +42,35 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.patch<{ Params: schemas.UpdatePostParams; Body: schemas.UpdatePostBody }>("/:id", {
-        schema: {
-            tags: ["posts"],
-            params: schemas.updatePostParams,
-            body: schemas.updatePostBody
-        },
-        preHandler: app.createPreHandler([
-            app.setUserData,
-            app.verifyAuth,
-            app.verifyConfirmedEmail,
-            app.verifyNotBanned
-        ]),
-        async handler(req, reply) {
-            const data = await handlers.updatePost(app, {
-                userData: req.userData!,
-                params: req.params,
-                body: req.body
-            })
-            await reply.sendData(data)
+    app.patch<{ Params: common.posts.UpdatePostParams; Body: common.posts.UpdatePostBody }>(
+        common.posts.updatePostPath,
+        {
+            schema: {
+                tags: [common.posts.basePath],
+                params: common.posts.updatePostParamsSchema(),
+                body: common.posts.updatePostBodySchema()
+            },
+            preHandler: app.createPreHandler([
+                app.setUserData,
+                app.verifyAuth,
+                app.verifyConfirmedEmail,
+                app.verifyNotBanned
+            ]),
+            async handler(req, reply) {
+                const data = await handlers.updatePost(app, {
+                    userData: req.userData!,
+                    params: req.params,
+                    body: req.body
+                })
+                await reply.sendData(data)
+            }
         }
-    })
+    )
 
-    app.delete<{ Params: schemas.DeletePostParams }>("/:id", {
+    app.delete<{ Params: common.posts.DeletePostParams }>(common.posts.deletePostPath, {
         schema: {
-            tags: ["posts"],
-            params: schemas.deletePostParams
+            tags: [common.posts.basePath],
+            params: common.posts.deletePostParamsSchema()
         },
         preHandler: app.createPreHandler([
             app.setUserData,

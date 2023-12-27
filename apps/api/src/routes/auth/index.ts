@@ -1,13 +1,13 @@
 import { FastifyPluginCallback } from "fastify"
 import { UnauthorizedError } from "http-errors-enhanced"
-import * as schemas from "./schemas"
+import * as common from "$/common"
 import * as handlers from "./handlers"
 
 export const authRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.post<{ Body: schemas.RegisterBody }>("/register", {
+    app.post<{ Body: common.auth.RegisterBody }>(common.auth.registerPath, {
         schema: {
-            tags: ["auth"],
-            body: schemas.registerBody
+            tags: [common.auth.basePath],
+            body: common.auth.registerBodySchema()
         },
         async handler(req, reply) {
             const data = await handlers.register(app, { body: req.body })
@@ -15,10 +15,10 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Body: schemas.LoginBody }>("/login", {
+    app.post<{ Body: common.auth.LoginBody }>(common.auth.loginPath, {
         schema: {
-            tags: ["auth"],
-            body: schemas.loginBody
+            tags: [common.auth.basePath],
+            body: common.auth.loginBodySchema()
         },
         async handler(req, reply) {
             const data = await handlers.login(app, { body: req.body })
@@ -26,15 +26,15 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post("/logout", {
+    app.post(common.auth.logoutPath, {
         schema: {
-            tags: ["auth"]
+            tags: [common.auth.basePath]
         },
         async handler(req, reply) {
-            let cookies: schemas.LogoutCookies
+            let cookies: common.auth.LogoutCookies
 
             try {
-                cookies = schemas.logoutCookies.parse(req.cookies)
+                cookies = common.auth.logoutCookiesSchema().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }
@@ -44,15 +44,15 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post("/refresh", {
+    app.post(common.auth.refreshPath, {
         schema: {
-            tags: ["auth"]
+            tags: [common.auth.basePath]
         },
         async handler(req, reply) {
-            let cookies: schemas.RefreshTokensCookies
+            let cookies: common.auth.RefreshTokensCookies
 
             try {
-                cookies = schemas.refreshTokensCookies.parse(req.cookies)
+                cookies = common.auth.refreshTokensCookiesSchema().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }

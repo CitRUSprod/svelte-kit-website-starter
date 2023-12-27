@@ -1,11 +1,12 @@
 import { FastifyPluginCallback } from "fastify"
 import * as enums from "$/enums"
+import * as common from "$/common"
 import * as handlers from "./handlers"
 
 export const permissionsRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get("/", {
+    app.get(common.permissions.getPermissionsPath, {
         schema: {
-            tags: ["permissions"]
+            tags: [common.permissions.basePath]
         },
         preHandler: app.createPreHandler([
             app.setUserData,

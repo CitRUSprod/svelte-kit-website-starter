@@ -1,4 +1,5 @@
 import { FastifyPluginCallback } from "fastify"
+import * as common from "$/common"
 import { authRoutes } from "./auth"
 import { profileRoutes } from "./profile"
 import { usersRoutes } from "./users"
@@ -7,12 +8,12 @@ import { permissionsRoutes } from "./permissions"
 import { postsRoutes } from "./posts"
 
 export const routes: FastifyPluginCallback = (app, options, done) => {
-    app.register(authRoutes, { prefix: "/auth" })
-        .register(profileRoutes, { prefix: "/profile" })
-        .register(permissionsRoutes, { prefix: "/permissions" })
-        .register(rolesRoutes, { prefix: "/roles" })
-        .register(usersRoutes, { prefix: "/users" })
-        .register(postsRoutes, { prefix: "/posts" })
+    app.register(authRoutes, { prefix: common.auth.basePath })
+        .register(profileRoutes, { prefix: common.profile.basePath })
+        .register(permissionsRoutes, { prefix: common.permissions.basePath })
+        .register(rolesRoutes, { prefix: common.roles.basePath })
+        .register(usersRoutes, { prefix: common.users.basePath })
+        .register(postsRoutes, { prefix: common.posts.basePath })
 
     done()
 }
