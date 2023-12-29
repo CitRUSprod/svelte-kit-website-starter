@@ -2,6 +2,7 @@ import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 
 const scheme = z.object({
+    IS_DOCKER_CONTAINER: z.coerce.boolean(),
     JWT_SECRET: z.string().trim().min(6),
     ENABLE_DOCS: z.coerce.boolean(),
     MAILER_HOST: z
