@@ -8,7 +8,6 @@ export async function load(e) {
             emailConfirmationToken: e.params.token
         })
     } catch {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
-        throw redirect(302, `/${e.params.locale as string}`)
+        redirect(302, `/${e.params.locale as string}`)
     }
 }

@@ -11,9 +11,9 @@ export function setCookies(
     const rawCookies = getHeader<Array<string>>(headers, "set-cookie") ?? []
     const newCookies = parse(rawCookies)
 
-    for (const { name, value, sameSite, ...opts } of newCookies) {
+    for (const { name, value, sameSite, path, ...opts } of newCookies) {
         if (!("httpOnly" in opts)) opts.httpOnly = false
-        cookies.set(name, value, opts)
+        if (path) cookies.set(name, value, { path, ...opts })
     }
 }
 

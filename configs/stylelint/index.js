@@ -1,4 +1,4 @@
-/** @type {import("stylelint").Configuration} */
+/** @type {import("stylelint").Config} */
 const config = {
     customSyntax: "postcss-html",
     extends: ["@citrus-linting/stylelint-config"],
