@@ -7,14 +7,11 @@ import { UserData, RouteHandler } from "$/types"
 import * as common from "$/common"
 import * as utils from "./utils"
 
-export const getUser: RouteHandler<{ userData: UserData }> = async (app, { userData }) => ({
+export const getUser = (async (app, { userData }) => ({
     payload: models.user.dto(userData)
-})
+})) satisfies RouteHandler<{ userData: UserData }>
 
-export const updateUser: RouteHandler<{
-    userData: UserData
-    body: common.profile.UpdateUserBody
-}> = async (app, { userData, body }) => {
+export const updateUser = (async (app, { userData, body }) => {
     if (body.email && body.email !== userData.email) {
         const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
         if (userByEmail) throw new BadRequestError("User with such email already exists")
@@ -39,12 +36,9 @@ export const updateUser: RouteHandler<{
     })
 
     return { payload: models.user.dto(updatedUser) }
-}
+}) satisfies RouteHandler<{ userData: UserData; body: common.profile.UpdateUserBody }>
 
-export const uploadAvatar: RouteHandler<{
-    userData: UserData
-    body: common.profile.UploadAvatarBody
-}> = async (app, { userData, body }) => {
+export const uploadAvatar = (async (app, { userData, body }) => {
     if (!isImgFile(body.img)) throw new BadRequestError("File is not an image")
 
     const avatar = await writeFile(enums.ImgPath.Avatars, body.img)
@@ -57,11 +51,9 @@ export const uploadAvatar: RouteHandler<{
     })
 
     return {}
-}
+}) satisfies RouteHandler<{ userData: UserData; body: common.profile.UploadAvatarBody }>
 
-export const deleteAvatar: RouteHandler<{
-    userData: UserData
-}> = async (app, { userData }) => {
+export const deleteAvatar = (async (app, { userData }) => {
     if (!userData.avatar) throw new BadRequestError("You do not have an avatar")
 
     await removeFile(enums.ImgPath.Avatars, userData.avatar)
@@ -72,12 +64,9 @@ export const deleteAvatar: RouteHandler<{
     })
 
     return {}
-}
+}) satisfies RouteHandler<{ userData: UserData }>
 
-export const sendConfirmationEmail: RouteHandler<{ userData: UserData }> = async (
-    app,
-    { userData }
-) => {
+export const sendConfirmationEmail = (async (app, { userData }) => {
     if (userData.confirmedEmail) throw new BadRequestError("Email is already confirmed")
 
     const token = createUuid()
@@ -110,12 +99,9 @@ export const sendConfirmationEmail: RouteHandler<{ userData: UserData }> = async
     await sendEmail(userData.email, subject, message)
 
     return {}
-}
+}) satisfies RouteHandler<{ userData: UserData }>
 
-export const confirmEmail: RouteHandler<{ params: common.profile.ConfirmEmailParams }> = async (
-    app,
-    { params }
-) => {
+export const confirmEmail = (async (app, { params }) => {
     await utils.deleteExpiredEmailConfirmationTokens(app)
 
     const emailConfirmationToken = await app.prisma.emailConfirmationToken.findFirst({
@@ -131,12 +117,9 @@ export const confirmEmail: RouteHandler<{ params: common.profile.ConfirmEmailPar
     await app.prisma.emailConfirmationToken.delete({ where: { id: emailConfirmationToken.id } })
 
     return {}
-}
+}) satisfies RouteHandler<{ params: common.profile.ConfirmEmailParams }>
 
-export const changePassword: RouteHandler<{
-    userData: UserData
-    body: common.profile.ChangePasswordBody
-}> = async (app, { userData, body }) => {
+export const changePassword = (async (app, { userData, body }) => {
     if (body.oldPassword === body.newPassword) {
         throw new BadRequestError("Old and new passwords match")
     }
@@ -151,11 +134,9 @@ export const changePassword: RouteHandler<{
     })
 
     return {}
-}
+}) satisfies RouteHandler<{ userData: UserData; body: common.profile.ChangePasswordBody }>
 
-export const sendPasswordResetEmail: RouteHandler<{
-    body: common.profile.SendPasswordResetEmailBody
-}> = async (app, { body }) => {
+export const sendPasswordResetEmail = (async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (!user) throw new BadRequestError("User with such email was not found")
 
@@ -189,12 +170,9 @@ export const sendPasswordResetEmail: RouteHandler<{
     await sendEmail(user.email, subject, message)
 
     return {}
-}
+}) satisfies RouteHandler<{ body: common.profile.SendPasswordResetEmailBody }>
 
-export const resetPassword: RouteHandler<{
-    params: common.profile.ResetPasswordParams
-    body: common.profile.ResetPasswordBody
-}> = async (app, { params, body }) => {
+export const resetPassword = (async (app, { params, body }) => {
     await utils.deleteExpiredPasswordResetTokens(app)
 
     const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
@@ -211,4 +189,7 @@ export const resetPassword: RouteHandler<{
     await app.prisma.passwordResetToken.delete({ where: { id: passwordResetToken.id } })
 
     return {}
-}
+}) satisfies RouteHandler<{
+    params: common.profile.ResetPasswordParams
+    body: common.profile.ResetPasswordBody
+}>

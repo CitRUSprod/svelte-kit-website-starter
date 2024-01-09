@@ -14,7 +14,7 @@ export const permissionsRoutes: FastifyPluginCallback = (app, options, done) => 
             app.verifyPermission(enums.Permission.CreateRole)
         ]),
         async handler(req, reply) {
-            const data = await handlers.getPermissions(app, {})
+            const data = await handlers.getPermissions()
             await reply.sendData(data)
         }
     })

@@ -5,10 +5,7 @@ import * as enums from "$/enums"
 import { RouteHandler, UserData } from "$/types"
 import * as common from "$/common"
 
-export const getPosts: RouteHandler<{ query: common.posts.GetPostsQuery }> = async (
-    app,
-    { query }
-) => {
+export const getPosts = (async (app, { query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
         const where: Prisma.PostWhereInput = {
             title: { contains: query.title, mode: "insensitive" }
@@ -27,33 +24,23 @@ export const getPosts: RouteHandler<{ query: common.posts.GetPostsQuery }> = asy
     })
 
     return { payload: page }
-}
+}) satisfies RouteHandler<{ query: common.posts.GetPostsQuery }>
 
-export const createPost: RouteHandler<{
-    userData: UserData
-    body: common.posts.CreatePostBody
-}> = async (app, { userData, body }) => {
+export const createPost = (async (app, { userData, body }) => {
     const post = await app.prisma.post.create({
         data: { ...body, authorId: userData.id, creationDate: new Date() },
         include: { author: { include: { role: true } } }
     })
 
     return { payload: models.post.dto(post) }
-}
+}) satisfies RouteHandler<{ userData: UserData; body: common.posts.CreatePostBody }>
 
-export const getPost: RouteHandler<{ params: common.posts.GetPostParams }> = async (
-    app,
-    { params }
-) => {
+export const getPost = (async (app, { params }) => {
     const post = await models.post.get(app, params.id)
     return { payload: models.post.dto(post) }
-}
+}) satisfies RouteHandler<{ params: common.posts.GetPostParams }>
 
-export const updatePost: RouteHandler<{
-    userData: UserData
-    params: common.posts.UpdatePostParams
-    body: common.posts.UpdatePostBody
-}> = async (app, { userData, params, body }) => {
+export const updatePost = (async (app, { userData, params, body }) => {
     const post = await models.post.get(app, params.id)
 
     if (post.authorId === userData.id) {
@@ -67,12 +54,13 @@ export const updatePost: RouteHandler<{
     } else {
         throw new ForbiddenError("No access")
     }
-}
-
-export const deletePost: RouteHandler<{
+}) satisfies RouteHandler<{
     userData: UserData
-    params: common.posts.DeletePostParams
-}> = async (app, { userData, params }) => {
+    params: common.posts.UpdatePostParams
+    body: common.posts.UpdatePostBody
+}>
+
+export const deletePost = (async (app, { userData, params }) => {
     const post = await models.post.get(app, params.id)
 
     if (
@@ -88,4 +76,4 @@ export const deletePost: RouteHandler<{
     } else {
         throw new ForbiddenError("No access")
     }
-}
+}) satisfies RouteHandler<{ userData: UserData; params: common.posts.DeletePostParams }>

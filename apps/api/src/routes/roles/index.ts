@@ -9,7 +9,7 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [common.roles.basePath]
         },
         async handler(req, reply) {
-            const data = await handlers.getRoles(app, {})
+            const data = await handlers.getRoles(app)
             await reply.sendData(data)
         }
     })

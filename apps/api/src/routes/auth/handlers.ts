@@ -5,7 +5,7 @@ import { ReplyCookie, RouteHandler } from "$/types"
 import * as common from "$/common"
 import * as utils from "./utils"
 
-export const register: RouteHandler<{ body: common.auth.RegisterBody }> = async (app, { body }) => {
+export const register = (async (app, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (userByEmail) throw new BadRequestError("User with such email already exists")
 
@@ -18,9 +18,9 @@ export const register: RouteHandler<{ body: common.auth.RegisterBody }> = async 
     })
 
     return {}
-}
+}) satisfies RouteHandler<{ body: common.auth.RegisterBody }>
 
-export const login: RouteHandler<{ body: common.auth.LoginBody }> = async (app, { body }) => {
+export const login = (async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (!user) throw new BadRequestError("User with such email was not found")
 
@@ -48,12 +48,9 @@ export const login: RouteHandler<{ body: common.auth.LoginBody }> = async (app, 
             }
         ]
     }
-}
+}) satisfies RouteHandler<{ body: common.auth.LoginBody }>
 
-export const logout: RouteHandler<{ cookies: common.auth.LogoutCookies }> = async (
-    app,
-    { cookies }
-) => {
+export const logout = (async (app, { cookies }) => {
     const localCookies: Array<ReplyCookie> = [
         { name: "accessToken", value: undefined, options: { path: "/" } },
         { name: "refreshToken", value: undefined, options: { path: "/" } }
@@ -75,12 +72,9 @@ export const logout: RouteHandler<{ cookies: common.auth.LogoutCookies }> = asyn
     await app.prisma.refreshToken.delete({ where: { id: refreshToken.id } })
 
     return { cookies: localCookies }
-}
+}) satisfies RouteHandler<{ cookies: common.auth.LogoutCookies }>
 
-export const refreshTokens: RouteHandler<{ cookies: common.auth.RefreshTokensCookies }> = async (
-    app,
-    { cookies }
-) => {
+export const refreshTokens = (async (app, { cookies }) => {
     const payload = utils.getPayload(app, cookies.refreshToken)
 
     await utils.deleteExpiredRefreshTokens(app)
@@ -117,4 +111,4 @@ export const refreshTokens: RouteHandler<{ cookies: common.auth.RefreshTokensCoo
             }
         ]
     }
-}
+}) satisfies RouteHandler<{ cookies: common.auth.RefreshTokensCookies }>

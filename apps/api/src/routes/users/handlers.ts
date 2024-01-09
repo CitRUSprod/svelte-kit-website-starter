@@ -5,10 +5,7 @@ import * as enums from "$/enums"
 import { UserData, PartialUserData, RouteHandler } from "$/types"
 import * as common from "$/common"
 
-export const getUsers: RouteHandler<{
-    userData?: UserData
-    query: common.users.GetUsersQuery
-}> = async (app, { userData, query }) => {
+export const getUsers = (async (app, { userData, query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
         const where: Prisma.UserWhereInput = {
             email: { contains: query.email, mode: "insensitive" },
@@ -35,12 +32,9 @@ export const getUsers: RouteHandler<{
     })
 
     return { payload: page }
-}
+}) satisfies RouteHandler<{ userData?: UserData; query: common.users.GetUsersQuery }>
 
-export const getUser: RouteHandler<{
-    userData?: UserData
-    params: common.users.GetUserParams
-}> = async (app, { userData, params }) => {
+export const getUser = (async (app, { userData, params }) => {
     const user: PartialUserData = await models.user.get(app, params.id)
 
     function removeEmailFields() {
@@ -58,11 +52,9 @@ export const getUser: RouteHandler<{
     }
 
     return { payload: models.user.dto(user) }
-}
+}) satisfies RouteHandler<{ userData?: UserData; params: common.users.GetUserParams }>
 
-export const assignRoleToUser: RouteHandler<{
-    params: common.users.AssignRoleToUserParams
-}> = async (app, { params }) => {
+export const assignRoleToUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
     const role = await models.role.get(app, params.roleId)
 
@@ -77,12 +69,9 @@ export const assignRoleToUser: RouteHandler<{
     })
 
     return { payload: models.user.dto(updatedUser) }
-}
+}) satisfies RouteHandler<{ params: common.users.AssignRoleToUserParams }>
 
-export const banUser: RouteHandler<{ params: common.users.BanUserParams }> = async (
-    app,
-    { params }
-) => {
+export const banUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
     if (user.banned) throw new BadRequestError("User with such ID is already banned")
 
@@ -93,12 +82,9 @@ export const banUser: RouteHandler<{ params: common.users.BanUserParams }> = asy
     })
 
     return { payload: models.user.dto(bannedUser) }
-}
+}) satisfies RouteHandler<{ params: common.users.BanUserParams }>
 
-export const unbanUser: RouteHandler<{ params: common.users.UnbanUserParams }> = async (
-    app,
-    { params }
-) => {
+export const unbanUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
     if (!user.banned) throw new BadRequestError("User with such ID is not banned")
 
@@ -109,4 +95,4 @@ export const unbanUser: RouteHandler<{ params: common.users.UnbanUserParams }> =
     })
 
     return { payload: models.user.dto(unbannedUser) }
-}
+}) satisfies RouteHandler<{ params: common.users.UnbanUserParams }>
