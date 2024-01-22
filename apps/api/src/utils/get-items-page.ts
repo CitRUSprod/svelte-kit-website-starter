@@ -1,8 +1,8 @@
-import { JsonifiableObject } from "$/types"
+import { JsonObject } from "type-fest"
 
 interface ItemsData {
     totalItems: number
-    items: Array<JsonifiableObject>
+    items: Array<JsonObject>
 }
 
 export async function getItemsPage(

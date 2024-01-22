@@ -18,6 +18,7 @@ COPY . .
 FROM installer AS web
 ARG PUBLIC_TITLE
 ARG PUBLIC_BASE_URL
+ENV PUBLIC_IS_DOCKER_CONTAINER=true
 RUN pnpm build --filter=web...
 WORKDIR /project/apps/web
 CMD pnpm start

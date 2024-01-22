@@ -1,12 +1,12 @@
 import { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { FastifyAuthFunction } from "@fastify/auth"
 import { ForbiddenError } from "http-errors-enhanced"
-import * as enums from "$/enums"
+import * as constantsEnums from "@local/constants/enums"
 import { models } from "$/utils"
 
 declare module "fastify" {
     interface FastifyInstance {
-        verifyPermission(permission: enums.Permission): FastifyAuthFunction
+        verifyPermission(permission: constantsEnums.Permission): FastifyAuthFunction
     }
 }
 

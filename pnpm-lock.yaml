@@ -110,6 +110,12 @@ importers:
       '@fastify/swagger-ui':
         specifier: 2.0.1
         version: 2.0.1
+      '@local/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@local/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@prisma/client':
         specifier: 5.7.1
         version: 5.7.1(prisma@5.7.1)
@@ -213,6 +219,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@local/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@local/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@local/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -348,6 +360,56 @@ importers:
         version: 1.5.0
 
   packages/configs: {}
+
+  packages/constants:
+    dependencies:
+      tslib:
+        specifier: 2.6.2
+        version: 2.6.2
+    devDependencies:
+      '@local/configs':
+        specifier: workspace:*
+        version: link:../configs
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
+      '@types/node':
+        specifier: 20.9.3
+        version: 20.9.3
+      tsup:
+        specifier: 8.0.1
+        version: 8.0.1(postcss@8.4.33)(typescript@5.2.2)
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+
+  packages/schemas:
+    dependencies:
+      '@local/constants':
+        specifier: workspace:*
+        version: link:../constants
+      tslib:
+        specifier: 2.6.2
+        version: 2.6.2
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@local/configs':
+        specifier: workspace:*
+        version: link:../configs
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
+      '@types/node':
+        specifier: 20.9.3
+        version: 20.9.3
+      tsup:
+        specifier: 8.0.1
+        version: 8.0.1(postcss@8.4.33)(typescript@5.2.2)
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
 
   packages/utils:
     dependencies:

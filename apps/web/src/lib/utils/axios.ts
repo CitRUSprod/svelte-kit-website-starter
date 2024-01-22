@@ -1,8 +1,20 @@
 import basicAxios, { type AxiosResponseHeaders, type RawAxiosResponseHeaders } from "axios"
-import { browser, dev } from "$app/environment"
+import * as constantsRoutes from "@local/constants/routes"
+import { browser } from "$app/environment"
 import { env, uniqCookies } from "$lib/utils"
 
-const baseUrl = browser || dev ? env.PUBLIC_BASE_URL : "http://nginx:6700"
+const baseUrl =
+    !browser && env.PUBLIC_IS_DOCKER_CONTAINER ? "http://nginx:6700" : env.PUBLIC_BASE_URL
+
+export function createApiUrl(route: string, ...params: Array<string | number>) {
+    let apiUrl = `/api${route}`
+
+    for (const param of params) {
+        apiUrl = apiUrl.replace(/:\w+/, param.toString())
+    }
+
+    return apiUrl
+}
 
 export function getHeader<T = string>(
     headers: AxiosResponseHeaders | RawAxiosResponseHeaders,
@@ -45,7 +57,7 @@ axios.interceptors.response.use(
 
             if (err.response.status === 401 && url.startsWith(baseUrl)) {
                 const response = await basicAxios.post(
-                    "/api/auth/refresh",
+                    createApiUrl(constantsRoutes.auth.refreshTokens),
                     {},
                     {
                         baseURL: baseUrl,

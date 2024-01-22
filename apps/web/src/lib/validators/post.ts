@@ -1,6 +1,5 @@
-import { z } from "zod"
+import * as schemasModels from "@local/schemas/models"
 import { createValidator } from "$lib/utils"
 
-export const title = createValidator(z.string().trim().min(1).max(100))
-
-export const content = createValidator(z.string().trim().min(1))
+export const title = createValidator(schemasModels.post.title())
+export const content = createValidator(schemasModels.post.content())

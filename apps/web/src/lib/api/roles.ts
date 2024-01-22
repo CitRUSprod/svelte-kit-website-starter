@@ -1,4 +1,5 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { Permission } from "$lib/enums"
 import type { RoleWithProtected } from "$lib/types"
@@ -9,7 +10,7 @@ interface GetRolesData {
 
 export function getRoles(data: GetRolesData = {}) {
     return axios.get<{ items: Array<RoleWithProtected> }>(
-        "/api/roles",
+        createApiUrl(constantsRoutes.roles.getRoles),
         createAxiosConfig(data.headers)
     )
 }
@@ -22,7 +23,7 @@ interface CreateRoleData {
 
 export function createRole(data: CreateRoleData) {
     return axios.post<RoleWithProtected>(
-        "/api/roles",
+        createApiUrl(constantsRoutes.roles.createRole),
         {
             name: data.name,
             permissions: data.permissions
@@ -40,7 +41,7 @@ interface UpdateRoleData {
 
 export function updateRole(data: UpdateRoleData) {
     return axios.patch<RoleWithProtected>(
-        `/api/roles/${data.id}`,
+        createApiUrl(constantsRoutes.roles.updateRole, data.id),
         {
             name: data.name,
             permissions: data.permissions
@@ -55,5 +56,8 @@ interface DeleteRoleData {
 }
 
 export function deleteRole(data: DeleteRoleData) {
-    return axios.delete<RoleWithProtected>(`/api/roles/${data.id}`, createAxiosConfig(data.headers))
+    return axios.delete<RoleWithProtected>(
+        createApiUrl(constantsRoutes.roles.deleteRole, data.id),
+        createAxiosConfig(data.headers)
+    )
 }

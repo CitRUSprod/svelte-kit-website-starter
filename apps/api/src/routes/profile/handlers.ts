@@ -1,10 +1,11 @@
+import { MultipartFile } from "@fastify/multipart"
 import { BadRequestError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
+import * as schemasRoutes from "@local/schemas/routes"
 import * as enums from "$/enums"
 import { env, isImgFile, writeFile, removeFile, sendEmail, models } from "$/utils"
 import { UserData, RouteHandler } from "$/types"
-import * as common from "$/common"
 import * as utils from "./utils"
 
 export const getUser = (async (app, { userData }) => ({
@@ -36,12 +37,14 @@ export const updateUser = (async (app, { userData, body }) => {
     })
 
     return { payload: models.user.dto(updatedUser) }
-}) satisfies RouteHandler<{ userData: UserData; body: common.profile.UpdateUserBody }>
+}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.UpdateUserBody }>
 
 export const uploadAvatar = (async (app, { userData, body }) => {
-    if (!isImgFile(body.img)) throw new BadRequestError("File is not an image")
+    const img = body.img as MultipartFile
 
-    const avatar = await writeFile(enums.ImgPath.Avatars, body.img)
+    if (!isImgFile(img)) throw new BadRequestError("File is not an image")
+
+    const avatar = await writeFile(enums.ImgPath.Avatars, img)
 
     if (userData.avatar) await removeFile(enums.ImgPath.Avatars, userData.avatar)
 
@@ -51,7 +54,7 @@ export const uploadAvatar = (async (app, { userData, body }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData; body: common.profile.UploadAvatarBody }>
+}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.UploadAvatarBody }>
 
 export const deleteAvatar = (async (app, { userData }) => {
     if (!userData.avatar) throw new BadRequestError("You do not have an avatar")
@@ -117,7 +120,7 @@ export const confirmEmail = (async (app, { params }) => {
     await app.prisma.emailConfirmationToken.delete({ where: { id: emailConfirmationToken.id } })
 
     return {}
-}) satisfies RouteHandler<{ params: common.profile.ConfirmEmailParams }>
+}) satisfies RouteHandler<{ params: schemasRoutes.profile.ConfirmEmailParams }>
 
 export const changePassword = (async (app, { userData, body }) => {
     if (body.oldPassword === body.newPassword) {
@@ -134,7 +137,7 @@ export const changePassword = (async (app, { userData, body }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData; body: common.profile.ChangePasswordBody }>
+}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.ChangePasswordBody }>
 
 export const sendPasswordResetEmail = (async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
@@ -170,7 +173,7 @@ export const sendPasswordResetEmail = (async (app, { body }) => {
     await sendEmail(user.email, subject, message)
 
     return {}
-}) satisfies RouteHandler<{ body: common.profile.SendPasswordResetEmailBody }>
+}) satisfies RouteHandler<{ body: schemasRoutes.profile.SendPasswordResetEmailBody }>
 
 export const resetPassword = (async (app, { params, body }) => {
     await utils.deleteExpiredPasswordResetTokens(app)
@@ -190,6 +193,6 @@ export const resetPassword = (async (app, { params, body }) => {
 
     return {}
 }) satisfies RouteHandler<{
-    params: common.profile.ResetPasswordParams
-    body: common.profile.ResetPasswordBody
+    params: schemasRoutes.profile.ResetPasswordParams
+    body: schemasRoutes.profile.ResetPasswordBody
 }>

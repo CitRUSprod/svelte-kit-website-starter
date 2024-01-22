@@ -1,4 +1,7 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 interface RegisterData {
     headers?: Headers
@@ -8,8 +11,8 @@ interface RegisterData {
 }
 
 export function register(data: RegisterData) {
-    return axios.post<undefined>(
-        "/api/auth/register",
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.auth.register),
         {
             email: data.email,
             username: data.username,
@@ -26,8 +29,8 @@ interface LoginData {
 }
 
 export function login(data: LoginData) {
-    return axios.post<undefined>(
-        "/api/auth/login",
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.auth.login),
         {
             email: data.email,
             password: data.password
@@ -41,7 +44,11 @@ interface LogoutData {
 }
 
 export function logout(data: LogoutData = {}) {
-    return axios.post<undefined>("/api/auth/logout", {}, createAxiosConfig(data.headers))
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.auth.logout),
+        {},
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface RefreshTokensData {
@@ -49,5 +56,9 @@ interface RefreshTokensData {
 }
 
 export function refreshTokens(data: RefreshTokensData = {}) {
-    return axios.post<undefined>("/api/auth/refresh", {}, createAxiosConfig(data.headers))
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.auth.refreshTokens),
+        {},
+        createAxiosConfig(data.headers)
+    )
 }

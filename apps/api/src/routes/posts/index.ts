@@ -1,12 +1,13 @@
 import { FastifyPluginCallback } from "fastify"
-import * as common from "$/common"
+import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import * as handlers from "./handlers"
 
 export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get<{ Querystring: common.posts.GetPostsQuery }>(common.posts.getPostsPath, {
+    app.get<{ Querystring: schemasRoutes.posts.GetPostsQuery }>(constantsRoutes.posts.getPosts, {
         schema: {
-            tags: [common.posts.basePath],
-            querystring: common.posts.getPostsQuerySchema()
+            tags: [constantsRoutes.posts.base],
+            querystring: schemasRoutes.posts.getPostsQuery()
         },
         async handler(req, reply) {
             const data = await handlers.getPosts(app, { query: req.query })
@@ -14,10 +15,10 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Body: common.posts.CreatePostBody }>(common.posts.createPostPath, {
+    app.post<{ Body: schemasRoutes.posts.CreatePostBody }>(constantsRoutes.posts.createPost, {
         schema: {
-            tags: [common.posts.basePath],
-            body: common.posts.createPostBodySchema()
+            tags: [constantsRoutes.posts.base],
+            body: schemasRoutes.posts.createPostBody()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
@@ -31,10 +32,10 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.get<{ Params: common.posts.GetPostParams }>(common.posts.getPostPath, {
+    app.get<{ Params: schemasRoutes.posts.GetPostParams }>(constantsRoutes.posts.getPost, {
         schema: {
-            tags: [common.posts.basePath],
-            params: common.posts.getPostParamsSchema()
+            tags: [constantsRoutes.posts.base],
+            params: schemasRoutes.posts.getPostParams()
         },
         async handler(req, reply) {
             const data = await handlers.getPost(app, { params: req.params })
@@ -42,35 +43,35 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.patch<{ Params: common.posts.UpdatePostParams; Body: common.posts.UpdatePostBody }>(
-        common.posts.updatePostPath,
-        {
-            schema: {
-                tags: [common.posts.basePath],
-                params: common.posts.updatePostParamsSchema(),
-                body: common.posts.updatePostBodySchema()
-            },
-            preHandler: app.createPreHandler([
-                app.setUserData,
-                app.verifyAuth,
-                app.verifyConfirmedEmail,
-                app.verifyNotBanned
-            ]),
-            async handler(req, reply) {
-                const data = await handlers.updatePost(app, {
-                    userData: req.userData!,
-                    params: req.params,
-                    body: req.body
-                })
-                await reply.sendData(data)
-            }
-        }
-    )
-
-    app.delete<{ Params: common.posts.DeletePostParams }>(common.posts.deletePostPath, {
+    app.patch<{
+        Params: schemasRoutes.posts.UpdatePostParams
+        Body: schemasRoutes.posts.UpdatePostBody
+    }>(constantsRoutes.posts.updatePost, {
         schema: {
-            tags: [common.posts.basePath],
-            params: common.posts.deletePostParamsSchema()
+            tags: [constantsRoutes.posts.base],
+            params: schemasRoutes.posts.updatePostParams(),
+            body: schemasRoutes.posts.updatePostBody()
+        },
+        preHandler: app.createPreHandler([
+            app.setUserData,
+            app.verifyAuth,
+            app.verifyConfirmedEmail,
+            app.verifyNotBanned
+        ]),
+        async handler(req, reply) {
+            const data = await handlers.updatePost(app, {
+                userData: req.userData!,
+                params: req.params,
+                body: req.body
+            })
+            await reply.sendData(data)
+        }
+    })
+
+    app.delete<{ Params: schemasRoutes.posts.DeletePostParams }>(constantsRoutes.posts.deletePost, {
+        schema: {
+            tags: [constantsRoutes.posts.base],
+            params: schemasRoutes.posts.deletePostParams()
         },
         preHandler: app.createPreHandler([
             app.setUserData,

@@ -1,21 +1,22 @@
 import { FastifyInstance } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
+import { JsonObject } from "type-fest"
 import * as enums from "$/enums"
-import { JsonifiableObject, PartialUserData } from "$/types"
+import { PartialUserData } from "$/types"
 
-export function dto(user: PartialUserData): JsonifiableObject {
+export function dto(user: PartialUserData): JsonObject {
     return {
         id: user.id,
-        email: user.email,
+        email: user.email ?? null,
         username: user.username,
         role: {
             id: user.role.id,
             name: user.role.name,
             permissions: user.role.permissions
         },
-        confirmedEmail: user.confirmedEmail,
+        confirmedEmail: user.confirmedEmail ?? null,
         banned: user.banned,
-        registrationDate: user.registrationDate,
+        registrationDate: user.registrationDate.toJSON(),
         avatar: user.avatar && `/api/files/${enums.ImgPath.Avatars}/${user.avatar}`
     }
 }

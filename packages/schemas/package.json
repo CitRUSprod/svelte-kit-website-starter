@@ -1,0 +1,33 @@
+{
+    "name": "@local/schemas",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./common": "./dist/common/index.js",
+        "./models": "./dist/models/index.js",
+        "./routes": "./dist/routes/index.js"
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "./dist/*/index.d.ts"
+            ]
+        }
+    },
+    "scripts": {
+        "build": "tsup src/*/index.ts --clean --format esm --minify --dts",
+        "check-types": "tsc --pretty --noEmit"
+    },
+    "devDependencies": {
+        "@local/configs": "workspace:*",
+        "@total-typescript/ts-reset": "0.5.1",
+        "@types/node": "20.9.3",
+        "tsup": "8.0.1",
+        "typescript": "5.2.2"
+    },
+    "dependencies": {
+        "@local/constants": "workspace:*",
+        "tslib": "2.6.2",
+        "zod": "3.22.4"
+    }
+}

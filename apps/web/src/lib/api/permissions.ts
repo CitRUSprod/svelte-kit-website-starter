@@ -1,4 +1,5 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { Permission } from "$lib/enums"
 
@@ -8,7 +9,7 @@ interface GetPermissionsData {
 
 export function getPermissions(data: GetPermissionsData = {}) {
     return axios.get<{ items: Array<Permission> }>(
-        "/api/permissions",
+        createApiUrl(constantsRoutes.permissions.getPermissions),
         createAxiosConfig(data.headers)
     )
 }

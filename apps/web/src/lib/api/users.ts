@@ -1,4 +1,5 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { ItemsPage, User } from "$lib/types"
 
@@ -13,7 +14,10 @@ interface GetUsersData {
 }
 
 export function getUsers(data: GetUsersData) {
-    return axios.get<ItemsPage<User>>("/api/users", createAxiosConfig(data.headers))
+    return axios.get<ItemsPage<User>>(
+        createApiUrl(constantsRoutes.users.getUsers),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface GetUserData {
@@ -22,7 +26,10 @@ interface GetUserData {
 }
 
 export function getUser(data: GetUserData) {
-    return axios.get<User>(`/api/users/${data.id}`, createAxiosConfig(data.headers))
+    return axios.get<User>(
+        createApiUrl(constantsRoutes.users.getUser, data.id),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface AssignRoleToUserData {
@@ -33,7 +40,7 @@ interface AssignRoleToUserData {
 
 export function assignRoleToUser(data: AssignRoleToUserData) {
     return axios.post<User>(
-        `/api/users/${data.id}/role/${data.roleId}`,
+        createApiUrl(constantsRoutes.users.assignRoleToUser, data.id, data.roleId),
         createAxiosConfig(data.headers)
     )
 }
@@ -44,7 +51,10 @@ interface BanUserData {
 }
 
 export function banUser(data: BanUserData) {
-    return axios.post<User>(`/api/users/${data.id}/ban`, createAxiosConfig(data.headers))
+    return axios.post<User>(
+        createApiUrl(constantsRoutes.users.banUser, data.id),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface UnbanUserData {
@@ -53,5 +63,8 @@ interface UnbanUserData {
 }
 
 export function unbanUser(data: UnbanUserData) {
-    return axios.post<User>(`/api/users/${data.id}/unban`, createAxiosConfig(data.headers))
+    return axios.post<User>(
+        createApiUrl(constantsRoutes.users.unbanUser, data.id),
+        createAxiosConfig(data.headers)
+    )
 }

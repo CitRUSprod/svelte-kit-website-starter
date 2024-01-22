@@ -1,17 +1,17 @@
 import { FastifyPluginCallback } from "fastify"
-import * as enums from "$/enums"
-import * as common from "$/common"
+import * as constantsEnums from "@local/constants/enums"
+import * as constantsRoutes from "@local/constants/routes"
 import * as handlers from "./handlers"
 
 export const permissionsRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get(common.permissions.getPermissionsPath, {
+    app.get(constantsRoutes.permissions.getPermissions, {
         schema: {
-            tags: [common.permissions.basePath]
+            tags: [constantsRoutes.permissions.base]
         },
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyPermission(enums.Permission.CreateRole)
+            app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
         async handler(req, reply) {
             const data = await handlers.getPermissions()

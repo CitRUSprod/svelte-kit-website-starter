@@ -1,4 +1,5 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { ItemsPage, Post } from "$lib/types"
 
@@ -12,7 +13,7 @@ interface GetPostsData {
 }
 
 export function getPosts(data: GetPostsData = {}) {
-    return axios.get<ItemsPage<Post>>("/api/posts", {
+    return axios.get<ItemsPage<Post>>(createApiUrl(constantsRoutes.posts.getPosts), {
         params: {
             page: data.page,
             perPage: data.perPage,
@@ -30,7 +31,10 @@ interface GetPostData {
 }
 
 export function getPost(data: GetPostData) {
-    return axios.get<Post>(`/api/posts/${data.id}`, createAxiosConfig(data.headers))
+    return axios.get<Post>(
+        createApiUrl(constantsRoutes.posts.getPost, data.id),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface CreatePostData {
@@ -41,7 +45,7 @@ interface CreatePostData {
 
 export function createPost(data: CreatePostData) {
     return axios.post<Post>(
-        "/api/posts",
+        createApiUrl(constantsRoutes.posts.createPost),
         {
             title: data.title,
             content: data.content
@@ -59,7 +63,7 @@ interface UpdatePostData {
 
 export function updatePost(data: UpdatePostData) {
     return axios.patch<Post>(
-        `/api/posts/${data.id}`,
+        createApiUrl(constantsRoutes.posts.updatePost, data.id),
         {
             title: data.title,
             content: data.content
@@ -74,5 +78,8 @@ interface DeletePostData {
 }
 
 export function deletePost(data: DeletePostData) {
-    return axios.delete<Post>(`/api/posts/${data.id}`, createAxiosConfig(data.headers))
+    return axios.delete<Post>(
+        createApiUrl(constantsRoutes.posts.deletePost, data.id),
+        createAxiosConfig(data.headers)
+    )
 }

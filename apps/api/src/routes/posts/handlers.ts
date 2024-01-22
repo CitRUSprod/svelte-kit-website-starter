@@ -1,9 +1,9 @@
 import { ForbiddenError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
+import * as constantsEnums from "@local/constants/enums"
+import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import * as enums from "$/enums"
 import { RouteHandler, UserData } from "$/types"
-import * as common from "$/common"
 
 export const getPosts = (async (app, { query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
@@ -24,7 +24,7 @@ export const getPosts = (async (app, { query }) => {
     })
 
     return { payload: page }
-}) satisfies RouteHandler<{ query: common.posts.GetPostsQuery }>
+}) satisfies RouteHandler<{ query: schemasRoutes.posts.GetPostsQuery }>
 
 export const createPost = (async (app, { userData, body }) => {
     const post = await app.prisma.post.create({
@@ -33,12 +33,12 @@ export const createPost = (async (app, { userData, body }) => {
     })
 
     return { payload: models.post.dto(post) }
-}) satisfies RouteHandler<{ userData: UserData; body: common.posts.CreatePostBody }>
+}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.posts.CreatePostBody }>
 
 export const getPost = (async (app, { params }) => {
     const post = await models.post.get(app, params.id)
     return { payload: models.post.dto(post) }
-}) satisfies RouteHandler<{ params: common.posts.GetPostParams }>
+}) satisfies RouteHandler<{ params: schemasRoutes.posts.GetPostParams }>
 
 export const updatePost = (async (app, { userData, params, body }) => {
     const post = await models.post.get(app, params.id)
@@ -56,8 +56,8 @@ export const updatePost = (async (app, { userData, params, body }) => {
     }
 }) satisfies RouteHandler<{
     userData: UserData
-    params: common.posts.UpdatePostParams
-    body: common.posts.UpdatePostBody
+    params: schemasRoutes.posts.UpdatePostParams
+    body: schemasRoutes.posts.UpdatePostBody
 }>
 
 export const deletePost = (async (app, { userData, params }) => {
@@ -65,7 +65,7 @@ export const deletePost = (async (app, { userData, params }) => {
 
     if (
         post.authorId === userData.id ||
-        userData.role.permissions.includes(enums.Permission.DeleteOtherUserPost)
+        userData.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)
     ) {
         const deletedPost = await app.prisma.post.delete({
             where: { id: params.id },
@@ -76,4 +76,4 @@ export const deletePost = (async (app, { userData, params }) => {
     } else {
         throw new ForbiddenError("No access")
     }
-}) satisfies RouteHandler<{ userData: UserData; params: common.posts.DeletePostParams }>
+}) satisfies RouteHandler<{ userData: UserData; params: schemasRoutes.posts.DeletePostParams }>

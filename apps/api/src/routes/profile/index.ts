@@ -1,11 +1,12 @@
 import { FastifyPluginCallback } from "fastify"
-import * as common from "$/common"
+import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import * as handlers from "./handlers"
 
 export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get(common.profile.getUserPath, {
+    app.get(constantsRoutes.profile.getUser, {
         schema: {
-            tags: [common.profile.basePath]
+            tags: [constantsRoutes.profile.base]
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
@@ -14,10 +15,10 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.patch<{ Body: common.profile.UpdateUserBody }>(common.profile.updateUserPath, {
+    app.patch<{ Body: schemasRoutes.profile.UpdateUserBody }>(constantsRoutes.profile.updateUser, {
         schema: {
-            tags: [common.profile.basePath],
-            body: common.profile.updateUserBodySchema()
+            tags: [constantsRoutes.profile.base],
+            body: schemasRoutes.profile.updateUserBody()
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
@@ -26,24 +27,27 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Body: common.profile.UploadAvatarBody }>(common.profile.uploadAvatarPath, {
-        schema: {
-            tags: [common.profile.basePath],
-            body: common.profile.uploadAvatarBodySchema()
-        },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
-        async handler(req, reply) {
-            const data = await handlers.uploadAvatar(app, {
-                userData: req.userData!,
-                body: req.body
-            })
-            await reply.sendData(data)
+    app.post<{ Body: schemasRoutes.profile.UploadAvatarBody }>(
+        constantsRoutes.profile.uploadAvatar,
+        {
+            schema: {
+                tags: [constantsRoutes.profile.base],
+                body: schemasRoutes.profile.uploadAvatarBody()
+            },
+            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            async handler(req, reply) {
+                const data = await handlers.uploadAvatar(app, {
+                    userData: req.userData!,
+                    body: req.body
+                })
+                await reply.sendData(data)
+            }
         }
-    })
+    )
 
-    app.delete(common.profile.deleteAvatarPath, {
+    app.delete(constantsRoutes.profile.deleteAvatar, {
         schema: {
-            tags: [common.profile.basePath]
+            tags: [constantsRoutes.profile.base]
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
@@ -54,9 +58,9 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post(common.profile.sendConfirmationEmailPath, {
+    app.post(constantsRoutes.profile.sendConfirmationEmail, {
         schema: {
-            tags: [common.profile.basePath]
+            tags: [constantsRoutes.profile.base]
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
@@ -65,38 +69,44 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: common.profile.ConfirmEmailParams }>(common.profile.confirmEmailPath, {
-        schema: {
-            tags: [common.profile.basePath],
-            params: common.profile.confirmEmailParamsSchema()
-        },
-        async handler(req, reply) {
-            const data = await handlers.confirmEmail(app, { params: req.params })
-            await reply.sendData(data)
-        }
-    })
-
-    app.post<{ Body: common.profile.ChangePasswordBody }>(common.profile.changePasswordPath, {
-        schema: {
-            tags: [common.profile.basePath],
-            body: common.profile.changePasswordBodySchema()
-        },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
-        async handler(req, reply) {
-            const data = await handlers.changePassword(app, {
-                userData: req.userData!,
-                body: req.body
-            })
-            await reply.sendData(data)
-        }
-    })
-
-    app.post<{ Body: common.profile.SendPasswordResetEmailBody }>(
-        common.profile.sendPasswordResetEmailPath,
+    app.post<{ Params: schemasRoutes.profile.ConfirmEmailParams }>(
+        constantsRoutes.profile.confirmEmail,
         {
             schema: {
-                tags: [common.profile.basePath],
-                body: common.profile.sendPasswordResetEmailBodySchema()
+                tags: [constantsRoutes.profile.base],
+                params: schemasRoutes.profile.confirmEmailParams()
+            },
+            async handler(req, reply) {
+                const data = await handlers.confirmEmail(app, { params: req.params })
+                await reply.sendData(data)
+            }
+        }
+    )
+
+    app.post<{ Body: schemasRoutes.profile.ChangePasswordBody }>(
+        constantsRoutes.profile.changePassword,
+        {
+            schema: {
+                tags: [constantsRoutes.profile.base],
+                body: schemasRoutes.profile.changePasswordBody()
+            },
+            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            async handler(req, reply) {
+                const data = await handlers.changePassword(app, {
+                    userData: req.userData!,
+                    body: req.body
+                })
+                await reply.sendData(data)
+            }
+        }
+    )
+
+    app.post<{ Body: schemasRoutes.profile.SendPasswordResetEmailBody }>(
+        constantsRoutes.profile.sendPasswordResetEmail,
+        {
+            schema: {
+                tags: [constantsRoutes.profile.base],
+                body: schemasRoutes.profile.sendPasswordResetEmailBody()
             },
             async handler(req, reply) {
                 const data = await handlers.sendPasswordResetEmail(app, { body: req.body })
@@ -106,13 +116,13 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
     )
 
     app.post<{
-        Params: common.profile.ResetPasswordParams
-        Body: common.profile.ResetPasswordBody
-    }>(common.profile.resetPasswordPath, {
+        Params: schemasRoutes.profile.ResetPasswordParams
+        Body: schemasRoutes.profile.ResetPasswordBody
+    }>(constantsRoutes.profile.resetPassword, {
         schema: {
-            tags: [common.profile.basePath],
-            params: common.profile.resetPasswordParamsSchema(),
-            body: common.profile.resetPasswordBodySchema()
+            tags: [constantsRoutes.profile.base],
+            params: schemasRoutes.profile.resetPasswordParams(),
+            body: schemasRoutes.profile.resetPasswordBody()
         },
         async handler(req, reply) {
             const data = await handlers.resetPassword(app, {

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { PrismaClient, Prisma, Role } from "@prisma/client"
-import * as enums from "$/enums"
+import * as constantsEnums from "@local/constants/enums"
 
 declare module "fastify" {
     interface FastifyInstance {
@@ -25,7 +25,7 @@ const actionsWithMany: Array<Prisma.PrismaAction> = [
 
 function setAllPermissionsForAdmin(role?: Role) {
     if (role?.id === 2) {
-        role.permissions = Object.values(enums.Permission)
+        role.permissions = Object.values(constantsEnums.Permission)
     }
 }
 

@@ -1,9 +1,9 @@
 import { BadRequestError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
+import * as constantsEnums from "@local/constants/enums"
+import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import * as enums from "$/enums"
 import { UserData, PartialUserData, RouteHandler } from "$/types"
-import * as common from "$/common"
 
 export const getUsers = (async (app, { userData, query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
@@ -21,7 +21,7 @@ export const getUsers = (async (app, { userData, query }) => {
             include: { role: true }
         })
 
-        if (!userData?.role.permissions.includes(enums.Permission.GetOtherUserEmail)) {
+        if (!userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)) {
             for (const user of users) {
                 delete user.email
                 delete user.confirmedEmail
@@ -32,7 +32,7 @@ export const getUsers = (async (app, { userData, query }) => {
     })
 
     return { payload: page }
-}) satisfies RouteHandler<{ userData?: UserData; query: common.users.GetUsersQuery }>
+}) satisfies RouteHandler<{ userData?: UserData; query: schemasRoutes.users.GetUsersQuery }>
 
 export const getUser = (async (app, { userData, params }) => {
     const user: PartialUserData = await models.user.get(app, params.id)
@@ -44,7 +44,7 @@ export const getUser = (async (app, { userData, params }) => {
 
     if (userData) {
         const goodPermissions = userData.role.permissions.includes(
-            enums.Permission.GetOtherUserEmail
+            constantsEnums.Permission.GetOtherUserEmail
         )
         if (userData.id !== user.id && !goodPermissions) removeEmailFields()
     } else {
@@ -52,7 +52,7 @@ export const getUser = (async (app, { userData, params }) => {
     }
 
     return { payload: models.user.dto(user) }
-}) satisfies RouteHandler<{ userData?: UserData; params: common.users.GetUserParams }>
+}) satisfies RouteHandler<{ userData?: UserData; params: schemasRoutes.users.GetUserParams }>
 
 export const assignRoleToUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -69,7 +69,7 @@ export const assignRoleToUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(updatedUser) }
-}) satisfies RouteHandler<{ params: common.users.AssignRoleToUserParams }>
+}) satisfies RouteHandler<{ params: schemasRoutes.users.AssignRoleToUserParams }>
 
 export const banUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -82,7 +82,7 @@ export const banUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(bannedUser) }
-}) satisfies RouteHandler<{ params: common.users.BanUserParams }>
+}) satisfies RouteHandler<{ params: schemasRoutes.users.BanUserParams }>
 
 export const unbanUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -95,4 +95,4 @@ export const unbanUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(unbannedUser) }
-}) satisfies RouteHandler<{ params: common.users.UnbanUserParams }>
+}) satisfies RouteHandler<{ params: schemasRoutes.users.UnbanUserParams }>

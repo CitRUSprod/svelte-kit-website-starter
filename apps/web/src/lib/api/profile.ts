@@ -1,4 +1,7 @@
-import { axios, createAxiosConfig } from "$lib/utils"
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+
+import * as constantsRoutes from "@local/constants/routes"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { User } from "$lib/types"
 
@@ -7,7 +10,10 @@ interface GetUserData {
 }
 
 export function getUser(data: GetUserData = {}) {
-    return axios.get<User>("/api/profile/user", createAxiosConfig(data.headers))
+    return axios.get<User>(
+        createApiUrl(constantsRoutes.profile.getUser),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface UpdateUserData {
@@ -18,7 +24,7 @@ interface UpdateUserData {
 
 export function updateUser(data: UpdateUserData) {
     return axios.patch<User>(
-        "/api/profile/user",
+        createApiUrl(constantsRoutes.profile.updateUser),
         {
             email: data.email,
             username: data.username
@@ -35,7 +41,11 @@ interface UploadAvatarData {
 export function uploadAvatar(data: UploadAvatarData) {
     const fd = new FormData()
     fd.append("img", data.img)
-    return axios.post<undefined>("/api/profile/avatar", fd, createAxiosConfig(data.headers))
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.uploadAvatar),
+        fd,
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface DeleteAvatarData {
@@ -43,7 +53,10 @@ interface DeleteAvatarData {
 }
 
 export function deleteAvatar(data: DeleteAvatarData = {}) {
-    return axios.delete<undefined>("/api/profile/avatar", createAxiosConfig(data.headers))
+    return axios.delete<void>(
+        createApiUrl(constantsRoutes.profile.deleteAvatar),
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface SendConfirmationEmailData {
@@ -51,7 +64,11 @@ interface SendConfirmationEmailData {
 }
 
 export function sendConfirmationEmail(data: SendConfirmationEmailData = {}) {
-    return axios.post<undefined>("/api/profile/email/confirm", {}, createAxiosConfig(data.headers))
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.sendConfirmationEmail),
+        {},
+        createAxiosConfig(data.headers)
+    )
 }
 
 interface ConfirmEmailData {
@@ -60,8 +77,8 @@ interface ConfirmEmailData {
 }
 
 export function confirmEmail(data: ConfirmEmailData) {
-    return axios.post<undefined>(
-        `/api/profile/email/confirm/${data.emailConfirmationToken}`,
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.confirmEmail, data.emailConfirmationToken),
         {},
         createAxiosConfig(data.headers)
     )
@@ -74,8 +91,8 @@ interface ChangePasswordData {
 }
 
 export function changePassword(data: ChangePasswordData) {
-    return axios.post<undefined>(
-        "/api/profile/password/change",
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.changePassword),
         {
             oldPassword: data.oldPassword,
             newPassword: data.newPassword
@@ -90,8 +107,8 @@ interface SendPasswordResetEmailData {
 }
 
 export function sendPasswordResetEmail(data: SendPasswordResetEmailData) {
-    return axios.post<undefined>(
-        "/api/profile/password/reset",
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.sendPasswordResetEmail),
         {
             email: data.email
         },
@@ -106,8 +123,8 @@ interface ResetPasswordData {
 }
 
 export function resetPassword(data: ResetPasswordData) {
-    return axios.post<undefined>(
-        `/api/profile/password/reset/${data.passwordResetToken}`,
+    return axios.post<void>(
+        createApiUrl(constantsRoutes.profile.resetPassword, data.passwordResetToken),
         {
             newPassword: data.newPassword
         },

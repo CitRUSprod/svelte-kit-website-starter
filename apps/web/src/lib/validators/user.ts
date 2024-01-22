@@ -1,8 +1,6 @@
-import { z } from "zod"
+import * as schemasModels from "@local/schemas/models"
 import { createValidator } from "$lib/utils"
 
-export const email = createValidator(z.string().trim().toLowerCase().email())
-
-export const username = createValidator(z.string().trim().min(3).max(32))
-
-export const password = createValidator(z.string().trim().min(8))
+export const email = createValidator(schemasModels.user.email())
+export const username = createValidator(schemasModels.user.username())
+export const password = createValidator(schemasModels.user.password())

@@ -1,13 +1,14 @@
 import { FastifyPluginCallback } from "fastify"
-import * as enums from "$/enums"
-import * as common from "$/common"
+import * as constantsEnums from "@local/constants/enums"
+import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import * as handlers from "./handlers"
 
 export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.get<{ Querystring: common.users.GetUsersQuery }>(common.users.getUsersPath, {
+    app.get<{ Querystring: schemasRoutes.users.GetUsersQuery }>(constantsRoutes.users.getUsers, {
         schema: {
-            tags: [common.users.basePath],
-            querystring: common.users.getUsersQuerySchema()
+            tags: [constantsRoutes.users.base],
+            querystring: schemasRoutes.users.getUsersQuery()
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
@@ -16,10 +17,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.get<{ Params: common.users.GetUserParams }>(common.users.getUserPath, {
+    app.get<{ Params: schemasRoutes.users.GetUserParams }>(constantsRoutes.users.getUser, {
         schema: {
-            tags: [common.users.basePath],
-            params: common.users.getUserParamsSchema()
+            tags: [constantsRoutes.users.base],
+            params: schemasRoutes.users.getUserParams()
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
@@ -31,33 +32,36 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: common.users.AssignRoleToUserParams }>(common.users.assignRoleToUserPath, {
-        schema: {
-            tags: [common.users.basePath],
-            params: common.users.assignRoleToUserParamsSchema()
-        },
-        preHandler: app.createPreHandler([
-            app.setUserData,
-            app.verifyAuth,
-            app.verifyConfirmedEmail,
-            app.verifyPermission(enums.Permission.AssignRole)
-        ]),
-        async handler(req, reply) {
-            const data = await handlers.assignRoleToUser(app, { params: req.params })
-            await reply.sendData(data)
+    app.post<{ Params: schemasRoutes.users.AssignRoleToUserParams }>(
+        constantsRoutes.users.assignRoleToUser,
+        {
+            schema: {
+                tags: [constantsRoutes.users.base],
+                params: schemasRoutes.users.assignRoleToUserParams()
+            },
+            preHandler: app.createPreHandler([
+                app.setUserData,
+                app.verifyAuth,
+                app.verifyConfirmedEmail,
+                app.verifyPermission(constantsEnums.Permission.AssignRole)
+            ]),
+            async handler(req, reply) {
+                const data = await handlers.assignRoleToUser(app, { params: req.params })
+                await reply.sendData(data)
+            }
         }
-    })
+    )
 
-    app.post<{ Params: common.users.BanUserParams }>(common.users.banUserPath, {
+    app.post<{ Params: schemasRoutes.users.BanUserParams }>(constantsRoutes.users.banUser, {
         schema: {
-            tags: [common.users.basePath],
-            params: common.users.banUserParamsSchema()
+            tags: [constantsRoutes.users.base],
+            params: schemasRoutes.users.banUserParams()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
             app.verifyConfirmedEmail,
-            app.verifyPermission(enums.Permission.BanUser)
+            app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {
             const data = await handlers.banUser(app, { params: req.params })
@@ -65,16 +69,16 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: common.users.UnbanUserParams }>(common.users.unbanUserPath, {
+    app.post<{ Params: schemasRoutes.users.UnbanUserParams }>(constantsRoutes.users.unbanUser, {
         schema: {
-            tags: [common.users.basePath],
-            params: common.users.unbanUserParamsSchema()
+            tags: [constantsRoutes.users.base],
+            params: schemasRoutes.users.unbanUserParams()
         },
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
             app.verifyConfirmedEmail,
-            app.verifyPermission(enums.Permission.BanUser)
+            app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {
             const data = await handlers.unbanUser(app, { params: req.params })
