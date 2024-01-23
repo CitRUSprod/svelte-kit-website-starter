@@ -1,6 +1,6 @@
 import { sequence } from "@sveltejs/kit/hooks"
 import { defaultLocale, locales } from "$lib/locales"
-import { getLocaleAndRoute, setCookies } from "$lib/utils"
+import { getLocaleAndRoute, setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
 import type { Handle } from "@sveltejs/kit"
@@ -40,6 +40,21 @@ const authHandle: Handle = async ({ event: e, resolve }) => {
 
         userData = res.data
     } catch {}
+
+    const newCookies: Array<string> = []
+    const cookieList = e.cookies.getAll()
+
+    for (const cookie of cookieList) {
+        newCookies.push(`${cookie.name}=${cookie.value}`)
+    }
+
+    const oldCookies = e.request.headers.get("cookie")?.split("; ") ?? []
+
+    const cookies = uniqCookies([...oldCookies, ...newCookies])
+
+    if (cookies.length > 0) {
+        e.request.headers.set("cookie", cookies.join("; "))
+    }
 
     e.locals.userData = userData
 
