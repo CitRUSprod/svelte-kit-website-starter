@@ -3,6 +3,7 @@
     import { DialogPostCreating } from "./_components"
 
     import * as lodash from "lodash-es"
+    import * as schemasRoutes from "@local/schemas/routes"
     import { t, localePath, currentLocale } from "$lib/locales"
     import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
@@ -30,7 +31,10 @@
             title: data.query.title
         },
         fn(params) {
-            const [sort, order] = params.sortAndOrder.split("-")
+            const [sort, order] = params.sortAndOrder.split("-") as [
+                schemasRoutes.posts.GetPostsQuery["sort"],
+                schemasRoutes.posts.GetPostsQuery["order"]
+            ]
             return api.posts.getPosts(
                 qp.removeDefault(
                     {
@@ -57,7 +61,10 @@
     $: watchForData(data)
 
     async function refetchPage() {
-        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-")
+        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-") as [
+            schemasRoutes.posts.GetPostsQuery["sort"],
+            schemasRoutes.posts.GetPostsQuery["order"]
+        ]
         qp.setForCurrentPage(
             qp.removeDefault(
                 {

@@ -1,10 +1,10 @@
 import { sequence } from "@sveltejs/kit/hooks"
+import * as schemasModels from "@local/schemas/models"
 import { defaultLocale, locales } from "$lib/locales"
 import { getLocaleAndRoute, setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
 import type { Handle } from "@sveltejs/kit"
-import type { User } from "$lib/types"
 
 const supportedLocales = locales.get()
 
@@ -32,7 +32,7 @@ const localeHandle: Handle = async ({ event: e, resolve }) => {
 }
 
 const authHandle: Handle = async ({ event: e, resolve }) => {
-    let userData: User | null = null
+    let userData: schemasModels.user.User | null = null
 
     try {
         const res = await api.profile.getUser({ headers: e.request.headers })

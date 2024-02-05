@@ -3,7 +3,7 @@ import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import { User, Post } from "@prisma/client"
 
-export function dto(post: Post & { author: User }): JsonObject {
+export function dto(post: Post & { author: User }) {
     return {
         id: post.id,
         title: post.title,
@@ -14,7 +14,7 @@ export function dto(post: Post & { author: User }): JsonObject {
         },
         creationDate: post.creationDate.toJSON(),
         editingDate: post.editingDate?.toJSON() ?? null
-    }
+    } satisfies JsonObject
 }
 
 export async function get(app: FastifyInstance, id: number) {

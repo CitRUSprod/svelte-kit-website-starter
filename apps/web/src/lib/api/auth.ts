@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-
 import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-interface RegisterData {
-    headers?: Headers
-    email: string
-    username: string
-    password: string
-}
+import type { RequestData } from "$lib/types"
 
-export function register(data: RegisterData) {
-    return axios.post<void>(
+export function register(data: RequestData<schemasRoutes.auth.RegisterRequest>) {
+    return axios.post<schemasRoutes.auth.RegisterResponse>(
         createApiUrl(constantsRoutes.auth.register),
         {
             email: data.email,
@@ -22,14 +16,8 @@ export function register(data: RegisterData) {
     )
 }
 
-interface LoginData {
-    headers?: Headers
-    email: string
-    password: string
-}
-
-export function login(data: LoginData) {
-    return axios.post<void>(
+export function login(data: RequestData<schemasRoutes.auth.LoginRequest>) {
+    return axios.post<schemasRoutes.auth.LoginResponse>(
         createApiUrl(constantsRoutes.auth.login),
         {
             email: data.email,
@@ -39,24 +27,16 @@ export function login(data: LoginData) {
     )
 }
 
-interface LogoutData {
-    headers?: Headers
-}
-
-export function logout(data: LogoutData = {}) {
-    return axios.post<void>(
+export function logout(data: RequestData<schemasRoutes.auth.LogoutRequest> = {}) {
+    return axios.post<schemasRoutes.auth.LogoutResponse>(
         createApiUrl(constantsRoutes.auth.logout),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-interface RefreshTokensData {
-    headers?: Headers
-}
-
-export function refreshTokens(data: RefreshTokensData = {}) {
-    return axios.post<void>(
+export function refreshTokens(data: RequestData<schemasRoutes.auth.RefreshTokensRequest> = {}) {
+    return axios.post<schemasRoutes.auth.RefreshTokensResponse>(
         createApiUrl(constantsRoutes.auth.refreshTokens),
         {},
         createAxiosConfig(data.headers)

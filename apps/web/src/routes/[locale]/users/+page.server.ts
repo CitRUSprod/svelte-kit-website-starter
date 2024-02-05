@@ -1,14 +1,12 @@
+import * as schemasRoutes from "@local/schemas/routes"
 import { qp } from "$lib/utils"
 import * as api from "$lib/api"
 
-interface QueryParams {
-    page: number
-    perPage: number
-}
-
-const defaultQuery: QueryParams = {
+const defaultQuery: schemasRoutes.users.GetUsersQuery = {
     page: 1,
-    perPage: 10
+    perPage: 10,
+    sort: "registrationDate",
+    order: "asc"
 }
 
 export async function load(e) {

@@ -2,9 +2,9 @@
     import { Content, Button } from "$lib/components"
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
+    import * as constantsEnums from "@local/constants/enums"
     import { t, localePath, currentLocale } from "$lib/locales"
     import { userData } from "$lib/stores"
-    import { Permission } from "$lib/enums"
     import { dt } from "$lib/utils"
 
     export let data
@@ -55,7 +55,7 @@
                 {$t("routes.posts.[id].remove")}
             </Button>
         </div>
-    {:else if $userData?.role.permissions.includes(Permission.DeleteOtherUserPost)}
+    {:else if $userData?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
         <div>
             <Button variant="error" on:click={dialogPostRemoving.open}>
                 {$t("routes.posts.[id].remove")}

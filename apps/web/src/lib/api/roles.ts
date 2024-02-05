@@ -1,28 +1,18 @@
 import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-import type { Permission } from "$lib/enums"
-import type { RoleWithProtected } from "$lib/types"
+import type { RequestData } from "$lib/types"
 
-interface GetRolesData {
-    headers?: Headers
-}
-
-export function getRoles(data: GetRolesData = {}) {
-    return axios.get<{ items: Array<RoleWithProtected> }>(
+export function getRoles(data: RequestData<schemasRoutes.roles.GetRolesRequest> = {}) {
+    return axios.get<schemasRoutes.roles.GetRolesResponse>(
         createApiUrl(constantsRoutes.roles.getRoles),
         createAxiosConfig(data.headers)
     )
 }
 
-interface CreateRoleData {
-    headers?: Headers
-    name: string
-    permissions: Array<Permission>
-}
-
-export function createRole(data: CreateRoleData) {
-    return axios.post<RoleWithProtected>(
+export function createRole(data: RequestData<schemasRoutes.roles.CreateRoleRequest>) {
+    return axios.post<schemasRoutes.roles.CreateRoleResponse>(
         createApiUrl(constantsRoutes.roles.createRole),
         {
             name: data.name,
@@ -32,15 +22,8 @@ export function createRole(data: CreateRoleData) {
     )
 }
 
-interface UpdateRoleData {
-    headers?: Headers
-    id: number
-    name?: string
-    permissions?: Array<Permission>
-}
-
-export function updateRole(data: UpdateRoleData) {
-    return axios.patch<RoleWithProtected>(
+export function updateRole(data: RequestData<schemasRoutes.roles.UpdateRoleRequest>) {
+    return axios.patch<schemasRoutes.roles.UpdateRoleResponse>(
         createApiUrl(constantsRoutes.roles.updateRole, data.id),
         {
             name: data.name,
@@ -50,13 +33,8 @@ export function updateRole(data: UpdateRoleData) {
     )
 }
 
-interface DeleteRoleData {
-    headers?: Headers
-    id: number
-}
-
-export function deleteRole(data: DeleteRoleData) {
-    return axios.delete<RoleWithProtected>(
+export function deleteRole(data: RequestData<schemasRoutes.roles.DeleteRoleRequest>) {
+    return axios.delete<schemasRoutes.roles.DeleteRoleResponse>(
         createApiUrl(constantsRoutes.roles.deleteRole, data.id),
         createAxiosConfig(data.headers)
     )

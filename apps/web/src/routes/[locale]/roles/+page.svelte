@@ -2,9 +2,9 @@
     import { Content, Button } from "$lib/components"
     import { DialogRoleCreating, DialogRoleEditing, DialogRoleRemoving } from "./_components"
 
+    import * as constantsEnums from "@local/constants/enums"
     import { t } from "$lib/locales"
     import { userData } from "$lib/stores"
-    import { Permission } from "$lib/enums"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
@@ -20,6 +20,8 @@
             return api.roles.getRoles()
         }
     })
+
+    const permissions = Object.values(constantsEnums.Permission)
 </script>
 
 <svelte:head>
@@ -35,7 +37,7 @@
                 >
                     <th>{$t("routes.roles.name")}</th>
                     <th>{$t("routes.roles.permissions")}</th>
-                    {#if $userData?.role.permissions.includes(Permission.CreateRole)}
+                    {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
                         <th>{$t("routes.roles.actions")}</th>
                     {/if}
                 </tr>
@@ -53,7 +55,7 @@
                                 <span class="u:opacity-30">({$t("routes.roles.empty")})</span>
                             {/if}
                         </td>
-                        {#if $userData?.role.permissions.includes(Permission.CreateRole)}
+                        {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
                             <td>
                                 {#if !role.protected}
                                     <Button
@@ -85,12 +87,8 @@
 
 <DialogRoleCreating
     bind:this={dialogRoleCreating}
-    permissions={data.permissions}
+    {permissions}
     on:createRole={qcGetRoles.refresh}
 />
-<DialogRoleEditing
-    bind:this={dialogRoleEditing}
-    permissions={data.permissions}
-    on:editRole={qcGetRoles.refresh}
-/>
+<DialogRoleEditing bind:this={dialogRoleEditing} {permissions} on:editRole={qcGetRoles.refresh} />
 <DialogRoleRemoving bind:this={dialogRoleRemoving} on:removeRole={qcGetRoles.refresh} />

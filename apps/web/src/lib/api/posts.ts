@@ -1,50 +1,34 @@
 import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-import type { ItemsPage, Post } from "$lib/types"
+import type { RequestData } from "$lib/types"
 
-interface GetPostsData {
-    headers?: Headers
-    page?: number
-    perPage?: number
-    sort?: string
-    order?: string
-    title?: string
+export function getPosts(data: RequestData<schemasRoutes.posts.GetPostsRequest> = {}) {
+    return axios.get<schemasRoutes.posts.GetPostsResponse>(
+        createApiUrl(constantsRoutes.posts.getPosts),
+        {
+            params: {
+                page: data.page,
+                perPage: data.perPage,
+                sort: data.sort,
+                order: data.order,
+                title: data.title
+            },
+            ...createAxiosConfig(data.headers)
+        }
+    )
 }
 
-export function getPosts(data: GetPostsData = {}) {
-    return axios.get<ItemsPage<Post>>(createApiUrl(constantsRoutes.posts.getPosts), {
-        params: {
-            page: data.page,
-            perPage: data.perPage,
-            sort: data.sort,
-            order: data.order,
-            title: data.title
-        },
-        ...createAxiosConfig(data.headers)
-    })
-}
-
-interface GetPostData {
-    headers?: Headers
-    id: number
-}
-
-export function getPost(data: GetPostData) {
-    return axios.get<Post>(
+export function getPost(data: RequestData<schemasRoutes.posts.GetPostRequest>) {
+    return axios.get<schemasRoutes.posts.GetPostResponse>(
         createApiUrl(constantsRoutes.posts.getPost, data.id),
         createAxiosConfig(data.headers)
     )
 }
 
-interface CreatePostData {
-    headers?: Headers
-    title: string
-    content: string
-}
-
-export function createPost(data: CreatePostData) {
-    return axios.post<Post>(
+export function createPost(data: RequestData<schemasRoutes.posts.CreatePostRequest>) {
+    return axios.post<schemasRoutes.posts.CreatePostResponse>(
         createApiUrl(constantsRoutes.posts.createPost),
         {
             title: data.title,
@@ -54,15 +38,8 @@ export function createPost(data: CreatePostData) {
     )
 }
 
-interface UpdatePostData {
-    headers?: Headers
-    id: number
-    title?: string
-    content?: string
-}
-
-export function updatePost(data: UpdatePostData) {
-    return axios.patch<Post>(
+export function updatePost(data: RequestData<schemasRoutes.posts.UpdatePostRequest>) {
+    return axios.patch<schemasRoutes.posts.UpdatePostResponse>(
         createApiUrl(constantsRoutes.posts.updatePost, data.id),
         {
             title: data.title,
@@ -72,13 +49,8 @@ export function updatePost(data: UpdatePostData) {
     )
 }
 
-interface DeletePostData {
-    headers?: Headers
-    id: number
-}
-
-export function deletePost(data: DeletePostData) {
-    return axios.delete<Post>(
+export function deletePost(data: RequestData<schemasRoutes.posts.DeletePostRequest>) {
+    return axios.delete<schemasRoutes.posts.DeletePostResponse>(
         createApiUrl(constantsRoutes.posts.deletePost, data.id),
         createAxiosConfig(data.headers)
     )

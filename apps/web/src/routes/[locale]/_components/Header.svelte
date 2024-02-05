@@ -2,9 +2,9 @@
     import { Button } from "$lib/components"
 
     import cn from "classnames"
+    import * as constantsEnums from "@local/constants/enums"
     import { darkTheme, userData, pageSearchParams } from "$lib/stores"
     import { t, currentLocale, locales, localePath } from "$lib/locales"
-    import { Permission } from "$lib/enums"
     import { env } from "$lib/utils"
 
     export let route: string
@@ -20,7 +20,7 @@
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
         {#if $userData}
-            <Button href={$localePath(`/users/${$userData.id}`)} variant="primary">
+            <Button href={$localePath(`/users/${String($userData.id)}`)} variant="primary">
                 {$t("components.header.profile")}
             </Button>
         {/if}
@@ -37,7 +37,7 @@
         <Button href={$localePath("/users")} variant="primary">
             {$t("components.header.users")}
         </Button>
-        {#if $userData?.role.permissions.includes(Permission.AssignRole)}
+        {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
             <Button href={$localePath("/roles")} variant="primary">
                 {$t("components.header.roles")}
             </Button>

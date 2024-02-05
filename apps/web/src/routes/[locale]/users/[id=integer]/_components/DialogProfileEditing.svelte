@@ -1,15 +1,14 @@
 <script lang="ts">
     import { Button, TextField, Dialog } from "$lib/components"
 
+    import * as schemasModels from "@local/schemas/models"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    import type { User } from "$lib/types"
-
-    export let user: User
+    export let user: schemasModels.user.User
 
     let dialog: Dialog
 

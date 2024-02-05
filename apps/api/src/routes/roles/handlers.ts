@@ -6,12 +6,15 @@ import { RouteHandler } from "$/types"
 export const getRoles = (async app => {
     const roles = await app.prisma.role.findMany()
     return { payload: { items: roles.map(models.role.dto) } }
-}) satisfies RouteHandler
+}) satisfies RouteHandler<schemasRoutes.roles.GetRolesResponse>
 
 export const createRole = (async (app, { body }) => {
     const role = await app.prisma.role.create({ data: body })
     return { payload: models.role.dto(role) }
-}) satisfies RouteHandler<{ body: schemasRoutes.roles.CreateRoleBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.roles.CreateRoleResponse,
+    { body: schemasRoutes.roles.CreateRoleBody }
+>
 
 export const updateRole = (async (app, { params, body }) => {
     const role = await models.role.get(app, params.id)
@@ -19,10 +22,13 @@ export const updateRole = (async (app, { params, body }) => {
 
     const updatedRole = await app.prisma.role.update({ where: { id: params.id }, data: body })
     return { payload: models.role.dto(updatedRole) }
-}) satisfies RouteHandler<{
-    params: schemasRoutes.roles.UpdateRoleParams
-    body: schemasRoutes.roles.UpdateRoleBody
-}>
+}) satisfies RouteHandler<
+    schemasRoutes.roles.UpdateRoleResponse,
+    {
+        params: schemasRoutes.roles.UpdateRoleParams
+        body: schemasRoutes.roles.UpdateRoleBody
+    }
+>
 
 export const deleteRole = (async (app, { params }) => {
     const role = await models.role.get(app, params.id)
@@ -30,4 +36,7 @@ export const deleteRole = (async (app, { params }) => {
 
     const deletedRole = await app.prisma.role.delete({ where: { id: params.id } })
     return { payload: models.role.dto(deletedRole) }
-}) satisfies RouteHandler<{ params: schemasRoutes.roles.DeleteRoleParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.roles.DeleteRoleResponse,
+    { params: schemasRoutes.roles.DeleteRoleParams }
+>

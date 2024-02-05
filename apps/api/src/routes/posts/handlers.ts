@@ -16,7 +16,7 @@ export const getPosts = (async (app, { query }) => {
             skip,
             take,
             where,
-            orderBy: { [query.sort ?? "creationDate"]: query.order },
+            orderBy: { [query.sort]: query.order },
             include: { author: { include: { role: true } } }
         })
 
@@ -24,7 +24,10 @@ export const getPosts = (async (app, { query }) => {
     })
 
     return { payload: page }
-}) satisfies RouteHandler<{ query: schemasRoutes.posts.GetPostsQuery }>
+}) satisfies RouteHandler<
+    schemasRoutes.posts.GetPostsResponse,
+    { query: schemasRoutes.posts.GetPostsQuery }
+>
 
 export const createPost = (async (app, { userData, body }) => {
     const post = await app.prisma.post.create({
@@ -33,12 +36,18 @@ export const createPost = (async (app, { userData, body }) => {
     })
 
     return { payload: models.post.dto(post) }
-}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.posts.CreatePostBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.posts.CreatePostResponse,
+    { userData: UserData; body: schemasRoutes.posts.CreatePostBody }
+>
 
 export const getPost = (async (app, { params }) => {
     const post = await models.post.get(app, params.id)
     return { payload: models.post.dto(post) }
-}) satisfies RouteHandler<{ params: schemasRoutes.posts.GetPostParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.posts.GetPostResponse,
+    { params: schemasRoutes.posts.GetPostParams }
+>
 
 export const updatePost = (async (app, { userData, params, body }) => {
     const post = await models.post.get(app, params.id)
@@ -54,11 +63,14 @@ export const updatePost = (async (app, { userData, params, body }) => {
     } else {
         throw new ForbiddenError("No access")
     }
-}) satisfies RouteHandler<{
-    userData: UserData
-    params: schemasRoutes.posts.UpdatePostParams
-    body: schemasRoutes.posts.UpdatePostBody
-}>
+}) satisfies RouteHandler<
+    schemasRoutes.posts.UpdatePostResponse,
+    {
+        userData: UserData
+        params: schemasRoutes.posts.UpdatePostParams
+        body: schemasRoutes.posts.UpdatePostBody
+    }
+>
 
 export const deletePost = (async (app, { userData, params }) => {
     const post = await models.post.get(app, params.id)
@@ -76,4 +88,7 @@ export const deletePost = (async (app, { userData, params }) => {
     } else {
         throw new ForbiddenError("No access")
     }
-}) satisfies RouteHandler<{ userData: UserData; params: schemasRoutes.posts.DeletePostParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.posts.DeletePostResponse,
+    { userData: UserData; params: schemasRoutes.posts.DeletePostParams }
+>

@@ -1,15 +1,8 @@
+import * as schemasRoutes from "@local/schemas/routes"
 import { qp } from "$lib/utils"
 import * as api from "$lib/api"
 
-interface QueryParams {
-    page: number
-    perPage: number
-    sort: string
-    order: string
-    title: string
-}
-
-const defaultQuery: QueryParams = {
+const defaultQuery: schemasRoutes.posts.GetPostsQuery = {
     page: 1,
     perPage: 10,
     sort: "creationDate",

@@ -1,29 +1,18 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-
 import * as constantsRoutes from "@local/constants/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-import type { User } from "$lib/types"
+import type { RequestData } from "$lib/types"
 
-interface GetUserData {
-    headers?: Headers
-}
-
-export function getUser(data: GetUserData = {}) {
-    return axios.get<User>(
+export function getUser(data: RequestData<schemasRoutes.profile.GetUserRequest> = {}) {
+    return axios.get<schemasRoutes.profile.GetUserResponse>(
         createApiUrl(constantsRoutes.profile.getUser),
         createAxiosConfig(data.headers)
     )
 }
 
-interface UpdateUserData {
-    headers?: Headers
-    email?: string
-    username?: string
-}
-
-export function updateUser(data: UpdateUserData) {
-    return axios.patch<User>(
+export function updateUser(data: RequestData<schemasRoutes.profile.UpdateUserRequest>) {
+    return axios.patch<schemasRoutes.profile.UpdateUserResponse>(
         createApiUrl(constantsRoutes.profile.updateUser),
         {
             email: data.email,
@@ -33,65 +22,43 @@ export function updateUser(data: UpdateUserData) {
     )
 }
 
-interface UploadAvatarData {
-    headers?: Headers
-    img: File
-}
-
-export function uploadAvatar(data: UploadAvatarData) {
+export function uploadAvatar(data: RequestData<schemasRoutes.profile.UploadAvatarRequest>) {
     const fd = new FormData()
     fd.append("img", data.img)
-    return axios.post<void>(
+    return axios.post<schemasRoutes.profile.UploadAvatarResponse>(
         createApiUrl(constantsRoutes.profile.uploadAvatar),
         fd,
         createAxiosConfig(data.headers)
     )
 }
 
-interface DeleteAvatarData {
-    headers?: Headers
-}
-
-export function deleteAvatar(data: DeleteAvatarData = {}) {
-    return axios.delete<void>(
+export function deleteAvatar(data: RequestData<schemasRoutes.profile.DeleteAvatarRequest> = {}) {
+    return axios.delete<schemasRoutes.profile.DeleteAvatarResponse>(
         createApiUrl(constantsRoutes.profile.deleteAvatar),
         createAxiosConfig(data.headers)
     )
 }
 
-interface SendConfirmationEmailData {
-    headers?: Headers
-}
-
-export function sendConfirmationEmail(data: SendConfirmationEmailData = {}) {
-    return axios.post<void>(
+export function sendConfirmationEmail(
+    data: RequestData<schemasRoutes.profile.SendConfirmationEmailRequest> = {}
+) {
+    return axios.post<schemasRoutes.profile.SendConfirmationEmailResponse>(
         createApiUrl(constantsRoutes.profile.sendConfirmationEmail),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-interface ConfirmEmailData {
-    headers?: Headers
-    emailConfirmationToken: string
-}
-
-export function confirmEmail(data: ConfirmEmailData) {
-    return axios.post<void>(
+export function confirmEmail(data: RequestData<schemasRoutes.profile.ConfirmEmailRequest>) {
+    return axios.post<schemasRoutes.profile.ConfirmEmailResponse>(
         createApiUrl(constantsRoutes.profile.confirmEmail, data.emailConfirmationToken),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-interface ChangePasswordData {
-    headers?: Headers
-    oldPassword: string
-    newPassword: string
-}
-
-export function changePassword(data: ChangePasswordData) {
-    return axios.post<void>(
+export function changePassword(data: RequestData<schemasRoutes.profile.ChangePasswordRequest>) {
+    return axios.post<schemasRoutes.profile.ChangePasswordResponse>(
         createApiUrl(constantsRoutes.profile.changePassword),
         {
             oldPassword: data.oldPassword,
@@ -101,13 +68,10 @@ export function changePassword(data: ChangePasswordData) {
     )
 }
 
-interface SendPasswordResetEmailData {
-    headers?: Headers
-    email: string
-}
-
-export function sendPasswordResetEmail(data: SendPasswordResetEmailData) {
-    return axios.post<void>(
+export function sendPasswordResetEmail(
+    data: RequestData<schemasRoutes.profile.SendPasswordResetEmailRequest>
+) {
+    return axios.post<schemasRoutes.profile.SendPasswordResetEmailResponse>(
         createApiUrl(constantsRoutes.profile.sendPasswordResetEmail),
         {
             email: data.email
@@ -116,14 +80,8 @@ export function sendPasswordResetEmail(data: SendPasswordResetEmailData) {
     )
 }
 
-interface ResetPasswordData {
-    headers?: Headers
-    passwordResetToken: string
-    newPassword: string
-}
-
-export function resetPassword(data: ResetPasswordData) {
-    return axios.post<void>(
+export function resetPassword(data: RequestData<schemasRoutes.profile.ResetPasswordRequest>) {
+    return axios.post<schemasRoutes.profile.ResetPasswordResponse>(
         createApiUrl(constantsRoutes.profile.resetPassword, data.passwordResetToken),
         {
             newPassword: data.newPassword

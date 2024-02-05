@@ -17,7 +17,7 @@ export const getUsers = (async (app, { userData, query }) => {
             skip,
             take,
             where,
-            orderBy: query.sort ? { [query.sort]: query.order } : undefined,
+            orderBy: { [query.sort]: query.order },
             include: { role: true }
         })
 
@@ -32,7 +32,10 @@ export const getUsers = (async (app, { userData, query }) => {
     })
 
     return { payload: page }
-}) satisfies RouteHandler<{ userData?: UserData; query: schemasRoutes.users.GetUsersQuery }>
+}) satisfies RouteHandler<
+    schemasRoutes.users.GetUsersResponse,
+    { userData?: UserData; query: schemasRoutes.users.GetUsersQuery }
+>
 
 export const getUser = (async (app, { userData, params }) => {
     const user: PartialUserData = await models.user.get(app, params.id)
@@ -52,7 +55,10 @@ export const getUser = (async (app, { userData, params }) => {
     }
 
     return { payload: models.user.dto(user) }
-}) satisfies RouteHandler<{ userData?: UserData; params: schemasRoutes.users.GetUserParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.users.GetUserResponse,
+    { userData?: UserData; params: schemasRoutes.users.GetUserParams }
+>
 
 export const assignRoleToUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -69,7 +75,10 @@ export const assignRoleToUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(updatedUser) }
-}) satisfies RouteHandler<{ params: schemasRoutes.users.AssignRoleToUserParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.users.AssignRoleToUserResponse,
+    { params: schemasRoutes.users.AssignRoleToUserParams }
+>
 
 export const banUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -82,7 +91,10 @@ export const banUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(bannedUser) }
-}) satisfies RouteHandler<{ params: schemasRoutes.users.BanUserParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.users.BanUserResponse,
+    { params: schemasRoutes.users.BanUserParams }
+>
 
 export const unbanUser = (async (app, { params }) => {
     const user = await models.user.get(app, params.id)
@@ -95,4 +107,7 @@ export const unbanUser = (async (app, { params }) => {
     })
 
     return { payload: models.user.dto(unbannedUser) }
-}) satisfies RouteHandler<{ params: schemasRoutes.users.UnbanUserParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.users.UnbanUserResponse,
+    { params: schemasRoutes.users.UnbanUserParams }
+>

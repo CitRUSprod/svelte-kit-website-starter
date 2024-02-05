@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
+import * as constantsEnums from "@local/constants/enums"
 import * as enums from "$/enums"
 import { PartialUserData } from "$/types"
 
-export function dto(user: PartialUserData): JsonObject {
+export function dto(user: PartialUserData) {
     return {
         id: user.id,
         email: user.email ?? null,
@@ -12,13 +13,13 @@ export function dto(user: PartialUserData): JsonObject {
         role: {
             id: user.role.id,
             name: user.role.name,
-            permissions: user.role.permissions
+            permissions: user.role.permissions as Array<constantsEnums.Permission>
         },
         confirmedEmail: user.confirmedEmail ?? null,
         banned: user.banned,
         registrationDate: user.registrationDate.toJSON(),
         avatar: user.avatar && `/api/files/${enums.ImgPath.Avatars}/${user.avatar}`
-    }
+    } satisfies JsonObject
 }
 
 export async function get(app: FastifyInstance, id: number) {

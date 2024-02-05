@@ -2,20 +2,19 @@
     import { Button, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
+    import * as schemasModels from "@local/schemas/models"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    import type { RoleWithProtected } from "$lib/types"
-
     const dispatch = createEventDispatcher()
 
     let dialog: Dialog
 
-    let role: RoleWithProtected
+    let role: schemasModels.role.Role
 
-    export function open(r: RoleWithProtected) {
+    export function open(r: schemasModels.role.Role) {
         role = r
 
         dialog.open()

@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+
 import { FastifyReply, FastifyPluginCallback } from "fastify"
+import { JsonObject } from "type-fest"
 import { ReplyData } from "$/types"
 
 declare module "fastify" {
     interface FastifyReply {
-        sendData(data: ReplyData): Promise<void>
+        sendData<T extends JsonObject | void>(data: ReplyData<T>): Promise<void>
     }
 }
 
@@ -19,7 +22,7 @@ export const sendData: FastifyPluginCallback = (app, options, done) => {
             }
         }
 
-        await this.send(data.payload)
+        await this.send((data as any).payload)
     })
 
     done()

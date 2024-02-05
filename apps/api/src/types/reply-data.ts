@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+
 import { CookieSerializeOptions } from "@fastify/cookie"
 import { JsonObject } from "type-fest"
 
@@ -7,7 +9,6 @@ export interface ReplyCookie {
     options?: CookieSerializeOptions
 }
 
-export interface ReplyData {
-    payload?: JsonObject
+export type ReplyData<T extends JsonObject | void> = {
     cookies?: Array<ReplyCookie>
-}
+} & (T extends void ? unknown : { payload: T })

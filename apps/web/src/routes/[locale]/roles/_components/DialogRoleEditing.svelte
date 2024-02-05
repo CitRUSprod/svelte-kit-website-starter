@@ -2,16 +2,15 @@
     import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
+    import * as constantsEnums from "@local/constants/enums"
+    import * as schemasModels from "@local/schemas/models"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    import type { Permission } from "$lib/enums"
-    import type { RoleWithProtected } from "$lib/types"
-
-    export let permissions: Array<Permission>
+    export let permissions: Array<constantsEnums.Permission>
 
     const dispatch = createEventDispatcher()
 
@@ -19,8 +18,8 @@
 
     let roleId = 0
     let name = ""
-    let currentPermission: Permission | null = null
-    let selectedPermissions: Array<Permission> = []
+    let currentPermission: constantsEnums.Permission | null = null
+    let selectedPermissions: Array<constantsEnums.Permission> = []
 
     $: vldResultName = vld.role.name(name)
 
@@ -28,7 +27,7 @@
         .filter(p => !selectedPermissions.includes(p))
         .map(p => ({ text: p, value: p }))
 
-    export function open(role: RoleWithProtected) {
+    export function open(role: schemasModels.role.Role) {
         roleId = role.id
         name = role.name
         currentPermission = null
@@ -64,7 +63,7 @@
         }
     }
 
-    function removePermission(permission: Permission) {
+    function removePermission(permission: constantsEnums.Permission) {
         selectedPermissions = selectedPermissions.filter(p => p !== permission)
     }
 </script>

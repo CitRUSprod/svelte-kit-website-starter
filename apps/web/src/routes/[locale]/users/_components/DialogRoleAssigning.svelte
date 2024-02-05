@@ -2,14 +2,13 @@
     import { Button, DropdownMenu, Dialog } from "$lib/components"
 
     import { createEventDispatcher } from "svelte"
+    import * as schemasModels from "@local/schemas/models"
     import { t } from "$lib/locales"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    import type { User, Role } from "$lib/types"
-
-    export let roles: Array<Role>
+    export let roles: Array<schemasModels.role.Role>
 
     let dialog: Dialog
 
@@ -20,7 +19,7 @@
 
     $: items = roles.map(r => ({ text: r.name, value: r.id }))
 
-    export function open(user: User) {
+    export function open(user: schemasModels.user.User) {
         userId = user.id
         roleId = user.role.id
 

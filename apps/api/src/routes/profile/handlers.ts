@@ -10,7 +10,7 @@ import * as utils from "./utils"
 
 export const getUser = (async (app, { userData }) => ({
     payload: models.user.dto(userData)
-})) satisfies RouteHandler<{ userData: UserData }>
+})) satisfies RouteHandler<schemasRoutes.profile.GetUserResponse, { userData: UserData }>
 
 export const updateUser = (async (app, { userData, body }) => {
     if (body.email && body.email !== userData.email) {
@@ -37,7 +37,10 @@ export const updateUser = (async (app, { userData, body }) => {
     })
 
     return { payload: models.user.dto(updatedUser) }
-}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.UpdateUserBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.UpdateUserResponse,
+    { userData: UserData; body: schemasRoutes.profile.UpdateUserBody }
+>
 
 export const uploadAvatar = (async (app, { userData, body }) => {
     const img = body.img as MultipartFile
@@ -54,7 +57,10 @@ export const uploadAvatar = (async (app, { userData, body }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.UploadAvatarBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.UploadAvatarResponse,
+    { userData: UserData; body: schemasRoutes.profile.UploadAvatarBody }
+>
 
 export const deleteAvatar = (async (app, { userData }) => {
     if (!userData.avatar) throw new BadRequestError("You do not have an avatar")
@@ -67,7 +73,7 @@ export const deleteAvatar = (async (app, { userData }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData }>
+}) satisfies RouteHandler<schemasRoutes.profile.DeleteAvatarResponse, { userData: UserData }>
 
 export const sendConfirmationEmail = (async (app, { userData }) => {
     if (userData.confirmedEmail) throw new BadRequestError("Email is already confirmed")
@@ -102,7 +108,10 @@ export const sendConfirmationEmail = (async (app, { userData }) => {
     await sendEmail(userData.email, subject, message)
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.SendConfirmationEmailResponse,
+    { userData: UserData }
+>
 
 export const confirmEmail = (async (app, { params }) => {
     await utils.deleteExpiredEmailConfirmationTokens(app)
@@ -120,7 +129,10 @@ export const confirmEmail = (async (app, { params }) => {
     await app.prisma.emailConfirmationToken.delete({ where: { id: emailConfirmationToken.id } })
 
     return {}
-}) satisfies RouteHandler<{ params: schemasRoutes.profile.ConfirmEmailParams }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.ConfirmEmailResponse,
+    { params: schemasRoutes.profile.ConfirmEmailParams }
+>
 
 export const changePassword = (async (app, { userData, body }) => {
     if (body.oldPassword === body.newPassword) {
@@ -137,7 +149,10 @@ export const changePassword = (async (app, { userData, body }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ userData: UserData; body: schemasRoutes.profile.ChangePasswordBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.ChangePasswordResponse,
+    { userData: UserData; body: schemasRoutes.profile.ChangePasswordBody }
+>
 
 export const sendPasswordResetEmail = (async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
@@ -173,7 +188,10 @@ export const sendPasswordResetEmail = (async (app, { body }) => {
     await sendEmail(user.email, subject, message)
 
     return {}
-}) satisfies RouteHandler<{ body: schemasRoutes.profile.SendPasswordResetEmailBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.SendPasswordResetEmailResponse,
+    { body: schemasRoutes.profile.SendPasswordResetEmailBody }
+>
 
 export const resetPassword = (async (app, { params, body }) => {
     await utils.deleteExpiredPasswordResetTokens(app)
@@ -192,7 +210,10 @@ export const resetPassword = (async (app, { params, body }) => {
     await app.prisma.passwordResetToken.delete({ where: { id: passwordResetToken.id } })
 
     return {}
-}) satisfies RouteHandler<{
-    params: schemasRoutes.profile.ResetPasswordParams
-    body: schemasRoutes.profile.ResetPasswordBody
-}>
+}) satisfies RouteHandler<
+    schemasRoutes.profile.ResetPasswordResponse,
+    {
+        params: schemasRoutes.profile.ResetPasswordParams
+        body: schemasRoutes.profile.ResetPasswordBody
+    }
+>

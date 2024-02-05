@@ -1,6 +1,6 @@
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
-import * as routes from "@local/schemas/routes"
+import * as schemasRoutes from "@local/schemas/routes"
 import * as enums from "$/enums"
 import { ReplyCookie, RouteHandler } from "$/types"
 import * as utils from "./utils"
@@ -18,7 +18,10 @@ export const register = (async (app, { body }) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ body: routes.auth.RegisterBody }>
+}) satisfies RouteHandler<
+    schemasRoutes.auth.RegisterResponse,
+    { body: schemasRoutes.auth.RegisterBody }
+>
 
 export const login = (async (app, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
@@ -48,7 +51,7 @@ export const login = (async (app, { body }) => {
             }
         ]
     }
-}) satisfies RouteHandler<{ body: routes.auth.LoginBody }>
+}) satisfies RouteHandler<schemasRoutes.auth.LoginResponse, { body: schemasRoutes.auth.LoginBody }>
 
 export const logout = (async (app, { cookies }) => {
     const localCookies: Array<ReplyCookie> = [
@@ -72,7 +75,10 @@ export const logout = (async (app, { cookies }) => {
     await app.prisma.refreshToken.delete({ where: { id: refreshToken.id } })
 
     return { cookies: localCookies }
-}) satisfies RouteHandler<{ cookies: routes.auth.LogoutCookies }>
+}) satisfies RouteHandler<
+    schemasRoutes.auth.LogoutResponse,
+    { cookies: schemasRoutes.auth.LogoutCookies }
+>
 
 export const refreshTokens = (async (app, { cookies }) => {
     const payload = utils.getPayload(app, cookies.refreshToken)
@@ -111,4 +117,7 @@ export const refreshTokens = (async (app, { cookies }) => {
             }
         ]
     }
-}) satisfies RouteHandler<{ cookies: routes.auth.RefreshTokensCookies }>
+}) satisfies RouteHandler<
+    schemasRoutes.auth.RefreshTokensResponse,
+    { cookies: schemasRoutes.auth.RefreshTokensCookies }
+>

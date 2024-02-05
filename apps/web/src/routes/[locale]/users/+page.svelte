@@ -2,9 +2,9 @@
     import { Content, Button, Checkbox, SimplePagination } from "$lib/components"
     import { DialogRoleAssigning } from "./_components"
 
+    import * as constantsEnums from "@local/constants/enums"
     import { t, localePath, currentLocale } from "$lib/locales"
     import { toasts, userData } from "$lib/stores"
-    import { Permission } from "$lib/enums"
     import { createQueryController, qp, dt } from "$lib/utils"
     import * as api from "$lib/api"
 
@@ -23,7 +23,9 @@
                 qp.removeDefault(
                     {
                         page: params.page,
-                        perPage: params.perPage
+                        perPage: params.perPage,
+                        sort: "registrationDate",
+                        order: "asc"
                     },
                     data.defaultQuery
                 )
@@ -84,7 +86,9 @@
             qp.removeDefault(
                 {
                     page: qcGetUsers.params.page,
-                    perPage: qcGetUsers.params.perPage
+                    perPage: qcGetUsers.params.perPage,
+                    sort: "registrationDate",
+                    order: "asc"
                 },
                 data.defaultQuery
             )
@@ -112,7 +116,7 @@
                     <th>ID</th>
                     <th>{$t("routes.users.avatar")}</th>
                     <th>{$t("routes.users.username")}</th>
-                    {#if $userData?.role.permissions.includes(Permission.GetOtherUserEmail)}
+                    {#if $userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)}
                         <th>{$t("routes.users.email")}</th>
                         <th>{$t("routes.users.confirmed-email")}</th>
                     {/if}
@@ -138,8 +142,10 @@
                             </div>
                         </td>
                         <td>{user.username}</td>
-                        {#if $userData?.role.permissions.includes(Permission.GetOtherUserEmail)}
+                        {#if user.email !== null}
                             <td>{user.email}</td>
+                        {/if}
+                        {#if user.confirmedEmail !== null}
                             <td>
                                 <Checkbox checked={user.confirmedEmail} readonly />
                             </td>
@@ -158,7 +164,7 @@
                             >
                                 {$t("routes.users.open")}
                             </Button>
-                            {#if $userData?.role.permissions.includes(Permission.AssignRole)}
+                            {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
                                 {#if !user.banned}
                                     <Button
                                         variant="warning"
@@ -168,7 +174,7 @@
                                     </Button>
                                 {/if}
                             {/if}
-                            {#if $userData?.role.permissions.includes(Permission.BanUser)}
+                            {#if $userData?.role.permissions.includes(constantsEnums.Permission.BanUser)}
                                 {#if user.banned}
                                     <Button
                                         loading={$qcUnbanUser.loading &&

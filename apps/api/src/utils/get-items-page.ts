@@ -1,14 +1,14 @@
 import { JsonObject } from "type-fest"
 
-interface ItemsData {
+interface ItemsData<T extends JsonObject> {
     totalItems: number
-    items: Array<JsonObject>
+    items: Array<T>
 }
 
-export async function getItemsPage(
+export async function getItemsPage<T extends JsonObject>(
     page: number,
     perPage: number,
-    getItemsData: (skip: number, take: number) => Promise<ItemsData>
+    getItemsData: (skip: number, take: number) => Promise<ItemsData<T>>
 ) {
     const skip = perPage * (page - 1)
     const take = perPage
