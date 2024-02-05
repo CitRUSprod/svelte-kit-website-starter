@@ -116,6 +116,9 @@ importers:
       '@local/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
+      '@local/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@prisma/client':
         specifier: 5.7.1
         version: 5.7.1(prisma@5.7.1)
@@ -164,12 +167,6 @@ importers:
       uuid:
         specifier: 9.0.1
         version: 9.0.1
-      zod:
-        specifier: 3.22.4
-        version: 3.22.4
-      zod-validation-error:
-        specifier: 2.1.0
-        version: 2.1.0(zod@3.22.4)
     devDependencies:
       '@local/configs':
         specifier: workspace:*
@@ -215,7 +212,7 @@ importers:
         version: 5.7.1
       tsup:
         specifier: 8.0.1
-        version: 8.0.1(postcss@8.4.33)(typescript@5.3.3)
+        version: 8.0.1(typescript@5.3.3)
       type-fest:
         specifier: 4.9.0
         version: 4.9.0
@@ -264,12 +261,6 @@ importers:
       tslib:
         specifier: 2.6.2
         version: 2.6.2
-      zod:
-        specifier: 3.22.4
-        version: 3.22.4
-      zod-validation-error:
-        specifier: 2.1.0
-        version: 2.1.0(zod@3.22.4)
     devDependencies:
       '@histoire/plugin-svelte':
         specifier: 0.17.6
@@ -422,6 +413,12 @@ importers:
       tslib:
         specifier: 2.6.2
         version: 2.6.2
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+      zod-validation-error:
+        specifier: 2.1.0
+        version: 2.1.0(zod@3.22.4)
     devDependencies:
       '@local/configs':
         specifier: workspace:*
@@ -6445,6 +6442,22 @@ packages:
       yaml: 1.10.2
     dev: true
 
+  /postcss-load-config@4.0.2:
+    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 3.0.0
+      yaml: 2.3.4
+    dev: true
+
   /postcss-load-config@4.0.2(postcss@8.4.33):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
@@ -7109,6 +7122,7 @@ packages:
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dev: true
 
   /source-map@0.8.0-beta.0:
@@ -7811,7 +7825,7 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@8.0.1(postcss@8.4.33)(typescript@5.3.3):
+  /tsup@8.0.1(typescript@5.3.3):
     resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
     engines: {node: '>=18'}
     hasBin: true
@@ -7838,8 +7852,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss: 8.4.33
-      postcss-load-config: 4.0.2(postcss@8.4.33)
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.9.4
       source-map: 0.8.0-beta.0

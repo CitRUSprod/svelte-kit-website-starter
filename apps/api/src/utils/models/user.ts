@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import * as constantsEnums from "@local/constants/enums"
-import * as enums from "$/enums"
+import { enums } from "$/constants"
 import { PartialUserData } from "$/types"
 
 export function dto(user: PartialUserData) {

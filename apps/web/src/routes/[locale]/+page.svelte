@@ -2,7 +2,7 @@
     import { Content, Button } from "$lib/components"
 
     import { getRandomInt } from "@local/utils"
-    import { env } from "$lib/utils"
+    import { env } from "$lib/constants"
     import { toasts } from "$lib/stores"
     import { t } from "$lib/locales"
 

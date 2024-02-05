@@ -1,7 +1,8 @@
 import basicAxios, { type AxiosResponseHeaders, type RawAxiosResponseHeaders } from "axios"
 import * as constantsRoutes from "@local/constants/routes"
 import { browser } from "$app/environment"
-import { env, uniqCookies } from "$lib/utils"
+import { env } from "$lib/constants"
+import { uniqCookies } from "$lib/utils"
 
 const baseUrl =
     !browser && env.PUBLIC_IS_DOCKER_CONTAINER ? "http://nginx:6700" : env.PUBLIC_BASE_URL

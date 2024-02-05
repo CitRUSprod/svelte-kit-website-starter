@@ -4,7 +4,7 @@ import fs from "fs-extra"
 import { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
-import * as enums from "$/enums"
+import { enums } from "$/constants"
 
 const isDev = process.env.NODE_ENV === "development"
 

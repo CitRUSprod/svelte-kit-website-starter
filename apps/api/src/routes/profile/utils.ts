@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import * as enums from "$/enums"
+import { enums } from "$/constants"
 
 export async function deleteExpiredEmailConfirmationTokens(app: FastifyInstance) {
     await app.prisma.emailConfirmationToken.deleteMany({

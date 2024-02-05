@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { UnauthorizedError } from "http-errors-enhanced"
-import * as enums from "$/enums"
+import { enums } from "$/constants"
 import { UserPayload } from "$/types"
 
 interface PayloadWithTimestamps extends UserPayload {

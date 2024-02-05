@@ -1,7 +1,7 @@
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import * as schemasRoutes from "@local/schemas/routes"
-import * as enums from "$/enums"
+import { enums } from "$/constants"
 import { ReplyCookie, RouteHandler } from "$/types"
 import * as utils from "./utils"
 

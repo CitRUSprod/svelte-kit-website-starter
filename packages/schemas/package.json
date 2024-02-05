@@ -3,6 +3,7 @@
     "private": true,
     "type": "module",
     "exports": {
+        "./env": "./dist/env/index.js",
         "./common": "./dist/common/index.js",
         "./models": "./dist/models/index.js",
         "./routes": "./dist/routes/index.js"

@@ -3,9 +3,9 @@
 
     import cn from "classnames"
     import * as constantsEnums from "@local/constants/enums"
+    import { env } from "$lib/constants"
     import { darkTheme, userData, pageSearchParams } from "$lib/stores"
     import { t, currentLocale, locales, localePath } from "$lib/locales"
-    import { env } from "$lib/utils"
 
     export let route: string
 </script>

@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { authenticate } from "socketio-jwt-auth"
 import { User } from "@prisma/client"
-import { env } from "$/utils"
+import { env } from "$/constants"
 import { UserPayload } from "$/types"
 import { initModules } from "./modules"
 
