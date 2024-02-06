@@ -12,7 +12,7 @@ services:
             dockerfile: configs/docker/Dockerfile
             target: web
             args:
-                NODE_IMAGE: node:20.10.0-alpine
+                NODE_IMAGE: node:20.11.0-alpine
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
                 PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
         restart: always
@@ -22,7 +22,7 @@ services:
             dockerfile: configs/docker/Dockerfile
             target: api
             args:
-                NODE_IMAGE: node:20.10.0-alpine
+                NODE_IMAGE: node:20.11.0-alpine
         restart: always
         environment:
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
