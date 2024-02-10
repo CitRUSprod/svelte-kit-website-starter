@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export function api() {
     return z.object({
+        PUBLIC_BASE_URL: z.string().trim().url(),
         JWT_SECRET: z.string().trim().min(6),
         TWITCH_CLIENT_ID: z.string().trim().length(30),
         TWITCH_CLIENT_SECRET: z.string().trim().length(30),

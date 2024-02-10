@@ -1,18 +1,13 @@
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import axios from "axios"
-import { generateState, Twitch } from "arctic"
+import { generateState } from "arctic"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
 import { ReplyCookie, RouteHandler } from "$/types"
+import { oAuthProviders } from "$/utils"
 import * as utils from "./utils"
-
-const twitch = new Twitch(
-    env.TWITCH_CLIENT_ID,
-    env.TWITCH_CLIENT_SECRET,
-    "http://localhost:6700/auth/login/twitch/callback"
-)
 
 export const register = (async (app, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
@@ -101,7 +96,7 @@ export const login = (async (app, { body }) => {
 
 export const loginWithTwitch = (async () => {
     const state = generateState()
-    const url = await twitch.createAuthorizationURL(state)
+    const url = await oAuthProviders.twitch.createAuthorizationURL(state)
 
     return {
         payload: {
@@ -111,7 +106,7 @@ export const loginWithTwitch = (async () => {
             {
                 name: "twitchOAuthState",
                 value: state,
-                options: { path: "/", maxAge: enums.TokenTtl.OAuthRegistration, httpOnly: true }
+                options: { path: "/", httpOnly: true }
             }
         ]
     }
@@ -120,7 +115,7 @@ export const loginWithTwitch = (async () => {
 export const loginWithTwitchCallback = (async (app, { cookies, body }) => {
     if (cookies.twitchOAuthState !== body.state) throw new BadRequestError("States do not match")
 
-    const twitchTokens = await twitch.validateAuthorizationCode(body.code)
+    const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(body.code)
 
     const res = await axios.get<{ data: Array<{ id: string }> }>(
         "https://api.twitch.tv/helix/users",
