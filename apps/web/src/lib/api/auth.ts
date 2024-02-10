@@ -16,12 +16,43 @@ export function register(data: RequestData<schemasRoutes.auth.RegisterRequest>) 
     )
 }
 
+export function oAuthRegister(data: RequestData<schemasRoutes.auth.OAuthRegisterRequest>) {
+    return axios.post<schemasRoutes.auth.OAuthRegisterResponse>(
+        createApiUrl(constantsRoutes.auth.oAuthRegister, data.oAuthRegistrationToken),
+        {
+            username: data.username
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
 export function login(data: RequestData<schemasRoutes.auth.LoginRequest>) {
     return axios.post<schemasRoutes.auth.LoginResponse>(
         createApiUrl(constantsRoutes.auth.login),
         {
             email: data.email,
             password: data.password
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function loginWithTwitch(data: RequestData<schemasRoutes.auth.LoginWithTwitchRequest>) {
+    return axios.post<schemasRoutes.auth.LoginWithTwitchResponse>(
+        createApiUrl(constantsRoutes.auth.loginWithTwitch),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function loginWithTwitchCallback(
+    data: RequestData<schemasRoutes.auth.LoginWithTwitchCallbackRequest>
+) {
+    return axios.post<schemasRoutes.auth.LoginWithTwitchCallbackResponse>(
+        createApiUrl(constantsRoutes.auth.loginWithTwitchCallback),
+        {
+            code: data.code,
+            state: data.state
         },
         createAxiosConfig(data.headers)
     )

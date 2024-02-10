@@ -17,7 +17,10 @@ const localeHandle: Handle = async ({ event: e, resolve }) => {
         const isSupportedLocale = !!localeCandidate && supportedLocales.includes(localeCandidate)
 
         const headers = new Headers()
-        headers.set("location", `/${isSupportedLocale ? localeCandidate : defaultLocale}${route}`)
+        headers.set(
+            "location",
+            `/${isSupportedLocale ? localeCandidate : defaultLocale}${route}${e.url.search}`
+        )
 
         return new Response(undefined, { status: 301, headers })
     }

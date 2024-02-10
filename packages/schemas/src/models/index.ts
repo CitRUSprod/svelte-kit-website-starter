@@ -1,5 +1,6 @@
 export * as role from "./role"
 export * as user from "./user"
+export * as oAuthRegistrationToken from "./o-auth-registration-token"
 export * as refreshToken from "./refresh-token"
 export * as emailConfirmationToken from "./email-confirmation-token"
 export * as passwordResetToken from "./password-reset-token"

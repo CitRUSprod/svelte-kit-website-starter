@@ -3,6 +3,8 @@ import { z } from "zod"
 export function api() {
     return z.object({
         JWT_SECRET: z.string().trim().min(6),
+        TWITCH_CLIENT_ID: z.string().trim().length(30),
+        TWITCH_CLIENT_SECRET: z.string().trim().length(30),
         ENABLE_DOCS: z.coerce.boolean(),
         MAILER_HOST: z
             .string()

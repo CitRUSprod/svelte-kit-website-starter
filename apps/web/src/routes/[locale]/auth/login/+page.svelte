@@ -77,6 +77,7 @@
             <Button href={$localePath("/auth/registration")} text>
                 {$t("routes.auth.login.registration")}
             </Button>
+            <Button href={$localePath("/auth/login/twitch")} text>Twitch</Button>
             <Button
                 disabled={!completedForm}
                 loading={$qcLogin.loading}

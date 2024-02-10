@@ -76,6 +76,7 @@ export const deleteAvatar = (async (app, { userData }) => {
 }) satisfies RouteHandler<schemasRoutes.profile.DeleteAvatarResponse, { userData: UserData }>
 
 export const sendConfirmationEmail = (async (app, { userData }) => {
+    if (!userData.email) throw new BadRequestError("Email is not set")
     if (userData.confirmedEmail) throw new BadRequestError("Email is already confirmed")
 
     const token = createUuid()
@@ -135,6 +136,8 @@ export const confirmEmail = (async (app, { params }) => {
 >
 
 export const changePassword = (async (app, { userData, body }) => {
+    if (!userData.password) throw new BadRequestError("Password is not set")
+
     if (body.oldPassword === body.newPassword) {
         throw new BadRequestError("Old and new passwords match")
     }
@@ -185,7 +188,7 @@ export const sendPasswordResetEmail = (async (app, { body }) => {
             <a href="${url}">Reset password</a>
         </div>
     `
-    await sendEmail(user.email, subject, message)
+    await sendEmail(user.email!, subject, message)
 
     return {}
 }) satisfies RouteHandler<

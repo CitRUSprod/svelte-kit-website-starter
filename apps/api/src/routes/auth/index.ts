@@ -16,6 +16,21 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
+    app.post<{
+        Params: schemasRoutes.auth.OAuthRegisterParams
+        Body: schemasRoutes.auth.OAuthRegisterBody
+    }>(constantsRoutes.auth.oAuthRegister, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.oAuthRegisterParams(),
+            body: schemasRoutes.auth.oAuthRegisterBody()
+        },
+        async handler(req, reply) {
+            const data = await handlers.oAuthRegister(app, { params: req.params, body: req.body })
+            await reply.sendData(data)
+        }
+    })
+
     app.post<{ Body: schemasRoutes.auth.LoginBody }>(constantsRoutes.auth.login, {
         schema: {
             tags: [constantsRoutes.auth.base],
@@ -26,6 +41,41 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             await reply.sendData(data)
         }
     })
+
+    app.post(constantsRoutes.auth.loginWithTwitch, {
+        schema: {
+            tags: [constantsRoutes.auth.base]
+        },
+        async handler(req, reply) {
+            const data = await handlers.loginWithTwitch()
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{ Body: schemasRoutes.auth.LoginWithTwitchCallbackBody }>(
+        constantsRoutes.auth.loginWithTwitchCallback,
+        {
+            schema: {
+                tags: [constantsRoutes.auth.base],
+                body: schemasRoutes.auth.loginWithTwitchCallbackBody()
+            },
+            async handler(req, reply) {
+                let cookies: schemasRoutes.auth.LoginWithTwitchCallbackCookies
+
+                try {
+                    cookies = schemasRoutes.auth.loginWithTwitchCallbackCookies().parse(req.cookies)
+                } catch (err: any) {
+                    throw new UnauthorizedError(err.message)
+                }
+
+                const data = await handlers.loginWithTwitchCallback(app, {
+                    cookies,
+                    body: req.body
+                })
+                await reply.sendData(data as any)
+            }
+        }
+    )
 
     app.post(constantsRoutes.auth.logout, {
         schema: {

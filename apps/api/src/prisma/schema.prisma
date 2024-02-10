@@ -7,6 +7,10 @@ generator client {
     provider = "prisma-client-js"
 }
 
+enum OAuthRegistrationTokenType {
+    Twitch
+}
+
 enum Permission {
     DeleteOtherUserPost
     BanUser
@@ -25,9 +29,10 @@ model Role {
 
 model User {
     id Int @id @default(autoincrement())
-    email String @unique
+    email String? @unique
     username String @unique
-    password String
+    password String?
+    twitchId String? @unique
     roleId Int @default(1)
     role Role @relation(fields: [roleId], references: [id])
     confirmedEmail Boolean @default(false)
@@ -38,6 +43,14 @@ model User {
     emailConfirmationToken EmailConfirmationToken?
     passwordResetToken PasswordResetToken?
     posts Post[]
+}
+
+model OAuthRegistrationToken {
+    id Int @id @default(autoincrement())
+    token String @unique
+    type OAuthRegistrationTokenType
+    providerUserId String
+    creationDate DateTime
 }
 
 model RefreshToken {

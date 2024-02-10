@@ -27,6 +27,39 @@ export function registerResponse() {
 
 export type RegisterResponse = z.infer<ReturnType<typeof registerResponse>>
 
+// OAuthRegister
+
+export function oAuthRegisterParams() {
+    return z.object({
+        oAuthRegistrationToken: models.oAuthRegistrationToken.token()
+    })
+}
+
+export type OAuthRegisterParams = z.infer<ReturnType<typeof oAuthRegisterParams>>
+
+export function oAuthRegisterBody() {
+    return z.object({
+        username: models.user.username()
+    })
+}
+
+export type OAuthRegisterBody = z.infer<ReturnType<typeof oAuthRegisterBody>>
+
+export function oAuthRegisterRequest() {
+    return z.object({
+        ...oAuthRegisterParams().shape,
+        ...oAuthRegisterBody().shape
+    })
+}
+
+export type OAuthRegisterRequest = z.infer<ReturnType<typeof oAuthRegisterRequest>>
+
+export function oAuthRegisterResponse() {
+    return z.void()
+}
+
+export type OAuthRegisterResponse = z.infer<ReturnType<typeof oAuthRegisterResponse>>
+
 // Login
 
 export function loginBody() {
@@ -51,6 +84,63 @@ export function loginResponse() {
 }
 
 export type LoginResponse = z.infer<ReturnType<typeof loginResponse>>
+
+// LoginWithTwitch
+
+export function loginWithTwitchRequest() {
+    return z.void()
+}
+
+export type LoginWithTwitchRequest = z.infer<ReturnType<typeof loginWithTwitchRequest>>
+
+export function loginWithTwitchResponse() {
+    return z.object({
+        redirectUrl: z.string().trim().min(1)
+    })
+}
+
+export type LoginWithTwitchResponse = z.infer<ReturnType<typeof loginWithTwitchResponse>>
+
+// LoginWithTwitchCallback
+
+export function loginWithTwitchCallbackCookies() {
+    return z.object({
+        twitchOAuthState: z.string().trim().min(1)
+    })
+}
+
+export type LoginWithTwitchCallbackCookies = z.infer<
+    ReturnType<typeof loginWithTwitchCallbackCookies>
+>
+
+export function loginWithTwitchCallbackBody() {
+    return z.object({
+        code: z.string().trim().min(1),
+        state: z.string().trim().min(1)
+    })
+}
+
+export type LoginWithTwitchCallbackBody = z.infer<ReturnType<typeof loginWithTwitchCallbackBody>>
+
+export function loginWithTwitchCallbackRequest() {
+    return z.object({
+        ...loginWithTwitchCallbackBody().shape
+    })
+}
+
+export type LoginWithTwitchCallbackRequest = z.infer<
+    ReturnType<typeof loginWithTwitchCallbackRequest>
+>
+
+export function loginWithTwitchCallbackResponse() {
+    return z.object({
+        oAuthRegistrationToken: models.oAuthRegistrationToken.token().nullable()
+    })
+}
+
+export type LoginWithTwitchCallbackResponse = z.infer<
+    ReturnType<typeof loginWithTwitchCallbackResponse>
+>
 
 // Logout
 

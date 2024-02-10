@@ -28,3 +28,11 @@ export async function deleteExpiredRefreshTokens(app: FastifyInstance) {
         where: { creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Refresh * 1000) } }
     })
 }
+
+export async function deleteExpiredOAuthRegistrationTokens(app: FastifyInstance) {
+    await app.prisma.oAuthRegistrationToken.deleteMany({
+        where: {
+            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.OAuthRegistration * 1000) }
+        }
+    })
+}
