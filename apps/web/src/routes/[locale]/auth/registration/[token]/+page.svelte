@@ -1,10 +1,9 @@
 <script lang="ts">
     import { Content, Button, TextField } from "$lib/components"
 
-    import { goto } from "$app/navigation"
-    import { localePath } from "$lib/locales"
+    import { invalidateAll } from "$app/navigation"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
+    import { socket, createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -24,8 +23,9 @@
             })
         },
         async onSuccess() {
+            socket.disconnect().connect()
             toasts.add("success", "Вы успешно зарегистрировались")
-            await goto($localePath("/auth/login"))
+            await invalidateAll()
         }
     })
 

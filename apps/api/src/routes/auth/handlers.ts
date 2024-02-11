@@ -5,6 +5,7 @@ import axios from "axios"
 import { generateState } from "arctic"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
+import { User } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
@@ -20,11 +21,11 @@ export const register = (async (app, { body }) => {
     if (userByUsername) throw new BadRequestError("User with such username already exists")
 
     const password = await argon2.hash(body.password)
-    await app.prisma.user.create({
+    const user = await app.prisma.user.create({
         data: { email: body.email, username: body.username, password, registrationDate: new Date() }
     })
 
-    return {}
+    return utils.login(app, { id: user.id }, false, true)
 }) satisfies RouteHandler<
     schemasRoutes.auth.RegisterResponse,
     { body: schemasRoutes.auth.RegisterBody }
@@ -39,9 +40,11 @@ export const oAuthRegister = (async (app, { params, body }) => {
     })
     if (!oAuthRegistrationToken) throw new BadRequestError("OAuth registration token not found")
 
+    let user: User
+
     switch (oAuthRegistrationToken.provider) {
         case constantsEnums.OAuthProvider.Twitch: {
-            await app.prisma.user.create({
+            user = await app.prisma.user.create({
                 data: {
                     username: body.username,
                     twitchId: oAuthRegistrationToken.providerUserId,
@@ -59,7 +62,7 @@ export const oAuthRegister = (async (app, { params, body }) => {
 
     await app.prisma.oAuthRegistrationToken.delete({ where: { id: oAuthRegistrationToken.id } })
 
-    return {}
+    return utils.login(app, { id: user.id }, true, true)
 }) satisfies RouteHandler<
     schemasRoutes.auth.OAuthRegisterResponse,
     { params: schemasRoutes.auth.OAuthRegisterParams; body: schemasRoutes.auth.OAuthRegisterBody }
@@ -74,27 +77,7 @@ export const login = (async (app, { body }) => {
     const isCorrectPassword = await argon2.verify(user.password, body.password)
     if (!isCorrectPassword) throw new BadRequestError("Incorrect password")
 
-    await utils.deleteExpiredRefreshTokens(app)
-
-    const tokens = utils.generateTokens(app, { id: user.id })
-    await app.prisma.refreshToken.create({
-        data: { token: tokens.refresh, userId: user.id, creationDate: new Date() }
-    })
-
-    return {
-        cookies: [
-            {
-                name: "accessToken",
-                value: tokens.access,
-                options: { path: "/", maxAge: enums.TokenTtl.Access }
-            },
-            {
-                name: "refreshToken",
-                value: tokens.refresh,
-                options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
-            }
-        ]
-    }
+    return utils.login(app, { id: user.id }, false, false)
 }) satisfies RouteHandler<schemasRoutes.auth.LoginResponse, { body: schemasRoutes.auth.LoginBody }>
 
 export const oAuthLogin = (async (app, { params }) => {
@@ -149,35 +132,7 @@ export const oAuthLoginCallback = (async (app, { params, cookies, body }) => {
             const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
 
             if (user) {
-                await utils.deleteExpiredRefreshTokens(app)
-
-                const tokens = utils.generateTokens(app, { id: user.id })
-                await app.prisma.refreshToken.create({
-                    data: { token: tokens.refresh, userId: user.id, creationDate: new Date() }
-                })
-
-                return {
-                    payload: {
-                        oAuthRegistrationToken: null
-                    },
-                    cookies: [
-                        {
-                            name: "oAuthState",
-                            value: undefined,
-                            options: { path: "/" }
-                        },
-                        {
-                            name: "accessToken",
-                            value: tokens.access,
-                            options: { path: "/", maxAge: enums.TokenTtl.Access }
-                        },
-                        {
-                            name: "refreshToken",
-                            value: tokens.refresh,
-                            options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
-                        }
-                    ]
-                }
+                return utils.login(app, { id: user.id }, true, false)
             } else {
                 await utils.deleteExpiredOAuthRegistrationTokens(app)
 
