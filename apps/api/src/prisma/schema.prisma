@@ -7,7 +7,7 @@ generator client {
     provider = "prisma-client-js"
 }
 
-enum OAuthRegistrationTokenType {
+enum OAuthProvider {
     Twitch
 }
 
@@ -48,7 +48,7 @@ model User {
 model OAuthRegistrationToken {
     id Int @id @default(autoincrement())
     token String @unique
-    type OAuthRegistrationTokenType
+    provider OAuthProvider
     providerUserId String
     creationDate DateTime
 }

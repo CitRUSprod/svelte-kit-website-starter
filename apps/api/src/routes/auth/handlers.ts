@@ -1,8 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import * as _ from "lodash-es"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import axios from "axios"
 import { generateState } from "arctic"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
+import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
 import { ReplyCookie, RouteHandler } from "$/types"
@@ -36,8 +39,8 @@ export const oAuthRegister = (async (app, { params, body }) => {
     })
     if (!oAuthRegistrationToken) throw new BadRequestError("OAuth registration token not found")
 
-    switch (oAuthRegistrationToken.type) {
-        case enums.OAuthRegistrationTokenType.Twitch: {
+    switch (oAuthRegistrationToken.provider) {
+        case constantsEnums.OAuthProvider.Twitch: {
             await app.prisma.user.create({
                 data: {
                     username: body.username,
@@ -94,104 +97,133 @@ export const login = (async (app, { body }) => {
     }
 }) satisfies RouteHandler<schemasRoutes.auth.LoginResponse, { body: schemasRoutes.auth.LoginBody }>
 
-export const loginWithTwitch = (async () => {
-    const state = generateState()
-    const url = await oAuthProviders.twitch.createAuthorizationURL(state)
+export const oAuthLogin = (async (app, { params }) => {
+    const oAuthState = generateState()
 
-    return {
-        payload: {
-            redirectUrl: url.toString()
-        },
-        cookies: [
-            {
-                name: "twitchOAuthState",
-                value: state,
-                options: { path: "/", httpOnly: true }
-            }
-        ]
-    }
-}) satisfies RouteHandler<schemasRoutes.auth.LoginWithTwitchResponse>
+    switch (_.startCase(params.provider)) {
+        case constantsEnums.OAuthProvider.Twitch: {
+            const url = await oAuthProviders.twitch.createAuthorizationURL(oAuthState)
 
-export const loginWithTwitchCallback = (async (app, { cookies, body }) => {
-    if (cookies.twitchOAuthState !== body.state) throw new BadRequestError("States do not match")
-
-    const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(body.code)
-
-    const res = await axios.get<{ data: Array<{ id: string }> }>(
-        "https://api.twitch.tv/helix/users",
-        {
-            headers: {
-                Authorization: `Bearer ${twitchTokens.accessToken}`,
-                "Client-Id": env.TWITCH_CLIENT_ID
-            }
-        }
-    )
-
-    const twitchUser = res.data.data[0]
-
-    const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
-
-    if (user) {
-        await utils.deleteExpiredRefreshTokens(app)
-
-        const tokens = utils.generateTokens(app, { id: user.id })
-        await app.prisma.refreshToken.create({
-            data: { token: tokens.refresh, userId: user.id, creationDate: new Date() }
-        })
-
-        return {
-            payload: {
-                oAuthRegistrationToken: null
-            },
-            cookies: [
-                {
-                    name: "accessToken",
-                    value: tokens.access,
-                    options: { path: "/", maxAge: enums.TokenTtl.Access }
+            return {
+                payload: {
+                    redirectUrl: url.toString()
                 },
-                {
-                    name: "refreshToken",
-                    value: tokens.refresh,
-                    options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
-                }
-            ]
-        }
-    } else {
-        await utils.deleteExpiredOAuthRegistrationTokens(app)
-
-        const token = createUuid()
-
-        const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
-            where: { type: enums.OAuthRegistrationTokenType.Twitch, providerUserId: twitchUser.id }
-        })
-
-        if (oAuthRegistrationToken) {
-            await app.prisma.oAuthRegistrationToken.update({
-                where: { id: oAuthRegistrationToken.id },
-                data: { token, creationDate: new Date() }
-            })
-        } else {
-            await app.prisma.oAuthRegistrationToken.create({
-                data: {
-                    token,
-                    type: enums.OAuthRegistrationTokenType.Twitch,
-                    providerUserId: twitchUser.id,
-                    creationDate: new Date()
-                }
-            })
-        }
-
-        return {
-            payload: {
-                oAuthRegistrationToken: token
+                cookies: [
+                    {
+                        name: "oAuthState",
+                        value: oAuthState,
+                        options: { path: "/", httpOnly: true }
+                    }
+                ]
             }
+        }
+
+        default: {
+            throw new InternalServerError("Unexpected error")
         }
     }
 }) satisfies RouteHandler<
-    schemasRoutes.auth.LoginWithTwitchCallbackResponse,
+    schemasRoutes.auth.OAuthLoginResponse,
+    { params: schemasRoutes.auth.OAuthLoginParams }
+>
+
+export const oAuthLoginCallback = (async (app, { params, cookies, body }) => {
+    if (cookies.oAuthState !== body.oAuthState) throw new BadRequestError("States do not match")
+
+    switch (_.startCase(params.provider)) {
+        case constantsEnums.OAuthProvider.Twitch: {
+            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(body.code)
+
+            const res = await axios.get<{ data: Array<{ id: string }> }>(
+                "https://api.twitch.tv/helix/users",
+                {
+                    headers: {
+                        Authorization: `Bearer ${twitchTokens.accessToken}`,
+                        "Client-Id": env.TWITCH_CLIENT_ID
+                    }
+                }
+            )
+
+            const twitchUser = res.data.data[0]
+
+            const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
+
+            if (user) {
+                await utils.deleteExpiredRefreshTokens(app)
+
+                const tokens = utils.generateTokens(app, { id: user.id })
+                await app.prisma.refreshToken.create({
+                    data: { token: tokens.refresh, userId: user.id, creationDate: new Date() }
+                })
+
+                return {
+                    payload: {
+                        oAuthRegistrationToken: null
+                    },
+                    cookies: [
+                        {
+                            name: "oAuthState",
+                            value: undefined,
+                            options: { path: "/" }
+                        },
+                        {
+                            name: "accessToken",
+                            value: tokens.access,
+                            options: { path: "/", maxAge: enums.TokenTtl.Access }
+                        },
+                        {
+                            name: "refreshToken",
+                            value: tokens.refresh,
+                            options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
+                        }
+                    ]
+                }
+            } else {
+                await utils.deleteExpiredOAuthRegistrationTokens(app)
+
+                const token = createUuid()
+
+                const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
+                    where: {
+                        provider: constantsEnums.OAuthProvider.Twitch,
+                        providerUserId: twitchUser.id
+                    }
+                })
+
+                if (oAuthRegistrationToken) {
+                    await app.prisma.oAuthRegistrationToken.update({
+                        where: { id: oAuthRegistrationToken.id },
+                        data: { token, creationDate: new Date() }
+                    })
+                } else {
+                    await app.prisma.oAuthRegistrationToken.create({
+                        data: {
+                            token,
+                            provider: constantsEnums.OAuthProvider.Twitch,
+                            providerUserId: twitchUser.id,
+                            creationDate: new Date()
+                        }
+                    })
+                }
+
+                return {
+                    payload: {
+                        oAuthRegistrationToken: token
+                    }
+                }
+            }
+        }
+
+        default: {
+            throw new InternalServerError("Unexpected error")
+        }
+    }
+}) satisfies RouteHandler<
+    schemasRoutes.auth.OAuthLoginCallbackResponse,
     {
-        cookies: schemasRoutes.auth.LoginWithTwitchCallbackCookies
-        body: schemasRoutes.auth.LoginWithTwitchCallbackBody
+        cookies: schemasRoutes.auth.OAuthLoginCallbackCookies
+        params: schemasRoutes.auth.OAuthLoginCallbackParams
+        body: schemasRoutes.auth.OAuthLoginCallbackBody
     }
 >
 

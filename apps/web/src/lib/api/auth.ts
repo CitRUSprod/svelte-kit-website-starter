@@ -37,22 +37,22 @@ export function login(data: RequestData<schemasRoutes.auth.LoginRequest>) {
     )
 }
 
-export function loginWithTwitch(data: RequestData<schemasRoutes.auth.LoginWithTwitchRequest>) {
-    return axios.post<schemasRoutes.auth.LoginWithTwitchResponse>(
-        createApiUrl(constantsRoutes.auth.loginWithTwitch),
+export function oAuthLogin(data: RequestData<schemasRoutes.auth.OAuthLoginRequest>) {
+    return axios.post<schemasRoutes.auth.OAuthLoginResponse>(
+        createApiUrl(constantsRoutes.auth.oAuthLogin, data.provider),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-export function loginWithTwitchCallback(
-    data: RequestData<schemasRoutes.auth.LoginWithTwitchCallbackRequest>
+export function oAuthLoginCallback(
+    data: RequestData<schemasRoutes.auth.OAuthLoginCallbackRequest>
 ) {
-    return axios.post<schemasRoutes.auth.LoginWithTwitchCallbackResponse>(
-        createApiUrl(constantsRoutes.auth.loginWithTwitchCallback),
+    return axios.post<schemasRoutes.auth.OAuthLoginCallbackResponse>(
+        createApiUrl(constantsRoutes.auth.oAuthLoginCallback, data.provider),
         {
             code: data.code,
-            state: data.state
+            oAuthState: data.oAuthState
         },
         createAxiosConfig(data.headers)
     )

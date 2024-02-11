@@ -42,40 +42,43 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post(constantsRoutes.auth.loginWithTwitch, {
+    app.post<{ Params: schemasRoutes.auth.OAuthLoginParams }>(constantsRoutes.auth.oAuthLogin, {
         schema: {
-            tags: [constantsRoutes.auth.base]
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.oAuthLoginParams()
         },
         async handler(req, reply) {
-            const data = await handlers.loginWithTwitch()
+            const data = await handlers.oAuthLogin(app, { params: req.params })
             await reply.sendData(data)
         }
     })
 
-    app.post<{ Body: schemasRoutes.auth.LoginWithTwitchCallbackBody }>(
-        constantsRoutes.auth.loginWithTwitchCallback,
-        {
-            schema: {
-                tags: [constantsRoutes.auth.base],
-                body: schemasRoutes.auth.loginWithTwitchCallbackBody()
-            },
-            async handler(req, reply) {
-                let cookies: schemasRoutes.auth.LoginWithTwitchCallbackCookies
+    app.post<{
+        Params: schemasRoutes.auth.OAuthLoginCallbackParams
+        Body: schemasRoutes.auth.OAuthLoginCallbackBody
+    }>(constantsRoutes.auth.oAuthLoginCallback, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.oAuthLoginCallbackParams(),
+            body: schemasRoutes.auth.oAuthLoginCallbackBody()
+        },
+        async handler(req, reply) {
+            let cookies: schemasRoutes.auth.OAuthLoginCallbackCookies
 
-                try {
-                    cookies = schemasRoutes.auth.loginWithTwitchCallbackCookies().parse(req.cookies)
-                } catch (err: any) {
-                    throw new UnauthorizedError(err.message)
-                }
-
-                const data = await handlers.loginWithTwitchCallback(app, {
-                    cookies,
-                    body: req.body
-                })
-                await reply.sendData(data as any)
+            try {
+                cookies = schemasRoutes.auth.oAuthLoginCallbackCookies().parse(req.cookies)
+            } catch (err: any) {
+                throw new UnauthorizedError(err.message)
             }
+
+            const data = await handlers.oAuthLoginCallback(app, {
+                cookies,
+                params: req.params,
+                body: req.body
+            })
+            await reply.sendData(data as any)
         }
-    )
+    })
 
     app.post(constantsRoutes.auth.logout, {
         schema: {
