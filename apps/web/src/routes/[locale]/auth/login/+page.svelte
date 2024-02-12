@@ -77,7 +77,6 @@
             <Button href={$localePath("/auth/registration")} text>
                 {$t("routes.auth.login.registration")}
             </Button>
-            <Button href={$localePath("/auth/login/twitch")} text>Twitch</Button>
             <Button
                 disabled={!completedForm}
                 loading={$qcLogin.loading}
@@ -85,6 +84,18 @@
                 on:click={qcLogin.refresh}
             >
                 {$t("routes.auth.login.do-login")}
+            </Button>
+        </div>
+        <div>
+            <h3>или войти с помощью</h3>
+        </div>
+        <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
+            <Button
+                class="u:bg-purple-800! u:hover:bg-purple-700! u:active:bg-purple-900!"
+                href={$localePath("/auth/login/twitch")}
+            >
+                <i class="u:i-mdi-twitch u:text-xl u:mr-1" />
+                <span>Twitch</span>
             </Button>
         </div>
     </div>
