@@ -1,7 +1,8 @@
 <script lang="ts">
     import { Content, Button } from "$lib/components"
 
-    import { getRandomInt } from "@local/utils"
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    import * as _ from "lodash-es"
     import { env } from "$lib/constants"
     import { toasts } from "$lib/stores"
     import { t } from "$lib/locales"
@@ -14,7 +15,7 @@
     }
 
     function showRandomNumber() {
-        const num = getRandomInt(1, 100)
+        const num = _.random(1, 100)
         toasts.add("success", `${$t("routes.home.random-number") as string}: ${num}`)
     }
 </script>
