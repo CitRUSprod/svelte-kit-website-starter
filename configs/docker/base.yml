@@ -25,8 +25,11 @@ services:
                 NODE_IMAGE: node:20.11.0-alpine
         restart: always
         environment:
+            PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
             JWT_SECRET: ${JWT_SECRET}
+            TWITCH_CLIENT_ID: ${TWITCH_CLIENT_ID}
+            TWITCH_CLIENT_SECRET: ${TWITCH_CLIENT_SECRET}
             MAILER_HOST: ${MAILER_HOST}
             MAILER_PORT: ${MAILER_PORT}
             MAILER_EMAIL: ${MAILER_EMAIL}
