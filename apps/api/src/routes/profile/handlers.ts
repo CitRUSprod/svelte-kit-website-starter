@@ -96,7 +96,7 @@ export const sendConfirmationEmail = (async (app, { userData }) => {
         })
     }
 
-    const url = env.EMAIL_CONFIRMATION_URL.replace(/{token}/g, token)
+    const url = new URL(`/profile/email/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = "Email confirmation"
     const message = `
         <div>
@@ -178,7 +178,7 @@ export const sendPasswordResetEmail = (async (app, { body }) => {
         })
     }
 
-    const url = env.PASSWORD_RESET_URL.replace(/{token}/g, token)
+    const url = new URL(`/profile/password/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = "Password reset"
     const message = `
         <div>

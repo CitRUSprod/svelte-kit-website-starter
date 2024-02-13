@@ -16,9 +16,7 @@ export function api() {
         MAILER_PORT: z.coerce.number().int().min(1),
         MAILER_EMAIL: z.string().trim().toLowerCase().email(),
         MAILER_PASSWORD: z.string().trim().min(1),
-        MAILER_NAME: z.string().trim().min(1),
-        EMAIL_CONFIRMATION_URL: z.string().trim().url(),
-        PASSWORD_RESET_URL: z.string().trim().url()
+        MAILER_NAME: z.string().trim().min(1)
     })
 }
 

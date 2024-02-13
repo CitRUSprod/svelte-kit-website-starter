@@ -35,8 +35,6 @@ services:
             MAILER_EMAIL: ${MAILER_EMAIL}
             MAILER_PASSWORD: ${MAILER_PASSWORD}
             MAILER_NAME: ${MAILER_NAME}
-            EMAIL_CONFIRMATION_URL: ${EMAIL_CONFIRMATION_URL}
-            PASSWORD_RESET_URL: ${PASSWORD_RESET_URL}
             ENABLE_DOCS: ${ENABLE_DOCS}
         volumes:
             - ../../storage/files:/app/files
