@@ -1,4 +1,5 @@
 import { z } from "zod"
+import * as common from "$/common"
 import * as models from "$/models"
 
 // Register
@@ -27,11 +28,35 @@ export function registerResponse() {
 
 export type RegisterResponse = z.infer<ReturnType<typeof registerResponse>>
 
+// CompleteRegistration
+
+export function completeRegistrationParams() {
+    return z.object({
+        registrationToken: common.token()
+    })
+}
+
+export type CompleteRegistrationParams = z.infer<ReturnType<typeof completeRegistrationParams>>
+
+export function completeRegistrationRequest() {
+    return z.object({
+        ...completeRegistrationParams().shape
+    })
+}
+
+export type CompleteRegistrationRequest = z.infer<ReturnType<typeof completeRegistrationRequest>>
+
+export function completeRegistrationResponse() {
+    return z.void()
+}
+
+export type CompleteRegistrationResponse = z.infer<ReturnType<typeof completeRegistrationResponse>>
+
 // OAuthRegister
 
 export function oAuthRegisterParams() {
     return z.object({
-        oAuthRegistrationToken: models.oAuthRegistrationToken.token()
+        oAuthRegistrationToken: common.token()
     })
 }
 
@@ -149,7 +174,7 @@ export type OAuthLoginCallbackRequest = z.infer<ReturnType<typeof oAuthLoginCall
 
 export function oAuthLoginCallbackResponse() {
     return z.object({
-        oAuthRegistrationToken: models.oAuthRegistrationToken.token().nullable()
+        oAuthRegistrationToken: common.token().nullable()
     })
 }
 

@@ -3,9 +3,9 @@ import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import * as constantsEnums from "@local/constants/enums"
 import { enums } from "$/constants"
-import { PartialUserData } from "$/types"
+import { UserData } from "$/types"
 
-export function dto(user: PartialUserData) {
+export function dto(user: UserData) {
     return {
         id: user.id,
         email: user.email ?? null,
@@ -15,7 +15,6 @@ export function dto(user: PartialUserData) {
             name: user.role.name,
             permissions: user.role.permissions as Array<constantsEnums.Permission>
         },
-        confirmedEmail: user.confirmedEmail ?? null,
         banned: user.banned,
         registrationDate: user.registrationDate.toJSON(),
         avatar: user.avatar && `/api/files/${enums.ImgPath.Avatars}/${user.avatar}`

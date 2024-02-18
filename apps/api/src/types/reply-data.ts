@@ -11,4 +11,4 @@ export interface ReplyCookie {
 
 export type ReplyData<T extends JsonObject | void> = {
     cookies?: Array<ReplyCookie>
-} & (T extends void ? unknown : { payload: T })
+} & (T extends void ? { payload?: Error | never } : { payload: Error | T })

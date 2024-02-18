@@ -3,12 +3,6 @@ import * as _ from "lodash-es"
 import { z } from "zod"
 import * as constantsEnums from "@local/constants/enums"
 
-export function token() {
-    return z.string().trim().length(36)
-}
-
-export type Token = z.infer<ReturnType<typeof token>>
-
 export function provider() {
     return z.nativeEnum(constantsEnums.OAuthProvider)
 }

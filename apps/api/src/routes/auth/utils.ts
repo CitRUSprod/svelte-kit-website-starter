@@ -24,9 +24,11 @@ export function getPayload(app: FastifyInstance, token: string): UserPayload {
     }
 }
 
-export async function deleteExpiredRefreshTokens(app: FastifyInstance) {
-    await app.prisma.refreshToken.deleteMany({
-        where: { creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Refresh * 1000) } }
+export async function deleteExpiredRegistrationTokens(app: FastifyInstance) {
+    await app.prisma.registrationToken.deleteMany({
+        where: {
+            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Registration * 1000) }
+        }
     })
 }
 
@@ -38,35 +40,41 @@ export async function deleteExpiredOAuthRegistrationTokens(app: FastifyInstance)
     })
 }
 
+export async function deleteExpiredRefreshTokens(app: FastifyInstance) {
+    await app.prisma.refreshToken.deleteMany({
+        where: { creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Refresh * 1000) } }
+    })
+}
+
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
-    isOAuth: false,
+    isOAuthHandler: false,
     isRegistrationHandler: true
 ): Promise<ReplyData<schemasRoutes.auth.RegisterResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
-    isOAuth: true,
+    isOAuthHandler: true,
     isRegistrationHandler: true
 ): Promise<ReplyData<schemasRoutes.auth.OAuthRegisterResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
-    isOAuth: false,
+    isOAuthHandler: false,
     isRegistrationHandler: false
 ): Promise<ReplyData<schemasRoutes.auth.LoginResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
-    isOAuth: true,
+    isOAuthHandler: true,
     isRegistrationHandler: false
 ): Promise<ReplyData<schemasRoutes.auth.OAuthLoginCallbackResponse>>
 
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
-    isOAuth: boolean,
+    isOAuthHandler: boolean,
     isRegistrationHandler: boolean
 ): Promise<
     ReplyData<
@@ -90,9 +98,9 @@ export async function login(
     }
 
     return {
-        ...(isOAuth && !isRegistrationHandler ? { oAuthRegistrationToken: null } : {}),
+        ...(isOAuthHandler && !isRegistrationHandler ? { oAuthRegistrationToken: null } : {}),
         cookies: [
-            ...(isOAuth ? [oAuthStateCookie] : []),
+            ...(isOAuthHandler ? [oAuthStateCookie] : []),
             {
                 name: "accessToken",
                 value: tokens.access,

@@ -13,19 +13,13 @@
     let dialog: Dialog
 
     let username = ""
-    let email = ""
 
     $: vldResultUsername = vld.user.username(username)
-    $: vldResultEmail = vld.user.email(email)
 
-    $: completedForm =
-        vldResultUsername.valid &&
-        vldResultEmail.valid &&
-        (vldResultUsername.value !== user.username || vldResultEmail.value !== user.email)
+    $: completedForm = vldResultUsername.valid && vldResultUsername.value !== user.username
 
     export function open() {
         username = user.username
-        email = user.email ?? ""
 
         dialog.open()
     }
@@ -37,7 +31,6 @@
     const qcUpdateUser = createQueryController({
         fn() {
             return api.profile.updateUser({
-                email: vldResultEmail.value,
                 username: vldResultUsername.value
             })
         },
@@ -61,13 +54,6 @@
             disabled={$qcUpdateUser.loading}
             label={$t("components.dialog-profile-editing.username")}
             bind:value={username}
-        />
-    </div>
-    <div>
-        <TextField
-            disabled={$qcUpdateUser.loading}
-            label={$t("components.dialog-profile-editing.email")}
-            bind:value={email}
         />
     </div>
     <div class="u:flex u:justify-between">

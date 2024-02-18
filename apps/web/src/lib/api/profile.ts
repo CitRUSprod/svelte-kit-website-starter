@@ -15,7 +15,6 @@ export function updateUser(data: RequestData<schemasRoutes.profile.UpdateUserReq
     return axios.patch<schemasRoutes.profile.UpdateUserResponse>(
         createApiUrl(constantsRoutes.profile.updateUser),
         {
-            email: data.email,
             username: data.username
         },
         createAxiosConfig(data.headers)
@@ -39,19 +38,31 @@ export function deleteAvatar(data: RequestData<schemasRoutes.profile.DeleteAvata
     )
 }
 
-export function sendConfirmationEmail(
-    data: RequestData<schemasRoutes.profile.SendConfirmationEmailRequest> = {}
+export function sendEmailUpdateEmailToOld(
+    data: RequestData<schemasRoutes.profile.SendEmailUpdateEmailToOldRequest>
 ) {
-    return axios.post<schemasRoutes.profile.SendConfirmationEmailResponse>(
-        createApiUrl(constantsRoutes.profile.sendConfirmationEmail),
+    return axios.post<schemasRoutes.profile.SendEmailUpdateEmailToOldResponse>(
+        createApiUrl(constantsRoutes.profile.sendEmailUpdateEmailToOld),
+        {
+            email: data.email
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function sendEmailUpdateEmailToNew(
+    data: RequestData<schemasRoutes.profile.SendEmailUpdateEmailToNewRequest>
+) {
+    return axios.post<schemasRoutes.profile.SendEmailUpdateEmailToNewResponse>(
+        createApiUrl(constantsRoutes.profile.sendEmailUpdateEmailToNew, data.emailUpdateToken),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-export function confirmEmail(data: RequestData<schemasRoutes.profile.ConfirmEmailRequest>) {
-    return axios.post<schemasRoutes.profile.ConfirmEmailResponse>(
-        createApiUrl(constantsRoutes.profile.confirmEmail, data.emailConfirmationToken),
+export function updateEmail(data: RequestData<schemasRoutes.profile.UpdateEmailRequest>) {
+    return axios.post<schemasRoutes.profile.UpdateEmailResponse>(
+        createApiUrl(constantsRoutes.profile.updateEmail, data.emailUpdateToken),
         {},
         createAxiosConfig(data.headers)
     )

@@ -37,6 +37,6 @@ export async function load(e) {
 
     redirect(
         302,
-        `/${e.params.locale as string}/auth/registration/${res.data.oAuthRegistrationToken}`
+        `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
     )
 }

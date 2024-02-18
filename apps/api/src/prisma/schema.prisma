@@ -35,14 +35,22 @@ model User {
     twitchId String? @unique
     roleId Int @default(1)
     role Role @relation(fields: [roleId], references: [id])
-    confirmedEmail Boolean @default(false)
     banned Boolean @default(false)
     registrationDate DateTime
     avatar String?
     refreshTokens RefreshToken[]
-    emailConfirmationToken EmailConfirmationToken?
+    emailUpdateToken EmailUpdateToken?
     passwordResetToken PasswordResetToken?
     posts Post[]
+}
+
+model RegistrationToken {
+    id Int @id @default(autoincrement())
+    token String @unique
+    email String @unique
+    username String @unique
+    password String
+    creationDate DateTime
 }
 
 model OAuthRegistrationToken {
@@ -61,9 +69,11 @@ model RefreshToken {
     creationDate DateTime
 }
 
-model EmailConfirmationToken {
+model EmailUpdateToken {
     id Int @id @default(autoincrement())
-    token String @unique
+    tokenFrom String @unique
+    tokenTo String @unique
+    email String @unique
     userId Int @unique
     user User @relation(fields: [userId], references: [id])
     creationDate DateTime

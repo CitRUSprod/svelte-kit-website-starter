@@ -23,7 +23,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyConfirmedEmail,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
         async handler(req, reply) {
@@ -44,7 +43,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyConfirmedEmail,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
         async handler(req, reply) {
@@ -61,7 +59,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyConfirmedEmail,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
         async handler(req, reply) {

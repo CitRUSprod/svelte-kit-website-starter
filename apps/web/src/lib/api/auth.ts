@@ -16,6 +16,16 @@ export function register(data: RequestData<schemasRoutes.auth.RegisterRequest>) 
     )
 }
 
+export function completeRegistration(
+    data: RequestData<schemasRoutes.auth.CompleteRegistrationRequest>
+) {
+    return axios.post<schemasRoutes.auth.CompleteRegistrationResponse>(
+        createApiUrl(constantsRoutes.auth.completeRegistration, data.registrationToken),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
 export function oAuthRegister(data: RequestData<schemasRoutes.auth.OAuthRegisterRequest>) {
     return axios.post<schemasRoutes.auth.OAuthRegisterResponse>(
         createApiUrl(constantsRoutes.auth.oAuthRegister, data.oAuthRegistrationToken),

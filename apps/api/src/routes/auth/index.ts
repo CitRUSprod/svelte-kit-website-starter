@@ -17,6 +17,19 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
     })
 
     app.post<{
+        Params: schemasRoutes.auth.CompleteRegistrationParams
+    }>(constantsRoutes.auth.completeRegistration, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.completeRegistrationParams()
+        },
+        async handler(req, reply) {
+            const data = await handlers.completeRegistration(app, { params: req.params })
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{
         Params: schemasRoutes.auth.OAuthRegisterParams
         Body: schemasRoutes.auth.OAuthRegisterBody
     }>(constantsRoutes.auth.oAuthRegister, {

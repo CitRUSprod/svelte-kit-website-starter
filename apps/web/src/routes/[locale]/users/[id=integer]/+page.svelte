@@ -3,7 +3,8 @@
     import {
         DialogAvatarRemoving,
         DialogProfileEditing,
-        DialogPasswordChanging
+        DialogPasswordChanging,
+        DialogEmailChanging
     } from "./_components"
 
     import { t, currentLocale } from "$lib/locales"
@@ -17,6 +18,7 @@
     let dialogAvatarRemoving: DialogAvatarRemoving
     let dialogProfileEditing: DialogProfileEditing
     let dialogPasswordChanging: DialogPasswordChanging
+    let dialogEmailChanging: DialogEmailChanging
 
     const qcUploadAvatar = createQueryController({
         params: {
@@ -37,15 +39,6 @@
             })
             data.user = res.data
             toasts.add("success", $t("routes.users.[id].avatar-updated-successfully"))
-        }
-    })
-
-    const qcSendConfirmationEmail = createQueryController({
-        fn() {
-            return api.profile.sendConfirmationEmail()
-        },
-        onSuccess() {
-            toasts.add("success", $t("routes.users.[id].confirmation-email-sent"))
         }
     })
 
@@ -76,10 +69,6 @@
                 <li><b>{$t("routes.users.[id].username")}:</b> {data.user.username}</li>
                 {#if data.user.email}
                     <li><b>{$t("routes.users.[id].email")}:</b> {data.user.email}</li>
-                    <li>
-                        <b>{$t("routes.users.[id].confirmed-email")}:</b>
-                        {$t(`routes.users.[id].${data.user.confirmedEmail ? "yes" : "no"}`)}
-                    </li>
                 {/if}
                 <li><b>{$t("routes.users.[id].role")}:</b> {data.user.role.name}</li>
                 <li>
@@ -114,13 +103,9 @@
             <Button variant="warning" on:click={dialogPasswordChanging.open}>
                 {$t("routes.users.[id].change-password")}
             </Button>
-            {#if !$userData.confirmedEmail}
-                <Button
-                    loading={$qcSendConfirmationEmail.loading}
-                    variant="success"
-                    on:click={qcSendConfirmationEmail.refresh}
-                >
-                    {$t("routes.users.[id].verify-email")}
+            {#if $userData.email}
+                <Button variant="warning" on:click={dialogEmailChanging.open}>
+                    Изменить электронную почту
                 </Button>
             {/if}
         </div>
@@ -130,3 +115,4 @@
 <DialogAvatarRemoving bind:this={dialogAvatarRemoving} bind:user={data.user} />
 <DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
 <DialogPasswordChanging bind:this={dialogPasswordChanging} />
+<DialogEmailChanging bind:this={dialogEmailChanging} user={data.user} />

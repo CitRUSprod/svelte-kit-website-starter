@@ -6,7 +6,6 @@ import { createPreHandler } from "./create-pre-handler"
 import { setUserData } from "./set-user-data"
 import { verifyAuth } from "./verify-auth"
 import { verifyPermission } from "./verify-permission"
-import { verifyConfirmedEmail } from "./verify-confirmed-email"
 import { verifyNotBanned } from "./verify-not-banned"
 
 function changeScope(fn: FastifyPluginCallback) {
@@ -20,7 +19,6 @@ export const decorators = changeScope((app, options, done) => {
         .register(changeScope(setUserData))
         .register(changeScope(verifyAuth))
         .register(changeScope(verifyPermission))
-        .register(changeScope(verifyConfirmedEmail))
         .register(changeScope(verifyNotBanned))
 
     done()

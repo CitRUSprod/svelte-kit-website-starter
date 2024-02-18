@@ -58,26 +58,47 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post(constantsRoutes.profile.sendConfirmationEmail, {
-        schema: {
-            tags: [constantsRoutes.profile.base]
-        },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
-        async handler(req, reply) {
-            const data = await handlers.sendConfirmationEmail(app, { userData: req.userData! })
-            await reply.sendData(data)
-        }
-    })
-
-    app.post<{ Params: schemasRoutes.profile.ConfirmEmailParams }>(
-        constantsRoutes.profile.confirmEmail,
+    app.post<{ Body: schemasRoutes.profile.SendEmailUpdateEmailToOldBody }>(
+        constantsRoutes.profile.sendEmailUpdateEmailToOld,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                params: schemasRoutes.profile.confirmEmailParams()
+                body: schemasRoutes.profile.sendEmailUpdateEmailToOldBody()
+            },
+            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            async handler(req, reply) {
+                const data = await handlers.sendEmailUpdateEmailToOld(app, {
+                    userData: req.userData!,
+                    body: req.body
+                })
+                await reply.sendData(data)
+            }
+        }
+    )
+
+    app.post<{ Params: schemasRoutes.profile.SendEmailUpdateEmailToNewParams }>(
+        constantsRoutes.profile.sendEmailUpdateEmailToNew,
+        {
+            schema: {
+                tags: [constantsRoutes.profile.base],
+                params: schemasRoutes.profile.sendEmailUpdateEmailToNewParams()
             },
             async handler(req, reply) {
-                const data = await handlers.confirmEmail(app, { params: req.params })
+                const data = await handlers.sendEmailUpdateEmailToNew(app, { params: req.params })
+                await reply.sendData(data)
+            }
+        }
+    )
+
+    app.post<{ Params: schemasRoutes.profile.UpdateEmailParams }>(
+        constantsRoutes.profile.updateEmail,
+        {
+            schema: {
+                tags: [constantsRoutes.profile.base],
+                params: schemasRoutes.profile.updateEmailParams()
+            },
+            async handler(req, reply) {
+                const data = await handlers.updateEmail(app, { params: req.params })
                 await reply.sendData(data)
             }
         }

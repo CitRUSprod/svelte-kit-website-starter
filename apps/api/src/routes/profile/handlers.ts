@@ -1,5 +1,5 @@
 import { MultipartFile } from "@fastify/multipart"
-import { BadRequestError } from "http-errors-enhanced"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
@@ -13,14 +13,9 @@ export const getUser = (async (app, { userData }) => ({
 })) satisfies RouteHandler<schemasRoutes.profile.GetUserResponse, { userData: UserData }>
 
 export const updateUser = (async (app, { userData, body }) => {
-    if (body.email && body.email !== userData.email) {
-        const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
-        if (userByEmail) throw new BadRequestError("User with such email already exists")
-    }
-
     if (body.username && body.username !== userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
-            where: { username: body.username }
+            where: { username: { contains: body.username, mode: "insensitive" } }
         })
         if (userByUsername) throw new BadRequestError("User with such username already exists")
     }
@@ -28,10 +23,7 @@ export const updateUser = (async (app, { userData, body }) => {
     const updatedUser = await app.prisma.user.update({
         where: { id: userData.id },
         data: {
-            email: body.email,
-            username: body.username,
-            confirmedEmail:
-                body.email === undefined || body.email === userData.email ? undefined : false
+            username: body.username
         },
         include: { role: true }
     })
@@ -75,64 +67,110 @@ export const deleteAvatar = (async (app, { userData }) => {
     return {}
 }) satisfies RouteHandler<schemasRoutes.profile.DeleteAvatarResponse, { userData: UserData }>
 
-export const sendConfirmationEmail = (async (app, { userData }) => {
+export const sendEmailUpdateEmailToOld = (async (app, { userData, body }) => {
     if (!userData.email) throw new BadRequestError("Email is not set")
-    if (userData.confirmedEmail) throw new BadRequestError("Email is already confirmed")
+    if (userData.email === body.email) throw new BadRequestError("Old and new emails match")
 
-    const token = createUuid()
+    await utils.deleteExpiredEmailUpdateTokens(app)
 
-    const emailConfirmationToken = await app.prisma.emailConfirmationToken.findFirst({
+    const tokenFrom = createUuid()
+    const tokenTo = createUuid()
+
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
         where: { userId: userData.id }
     })
 
-    if (emailConfirmationToken) {
-        await app.prisma.emailConfirmationToken.update({
-            where: { id: emailConfirmationToken.id },
-            data: { token, creationDate: new Date() }
+    if (emailUpdateToken) {
+        await app.prisma.emailUpdateToken.update({
+            where: { id: emailUpdateToken.id },
+            data: { tokenFrom, tokenTo, email: body.email, creationDate: new Date() }
         })
     } else {
-        await app.prisma.emailConfirmationToken.create({
-            data: { token, userId: userData.id, creationDate: new Date() }
+        await app.prisma.emailUpdateToken.create({
+            data: {
+                tokenFrom,
+                tokenTo,
+                email: body.email,
+                userId: userData.id,
+                creationDate: new Date()
+            }
         })
     }
 
-    const url = new URL(`/profile/email/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = "Email confirmation"
+    const url = new URL(`/profile/email/from/${tokenFrom}`, env.PUBLIC_BASE_URL).toString()
+    const subject = "Email update"
     const message = `
         <div>
             <h3>Dear ${userData.username}</h3>
         </div>
         <div>
-            <a href="${url}">Confirm Email</a>
+            <a href="${url}">Update email to <b>${body.email}</b></a>
         </div>
     `
     await sendEmail(userData.email, subject, message)
 
     return {}
 }) satisfies RouteHandler<
-    schemasRoutes.profile.SendConfirmationEmailResponse,
-    { userData: UserData }
+    schemasRoutes.profile.SendEmailUpdateEmailToOldResponse,
+    { userData: UserData; body: schemasRoutes.profile.SendEmailUpdateEmailToOldBody }
 >
 
-export const confirmEmail = (async (app, { params }) => {
-    await utils.deleteExpiredEmailConfirmationTokens(app)
+export const sendEmailUpdateEmailToNew = (async (app, { params }) => {
+    await utils.deleteExpiredEmailUpdateTokens(app)
 
-    const emailConfirmationToken = await app.prisma.emailConfirmationToken.findFirst({
-        where: { token: params.emailConfirmationToken }
-    })
-    if (!emailConfirmationToken) throw new BadRequestError("Email confirmation token expired")
-
-    await app.prisma.user.update({
-        where: { id: emailConfirmationToken.userId },
-        data: { confirmedEmail: true }
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
+        where: { tokenFrom: params.emailUpdateToken }
     })
 
-    await app.prisma.emailConfirmationToken.delete({ where: { id: emailConfirmationToken.id } })
+    if (!emailUpdateToken) throw new BadRequestError("Email update token expired")
+
+    const user = await app.prisma.user.findFirst({
+        where: { id: emailUpdateToken.userId }
+    })
+
+    if (!user) throw new InternalServerError("Unexpected error")
+
+    const { tokenTo } = emailUpdateToken
+
+    const url = new URL(`/profile/email/to/${tokenTo}`, env.PUBLIC_BASE_URL).toString()
+    const subject = "Email update"
+    const message = `
+        <div>
+            <h3>Dear ${user.username}</h3>
+        </div>
+        <div>
+            <a href="${url}">Update email</b></a>
+        </div>
+    `
+    await sendEmail(emailUpdateToken.email, subject, message)
 
     return {}
 }) satisfies RouteHandler<
-    schemasRoutes.profile.ConfirmEmailResponse,
-    { params: schemasRoutes.profile.ConfirmEmailParams }
+    schemasRoutes.profile.SendEmailUpdateEmailToNewResponse,
+    { params: schemasRoutes.profile.SendEmailUpdateEmailToNewParams }
+>
+
+export const updateEmail = (async (app, { params }) => {
+    await utils.deleteExpiredEmailUpdateTokens(app)
+
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
+        where: { tokenTo: params.emailUpdateToken }
+    })
+    if (!emailUpdateToken) throw new BadRequestError("Email update token expired")
+
+    await app.prisma.user.update({
+        where: { id: emailUpdateToken.userId },
+        data: {
+            email: emailUpdateToken.email
+        }
+    })
+
+    await app.prisma.emailUpdateToken.delete({ where: { id: emailUpdateToken.id } })
+
+    return {}
+}) satisfies RouteHandler<
+    schemasRoutes.profile.UpdateEmailResponse,
+    { params: schemasRoutes.profile.UpdateEmailParams }
 >
 
 export const changePassword = (async (app, { userData, body }) => {

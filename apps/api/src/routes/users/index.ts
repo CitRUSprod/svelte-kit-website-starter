@@ -42,7 +42,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             preHandler: app.createPreHandler([
                 app.setUserData,
                 app.verifyAuth,
-                app.verifyConfirmedEmail,
                 app.verifyPermission(constantsEnums.Permission.AssignRole)
             ]),
             async handler(req, reply) {
@@ -60,7 +59,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyConfirmedEmail,
             app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {
@@ -77,7 +75,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         preHandler: app.createPreHandler([
             app.setUserData,
             app.verifyAuth,
-            app.verifyConfirmedEmail,
             app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {

@@ -20,12 +20,6 @@ export function password() {
 
 export type Password = z.infer<ReturnType<typeof password>>
 
-export function confirmedEmail() {
-    return z.boolean()
-}
-
-export type ConfirmedEmail = z.infer<ReturnType<typeof confirmedEmail>>
-
 export function banned() {
     return z.boolean()
 }
@@ -54,7 +48,6 @@ export function user() {
             name: role.name(),
             permissions: z.array(role.permission())
         }),
-        confirmedEmail: confirmedEmail().nullable(),
         banned: banned(),
         registrationDate: registrationDate(),
         avatar: avatar().nullable()

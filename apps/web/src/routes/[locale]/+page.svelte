@@ -16,7 +16,7 @@
 
     function showRandomNumber() {
         const num = _.random(1, 100)
-        toasts.add("success", `${$t("routes.home.random-number") as string}: ${num}`)
+        toasts.add("info", `${$t("routes.home.random-number") as string}: ${num}`)
     }
 </script>
 

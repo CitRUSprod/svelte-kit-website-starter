@@ -1,11 +1,10 @@
 import { BadRequestError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
-import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import { UserData, PartialUserData, RouteHandler } from "$/types"
+import { UserData, RouteHandler } from "$/types"
 
-export const getUsers = (async (app, { userData, query }) => {
+export const getUsers = (async (app, { query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
         const where: Prisma.UserWhereInput = {
             email: { contains: query.email, mode: "insensitive" },
@@ -13,20 +12,13 @@ export const getUsers = (async (app, { userData, query }) => {
         }
 
         const totalItems = await app.prisma.user.count({ where })
-        const users: Array<PartialUserData> = await app.prisma.user.findMany({
+        const users = await app.prisma.user.findMany({
             skip,
             take,
             where,
             orderBy: { [query.sort]: query.order },
             include: { role: true }
         })
-
-        if (!userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)) {
-            for (const user of users) {
-                delete user.email
-                delete user.confirmedEmail
-            }
-        }
 
         return { totalItems, items: users.map(models.user.dto) }
     })
@@ -37,23 +29,8 @@ export const getUsers = (async (app, { userData, query }) => {
     { userData?: UserData; query: schemasRoutes.users.GetUsersQuery }
 >
 
-export const getUser = (async (app, { userData, params }) => {
-    const user: PartialUserData = await models.user.get(app, params.id)
-
-    function removeEmailFields() {
-        delete user.email
-        delete user.confirmedEmail
-    }
-
-    if (userData) {
-        const goodPermissions = userData.role.permissions.includes(
-            constantsEnums.Permission.GetOtherUserEmail
-        )
-        if (userData.id !== user.id && !goodPermissions) removeEmailFields()
-    } else {
-        removeEmailFields()
-    }
-
+export const getUser = (async (app, { params }) => {
+    const user = await models.user.get(app, params.id)
     return { payload: models.user.dto(user) }
 }) satisfies RouteHandler<
     schemasRoutes.users.GetUserResponse,

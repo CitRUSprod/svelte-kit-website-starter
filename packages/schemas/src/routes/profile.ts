@@ -22,7 +22,6 @@ export type GetUserResponse = z.infer<ReturnType<typeof getUserResponse>>
 
 export function updateUserBody() {
     return z.object({
-        email: models.user.email().optional(),
         username: models.user.username().optional()
     })
 }
@@ -83,45 +82,89 @@ export function deleteAvatarResponse() {
 
 export type DeleteAvatarResponse = z.infer<ReturnType<typeof deleteAvatarResponse>>
 
-// SendConfirmationEmail
+// SendEmailUpdateEmailToOld
 
-export function sendConfirmationEmailRequest() {
-    return z.void()
+export function sendEmailUpdateEmailToOldBody() {
+    return z.object({
+        email: models.user.email()
+    })
 }
 
-export type SendConfirmationEmailRequest = z.infer<ReturnType<typeof sendConfirmationEmailRequest>>
-
-export function sendConfirmationEmailResponse() {
-    return z.void()
-}
-
-export type SendConfirmationEmailResponse = z.infer<
-    ReturnType<typeof sendConfirmationEmailResponse>
+export type SendEmailUpdateEmailToOldBody = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToOldBody>
 >
 
-// ConfirmEmail
-
-export function confirmEmailParams() {
+export function sendEmailUpdateEmailToOldRequest() {
     return z.object({
-        emailConfirmationToken: models.emailConfirmationToken.token()
+        ...sendEmailUpdateEmailToOldBody().shape
     })
 }
 
-export type ConfirmEmailParams = z.infer<ReturnType<typeof confirmEmailParams>>
+export type SendEmailUpdateEmailToOldRequest = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToOldRequest>
+>
 
-export function confirmEmailRequest() {
-    return z.object({
-        ...confirmEmailParams().shape
-    })
-}
-
-export type ConfirmEmailRequest = z.infer<ReturnType<typeof confirmEmailRequest>>
-
-export function confirmEmailResponse() {
+export function sendEmailUpdateEmailToOldResponse() {
     return z.void()
 }
 
-export type ConfirmEmailResponse = z.infer<ReturnType<typeof confirmEmailResponse>>
+export type SendEmailUpdateEmailToOldResponse = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToOldResponse>
+>
+
+// SendEmailUpdateEmailToNew
+
+export function sendEmailUpdateEmailToNewParams() {
+    return z.object({
+        emailUpdateToken: common.token()
+    })
+}
+
+export type SendEmailUpdateEmailToNewParams = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToNewParams>
+>
+
+export function sendEmailUpdateEmailToNewRequest() {
+    return z.object({
+        ...sendEmailUpdateEmailToNewParams().shape
+    })
+}
+
+export type SendEmailUpdateEmailToNewRequest = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToNewRequest>
+>
+
+export function sendEmailUpdateEmailToNewResponse() {
+    return z.void()
+}
+
+export type SendEmailUpdateEmailToNewResponse = z.infer<
+    ReturnType<typeof sendEmailUpdateEmailToNewResponse>
+>
+
+// UpdateEmail
+
+export function updateEmailParams() {
+    return z.object({
+        emailUpdateToken: common.token()
+    })
+}
+
+export type UpdateEmailParams = z.infer<ReturnType<typeof updateEmailParams>>
+
+export function updateEmailRequest() {
+    return z.object({
+        ...updateEmailParams().shape
+    })
+}
+
+export type UpdateEmailRequest = z.infer<ReturnType<typeof updateEmailRequest>>
+
+export function updateEmailResponse() {
+    return z.void()
+}
+
+export type UpdateEmailResponse = z.infer<ReturnType<typeof updateEmailResponse>>
 
 // ChangePassword
 
@@ -180,7 +223,7 @@ export type SendPasswordResetEmailResponse = z.infer<
 
 export function resetPasswordParams() {
     return z.object({
-        passwordResetToken: models.passwordResetToken.token()
+        passwordResetToken: common.token()
     })
 }
 

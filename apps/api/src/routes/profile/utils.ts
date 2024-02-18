@@ -1,10 +1,10 @@
 import { FastifyInstance } from "fastify"
 import { enums } from "$/constants"
 
-export async function deleteExpiredEmailConfirmationTokens(app: FastifyInstance) {
-    await app.prisma.emailConfirmationToken.deleteMany({
+export async function deleteExpiredEmailUpdateTokens(app: FastifyInstance) {
+    await app.prisma.emailUpdateToken.deleteMany({
         where: {
-            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.EmailConfirmation * 1000) }
+            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.EmailUpdate * 1000) }
         }
     })
 }

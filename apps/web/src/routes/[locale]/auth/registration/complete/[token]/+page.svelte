@@ -3,11 +3,11 @@
 
     import { browser } from "$app/environment"
     import { goto } from "$app/navigation"
-    import { t, localePath } from "$lib/locales"
+    import { localePath } from "$lib/locales"
     import { toasts } from "$lib/stores"
 
     if (browser) {
-        toasts.add("success", $t("routes.profile.email.[token].email-verified-successfully"))
+        toasts.add("success", "Вы успешно зарегистрировались")
         goto($localePath("/"), {
             replaceState: true,
             invalidateAll: true
@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>{$t("routes.profile.email.[token].email-confirmation")}</title>
+    <title>Регистрация</title>
 </svelte:head>
 
-<Content.Default title={$t("routes.profile.email.[token].redirecting")} />
+<Content.Default title="Перенаправляем..." />

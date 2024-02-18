@@ -3,9 +3,9 @@ import * as api from "$lib/api"
 
 export async function load(e) {
     try {
-        await api.profile.confirmEmail({
+        await api.profile.sendEmailUpdateEmailToNew({
             headers: e.request.headers,
-            emailConfirmationToken: e.params.token
+            emailUpdateToken: e.params.token
         })
     } catch {
         redirect(302, `/${e.params.locale as string}`)

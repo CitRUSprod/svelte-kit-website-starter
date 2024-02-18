@@ -116,10 +116,7 @@
                     <th>ID</th>
                     <th>{$t("routes.users.avatar")}</th>
                     <th>{$t("routes.users.username")}</th>
-                    {#if $userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)}
-                        <th>{$t("routes.users.email")}</th>
-                        <th>{$t("routes.users.confirmed-email")}</th>
-                    {/if}
+                    <th>{$t("routes.users.email")}</th>
                     <th>{$t("routes.users.role")}</th>
                     <th>{$t("routes.users.banned")}</th>
                     <th>{$t("routes.users.registration-date")}</th>
@@ -142,14 +139,7 @@
                             </div>
                         </td>
                         <td>{user.username}</td>
-                        {#if user.email !== null}
-                            <td>{user.email}</td>
-                        {/if}
-                        {#if user.confirmedEmail !== null}
-                            <td>
-                                <Checkbox checked={user.confirmedEmail} readonly />
-                            </td>
-                        {/if}
+                        <td>{user.email ?? "-"}</td>
                         <td>{user.role.name}</td>
                         <td>
                             <Checkbox checked={user.banned} readonly />

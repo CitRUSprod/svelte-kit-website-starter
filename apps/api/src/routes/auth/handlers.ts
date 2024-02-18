@@ -10,29 +10,96 @@ import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
 import { ReplyCookie, RouteHandler } from "$/types"
-import { oAuthProviders } from "$/utils"
+import { oAuthProviders, sendEmail } from "$/utils"
 import * as utils from "./utils"
 
 export const register = (async (app, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
     if (userByEmail) throw new BadRequestError("User with such email already exists")
 
-    const userByUsername = await app.prisma.user.findFirst({ where: { username: body.username } })
+    const userByUsername = await app.prisma.user.findFirst({
+        where: { username: { contains: body.username, mode: "insensitive" } }
+    })
     if (userByUsername) throw new BadRequestError("User with such username already exists")
 
-    const password = await argon2.hash(body.password)
-    const user = await app.prisma.user.create({
-        data: { email: body.email, username: body.username, password, registrationDate: new Date() }
+    await utils.deleteExpiredRegistrationTokens(app)
+
+    const registrationTokenByEmail = await app.prisma.registrationToken.findFirst({
+        where: { email: body.email }
     })
 
-    return utils.login(app, { id: user.id }, false, true)
+    if (registrationTokenByEmail) {
+        throw new BadRequestError("Email has already been sent, check your email")
+    }
+
+    const registrationTokenByUsername = await app.prisma.registrationToken.findFirst({
+        where: { username: body.username }
+    })
+
+    if (registrationTokenByUsername) {
+        throw new BadRequestError("User with such username already exists")
+    }
+
+    const password = await argon2.hash(body.password)
+    const token = createUuid()
+
+    await app.prisma.registrationToken.create({
+        data: {
+            token,
+            email: body.email,
+            username: body.username,
+            password,
+            creationDate: new Date()
+        }
+    })
+
+    const url = new URL(`/auth/registration/complete/${token}`, env.PUBLIC_BASE_URL).toString()
+    const subject = "Registration"
+    const message = `
+        <div>
+            <h3>Dear ${body.username}</h3>
+        </div>
+        <div>
+            <a href="${url}">Complete registration</a>
+        </div>
+    `
+    await sendEmail(body.email, subject, message)
+
+    return {}
 }) satisfies RouteHandler<
     schemasRoutes.auth.RegisterResponse,
     { body: schemasRoutes.auth.RegisterBody }
 >
 
+export const completeRegistration = (async (app, { params }) => {
+    await utils.deleteExpiredRegistrationTokens(app)
+
+    const registrationToken = await app.prisma.registrationToken.findFirst({
+        where: { token: params.registrationToken }
+    })
+    if (!registrationToken) throw new BadRequestError("Registration token expired")
+
+    const user = await app.prisma.user.create({
+        data: {
+            email: registrationToken.email,
+            username: registrationToken.username,
+            password: registrationToken.password,
+            registrationDate: new Date()
+        }
+    })
+
+    await app.prisma.registrationToken.delete({ where: { id: registrationToken.id } })
+
+    return utils.login(app, { id: user.id }, false, true)
+}) satisfies RouteHandler<
+    schemasRoutes.auth.CompleteRegistrationResponse,
+    { params: schemasRoutes.auth.CompleteRegistrationParams }
+>
+
 export const oAuthRegister = (async (app, { params, body }) => {
-    const userByUsername = await app.prisma.user.findFirst({ where: { username: body.username } })
+    const userByUsername = await app.prisma.user.findFirst({
+        where: { username: { contains: body.username, mode: "insensitive" } }
+    })
     if (userByUsername) throw new BadRequestError("User with such username already exists")
 
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
