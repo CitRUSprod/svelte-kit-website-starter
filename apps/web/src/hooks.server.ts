@@ -8,7 +8,7 @@ import type { Handle } from "@sveltejs/kit"
 
 const supportedLocales = locales.get()
 
-const localeHandle: Handle = async ({ event: e, resolve }) => {
+const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     const { locale, route } = getLocaleAndRoute(e.url.pathname)
 
     if (!locale) {
@@ -25,9 +25,11 @@ const localeHandle: Handle = async ({ event: e, resolve }) => {
         return new Response(undefined, { status: 301, headers })
     }
 
+    const dark = e.cookies.get("darkTheme") === "true"
+
     const response = await resolve(e, {
         transformPageChunk({ html }) {
-            return html.replace(/<html.*>/, `<html lang="${locale}">`)
+            return html.replace(/<html.*>/, `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`)
         }
     })
 
@@ -66,7 +68,7 @@ const authHandle: Handle = async ({ event: e, resolve }) => {
     return response
 }
 
-export const handle = sequence(localeHandle, authHandle)
+export const handle = sequence(localeAndThemeHandle, authHandle)
 
 export function handleError({ error }) {
     if (
