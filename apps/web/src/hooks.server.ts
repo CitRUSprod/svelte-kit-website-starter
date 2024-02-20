@@ -8,21 +8,33 @@ import type { Handle } from "@sveltejs/kit"
 
 const supportedLocales = locales.get()
 
+function isSupportedLocale(locale: string | undefined): locale is string {
+    return !!locale && supportedLocales.includes(locale)
+}
+
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     const { locale, route } = getLocaleAndRoute(e.url.pathname)
 
     if (!locale) {
-        const lang = e.request.headers.get("accept-language") ?? ""
-        const localeCandidate = /^[a-z]{2}\b/.exec(lang)?.toString()
-        const isSupportedLocale = !!localeCandidate && supportedLocales.includes(localeCandidate)
+        const localeFromCookie = e.cookies.get("locale")
+
+        const acceptLanguage = e.request.headers.get("accept-language") ?? ""
+        const localeFromAcceptLanguage = /^[a-z]{2}\b/.exec(acceptLanguage)?.toString()
+
+        let localLocale: string
+
+        if (isSupportedLocale(localeFromCookie)) {
+            localLocale = localeFromCookie
+        } else if (isSupportedLocale(localeFromAcceptLanguage)) {
+            localLocale = localeFromAcceptLanguage
+        } else {
+            localLocale = defaultLocale
+        }
 
         const headers = new Headers()
-        headers.set(
-            "location",
-            `/${isSupportedLocale ? localeCandidate : defaultLocale}${route}${e.url.search}`
-        )
+        headers.set("location", `/${localLocale}${route}${e.url.search}`)
 
-        return new Response(undefined, { status: 301, headers })
+        return new Response(undefined, { status: 302, headers })
     }
 
     const dark = e.cookies.get("darkTheme") === "true"
@@ -32,6 +44,8 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
             return html.replace(/<html.*>/, `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`)
         }
     })
+
+    response.headers.set("set-cookie", `locale=${locale}; Path=/; Max-Age=${100 * 24 * 60 * 60}`)
 
     return response
 }

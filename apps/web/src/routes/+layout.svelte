@@ -1,9 +1,12 @@
 <script lang="ts">
     import { PageProgressBar, ToastContainer } from "./_components"
 
+    import { watch } from "svelte-legos"
+    import Cookies from "js-cookie"
     import { browser } from "$app/environment"
     import { invalidateAll, afterNavigate } from "$app/navigation"
     import { darkTheme, userData } from "$lib/stores"
+    import { currentLocale } from "$lib/locales"
 
     import "uno.css"
     import "@unocss/reset/tailwind.css"
@@ -15,6 +18,13 @@
     if (browser) {
         darkTheme.sync()
     }
+
+    watch(currentLocale, locale => {
+        Cookies.set("locale", locale, {
+            path: "/",
+            expires: 100
+        })
+    })
 
     afterNavigate(n => {
         if (n.from && n.to) {

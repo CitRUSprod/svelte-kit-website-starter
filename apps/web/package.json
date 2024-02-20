@@ -19,6 +19,7 @@
         "@sveltejs/kit": "2.5.0",
         "@sveltejs/vite-plugin-svelte": "3.0.2",
         "@total-typescript/ts-reset": "0.5.1",
+        "@types/js-cookie": "3.0.6",
         "@types/lodash-es": "4.17.12",
         "@types/luxon": "3.4.2",
         "@types/node": "20.11.16",
@@ -49,11 +50,13 @@
         "@macfja/svelte-persistent-store": "2.4.1",
         "axios": "1.6.7",
         "classnames": "2.5.1",
+        "js-cookie": "3.0.5",
         "lodash-es": "4.17.21",
         "luxon": "3.4.4",
         "nprogress": "0.2.0",
         "set-cookie-parser": "2.6.0",
         "socket.io-client": "4.7.4",
+        "svelte-legos": "0.2.2",
         "sveltekit-i18n": "2.4.2",
         "tslib": "2.6.2"
     }
