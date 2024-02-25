@@ -328,6 +328,9 @@ importers:
       '@unocss/reset':
         specifier: 0.58.5
         version: 0.58.5
+      concurrently:
+        specifier: 8.2.2
+        version: 8.2.2
       histoire:
         specifier: 0.17.9
         version: 0.17.9(@types/node@20.11.16)(vite@5.0.12)
