@@ -1,52 +1,49 @@
+import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
+import { initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
 import * as schemasModels from "@local/schemas/models"
-import { defaultLocale, locales } from "$lib/locales"
-import { getLocaleAndRoute, setCookies, uniqCookies } from "$lib/utils"
+import { base } from "$app/paths"
+import { getPathnameWithoutBase, type Locales } from "$i18n/helpers"
+import { detectLocale, i18n, isLocale } from "$i18n/i18n-util"
+import { loadAllLocales } from "$i18n/i18n-util.sync"
+import { setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
-import type { Handle } from "@sveltejs/kit"
+loadAllLocales()
+const l = i18n()
 
-const supportedLocales = locales.get()
-
-function isSupportedLocale(locale: string | undefined): locale is string {
-    return !!locale && supportedLocales.includes(locale)
+function getPreferredLocale({ request }: RequestEvent) {
+    const acceptLanguageDetector = initAcceptLanguageHeaderDetector(request)
+    return detectLocale(acceptLanguageDetector)
 }
 
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
-    const { locale, route } = getLocaleAndRoute(e.url.pathname)
+    const [, lang] = getPathnameWithoutBase(e.url).split("/")
 
-    if (!locale) {
-        const localeFromCookie = e.cookies.get("locale")
-
-        const acceptLanguage = e.request.headers.get("accept-language") ?? ""
-        const localeFromAcceptLanguage = /^[a-z]{2}\b/.exec(acceptLanguage)?.toString()
-
-        let localLocale: string
-
-        if (isSupportedLocale(localeFromCookie)) {
-            localLocale = localeFromCookie
-        } else if (isSupportedLocale(localeFromAcceptLanguage)) {
-            localLocale = localeFromAcceptLanguage
-        } else {
-            localLocale = defaultLocale
-        }
-
-        const headers = new Headers()
-        headers.set("location", `/${localLocale}${route}${e.url.search}`)
-
-        return new Response(undefined, { status: 302, headers })
+    if (!lang) {
+        const locale = getPreferredLocale(e)
+        redirect(307, `${base}/${String(locale)}`)
     }
+
+    const locale = isLocale(lang) ? (lang as Locales) : getPreferredLocale(e)
+    const ll = l[locale]
+
+    e.locals.locale = locale
+    e.locals.ll = ll
 
     const dark = e.cookies.get("darkTheme") === "true"
 
     const response = await resolve(e, {
         transformPageChunk({ html }) {
-            return html.replace(/<html.*>/, `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`)
+            return html.replace(
+                /<html.*>/,
+                `<html lang="${String(locale)}"${dark ? ' class="dark"' : ""}>`
+            )
         }
     })
 
     const setCookie = response.headers.get("set-cookie")
-    const newCookie = `locale=${locale}; Path=/; Max-Age=${100 * 24 * 60 * 60}`
+    const newCookie = `locale=${String(locale)}; Path=/; Max-Age=${100 * 24 * 60 * 60}`
     response.headers.set("set-cookie", setCookie ? `${setCookie}, ${newCookie}` : newCookie)
 
     return response

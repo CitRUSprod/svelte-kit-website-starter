@@ -1,4 +1,6 @@
-import { pageSearchParams } from "$lib/stores"
+import { get as storeGet } from "svelte/store"
+import { page } from "$app/stores"
+import { pushState } from "$app/navigation"
 
 export function get<T extends Record<string, any>>(
     params: URLSearchParams,
@@ -46,7 +48,5 @@ export function setForCurrentPage(query: Record<string, any>) {
         }
     }
 
-    pageSearchParams.set(url.search)
-
-    history.pushState(null, "", url.toString())
+    pushState(url, storeGet(page).state)
 }

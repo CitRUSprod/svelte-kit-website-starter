@@ -5,13 +5,15 @@
     import Cookies from "js-cookie"
     import { browser } from "$app/environment"
     import { invalidateAll, afterNavigate } from "$app/navigation"
+    import { currentLocale, setLocale } from "$i18n/helpers"
     import { darkTheme, userData } from "$lib/stores"
-    import { currentLocale } from "$lib/locales"
 
     import "uno.css"
     import "@unocss/reset/tailwind.css"
 
     export let data
+
+    setLocale(data.locale)
 
     $: $userData = data.userData
 

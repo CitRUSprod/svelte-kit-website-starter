@@ -1,6 +1,6 @@
 import { AxiosError, type AxiosResponse } from "axios"
 import { writable, get } from "svelte/store"
-import { t } from "$lib/locales"
+import { ll } from "$i18n/helpers"
 import { toasts } from "$lib/stores"
 
 interface ApiError {
@@ -71,8 +71,7 @@ export function createQueryController<T, K extends QueryControllerParams | undef
                 options.onError ??= error => toasts.add("error", error.message)
                 await options.onError(err.response.data)
             } else {
-                options.onUnexpectedError ??= () =>
-                    toasts.add("error", get(t)("global.error-occurred"))
+                options.onUnexpectedError ??= () => toasts.add("error", get(ll).errorOccurred())
                 await options.onUnexpectedError(err)
             }
         } else {

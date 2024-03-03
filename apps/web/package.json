@@ -3,12 +3,14 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "concurrently -k -n build,types -c blue,magenta -p [{name}] pnpm:dev:build pnpm:dev:check-types",
+        "dev": "concurrently -k -n i18n,build,types -c green,blue,magenta -p [{name}] pnpm:dev:i18n pnpm:dev:build pnpm:dev:check-types",
         "dev:build": "vite dev",
         "dev:check-types": "pnpm check-types --watch",
+        "dev:i18n": "typesafe-i18n",
         "build": "vite build",
         "start": "PORT=6701 node dist",
         "check-types": "svelte-check --tsconfig tsconfig.json",
+        "i18n": "typesafe-i18n --no-watch",
         "stories": "histoire dev"
     },
     "devDependencies": {
@@ -60,7 +62,7 @@
         "set-cookie-parser": "2.6.0",
         "socket.io-client": "4.7.4",
         "svelte-legos": "0.2.2",
-        "sveltekit-i18n": "2.4.2",
-        "tslib": "2.6.2"
+        "tslib": "2.6.2",
+        "typesafe-i18n": "5.26.2"
     }
 }

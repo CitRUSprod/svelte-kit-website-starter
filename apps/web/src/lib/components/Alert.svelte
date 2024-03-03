@@ -3,7 +3,7 @@
 
     import { createEventDispatcher } from "svelte"
     import cn from "classnames"
-    import { t } from "$lib/locales"
+    import { ll } from "$i18n/helpers"
     import { getElementBasicVariantObject } from "$lib/utils"
 
     import type { ElementBasicVariant } from "$lib/types"
@@ -22,13 +22,13 @@
     function getTextByVariant(localVariant: string) {
         switch (localVariant) {
             case "success":
-                return $t("components.alert.success")
+                return $ll.$$alert.success()
             case "error":
-                return $t("components.alert.error")
+                return $ll.$$alert.error()
             case "warning":
-                return $t("components.alert.warning")
+                return $ll.$$alert.warning()
             default:
-                return $t("components.alert.info")
+                return $ll.$$alert.info()
         }
     }
 

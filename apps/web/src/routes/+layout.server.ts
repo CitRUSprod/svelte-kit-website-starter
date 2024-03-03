@@ -1,3 +1,3 @@
 export function load(e) {
-    return { userData: e.locals.userData }
+    return { locale: e.locals.locale, userData: e.locals.userData }
 }

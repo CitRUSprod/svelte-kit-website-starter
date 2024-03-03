@@ -1,7 +1,0 @@
-{
-    "cancel": "Cancel",
-    "remove": "Remove",
-    "role-removed-successfully": "Role successfully removed",
-    "role-removing": "Removing a role",
-    "role-removing-question": "Are you sure you want to remove <b>{{role}}</b> role?"
-}

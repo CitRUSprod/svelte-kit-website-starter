@@ -8,6 +8,9 @@ const config = {
     preprocess: sequentialPreprocessor([sveltePreprocess(), preprocessMeltUI()]),
     kit: {
         adapter: adapterNode({ out: "dist" }),
+        alias: {
+            $i18n: "src/i18n"
+        },
         env: {
             dir: "../.."
         }

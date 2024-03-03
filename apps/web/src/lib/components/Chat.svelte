@@ -3,7 +3,7 @@
     import TextField from "./TextField.svelte"
 
     import { tick, createEventDispatcher } from "svelte"
-    import { t } from "$lib/locales"
+    import { ll } from "$i18n/helpers"
 
     import type { ChatMessage } from "$lib/types"
 
@@ -64,14 +64,14 @@
     {#if !hideControls}
         <div>
             <TextField
-                placeholder={$t("components.chat.message")}
+                placeholder={$ll.$$chat.message()}
                 bind:value={message}
                 on:keypress={onEnter}
             />
         </div>
         <div>
             <Button class="u:w-full" disabled={!trimmedMessage} on:click={send}>
-                {$t("components.chat.send")}
+                {$ll.$$chat.send()}
             </Button>
         </div>
     {/if}
