@@ -1,6 +1,4 @@
-import { get as storeGet } from "svelte/store"
-import { page } from "$app/stores"
-import { pushState } from "$app/navigation"
+import { goto } from "$app/navigation"
 
 export function get<T extends Record<string, any>>(
     params: URLSearchParams,
@@ -48,5 +46,5 @@ export function setForCurrentPage(query: Record<string, any>) {
         }
     }
 
-    pushState(url, storeGet(page).state)
+    goto(url, { keepFocus: true, noScroll: true })
 }

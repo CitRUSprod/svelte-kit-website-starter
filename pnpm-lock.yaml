@@ -255,9 +255,6 @@ importers:
       luxon:
         specifier: 3.4.4
         version: 3.4.4
-      nprogress:
-        specifier: 0.2.0
-        version: 0.2.0
       set-cookie-parser:
         specifier: 2.6.0
         version: 2.6.0
@@ -289,6 +286,9 @@ importers:
       '@melt-ui/svelte':
         specifier: 0.71.2
         version: 0.71.2(svelte@4.2.10)
+      '@prgm/sveltekit-progress-bar':
+        specifier: 2.0.0
+        version: 2.0.0(@sveltejs/kit@2.5.0)(svelte@4.2.10)
       '@sveltejs/adapter-node':
         specifier: 4.0.1
         version: 4.0.1(@sveltejs/kit@2.5.0)
@@ -313,9 +313,6 @@ importers:
       '@types/node':
         specifier: 20.11.16
         version: 20.11.16
-      '@types/nprogress':
-        specifier: 0.2.3
-        version: 0.2.3
       '@types/set-cookie-parser':
         specifier: 2.4.7
         version: 2.4.7
@@ -2588,6 +2585,17 @@ packages:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
     dev: true
 
+  /@prgm/sveltekit-progress-bar@2.0.0(@sveltejs/kit@2.5.0)(svelte@4.2.10):
+    resolution: {integrity: sha512-N9SlYDfpqaY9MyG85Wk38R9/BipIUdTJ4U7LVPY5cFn5cwGZrVA1lsXC3I2kmGtwz+DF6v/DvySkYOWCPmJV4A==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^4.0.0
+    dependencies:
+      '@sveltejs/kit': 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.0.12)
+      svelte: 4.2.10
+    dev: true
+
   /@prisma/client@5.9.1(prisma@5.9.1):
     resolution: {integrity: sha512-caSOnG4kxcSkhqC/2ShV7rEoWwd3XrftokxJqOCMVvia4NYV/TPtJlS9C2os3Igxw/Qyxumj9GBQzcStzECvtQ==}
     engines: {node: '>=16.13'}
@@ -3119,10 +3127,6 @@ packages:
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
-    dev: true
-
-  /@types/nprogress@0.2.3:
-    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
     dev: true
 
   /@types/pug@2.0.10:
@@ -6977,10 +6981,6 @@ packages:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
-    dev: false
-
-  /nprogress@0.2.0:
-    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
     dev: false
 
   /nwsapi@2.2.7:

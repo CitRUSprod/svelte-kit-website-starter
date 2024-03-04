@@ -3,7 +3,7 @@
 
     import cn from "classnames"
     import { page } from "$app/stores"
-    import { pushState, invalidateAll, afterNavigate } from "$app/navigation"
+    import { invalidateAll, afterNavigate } from "$app/navigation"
     import {
         currentLocale,
         locales,
@@ -16,8 +16,8 @@
     let klass: string | undefined = undefined
     export { klass as class }
 
-    async function switchLocale(newLocale: Locales) {
-        if ($currentLocale === newLocale) return
+    async function switchLocale(newLocale: Locales | undefined) {
+        if (!newLocale || $currentLocale === newLocale) return
         await loadLocaleAsync(newLocale)
         document.querySelector("html")!.setAttribute("lang", newLocale)
         setLocale(newLocale)
@@ -25,11 +25,8 @@
     }
 
     afterNavigate(() => {
-        if ($page.params.locale) {
-            const locale = $page.params.locale as Locales
-            switchLocale(locale)
-            pushState(replaceLocaleInUrl($page.url, locale), { ...$page.state, locale })
-        }
+        const locale = $page.params.locale as Locales | undefined
+        switchLocale(locale)
     })
 </script>
 

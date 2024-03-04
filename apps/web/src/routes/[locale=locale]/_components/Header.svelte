@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { Button, LocaleSwitcher } from "$lib/components"
+    import { Button } from "$lib/components"
+    import { LocaleSwitcher } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
     import { ll, localePath } from "$i18n/helpers"

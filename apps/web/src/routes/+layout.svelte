@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { PageProgressBar, ToastContainer } from "./_components"
+    import { ProgressBar } from "@prgm/sveltekit-progress-bar"
+    import { ToastContainer } from "./_components"
 
     import { watch } from "svelte-legos"
     import Cookies from "js-cookie"
     import { browser } from "$app/environment"
-    import { invalidateAll, afterNavigate } from "$app/navigation"
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { darkTheme, userData } from "$lib/stores"
 
@@ -28,19 +28,12 @@
         })
     })
 
-    afterNavigate(n => {
-        if (n.from && n.to) {
-            const from = `${n.from.url.origin}${n.from.url.pathname}`
-            const to = `${n.to.url.origin}${n.to.url.pathname}`
-
-            if (from === to) {
-                invalidateAll()
-            }
-        }
-    })
+    function defineAny(value: any) {
+        return value
+    }
 </script>
 
-<PageProgressBar />
+<ProgressBar class={defineAny("u:text-green-500")} />
 <slot />
 <ToastContainer />
 

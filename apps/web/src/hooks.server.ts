@@ -3,13 +3,19 @@ import { sequence } from "@sveltejs/kit/hooks"
 import { initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
 import * as schemasModels from "@local/schemas/models"
 import { base } from "$app/paths"
-import { getPathnameWithoutBase, type Locales } from "$i18n/helpers"
-import { detectLocale, i18n, isLocale } from "$i18n/i18n-util"
-import { loadAllLocales } from "$i18n/i18n-util.sync"
+import {
+    getPathnameWithoutBase,
+    detectLocale,
+    i18n,
+    isLocale,
+    loadAllLocales,
+    type Locales
+} from "$i18n/helpers"
 import { setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
 loadAllLocales()
+
 const l = i18n()
 
 function getPreferredLocale({ request }: RequestEvent) {

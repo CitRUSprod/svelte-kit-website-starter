@@ -1,4 +1,4 @@
-import { loadLocaleAsync } from "$i18n/i18n-util.async"
+import { loadLocaleAsync } from "$i18n/helpers"
 
 export async function load(e) {
     const { locale, userData } = e.data

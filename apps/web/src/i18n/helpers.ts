@@ -1,13 +1,24 @@
 import { derived } from "svelte/store"
 import { base } from "$app/paths"
 import ll, { locale as currentLocale, setLocale } from "./i18n-svelte"
-import { locales } from "./i18n-util"
+import { locales, detectLocale, i18n, isLocale } from "./i18n-util"
 import { loadLocaleAsync } from "./i18n-util.async"
+import { loadAllLocales } from "./i18n-util.sync"
 
-import type { Locales } from "$i18n/i18n-types"
+import type { Locales, TranslationFunctions } from "$i18n/i18n-types"
 
-export { ll, currentLocale, locales, setLocale, loadLocaleAsync }
-export type { Locales }
+export {
+    ll,
+    currentLocale,
+    locales,
+    setLocale,
+    loadLocaleAsync,
+    loadAllLocales,
+    detectLocale,
+    i18n,
+    isLocale
+}
+export type { Locales, TranslationFunctions }
 
 export const localePath = derived(
     currentLocale,
@@ -18,15 +29,8 @@ export function getPathnameWithoutBase(url: URL) {
     return url.pathname.replace(new RegExp(`^${base}`), "")
 }
 
-export function replaceLocaleInUrl(url: URL, locale: string, full = false) {
+export function replaceLocaleInUrl(url: URL, locale: string) {
     const [, , ...rest] = getPathnameWithoutBase(url).split("/")
     const newPathname = `/${[locale, ...rest].join("/")}`
-
-    if (!full) {
-        return `${newPathname}${url.search}`
-    }
-
-    const newUrl = new URL(url.toString())
-    newUrl.pathname = base + newPathname
-    return newUrl.toString()
+    return `${newPathname}${url.search}`
 }
