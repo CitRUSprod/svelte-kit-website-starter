@@ -18,20 +18,31 @@ loadAllLocales()
 
 const l = i18n()
 
-function getPreferredLocale({ request }: RequestEvent) {
-    const acceptLanguageDetector = initAcceptLanguageHeaderDetector(request)
+function getPreferredLocale(e: RequestEvent) {
+    const acceptLanguageDetector = initAcceptLanguageHeaderDetector(e.request)
     return detectLocale(acceptLanguageDetector)
 }
 
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
-    const [, lang] = getPathnameWithoutBase(e.url).split("/")
+    const [, locale, ...pathname] = getPathnameWithoutBase(e.url).split("/")
 
-    if (!lang) {
-        const locale = getPreferredLocale(e)
-        redirect(307, `${base}/${String(locale)}`)
+    if (!(locale && isLocale(locale))) {
+        const localeFromCookie = e.cookies.get("locale")
+
+        let localLocale: Locales
+
+        if (localeFromCookie && isLocale(localeFromCookie)) {
+            localLocale = localeFromCookie
+        } else {
+            localLocale = getPreferredLocale(e)
+        }
+
+        redirect(
+            307,
+            `${base}/${localLocale}${locale ? `/${locale}` : ""}${pathname.length > 0 ? `/${pathname.join("/")}` : ""}${e.url.search}`
+        )
     }
 
-    const locale = isLocale(lang) ? (lang as Locales) : getPreferredLocale(e)
     const ll = l[locale]
 
     e.locals.locale = locale
@@ -41,15 +52,12 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
 
     const response = await resolve(e, {
         transformPageChunk({ html }) {
-            return html.replace(
-                /<html.*>/,
-                `<html lang="${String(locale)}"${dark ? ' class="dark"' : ""}>`
-            )
+            return html.replace(/<html.*>/, `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`)
         }
     })
 
     const setCookie = response.headers.get("set-cookie")
-    const newCookie = `locale=${String(locale)}; Path=/; Max-Age=${100 * 24 * 60 * 60}`
+    const newCookie = `locale=${locale}; Path=/; Max-Age=${100 * 24 * 60 * 60}`
     response.headers.set("set-cookie", setCookie ? `${setCookie}, ${newCookie}` : newCookie)
 
     return response
