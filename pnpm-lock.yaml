@@ -243,6 +243,9 @@ importers:
       axios:
         specifier: 1.6.7
         version: 1.6.7
+      bits-ui:
+        specifier: 0.19.5
+        version: 0.19.5(svelte@4.2.10)
       classnames:
         specifier: 2.5.1
         version: 2.5.1
@@ -280,12 +283,6 @@ importers:
       '@local/configs':
         specifier: workspace:*
         version: link:../../packages/configs
-      '@melt-ui/pp':
-        specifier: 0.3.0
-        version: 0.3.0(@melt-ui/svelte@0.71.2)(svelte@4.2.10)
-      '@melt-ui/svelte':
-        specifier: 0.71.2
-        version: 0.71.2(svelte@4.2.10)
       '@prgm/sveltekit-progress-bar':
         specifier: 2.0.0
         version: 2.0.0(@sveltejs/kit@2.5.0)(svelte@4.2.10)
@@ -343,9 +340,6 @@ importers:
       svelte-preprocess:
         specifier: 5.1.3
         version: 5.1.3(@babel/core@7.23.9)(postcss@8.4.33)(svelte@4.2.10)(typescript@5.3.3)
-      svelte-sequential-preprocessor:
-        specifier: 2.0.1
-        version: 2.0.1
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.11.16)(typescript@5.3.3)
@@ -1488,18 +1482,18 @@ packages:
     resolution: {integrity: sha512-O0WKDOo0yhJuugCx6trZQj5jVJ9yR0ystG2JaNAemYUWce+pmM6WUEFIibnWyEJKdrDxhm75NoSRME35FNaM/Q==}
     dependencies:
       '@floating-ui/utils': 0.2.1
-    dev: true
+    dev: false
 
   /@floating-ui/dom@1.5.4:
     resolution: {integrity: sha512-jByEsHIY+eEdCjnTVu+E3ephzTOzkQ8hgUfGwos+bg7NlH33Zc5uO+QHz1mrQUOgIKKDD1RtS201P9NvAfq3XQ==}
     dependencies:
       '@floating-ui/core': 1.5.3
       '@floating-ui/utils': 0.2.1
-    dev: true
+    dev: false
 
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
-    dev: true
+    dev: false
 
   /@histoire/app@0.17.10(vite@5.0.12):
     resolution: {integrity: sha512-WN28m1N8x3WkVzzePYekrwgUQNixyUrLdyITpLk3/scFqsDSByG0nsHKi1MAMMHaVxyC9dcdQF4j50QdVWCZgQ==}
@@ -1804,7 +1798,7 @@ packages:
     resolution: {integrity: sha512-LUQIfwU9e+Fmutc/DpRTGXSdgYZLBegi4wygCWDSVmUdLTaMHsQyASDiJtREwanwKuQLq0hY76fCJ9J/9I2xOQ==}
     dependencies:
       '@swc/helpers': 0.5.3
-    dev: true
+    dev: false
 
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1913,21 +1907,8 @@ packages:
       - supports-color
     dev: false
 
-  /@melt-ui/pp@0.3.0(@melt-ui/svelte@0.71.2)(svelte@4.2.10):
-    resolution: {integrity: sha512-b07Bdh8l2KcwKVCXOY+SoBw1dk9eWvQfMSi6SoacpRVyVmmfpi0kV4oGt3HYF0tUCB3sEmVicxse50ZzZxEzEA==}
-    engines: {pnpm: '>=8.6.3'}
-    peerDependencies:
-      '@melt-ui/svelte': '>= 0.29.0'
-      svelte: ^3.55.0 || ^4.0.0 || ^5.0.0-next.1
-    dependencies:
-      '@melt-ui/svelte': 0.71.2(svelte@4.2.10)
-      estree-walker: 3.0.3
-      magic-string: 0.30.5
-      svelte: 4.2.10
-    dev: true
-
-  /@melt-ui/svelte@0.71.2(svelte@4.2.10):
-    resolution: {integrity: sha512-GDUErhAphEoEOLpcBjQ84BgzRR6M3344fQE4QYFffwT7aedWak7CvNsECgeig1Y5xvfDmeEaFnGlOQXIBucJYw==}
+  /@melt-ui/svelte@0.75.3(svelte@4.2.10):
+    resolution: {integrity: sha512-EA2IKn7w9qtzO/M7VEENpphQ9A4az+QDMQbA8SJLuKyu+S8NWliln5y9vvmnx9dZF8GtKtUKuxpwRNyPg5LAOg==}
     peerDependencies:
       svelte: '>=3 <5'
     dependencies:
@@ -1938,7 +1919,7 @@ packages:
       focus-trap: 7.5.4
       nanoid: 5.0.5
       svelte: 4.2.10
-    dev: true
+    dev: false
 
   /@napi-rs/wasm-runtime@0.1.1:
     resolution: {integrity: sha512-ATj9ua659JgrkICjJscaeZdmPr44cb/KFjNWuD0N6pux0SpzaM7+iOuuK11mAnQM2N9q0DT4REu6NkL8ZEhopw==}
@@ -2991,7 +2972,7 @@ packages:
     resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
     dependencies:
       tslib: 2.6.2
-    dev: true
+    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -3861,6 +3842,17 @@ packages:
   /birpc@0.1.1:
     resolution: {integrity: sha512-B64AGL4ug2IS2jvV/zjTYDD1L+2gOJTT7Rv+VaK7KVQtQOo/xZbCDsh7g727ipckmU+QJYRqo5RcifVr0Kgcmg==}
     dev: true
+
+  /bits-ui@0.19.5(svelte@4.2.10):
+    resolution: {integrity: sha512-jrt0pGZdixtl27VrfzLj5yJxha29CK+6nClZZSoJCL5DlXFT1sluF9NnOSMP48D3kczR5YjpArvCe0BEnGq4jA==}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      '@internationalized/date': 3.5.1
+      '@melt-ui/svelte': 0.75.3(svelte@4.2.10)
+      nanoid: 5.0.5
+      svelte: 4.2.10
+    dev: false
 
   /bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -5391,7 +5383,7 @@ packages:
     resolution: {integrity: sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==}
     dependencies:
       tabbable: 6.2.0
-    dev: true
+    dev: false
 
   /follow-redirects@1.15.4:
     resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
@@ -6867,7 +6859,7 @@ packages:
     resolution: {integrity: sha512-/Veqm+QKsyMY3kqi4faWplnY1u+VuKO3dD2binyPIybP31DRO29bPF+1mszgLnrR2KqSLceFLBNw0zmvDzN1QQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
-    dev: true
+    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -8426,14 +8418,6 @@ packages:
       typescript: 5.3.3
     dev: true
 
-  /svelte-sequential-preprocessor@2.0.1:
-    resolution: {integrity: sha512-N5JqlBni6BzElxmuFrOPxOJnjsxh1cFDACLEVKs8OHBcx8ZNRO1p5SxuQex1m3qbLzAC8G99EHeWcxGkjyKjLQ==}
-    engines: {node: '>=16'}
-    dependencies:
-      svelte: 4.2.10
-      tslib: 2.6.2
-    dev: true
-
   /svelte@4.2.10:
     resolution: {integrity: sha512-Ep06yCaCdgG1Mafb/Rx8sJ1QS3RW2I2BxGp2Ui9LBHSZ2/tO/aGLc5WqPjgiAP6KAnLJGaIr/zzwQlOo1b8MxA==}
     engines: {node: '>=16'}
@@ -8471,7 +8455,7 @@ packages:
 
   /tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
-    dev: true
+    dev: false
 
   /table@6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}
