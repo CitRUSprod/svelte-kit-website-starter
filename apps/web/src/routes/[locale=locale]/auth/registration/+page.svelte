@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { Content, Button, TextField } from "$lib/components"
+    import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
 
+    import * as constantsEnums from "@local/constants/enums"
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
@@ -105,6 +106,12 @@
             >
                 {$ll.$.$auth.$registration.register()}
             </Button>
+        </div>
+        <div>
+            <h3>{$ll.$.$auth.$registration.orRegisterWith()}</h3>
+        </div>
+        <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
+            <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
         </div>
     </div>
 </Content.Center>

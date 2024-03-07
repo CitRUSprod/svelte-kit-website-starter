@@ -72,6 +72,7 @@ const en = {
                 register: "Register",
                 registration: "Registration",
                 username: "Username",
+                orRegisterWith: "or register with",
                 confirmationEmailSent: "A confirmation email was sent to your email address",
 
                 $complete: {

@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { Content, Button, TextField } from "$lib/components"
+    import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
 
+    import * as constantsEnums from "@local/constants/enums"
     import { invalidateAll } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
@@ -90,13 +91,7 @@
             <h3>{$ll.$.$auth.$login.orLoginWith()}</h3>
         </div>
         <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
-            <Button
-                class="u:bg-purple-800! u:hover:bg-purple-700! u:active:bg-purple-900!"
-                href={$localePath("/auth/login/twitch")}
-            >
-                <i class="u:i-mdi-twitch u:text-xl u:mr-1" />
-                <span>Twitch</span>
-            </Button>
+            <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
         </div>
     </div>
 </Content.Center>
