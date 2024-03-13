@@ -3,12 +3,14 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "concurrently -k -n build,types -c blue,magenta -p [{name}] pnpm:dev:build pnpm:dev:check-types",
+        "dev": "concurrently -k -n i18n,build,types -c green,blue,magenta -p [{name}] pnpm:dev:i18n pnpm:dev:build pnpm:dev:check-types",
         "dev:build": "tsup --config tsup/dev.ts --watch --onSuccess \"NODE_OPTIONS=--enable-source-maps pnpm start\"",
         "dev:check-types": "pnpm check-types -w --preserveWatchOutput",
+        "dev:i18n": "typesafe-i18n",
         "build": "tsup --config tsup/prod.ts",
         "start": "node dist/main",
         "check-types": "tsc --pretty --noEmit",
+        "i18n": "typesafe-i18n --no-watch",
         "prisma": "dotenv -e ../../.env -- prisma",
         "prisma:generate": "pnpm prisma generate",
         "prisma:studio": "pnpm prisma studio",
@@ -17,7 +19,8 @@
         "prisma:migrations:run": "pnpm prisma:migrations deploy",
         "prisma:migrations:reset": "pnpm prisma:migrations reset",
         "prisma:seeds:run": "pnpm prisma db seed",
-        "prepare": "pnpm prisma:generate"
+        "prepare": "pnpm prisma:generate",
+        "typesafe-i18n": "typesafe-i18n"
     },
     "prisma": {
         "schema": "src/prisma/schema.prisma",
@@ -70,6 +73,7 @@
         "socket.io": "4.7.4",
         "socketio-jwt-auth": "0.2.1",
         "tslib": "2.6.2",
+        "typesafe-i18n": "5.26.2",
         "uuid": "9.0.1"
     }
 }

@@ -170,6 +170,9 @@ importers:
       tslib:
         specifier: 2.6.2
         version: 2.6.2
+      typesafe-i18n:
+        specifier: 5.26.2
+        version: 5.26.2(typescript@5.3.3)
       uuid:
         specifier: 9.0.1
         version: 9.0.1

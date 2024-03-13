@@ -4,7 +4,7 @@ import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
 import { UserData, RouteHandler } from "$/types"
 
-export const getUsers = (async (app, { query }) => {
+export const getUsers = (async (app, ll, { query }) => {
     const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
         const where: Prisma.UserWhereInput = {
             email: { contains: query.email, mode: "insensitive" },
@@ -29,7 +29,7 @@ export const getUsers = (async (app, { query }) => {
     { userData?: UserData; query: schemasRoutes.users.GetUsersQuery }
 >
 
-export const getUser = (async (app, { params }) => {
+export const getUser = (async (app, ll, { params }) => {
     const user = await models.user.get(app, params.id)
     return { payload: models.user.dto(user) }
 }) satisfies RouteHandler<
@@ -37,12 +37,12 @@ export const getUser = (async (app, { params }) => {
     { userData?: UserData; params: schemasRoutes.users.GetUserParams }
 >
 
-export const assignRoleToUser = (async (app, { params }) => {
+export const assignRoleToUser = (async (app, ll, { params }) => {
     const user = await models.user.get(app, params.id)
     const role = await models.role.get(app, params.roleId)
 
     if (user.roleId === params.roleId) {
-        throw new BadRequestError(`User with such ID is already "${role.name}"`)
+        throw new BadRequestError(ll.$users.userWithSuchIdIsAlready({ roleName: role.name }))
     }
 
     const updatedUser = await app.prisma.user.update({
@@ -57,9 +57,9 @@ export const assignRoleToUser = (async (app, { params }) => {
     { params: schemasRoutes.users.AssignRoleToUserParams }
 >
 
-export const banUser = (async (app, { params }) => {
+export const banUser = (async (app, ll, { params }) => {
     const user = await models.user.get(app, params.id)
-    if (user.banned) throw new BadRequestError("User with such ID is already banned")
+    if (user.banned) throw new BadRequestError(ll.$users.userWithSuchIdIsAlreadyBanned())
 
     const bannedUser = await app.prisma.user.update({
         where: { id: params.id },
@@ -73,9 +73,9 @@ export const banUser = (async (app, { params }) => {
     { params: schemasRoutes.users.BanUserParams }
 >
 
-export const unbanUser = (async (app, { params }) => {
+export const unbanUser = (async (app, ll, { params }) => {
     const user = await models.user.get(app, params.id)
-    if (!user.banned) throw new BadRequestError("User with such ID is not banned")
+    if (!user.banned) throw new BadRequestError(ll.$users.userWithSuchIdIsNotBanned())
 
     const unbannedUser = await app.prisma.user.update({
         where: { id: params.id },

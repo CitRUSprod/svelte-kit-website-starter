@@ -12,7 +12,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
-            const data = await handlers.getUsers(app, { userData: req.userData!, query: req.query })
+            const data = await handlers.getUsers(app, req.ll, {
+                userData: req.userData!,
+                query: req.query
+            })
             await reply.sendData(data)
         }
     })
@@ -24,7 +27,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
-            const data = await handlers.getUser(app, {
+            const data = await handlers.getUser(app, req.ll, {
                 userData: req.userData!,
                 params: req.params
             })
@@ -45,7 +48,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
                 app.verifyPermission(constantsEnums.Permission.AssignRole)
             ]),
             async handler(req, reply) {
-                const data = await handlers.assignRoleToUser(app, { params: req.params })
+                const data = await handlers.assignRoleToUser(app, req.ll, { params: req.params })
                 await reply.sendData(data)
             }
         }
@@ -62,7 +65,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {
-            const data = await handlers.banUser(app, { params: req.params })
+            const data = await handlers.banUser(app, req.ll, { params: req.params })
             await reply.sendData(data)
         }
     })
@@ -78,7 +81,7 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),
         async handler(req, reply) {
-            const data = await handlers.unbanUser(app, { params: req.params })
+            const data = await handlers.unbanUser(app, req.ll, { params: req.params })
             await reply.sendData(data)
         }
     })

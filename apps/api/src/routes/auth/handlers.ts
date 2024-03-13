@@ -13,14 +13,14 @@ import { ReplyCookie, RouteHandler } from "$/types"
 import { oAuthProviders, sendEmail } from "$/utils"
 import * as utils from "./utils"
 
-export const register = (async (app, { body }) => {
+export const register = (async (app, ll, { body }) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (userByEmail) throw new BadRequestError("User with such email already exists")
+    if (userByEmail) throw new BadRequestError(ll.$auth.userWithSuchEmailAlreadyExists())
 
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError("User with such username already exists")
+    if (userByUsername) throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
 
     await utils.deleteExpiredRegistrationTokens(app)
 
@@ -29,7 +29,7 @@ export const register = (async (app, { body }) => {
     })
 
     if (registrationTokenByEmail) {
-        throw new BadRequestError("Email has already been sent, check your email")
+        throw new BadRequestError(ll.$auth.emailAlreadySent())
     }
 
     const registrationTokenByUsername = await app.prisma.registrationToken.findFirst({
@@ -37,7 +37,7 @@ export const register = (async (app, { body }) => {
     })
 
     if (registrationTokenByUsername) {
-        throw new BadRequestError("User with such username already exists")
+        throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
     }
 
     const password = await argon2.hash(body.password)
@@ -54,13 +54,13 @@ export const register = (async (app, { body }) => {
     })
 
     const url = new URL(`/auth/registration/complete/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = "Registration"
+    const subject = ll.$auth.registration()
     const message = `
         <div>
-            <h3>Dear ${body.username}</h3>
+            <h3>${ll.$auth.dear()} ${body.username}</h3>
         </div>
         <div>
-            <a href="${url}">Complete registration</a>
+            <a href="${url}">${ll.$auth.completeRegistration()}</a>
         </div>
     `
     await sendEmail(body.email, subject, message)
@@ -71,13 +71,13 @@ export const register = (async (app, { body }) => {
     { body: schemasRoutes.auth.RegisterBody }
 >
 
-export const completeRegistration = (async (app, { params }) => {
+export const completeRegistration = (async (app, ll, { params }) => {
     await utils.deleteExpiredRegistrationTokens(app)
 
     const registrationToken = await app.prisma.registrationToken.findFirst({
         where: { token: params.registrationToken }
     })
-    if (!registrationToken) throw new BadRequestError("Registration token expired")
+    if (!registrationToken) throw new BadRequestError(ll.$auth.registrationTokenExpired())
 
     const user = await app.prisma.user.create({
         data: {
@@ -96,16 +96,19 @@ export const completeRegistration = (async (app, { params }) => {
     { params: schemasRoutes.auth.CompleteRegistrationParams }
 >
 
-export const oAuthRegister = (async (app, { params, body }) => {
+export const oAuthRegister = (async (app, ll, { params, body }) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError("User with such username already exists")
+    if (userByUsername) throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
 
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
         where: { token: params.oAuthRegistrationToken }
     })
-    if (!oAuthRegistrationToken) throw new BadRequestError("OAuth registration token not found")
+
+    if (!oAuthRegistrationToken) {
+        throw new BadRequestError(ll.$auth.oAuthRegistrationTokenNotFound())
+    }
 
     let user: User
 
@@ -123,7 +126,7 @@ export const oAuthRegister = (async (app, { params, body }) => {
         }
 
         default: {
-            throw new InternalServerError("Unexpected error")
+            throw new InternalServerError(ll.$auth.unexpectedError())
         }
     }
 
@@ -135,19 +138,19 @@ export const oAuthRegister = (async (app, { params, body }) => {
     { params: schemasRoutes.auth.OAuthRegisterParams; body: schemasRoutes.auth.OAuthRegisterBody }
 >
 
-export const login = (async (app, { body }) => {
+export const login = (async (app, ll, { body }) => {
     const user = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (!user) throw new BadRequestError("User with such email was not found")
+    if (!user) throw new BadRequestError(ll.$auth.userWithEmailNotFound())
 
-    if (!user.password) throw new BadRequestError("Unexpected error")
+    if (!user.password) throw new BadRequestError(ll.$auth.unexpectedError())
 
     const isCorrectPassword = await argon2.verify(user.password, body.password)
-    if (!isCorrectPassword) throw new BadRequestError("Incorrect password")
+    if (!isCorrectPassword) throw new BadRequestError(ll.$auth.incorrectPassword())
 
     return utils.login(app, { id: user.id }, false, false)
 }) satisfies RouteHandler<schemasRoutes.auth.LoginResponse, { body: schemasRoutes.auth.LoginBody }>
 
-export const oAuthLogin = (async (app, { params }) => {
+export const oAuthLogin = (async (app, ll, { params }) => {
     const oAuthState = generateState()
 
     switch (_.startCase(params.provider)) {
@@ -169,7 +172,7 @@ export const oAuthLogin = (async (app, { params }) => {
         }
 
         default: {
-            throw new InternalServerError("Unexpected error")
+            throw new InternalServerError(ll.$auth.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
@@ -177,8 +180,10 @@ export const oAuthLogin = (async (app, { params }) => {
     { params: schemasRoutes.auth.OAuthLoginParams }
 >
 
-export const oAuthLoginCallback = (async (app, { params, cookies, body }) => {
-    if (cookies.oAuthState !== body.oAuthState) throw new BadRequestError("States do not match")
+export const oAuthLoginCallback = (async (app, ll, { params, cookies, body }) => {
+    if (cookies.oAuthState !== body.oAuthState) {
+        throw new BadRequestError(ll.$auth.statesDoNotMatch())
+    }
 
     switch (_.startCase(params.provider)) {
         case constantsEnums.OAuthProvider.Twitch: {
@@ -237,7 +242,7 @@ export const oAuthLoginCallback = (async (app, { params, cookies, body }) => {
         }
 
         default: {
-            throw new InternalServerError("Unexpected error")
+            throw new InternalServerError(ll.$auth.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
@@ -249,7 +254,7 @@ export const oAuthLoginCallback = (async (app, { params, cookies, body }) => {
     }
 >
 
-export const logout = (async (app, { cookies }) => {
+export const logout = (async (app, ll, { cookies }) => {
     const localCookies: Array<ReplyCookie> = [
         { name: "accessToken", value: undefined, options: { path: "/" } },
         { name: "refreshToken", value: undefined, options: { path: "/" } }
@@ -264,7 +269,7 @@ export const logout = (async (app, { cookies }) => {
 
         return {
             cookies: localCookies,
-            payload: new InternalServerError("Unexpected error")
+            payload: new InternalServerError(ll.$auth.unexpectedError())
         }
     }
 
@@ -276,7 +281,7 @@ export const logout = (async (app, { cookies }) => {
     { cookies: schemasRoutes.auth.LogoutCookies }
 >
 
-export const refreshTokens = (async (app, { cookies }) => {
+export const refreshTokens = (async (app, ll, { cookies }) => {
     const payload = utils.getPayload(app, cookies.refreshToken)
 
     await utils.deleteExpiredRefreshTokens(app)
@@ -284,7 +289,7 @@ export const refreshTokens = (async (app, { cookies }) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
-    if (!refreshToken) throw new InternalServerError("Refresh token not found")
+    if (!refreshToken) throw new InternalServerError(ll.$auth.refreshTokenNotFound())
 
     const tokens = utils.generateTokens(app, payload)
     await app.prisma.refreshToken.update({

@@ -8,7 +8,7 @@ export const getRoles = (async app => {
     return { payload: { items: roles.map(models.role.dto) } }
 }) satisfies RouteHandler<schemasRoutes.roles.GetRolesResponse>
 
-export const createRole = (async (app, { body }) => {
+export const createRole = (async (app, ll, { body }) => {
     const role = await app.prisma.role.create({ data: body })
     return { payload: models.role.dto(role) }
 }) satisfies RouteHandler<
@@ -16,9 +16,9 @@ export const createRole = (async (app, { body }) => {
     { body: schemasRoutes.roles.CreateRoleBody }
 >
 
-export const updateRole = (async (app, { params, body }) => {
+export const updateRole = (async (app, ll, { params, body }) => {
     const role = await models.role.get(app, params.id)
-    if (role.protected) throw new BadRequestError("Role with such ID is protected")
+    if (role.protected) throw new BadRequestError(ll.$roles.roleWithSuchIdIsProtected())
 
     const updatedRole = await app.prisma.role.update({ where: { id: params.id }, data: body })
     return { payload: models.role.dto(updatedRole) }
@@ -30,9 +30,9 @@ export const updateRole = (async (app, { params, body }) => {
     }
 >
 
-export const deleteRole = (async (app, { params }) => {
+export const deleteRole = (async (app, ll, { params }) => {
     const role = await models.role.get(app, params.id)
-    if (role.protected) throw new BadRequestError("Role with such ID is protected")
+    if (role.protected) throw new BadRequestError(ll.$roles.roleWithSuchIdIsProtected())
 
     const deletedRole = await app.prisma.role.delete({ where: { id: params.id } })
     return { payload: models.role.dto(deletedRole) }

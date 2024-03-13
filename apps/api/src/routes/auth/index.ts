@@ -11,7 +11,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.auth.registerBody()
         },
         async handler(req, reply) {
-            const data = await handlers.register(app, { body: req.body })
+            const data = await handlers.register(app, req.ll, { body: req.body })
             await reply.sendData(data)
         }
     })
@@ -24,7 +24,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.auth.completeRegistrationParams()
         },
         async handler(req, reply) {
-            const data = await handlers.completeRegistration(app, { params: req.params })
+            const data = await handlers.completeRegistration(app, req.ll, { params: req.params })
             await reply.sendData(data)
         }
     })
@@ -39,7 +39,10 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.auth.oAuthRegisterBody()
         },
         async handler(req, reply) {
-            const data = await handlers.oAuthRegister(app, { params: req.params, body: req.body })
+            const data = await handlers.oAuthRegister(app, req.ll, {
+                params: req.params,
+                body: req.body
+            })
             await reply.sendData(data)
         }
     })
@@ -50,7 +53,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.auth.loginBody()
         },
         async handler(req, reply) {
-            const data = await handlers.login(app, { body: req.body })
+            const data = await handlers.login(app, req.ll, { body: req.body })
             await reply.sendData(data)
         }
     })
@@ -61,7 +64,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.auth.oAuthLoginParams()
         },
         async handler(req, reply) {
-            const data = await handlers.oAuthLogin(app, { params: req.params })
+            const data = await handlers.oAuthLogin(app, req.ll, { params: req.params })
             await reply.sendData(data)
         }
     })
@@ -84,7 +87,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
                 throw new UnauthorizedError(err.message)
             }
 
-            const data = await handlers.oAuthLoginCallback(app, {
+            const data = await handlers.oAuthLoginCallback(app, req.ll, {
                 cookies,
                 params: req.params,
                 body: req.body
@@ -106,7 +109,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
                 throw new UnauthorizedError(err.message)
             }
 
-            const data = await handlers.logout(app, { cookies })
+            const data = await handlers.logout(app, req.ll, { cookies })
             await reply.sendData(data)
         }
     })
@@ -124,7 +127,7 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
                 throw new UnauthorizedError(err.message)
             }
 
-            const data = await handlers.refreshTokens(app, { cookies })
+            const data = await handlers.refreshTokens(app, req.ll, { cookies })
             await reply.sendData(data)
         }
     })

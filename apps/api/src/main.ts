@@ -15,6 +15,7 @@ import {
 import { BadRequestError } from "http-errors-enhanced"
 import { parseZodError, ZodError } from "@local/utils"
 import { env } from "$/constants"
+import { hooks } from "$/hooks"
 import { decorators } from "$/decorators"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
@@ -56,7 +57,7 @@ app.register(staticPlugin, { root: getAbsFilesPath(), prefix: "/files" })
     .register(auth)
     .register(socketIo)
 
-app.register(decorators).register(routes)
+app.register(hooks).register(decorators).register(routes)
 
 async function start() {
     await app.ready()
