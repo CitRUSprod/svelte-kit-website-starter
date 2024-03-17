@@ -4,13 +4,13 @@
     "type": "module",
     "scripts": {
         "dev": "concurrently -k -n i18n,build,types -c green,blue,magenta -p [{name}] pnpm:dev:i18n pnpm:dev:build pnpm:dev:check-types",
+        "dev:i18n": "typesafe-i18n",
         "dev:build": "vite dev",
         "dev:check-types": "pnpm check-types --watch",
-        "dev:i18n": "typesafe-i18n",
+        "i18n": "typesafe-i18n --no-watch",
         "build": "vite build",
         "start": "PORT=6701 node dist",
         "check-types": "svelte-check --tsconfig tsconfig.json",
-        "i18n": "typesafe-i18n --no-watch",
         "stories": "histoire dev"
     },
     "devDependencies": {
