@@ -37,7 +37,7 @@ services:
             MAILER_NAME: ${MAILER_NAME}
             ENABLE_DOCS: ${ENABLE_DOCS}
         volumes:
-            - ../../storage/files:/app/files
+            - ../../storage/files:/project/files
     postgres:
         image: postgres:16.1-alpine
         restart: always

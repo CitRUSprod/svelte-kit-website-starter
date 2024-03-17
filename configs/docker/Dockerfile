@@ -24,6 +24,7 @@ WORKDIR /project/apps/web
 CMD pnpm start
 
 FROM installer AS api
+ENV IS_DOCKER_CONTAINER=true
 RUN pnpm build --filter=api...
 WORKDIR /project/apps/api
 CMD pnpm prisma:migrations:run && pnpm start

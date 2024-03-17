@@ -4,14 +4,16 @@ import fs from "fs-extra"
 import { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
-import { enums } from "$/constants"
-
-const isDev = process.env.NODE_ENV === "development"
+import { env, enums } from "$/constants"
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function getAbsFilesPath(...paths: Array<string>) {
-    return path.join(dirname, `..${isDev ? "/../../storage" : ""}/files`, ...paths)
+    return path.join(
+        dirname,
+        `../../..${env.IS_DOCKER_CONTAINER ? "" : "/storage"}/files`,
+        ...paths
+    )
 }
 
 function getExt(file: MultipartFile) {
