@@ -16,23 +16,25 @@ export function initSockets(app: FastifyInstance) {
     app.io.use(
         authenticate(
             { secret: env.JWT_SECRET, succeedWithoutToken: true },
-            async (payload: UserPayload, done) => {
+            (payload: UserPayload, done) => {
                 if (Object.keys(payload).length) {
-                    const user = await app.prisma.user.findFirst({
-                        where: { id: payload.id },
-                        include: { role: true }
-                    })
-
-                    if (user) {
-                        done(null, user)
-                    } else {
-                        done(null, null, "User not found")
-                    }
+                    app.prisma.user
+                        .findFirst({
+                            where: { id: payload.id },
+                            include: { role: true }
+                        })
+                        .then(user => {
+                            if (user) {
+                                done(null, user)
+                            } else {
+                                done(null, null, "User not found")
+                            }
+                        })
                 } else {
                     done()
                 }
             }
-        )
+        ) as any
     )
 
     app.io.on("connection", socket => {
