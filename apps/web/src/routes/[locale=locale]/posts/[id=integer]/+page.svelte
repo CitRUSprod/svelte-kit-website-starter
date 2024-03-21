@@ -3,9 +3,9 @@
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
+    import { dt } from "@local/utils"
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
-    import { dt } from "$lib/utils"
 
     export let data
 
@@ -36,12 +36,12 @@
             </ul>
             <ul>
                 <b>{$ll.$.$posts.$_id.created()}:</b>
-                {dt.getFullDateAndTime(data.post.creationDate, $currentLocale)}
+                {dt.getFullDateAndTime(data.post.creationDate, data.tz, $currentLocale)}
             </ul>
             {#if data.post.editingDate}
                 <ul>
                     <b>{$ll.$.$posts.$_id.edited()}:</b>
-                    {dt.getFullDateAndTime(data.post.editingDate, $currentLocale)}
+                    {dt.getFullDateAndTime(data.post.editingDate, data.tz, $currentLocale)}
                 </ul>
             {/if}
         </ul>

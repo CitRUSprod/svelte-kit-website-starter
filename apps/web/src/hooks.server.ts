@@ -48,6 +48,10 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     e.locals.locale = locale
     e.locals.ll = ll
 
+    const tz = e.cookies.get("timezone") ?? "Europe/Moscow"
+
+    e.locals.tz = tz
+
     const dark = e.cookies.get("darkTheme") === "true"
 
     const response = await resolve(e, {

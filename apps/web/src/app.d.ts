@@ -8,6 +8,7 @@ declare namespace App {
     interface Locals {
         locale: Locales
         ll: TranslationFunctions
+        tz: string
         userData: User | null
     }
 }

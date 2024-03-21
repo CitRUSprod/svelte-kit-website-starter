@@ -4,8 +4,9 @@
 
     import * as lodash from "lodash-es"
     import * as schemasRoutes from "@local/schemas/routes"
+    import { dt } from "@local/utils"
     import { ll, localePath, currentLocale } from "$i18n/helpers"
-    import { createQueryController, qp, dt } from "$lib/utils"
+    import { createQueryController, qp } from "$lib/utils"
     import * as api from "$lib/api"
 
     import type { DropdownMenuItem } from "$lib/types"
@@ -142,7 +143,7 @@
                             {$ll.$.$posts.author()}: {post.author.username}
                         </span>
                         <span class="u:text-sm">
-                            {dt.getFullDateAndTime(post.creationDate, $currentLocale)}
+                            {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}
                         </span>
                     </div>
                 </a>

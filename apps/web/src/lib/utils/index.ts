@@ -5,4 +5,3 @@ export * from "./socket"
 export * from "./query"
 
 export * as qp from "./qp"
-export * as dt from "./dt"

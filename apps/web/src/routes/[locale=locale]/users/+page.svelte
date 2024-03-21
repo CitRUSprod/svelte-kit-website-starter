@@ -3,9 +3,10 @@
     import { DialogRoleAssigning } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
+    import { dt } from "@local/utils"
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import { toasts, userData } from "$lib/stores"
-    import { createQueryController, qp, dt } from "$lib/utils"
+    import { createQueryController, qp } from "$lib/utils"
     import * as api from "$lib/api"
 
     export let data
@@ -144,7 +145,7 @@
                         <td>
                             <Checkbox checked={user.banned} readonly />
                         </td>
-                        <td>{dt.getFullDate(user.registrationDate, $currentLocale)}</td>
+                        <td>{dt.getFullDate(user.registrationDate, data.tz, $currentLocale)}</td>
                         <td>
                             <Button
                                 href={$localePath(`/users/${String(user.id)}`)}

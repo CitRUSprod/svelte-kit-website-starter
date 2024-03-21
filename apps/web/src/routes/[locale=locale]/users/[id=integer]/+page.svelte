@@ -7,9 +7,10 @@
         DialogEmailChanging
     } from "./_components"
 
+    import { dt } from "@local/utils"
     import { ll, currentLocale } from "$i18n/helpers"
     import { toasts, userData } from "$lib/stores"
-    import { createQueryController, dt } from "$lib/utils"
+    import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
     export let data
@@ -81,7 +82,7 @@
                 </li>
                 <li>
                     <b>{$ll.$.$users.$_id.registrationDate()}:</b>
-                    {dt.getFullDateAndTime(data.user.registrationDate, $currentLocale)}
+                    {dt.getFullDateAndTime(data.user.registrationDate, data.tz, $currentLocale)}
                 </li>
             </ul>
         </div>

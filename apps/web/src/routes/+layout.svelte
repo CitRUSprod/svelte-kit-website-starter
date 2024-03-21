@@ -19,6 +19,12 @@
 
     if (browser) {
         darkTheme.sync()
+
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+        Cookies.set("timezone", tz, {
+            path: "/",
+            expires: 100
+        })
     }
 
     watch(currentLocale, locale => {
