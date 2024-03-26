@@ -157,6 +157,22 @@ type RootTranslation = {
 				 * и​л​и​ ​в​о​й​т​и​ ​с​ ​п​о​м​о​щ​ь​ю
 				 */
 				orLoginWith: string
+				$_provider: {
+					$callback: {
+						/**
+						 * В​ы​ ​у​с​п​е​ш​н​о​ ​в​о​ш​л​и
+						 */
+						loggedInSuccessfully: string
+						/**
+						 * В​х​о​д
+						 */
+						login: string
+						/**
+						 * П​е​р​е​н​а​п​р​а​в​л​я​е​м​.​.​.
+						 */
+						redirecting: string
+					}
+				}
 			}
 			$logout: {
 				/**
@@ -1014,6 +1030,22 @@ export type TranslationFunctions = {
 				 * или войти с помощью
 				 */
 				orLoginWith: () => LocalizedString
+				$_provider: {
+					$callback: {
+						/**
+						 * Вы успешно вошли
+						 */
+						loggedInSuccessfully: () => LocalizedString
+						/**
+						 * Вход
+						 */
+						login: () => LocalizedString
+						/**
+						 * Перенаправляем...
+						 */
+						redirecting: () => LocalizedString
+					}
+				}
 			}
 			$logout: {
 				/**

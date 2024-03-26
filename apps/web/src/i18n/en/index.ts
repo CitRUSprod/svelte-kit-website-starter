@@ -55,7 +55,15 @@ const en = {
                 login: "Login",
                 password: "Password",
                 registration: "Registration",
-                orLoginWith: "or login with"
+                orLoginWith: "or login with",
+
+                $_provider: {
+                    $callback: {
+                        loggedInSuccessfully: "You have successfully logged in",
+                        login: "Login",
+                        redirecting: "Redirecting..."
+                    }
+                }
             },
 
             $logout: {

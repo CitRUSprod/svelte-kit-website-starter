@@ -31,12 +31,10 @@ export async function load(e) {
     })
     setCookies(e.cookies, res.headers)
 
-    if (!res.data.oAuthRegistrationToken) {
-        redirect(302, `/${e.params.locale as string}`)
+    if (res.data.oAuthRegistrationToken) {
+        redirect(
+            302,
+            `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
+        )
     }
-
-    redirect(
-        302,
-        `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
-    )
 }

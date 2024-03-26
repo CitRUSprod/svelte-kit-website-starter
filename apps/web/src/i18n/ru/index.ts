@@ -55,7 +55,15 @@ const ru = {
                 login: "Вход",
                 password: "Пароль",
                 registration: "Регистрация",
-                orLoginWith: "или войти с помощью"
+                orLoginWith: "или войти с помощью",
+
+                $_provider: {
+                    $callback: {
+                        loggedInSuccessfully: "Вы успешно вошли",
+                        login: "Вход",
+                        redirecting: "Перенаправляем..."
+                    }
+                }
             },
 
             $logout: {
