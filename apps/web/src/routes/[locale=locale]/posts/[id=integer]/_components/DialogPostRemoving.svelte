@@ -32,7 +32,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcDeletePost.loading}
+>
     <div>
         <h1>{$ll.$.$posts.$_id.$$dialogPostRemoving.postRemoving()}</h1>
     </div>

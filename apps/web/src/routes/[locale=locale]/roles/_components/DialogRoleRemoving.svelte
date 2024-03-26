@@ -36,7 +36,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcDeleteRole.loading}
+>
     <div>
         <h1>{$ll.$.$roles.$$dialogRoleRemoving.roleRemoving()}</h1>
     </div>

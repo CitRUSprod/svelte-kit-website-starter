@@ -45,7 +45,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcAssignRoleToUser.loading}
+>
     <div>
         <h1 class="u:text-center">{$ll.$.$users.$$dialogRoleAssigning.roleAssigning()}</h1>
     </div>

@@ -44,7 +44,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-200">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-200"
+    persistent={$qcCreatePost.loading}
+>
     <div>
         <h1 class="u:text-center">{$ll.$.$posts.$$dialogPostCreating.postCreating()}</h1>
     </div>

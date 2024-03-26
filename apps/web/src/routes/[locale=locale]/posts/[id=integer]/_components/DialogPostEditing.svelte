@@ -50,7 +50,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-200">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-200"
+    persistent={$qcUpdatePost.loading}
+>
     <div>
         <h1 class="u:text-center">{$ll.$.$posts.$_id.$$dialogPostEditing.postEditing()}</h1>
     </div>

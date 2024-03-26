@@ -64,7 +64,11 @@
     }
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcCreateRole.loading}
+>
     <div>
         <h1 class="u:text-center">{$ll.$.$roles.$$dialogRoleCreating.roleCreating()}</h1>
     </div>

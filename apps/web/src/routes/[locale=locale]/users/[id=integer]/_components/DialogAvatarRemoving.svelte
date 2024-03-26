@@ -34,7 +34,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcDeleteAvatar.loading}
+>
     <div>
         <h1>{$ll.$.$users.$_id.$$dialogAvatarRemoving.avatarRemoving()}</h1>
     </div>

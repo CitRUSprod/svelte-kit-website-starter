@@ -41,7 +41,11 @@
     })
 </script>
 
-<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100">
+<Dialog
+    bind:this={dialog}
+    class="u:flex u:flex-col u:gap-4 u:w-100"
+    persistent={$qcUpdateEmail.loading}
+>
     <div>
         <h1 class="u:text-center">{$ll.$.$users.$_id.$$dialogEmailChanging.emailChanging()}</h1>
     </div>
