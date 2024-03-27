@@ -8,7 +8,7 @@ const baseUrl =
     !browser && env.PUBLIC_IS_DOCKER_CONTAINER ? "http://nginx:6700" : env.PUBLIC_BASE_URL
 
 export function createApiUrl(route: string, ...params: Array<string | number>) {
-    let apiUrl = `/api${route}`
+    let apiUrl = `/api/v1${route}`
 
     for (const param of params) {
         apiUrl = apiUrl.replace(/:\w+/, param.toString())

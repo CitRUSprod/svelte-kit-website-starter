@@ -17,7 +17,7 @@ export function dto(user: UserData) {
         },
         banned: user.banned,
         registrationDate: user.registrationDate.toJSON(),
-        avatar: user.avatar && `/api/files/${enums.ImgPath.Avatars}/${user.avatar}`
+        avatar: user.avatar && `/api/v1/files/${enums.ImgPath.Avatars}/${user.avatar}`
     } satisfies JsonObject
 }
 

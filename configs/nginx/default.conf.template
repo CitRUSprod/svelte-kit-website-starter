@@ -9,7 +9,7 @@ server {
         proxy_read_timeout 3600;
     }
 
-    location /api/ {
+    location /api/v1/ {
         proxy_pass http://${API_HOST}:6702/;
         proxy_set_header Host $http_host;
         proxy_set_header Upgrade $http_upgrade;

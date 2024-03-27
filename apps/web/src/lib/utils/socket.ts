@@ -1,7 +1,7 @@
 import io from "socket.io-client"
 import { parse } from "set-cookie-parser"
 import * as constantsRoutes from "@local/constants/routes"
-import { createApiUrl } from "$lib/utils"
+import { createApiUrl } from "./axios"
 
 export const socket = io({
     path: createApiUrl(constantsRoutes.ws.base),
