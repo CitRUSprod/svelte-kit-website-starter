@@ -21,6 +21,7 @@ export function getUser(data: RequestData<schemasRoutes.users.GetUserRequest>) {
 export function assignRoleToUser(data: RequestData<schemasRoutes.users.AssignRoleToUserRequest>) {
     return axios.post<schemasRoutes.users.AssignRoleToUserResponse>(
         createApiUrl(constantsRoutes.users.assignRoleToUser, data.id, data.roleId),
+        {},
         createAxiosConfig(data.headers)
     )
 }
@@ -28,6 +29,9 @@ export function assignRoleToUser(data: RequestData<schemasRoutes.users.AssignRol
 export function banUser(data: RequestData<schemasRoutes.users.BanUserRequest>) {
     return axios.post<schemasRoutes.users.BanUserResponse>(
         createApiUrl(constantsRoutes.users.banUser, data.id),
+        {
+            reason: data.reason
+        },
         createAxiosConfig(data.headers)
     )
 }
@@ -35,6 +39,7 @@ export function banUser(data: RequestData<schemasRoutes.users.BanUserRequest>) {
 export function unbanUser(data: RequestData<schemasRoutes.users.UnbanUserRequest>) {
     return axios.post<schemasRoutes.users.UnbanUserResponse>(
         createApiUrl(constantsRoutes.users.unbanUser, data.id),
+        {},
         createAxiosConfig(data.headers)
     )
 }

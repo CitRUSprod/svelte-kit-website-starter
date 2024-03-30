@@ -27,6 +27,16 @@ model Role {
     users User[]
 }
 
+model Ban {
+    id Int @id @default(autoincrement())
+    userId Int @unique
+    user User @relation(fields: [userId], references: [id])
+    authorId Int
+    author User @relation("issuedBans", fields: [authorId], references: [id])
+    reason String
+    date DateTime
+}
+
 model User {
     id Int @id @default(autoincrement())
     email String? @unique
@@ -35,7 +45,8 @@ model User {
     twitchId String? @unique
     roleId Int @default(1)
     role Role @relation(fields: [roleId], references: [id])
-    banned Boolean @default(false)
+    ban Ban?
+    issuedBans Ban[] @relation("issuedBans")
     registrationDate DateTime
     avatar String?
     refreshTokens RefreshToken[]

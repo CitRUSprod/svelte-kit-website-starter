@@ -28,7 +28,7 @@ export const updateUser = (async (app, ll, { userData, body }) => {
         data: {
             username: body.username
         },
-        include: { role: true }
+        include: { role: true, ban: { include: { author: true } } }
     })
 
     return { payload: models.user.dto(updatedUser) }

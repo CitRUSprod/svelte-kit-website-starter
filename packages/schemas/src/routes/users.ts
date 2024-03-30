@@ -94,9 +94,18 @@ export function banUserParams() {
 
 export type BanUserParams = z.infer<ReturnType<typeof banUserParams>>
 
+export function banUserBody() {
+    return z.object({
+        reason: models.ban.reason()
+    })
+}
+
+export type BanUserBody = z.infer<ReturnType<typeof banUserBody>>
+
 export function banUserRequest() {
     return z.object({
-        ...banUserParams().shape
+        ...banUserParams().shape,
+        ...banUserBody().shape
     })
 }
 

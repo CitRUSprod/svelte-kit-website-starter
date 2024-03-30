@@ -54,21 +54,29 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     )
 
-    app.post<{ Params: schemasRoutes.users.BanUserParams }>(constantsRoutes.users.banUser, {
-        schema: {
-            tags: [constantsRoutes.users.base],
-            params: schemasRoutes.users.banUserParams()
-        },
-        preHandler: app.createPreHandler([
-            app.setUserData,
-            app.verifyAuth,
-            app.verifyPermission(constantsEnums.Permission.BanUser)
-        ]),
-        async handler(req, reply) {
-            const data = await handlers.banUser(app, req.ll, { params: req.params })
-            await reply.sendData(data)
+    app.post<{ Params: schemasRoutes.users.BanUserParams; Body: schemasRoutes.users.BanUserBody }>(
+        constantsRoutes.users.banUser,
+        {
+            schema: {
+                tags: [constantsRoutes.users.base],
+                params: schemasRoutes.users.banUserParams(),
+                body: schemasRoutes.users.banUserBody()
+            },
+            preHandler: app.createPreHandler([
+                app.setUserData,
+                app.verifyAuth,
+                app.verifyPermission(constantsEnums.Permission.BanUser)
+            ]),
+            async handler(req, reply) {
+                const data = await handlers.banUser(app, req.ll, {
+                    userData: req.userData!,
+                    params: req.params,
+                    body: req.body
+                })
+                await reply.sendData(data)
+            }
         }
-    })
+    )
 
     app.post<{ Params: schemasRoutes.users.UnbanUserParams }>(constantsRoutes.users.unbanUser, {
         schema: {

@@ -1,6 +1,7 @@
 import { z } from "zod"
 import * as common from "$/common"
 import * as role from "./role"
+import * as ban from "./ban"
 
 export function email() {
     return z.string().trim().toLowerCase().email()
@@ -48,7 +49,7 @@ export function user() {
             name: role.name(),
             permissions: z.array(role.permission())
         }),
-        banned: banned(),
+        ban: ban.ban().nullable(),
         registrationDate: registrationDate(),
         avatar: avatar().nullable()
     })

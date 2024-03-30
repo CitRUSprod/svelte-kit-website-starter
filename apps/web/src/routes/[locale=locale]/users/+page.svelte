@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Content, Button, Checkbox, SimplePagination } from "$lib/components"
-    import { DialogRoleAssigning } from "./_components"
+    import { DialogRoleAssigning, DialogUserBanning } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
     import { dt } from "@local/utils"
@@ -12,6 +12,7 @@
     export let data
 
     let dialogRoleAssigning: DialogRoleAssigning
+    let dialogUserBanning: DialogUserBanning
 
     const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
@@ -41,26 +42,6 @@
     }
 
     $: watchForData(data)
-
-    const qcBanUser = createQueryController({
-        params: {
-            id: 0
-        },
-        fn(params) {
-            return api.users.banUser({
-                id: params.id
-            })
-        },
-        onSuccess() {
-            toasts.add("success", $ll.$.$users.userBannedSuccessfully())
-        }
-    })
-
-    async function banUser(id: number) {
-        qcBanUser.params.id = id
-        await qcBanUser.refresh()
-        await qcGetUsers.refresh()
-    }
 
     const qcUnbanUser = createQueryController({
         params: {
@@ -143,7 +124,7 @@
                         <td>{user.email ?? "-"}</td>
                         <td>{user.role.name}</td>
                         <td>
-                            <Checkbox checked={user.banned} readonly />
+                            <Checkbox checked={!!user.ban} readonly />
                         </td>
                         <td>{dt.getFullDate(user.registrationDate, data.tz, $currentLocale)}</td>
                         <td>
@@ -156,7 +137,7 @@
                                 {$ll.$.$users.open()}
                             </Button>
                             {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
-                                {#if !user.banned}
+                                {#if !user.ban}
                                     <Button
                                         variant="warning"
                                         on:click={() => dialogRoleAssigning.open(user)}
@@ -166,7 +147,7 @@
                                 {/if}
                             {/if}
                             {#if $userData?.role.permissions.includes(constantsEnums.Permission.BanUser)}
-                                {#if user.banned}
+                                {#if user.ban}
                                     <Button
                                         loading={$qcUnbanUser.loading &&
                                             qcUnbanUser.params.id === user.id}
@@ -177,10 +158,8 @@
                                     </Button>
                                 {:else}
                                     <Button
-                                        loading={$qcBanUser.loading &&
-                                            qcBanUser.params.id === user.id}
                                         variant="error"
-                                        on:click={() => banUser(user.id)}
+                                        on:click={() => dialogUserBanning.open(user)}
                                     >
                                         {$ll.$.$users.ban()}
                                     </Button>
@@ -207,3 +186,4 @@
     roles={data.roles}
     on:assignRole={refetchPage}
 />
+<DialogUserBanning bind:this={dialogUserBanning} on:banUser={refetchPage} />

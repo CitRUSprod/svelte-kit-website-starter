@@ -248,7 +248,6 @@ const ru = {
             registrationDate: "Дата регистрации",
             role: "Роль",
             unban: "Разбанить",
-            userBannedSuccessfully: "Пользователь успешно забанен",
             userUnbannedSuccessfully: "Пользователь успешно разбанен",
             username: "Имя пользователя",
             users: "Пользователи",
@@ -259,6 +258,15 @@ const ru = {
                 roleAssigning: "Назначение роли",
                 roleEditedSuccessfully: "Роль успешно изменена",
                 save: "Сохранить"
+            },
+
+            $$dialogUserBanning: {
+                cancel: "Отмена",
+                enterReason: "Введите причину...",
+                reason: "Причина",
+                userBanning: "Бан пользователя",
+                userBannedSuccessfully: "Пользователь успешно забанен",
+                ban: "Забанить"
             },
 
             $_id: {

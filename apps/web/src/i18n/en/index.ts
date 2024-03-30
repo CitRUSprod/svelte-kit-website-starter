@@ -247,7 +247,6 @@ const en = {
             registrationDate: "Registration date",
             role: "Role",
             unban: "Unban",
-            userBannedSuccessfully: "User successfully banned",
             userUnbannedSuccessfully: "User successfully unbanned",
             username: "Username",
             users: "Users",
@@ -258,6 +257,15 @@ const en = {
                 roleAssigning: "Role assigning",
                 roleEditedSuccessfully: "Role successfully edited",
                 save: "Save"
+            },
+
+            $$dialogUserBanning: {
+                cancel: "Cancel",
+                enterReason: "Enter a reason...",
+                reason: "Reason",
+                userBanning: "User banning",
+                userBannedSuccessfully: "User successfully banned",
+                ban: "Ban"
             },
 
             $_id: {

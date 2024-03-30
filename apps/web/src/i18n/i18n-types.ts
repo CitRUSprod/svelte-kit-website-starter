@@ -683,10 +683,6 @@ type RootTranslation = {
 			 */
 			unban: string
 			/**
-			 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​з​а​б​а​н​е​н
-			 */
-			userBannedSuccessfully: string
-			/**
 			 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​р​а​з​б​а​н​е​н
 			 */
 			userUnbannedSuccessfully: string
@@ -719,6 +715,32 @@ type RootTranslation = {
 				 * С​о​х​р​а​н​и​т​ь
 				 */
 				save: string
+			}
+			$$dialogUserBanning: {
+				/**
+				 * О​т​м​е​н​а
+				 */
+				cancel: string
+				/**
+				 * В​в​е​д​и​т​е​ ​п​р​и​ч​и​н​у​.​.​.
+				 */
+				enterReason: string
+				/**
+				 * П​р​и​ч​и​н​а
+				 */
+				reason: string
+				/**
+				 * Б​а​н​ ​п​о​л​ь​з​о​в​а​т​е​л​я
+				 */
+				userBanning: string
+				/**
+				 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​з​а​б​а​н​е​н
+				 */
+				userBannedSuccessfully: string
+				/**
+				 * З​а​б​а​н​и​т​ь
+				 */
+				ban: string
 			}
 			$_id: {
 				/**
@@ -1556,10 +1578,6 @@ export type TranslationFunctions = {
 			 */
 			unban: () => LocalizedString
 			/**
-			 * Пользователь успешно забанен
-			 */
-			userBannedSuccessfully: () => LocalizedString
-			/**
 			 * Пользователь успешно разбанен
 			 */
 			userUnbannedSuccessfully: () => LocalizedString
@@ -1592,6 +1610,32 @@ export type TranslationFunctions = {
 				 * Сохранить
 				 */
 				save: () => LocalizedString
+			}
+			$$dialogUserBanning: {
+				/**
+				 * Отмена
+				 */
+				cancel: () => LocalizedString
+				/**
+				 * Введите причину...
+				 */
+				enterReason: () => LocalizedString
+				/**
+				 * Причина
+				 */
+				reason: () => LocalizedString
+				/**
+				 * Бан пользователя
+				 */
+				userBanning: () => LocalizedString
+				/**
+				 * Пользователь успешно забанен
+				 */
+				userBannedSuccessfully: () => LocalizedString
+				/**
+				 * Забанить
+				 */
+				ban: () => LocalizedString
 			}
 			$_id: {
 				/**

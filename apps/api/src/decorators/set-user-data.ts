@@ -33,7 +33,7 @@ export const setUserData: FastifyPluginCallback = (app, options, done) => {
         if (payload) {
             const user = await app.prisma.user.findFirst({
                 where: { id: payload.id },
-                include: { role: true }
+                include: { role: true, ban: { include: { author: true } } }
             })
 
             if (user === null) {

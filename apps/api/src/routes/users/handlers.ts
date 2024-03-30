@@ -17,7 +17,7 @@ export const getUsers = (async (app, ll, { query }) => {
             take,
             where,
             orderBy: { [query.sort]: query.order },
-            include: { role: true }
+            include: { role: true, ban: { include: { author: true } } }
         })
 
         return { totalItems, items: users.map(models.user.dto) }
@@ -48,7 +48,7 @@ export const assignRoleToUser = (async (app, ll, { params }) => {
     const updatedUser = await app.prisma.user.update({
         where: { id: params.id },
         data: { roleId: params.roleId },
-        include: { role: true }
+        include: { role: true, ban: { include: { author: true } } }
     })
 
     return { payload: models.user.dto(updatedUser) }
@@ -57,31 +57,44 @@ export const assignRoleToUser = (async (app, ll, { params }) => {
     { params: schemasRoutes.users.AssignRoleToUserParams }
 >
 
-export const banUser = (async (app, ll, { params }) => {
+export const banUser = (async (app, ll, { userData, params, body }) => {
     const user = await models.user.get(app, params.id)
-    if (user.banned) throw new BadRequestError(ll.$users.userWithSuchIdIsAlreadyBanned())
+    if (user.ban) throw new BadRequestError(ll.$users.userWithSuchIdIsAlreadyBanned())
+
+    await app.prisma.ban.create({
+        data: {
+            userId: params.id,
+            authorId: userData.id,
+            reason: body.reason,
+            date: new Date()
+        }
+    })
 
     const bannedUser = await app.prisma.user.update({
         where: { id: params.id },
-        data: { roleId: 1, banned: true },
-        include: { role: true }
+        data: { roleId: 1 },
+        include: { role: true, ban: { include: { author: true } } }
     })
 
     return { payload: models.user.dto(bannedUser) }
 }) satisfies RouteHandler<
     schemasRoutes.users.BanUserResponse,
-    { params: schemasRoutes.users.BanUserParams }
+    {
+        userData: UserData
+        params: schemasRoutes.users.BanUserParams
+        body: schemasRoutes.users.BanUserBody
+    }
 >
 
 export const unbanUser = (async (app, ll, { params }) => {
     const user = await models.user.get(app, params.id)
-    if (!user.banned) throw new BadRequestError(ll.$users.userWithSuchIdIsNotBanned())
+    if (!user.ban) throw new BadRequestError(ll.$users.userWithSuchIdIsNotBanned())
 
-    const unbannedUser = await app.prisma.user.update({
-        where: { id: params.id },
-        data: { banned: false },
-        include: { role: true }
+    await app.prisma.ban.delete({
+        where: { userId: params.id }
     })
+
+    const unbannedUser = await models.user.get(app, params.id)
 
     return { payload: models.user.dto(unbannedUser) }
 }) satisfies RouteHandler<

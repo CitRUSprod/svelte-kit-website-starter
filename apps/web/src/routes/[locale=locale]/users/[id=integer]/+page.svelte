@@ -74,7 +74,7 @@
                 <li><b>{$ll.$.$users.$_id.role()}:</b> {data.user.role.name}</li>
                 <li>
                     <b>{$ll.$.$users.$_id.banned()}:</b>
-                    {#if data.user.banned}
+                    {#if data.user.ban}
                         {$ll.$.$users.$_id.yes()}
                     {:else}
                         {$ll.$.$users.$_id.no()}

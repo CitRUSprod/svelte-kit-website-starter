@@ -10,7 +10,7 @@ declare module "fastify" {
 
 export const verifyNotBanned: FastifyPluginCallback = (app, options, done) => {
     app.decorate<FastifyInstance["verifyNotBanned"]>("verifyNotBanned", async req => {
-        if (req.userData!.banned) throw new ForbiddenError("Banned")
+        if (req.userData!.ban) throw new ForbiddenError("Banned")
     })
 
     done()
