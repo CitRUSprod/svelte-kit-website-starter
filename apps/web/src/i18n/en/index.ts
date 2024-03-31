@@ -250,13 +250,18 @@ const en = {
             userUnbannedSuccessfully: "User successfully unbanned",
             username: "Username",
             users: "Users",
+            yes: "Yes",
+            no: "No",
+            who: "Who",
+            reason: "Reason",
 
             $$dialogRoleAssigning: {
                 cancel: "Cancel",
                 role: "Role",
                 roleAssigning: "Role assigning",
                 roleEditedSuccessfully: "Role successfully edited",
-                save: "Save"
+                save: "Save",
+                user: "User"
             },
 
             $$dialogUserBanning: {
@@ -265,7 +270,8 @@ const en = {
                 reason: "Reason",
                 userBanning: "User banning",
                 userBannedSuccessfully: "User successfully banned",
-                ban: "Ban"
+                ban: "Ban",
+                user: "User"
             },
 
             $_id: {

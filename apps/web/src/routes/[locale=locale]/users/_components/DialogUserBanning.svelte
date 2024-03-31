@@ -14,6 +14,7 @@
     const dispatch = createEventDispatcher()
 
     let userId = 0
+    let username = ""
     let reason = ""
 
     $: vldResultReason = vld.ban.reason(reason)
@@ -22,6 +23,7 @@
 
     export function open(user: schemasModels.user.User) {
         userId = user.id
+        username = user.username
         reason = ""
 
         dialog.open()
@@ -53,6 +55,9 @@
 >
     <div>
         <h1 class="u:text-center">{$ll.$.$users.$$dialogUserBanning.userBanning()}</h1>
+    </div>
+    <div>
+        <h3 class="u:text-center">{$ll.$.$users.$$dialogUserBanning.user()}: {username}</h3>
     </div>
     <div>
         <TextField

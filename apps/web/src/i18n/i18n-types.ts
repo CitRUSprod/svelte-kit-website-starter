@@ -694,6 +694,22 @@ type RootTranslation = {
 			 * П​о​л​ь​з​о​в​а​т​е​л​и
 			 */
 			users: string
+			/**
+			 * Д​а
+			 */
+			yes: string
+			/**
+			 * Н​е​т
+			 */
+			no: string
+			/**
+			 * К​т​о
+			 */
+			who: string
+			/**
+			 * П​р​и​ч​и​н​а
+			 */
+			reason: string
 			$$dialogRoleAssigning: {
 				/**
 				 * О​т​м​е​н​а
@@ -715,6 +731,10 @@ type RootTranslation = {
 				 * С​о​х​р​а​н​и​т​ь
 				 */
 				save: string
+				/**
+				 * П​о​л​ь​з​о​в​а​т​е​л​ь
+				 */
+				user: string
 			}
 			$$dialogUserBanning: {
 				/**
@@ -741,6 +761,10 @@ type RootTranslation = {
 				 * З​а​б​а​н​и​т​ь
 				 */
 				ban: string
+				/**
+				 * П​о​л​ь​з​о​в​а​т​е​л​ь
+				 */
+				user: string
 			}
 			$_id: {
 				/**
@@ -1589,6 +1613,22 @@ export type TranslationFunctions = {
 			 * Пользователи
 			 */
 			users: () => LocalizedString
+			/**
+			 * Да
+			 */
+			yes: () => LocalizedString
+			/**
+			 * Нет
+			 */
+			no: () => LocalizedString
+			/**
+			 * Кто
+			 */
+			who: () => LocalizedString
+			/**
+			 * Причина
+			 */
+			reason: () => LocalizedString
 			$$dialogRoleAssigning: {
 				/**
 				 * Отмена
@@ -1610,6 +1650,10 @@ export type TranslationFunctions = {
 				 * Сохранить
 				 */
 				save: () => LocalizedString
+				/**
+				 * Пользователь
+				 */
+				user: () => LocalizedString
 			}
 			$$dialogUserBanning: {
 				/**
@@ -1636,6 +1680,10 @@ export type TranslationFunctions = {
 				 * Забанить
 				 */
 				ban: () => LocalizedString
+				/**
+				 * Пользователь
+				 */
+				user: () => LocalizedString
 			}
 			$_id: {
 				/**

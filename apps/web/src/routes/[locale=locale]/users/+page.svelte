@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Content, Button, Checkbox, SimplePagination } from "$lib/components"
+    import { Content, Button, SimplePagination } from "$lib/components"
     import { DialogRoleAssigning, DialogUserBanning } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
@@ -124,7 +124,13 @@
                         <td>{user.email ?? "-"}</td>
                         <td>{user.role.name}</td>
                         <td>
-                            <Checkbox checked={!!user.ban} readonly />
+                            {#if user.ban}
+                                <div>{$ll.$.$users.yes()}</div>
+                                <div>{$ll.$.$users.who()}: {user.ban.author.username}</div>
+                                <div>{$ll.$.$users.reason()}: {user.ban.reason}</div>
+                            {:else}
+                                <div>{$ll.$.$users.no()}</div>
+                            {/if}
                         </td>
                         <td>{dt.getFullDate(user.registrationDate, data.tz, $currentLocale)}</td>
                         <td>
@@ -136,7 +142,7 @@
                             >
                                 {$ll.$.$users.open()}
                             </Button>
-                            {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
+                            {#if $userData && $userData.id !== user.id && $userData.role.permissions.includes(constantsEnums.Permission.AssignRole)}
                                 {#if !user.ban}
                                     <Button
                                         variant="warning"
@@ -146,7 +152,7 @@
                                     </Button>
                                 {/if}
                             {/if}
-                            {#if $userData?.role.permissions.includes(constantsEnums.Permission.BanUser)}
+                            {#if $userData && $userData.id !== user.id && $userData.role.permissions.includes(constantsEnums.Permission.BanUser)}
                                 {#if user.ban}
                                     <Button
                                         loading={$qcUnbanUser.loading &&

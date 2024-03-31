@@ -15,12 +15,14 @@
     const dispatch = createEventDispatcher()
 
     let userId = 0
+    let username = ""
     let roleId = 0
 
     $: items = roles.map(r => ({ text: r.name, value: r.id }))
 
     export function open(user: schemasModels.user.User) {
         userId = user.id
+        username = user.username
         roleId = user.role.id
 
         dialog.open()
@@ -52,6 +54,9 @@
 >
     <div>
         <h1 class="u:text-center">{$ll.$.$users.$$dialogRoleAssigning.roleAssigning()}</h1>
+    </div>
+    <div>
+        <h3 class="u:text-center">{$ll.$.$users.$$dialogRoleAssigning.user()}: {username}</h3>
     </div>
     <div>
         <DropdownMenu
