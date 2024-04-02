@@ -293,6 +293,9 @@ const ru = {
                 uploadAvatar: "Загрузить аватар",
                 username: "Имя пользователя",
                 yes: "Да",
+                banAuthor: "Автор бана",
+                banReason: "Причина бана",
+                banDate: "Дата бана",
 
                 $$dialogAvatarRemoving: {
                     avatarRemovedSuccessfully: "Аватар успешно удалён",

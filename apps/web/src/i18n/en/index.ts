@@ -291,6 +291,9 @@ const en = {
                 uploadAvatar: "Upload avatar",
                 username: "Username",
                 yes: "Yes",
+                banAuthor: "Ban author",
+                banReason: "Ban reason",
+                banDate: "Ban date",
 
                 $$dialogAvatarRemoving: {
                     avatarRemovedSuccessfully: "Avatar successfully removed",

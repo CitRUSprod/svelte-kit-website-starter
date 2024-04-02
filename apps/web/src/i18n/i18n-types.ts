@@ -831,6 +831,18 @@ type RootTranslation = {
 				 * Д​а
 				 */
 				yes: string
+				/**
+				 * А​в​т​о​р​ ​б​а​н​а
+				 */
+				banAuthor: string
+				/**
+				 * П​р​и​ч​и​н​а​ ​б​а​н​а
+				 */
+				banReason: string
+				/**
+				 * Д​а​т​а​ ​б​а​н​а
+				 */
+				banDate: string
 				$$dialogAvatarRemoving: {
 					/**
 					 * А​в​а​т​а​р​ ​у​с​п​е​ш​н​о​ ​у​д​а​л​ё​н
@@ -1750,6 +1762,18 @@ export type TranslationFunctions = {
 				 * Да
 				 */
 				yes: () => LocalizedString
+				/**
+				 * Автор бана
+				 */
+				banAuthor: () => LocalizedString
+				/**
+				 * Причина бана
+				 */
+				banReason: () => LocalizedString
+				/**
+				 * Дата бана
+				 */
+				banDate: () => LocalizedString
 				$$dialogAvatarRemoving: {
 					/**
 					 * Аватар успешно удалён

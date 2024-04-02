@@ -80,6 +80,14 @@
                         {$ll.$.$users.$_id.no()}
                     {/if}
                 </li>
+                {#if data.user.ban}
+                    <li><b>{$ll.$.$users.$_id.banAuthor()}:</b> {data.user.ban.author.username}</li>
+                    <li><b>{$ll.$.$users.$_id.banReason()}:</b> {data.user.ban.reason}</li>
+                    <li>
+                        <b>{$ll.$.$users.$_id.banDate()}:</b>
+                        {dt.getFullDateAndTime(data.user.ban.date, data.tz, $currentLocale)}
+                    </li>
+                {/if}
                 <li>
                     <b>{$ll.$.$users.$_id.registrationDate()}:</b>
                     {dt.getFullDateAndTime(data.user.registrationDate, data.tz, $currentLocale)}
