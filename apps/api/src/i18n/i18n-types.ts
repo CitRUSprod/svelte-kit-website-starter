@@ -16,37 +16,41 @@ export type Translations = RootTranslation
 type RootTranslation = {
 	$auth: {
 		/**
-		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​о​й​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​о​й​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
+		 * З​а​в​е​р​ш​и​т​ь​ ​р​е​г​и​с​т​р​а​ц​и​ю
 		 */
-		userWithSuchEmailAlreadyExists: string
-		/**
-		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​и​м​е​н​е​м​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
-		 */
-		userWithSuchUsernameAlreadyExists: string
-		/**
-		 * П​и​с​ь​м​о​ ​у​ж​е​ ​о​т​п​р​а​в​л​е​н​о​,​ ​п​р​о​в​е​р​ь​т​е​ ​п​о​ч​т​у
-		 */
-		emailAlreadySent: string
-		/**
-		 * Р​е​г​и​с​т​р​а​ц​и​я
-		 */
-		registration: string
+		completeRegistration: string
 		/**
 		 * Д​о​р​о​г​о​и​̆
 		 */
 		dear: string
 		/**
-		 * З​а​в​е​р​ш​и​т​ь​ ​р​е​г​и​с​т​р​а​ц​и​ю
+		 * П​и​с​ь​м​о​ ​у​ж​е​ ​о​т​п​р​а​в​л​е​н​о​,​ ​п​р​о​в​е​р​ь​т​е​ ​п​о​ч​т​у
 		 */
-		completeRegistration: string
+		emailAlreadySent: string
+		/**
+		 * Н​е​в​е​р​н​ы​й​ ​п​а​р​о​л​ь
+		 */
+		incorrectPassword: string
+		/**
+		 * Т​о​к​е​н​ ​р​е​г​и​с​т​р​а​ц​и​и​ ​O​A​u​t​h​ ​н​е​ ​н​а​й​д​е​н
+		 */
+		oAuthRegistrationTokenNotFound: string
+		/**
+		 * R​e​f​r​e​s​h​-​т​о​к​е​н​ ​н​е​ ​н​а​й​д​е​н
+		 */
+		refreshTokenNotFound: string
+		/**
+		 * Р​е​г​и​с​т​р​а​ц​и​я
+		 */
+		registration: string
 		/**
 		 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​р​е​г​и​с​т​р​а​ц​и​и​ ​и​с​т​ё​к
 		 */
 		registrationTokenExpired: string
 		/**
-		 * Т​о​к​е​н​ ​р​е​г​и​с​т​р​а​ц​и​и​ ​O​A​u​t​h​ ​н​е​ ​н​а​й​д​е​н
+		 * S​t​a​t​e​ ​н​е​ ​с​о​в​п​а​д​а​ю​т
 		 */
-		oAuthRegistrationTokenNotFound: string
+		statesDoNotMatch: string
 		/**
 		 * Н​е​о​ж​и​д​а​н​н​а​я​ ​о​ш​и​б​к​а
 		 */
@@ -56,17 +60,13 @@ type RootTranslation = {
 		 */
 		userWithEmailNotFound: string
 		/**
-		 * Н​е​в​е​р​н​ы​й​ ​п​а​р​о​л​ь
+		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​о​й​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​о​й​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
 		 */
-		incorrectPassword: string
+		userWithSuchEmailAlreadyExists: string
 		/**
-		 * S​t​a​t​e​ ​н​е​ ​с​о​в​п​а​д​а​ю​т
+		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​и​м​е​н​е​м​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
 		 */
-		statesDoNotMatch: string
-		/**
-		 * R​e​f​r​e​s​h​-​т​о​к​е​н​ ​н​е​ ​н​а​й​д​е​н
-		 */
-		refreshTokenNotFound: string
+		userWithSuchUsernameAlreadyExists: string
 	}
 	$posts: {
 		/**
@@ -76,42 +76,53 @@ type RootTranslation = {
 	}
 	$profile: {
 		/**
-		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​и​м​е​н​е​м​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
+		 * Д​о​р​о​г​о​й
 		 */
-		userWithSuchUsernameAlreadyExists: string
-		/**
-		 * Ф​а​й​л​ ​н​е​ ​я​в​л​я​е​т​с​я​ ​и​з​о​б​р​а​ж​е​н​и​е​м
-		 */
-		fileIsNotImage: string
-		/**
-		 * У​ ​в​а​с​ ​н​е​т​ ​а​в​а​т​а​р​а
-		 */
-		youDoNotHaveAvatar: string
+		dear: string
 		/**
 		 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а​ ​н​е​ ​у​к​а​з​а​н​а
 		 */
 		emailIsNotSet: string
 		/**
-		 * С​т​а​р​а​я​ ​и​ ​н​о​в​а​я​ ​э​л​е​к​т​р​о​н​н​ы​е​ ​п​о​ч​т​ы​ ​с​о​в​п​а​д​а​ю​т
-		 */
-		oldAndNewEmailsMatch: string
-		/**
 		 * О​б​н​о​в​л​е​н​и​е​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
 		 */
 		emailUpdate: string
 		/**
-		 * Д​о​р​о​г​о​й
-		 */
-		dear: string
-		/**
-		 * О​б​н​о​в​и​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у​ ​н​а​ ​<​b​>​{​e​m​a​i​l​}​<​/​b​>
-		 * @param {unknown} email
-		 */
-		updateEmailTo: RequiredParams<'email'>
-		/**
 		 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​о​б​н​о​в​л​е​н​и​я​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы​ ​и​с​т​ё​к
 		 */
 		emailUpdateTokenExpired: string
+		/**
+		 * Ф​а​й​л​ ​н​е​ ​я​в​л​я​е​т​с​я​ ​и​з​о​б​р​а​ж​е​н​и​е​м
+		 */
+		fileIsNotImage: string
+		/**
+		 * Н​е​в​е​р​н​ы​й​ ​с​т​а​р​ы​й​ ​п​а​р​о​л​ь
+		 */
+		incorrectOldPassword: string
+		/**
+		 * С​т​а​р​а​я​ ​и​ ​н​о​в​а​я​ ​э​л​е​к​т​р​о​н​н​ы​е​ ​п​о​ч​т​ы​ ​с​о​в​п​а​д​а​ю​т
+		 */
+		oldAndNewEmailsMatch: string
+		/**
+		 * С​т​а​р​ы​й​ ​и​ ​н​о​в​ы​й​ ​п​а​р​о​л​и​ ​с​о​в​п​а​д​а​ю​т
+		 */
+		oldAndNewPasswordsMatch: string
+		/**
+		 * П​а​р​о​л​ь​ ​н​е​ ​у​к​а​з​а​н
+		 */
+		passwordIsNotSet: string
+		/**
+		 * С​б​р​о​с​ ​п​а​р​о​л​я
+		 */
+		passwordReset: string
+		/**
+		 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​с​б​р​о​с​а​ ​п​а​р​о​л​я​ ​и​с​т​ё​к
+		 */
+		passwordResetTokenExpired: string
+		/**
+		 * С​б​р​о​с​и​т​ь​ ​п​а​р​о​л​ь
+		 */
+		resetPassword: string
 		/**
 		 * Н​е​о​ж​и​д​а​н​н​а​я​ ​о​ш​и​б​к​а
 		 */
@@ -121,33 +132,22 @@ type RootTranslation = {
 		 */
 		updateEmail: string
 		/**
-		 * П​а​р​о​л​ь​ ​н​е​ ​у​к​а​з​а​н
+		 * О​б​н​о​в​и​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у​ ​н​а​ ​<​b​>​{​e​m​a​i​l​}​<​/​b​>
+		 * @param {unknown} email
 		 */
-		passwordIsNotSet: string
-		/**
-		 * С​т​а​р​ы​й​ ​и​ ​н​о​в​ы​й​ ​п​а​р​о​л​и​ ​с​о​в​п​а​д​а​ю​т
-		 */
-		oldAndNewPasswordsMatch: string
-		/**
-		 * Н​е​в​е​р​н​ы​й​ ​с​т​а​р​ы​й​ ​п​а​р​о​л​ь
-		 */
-		incorrectOldPassword: string
+		updateEmailTo: RequiredParams<'email'>
 		/**
 		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​а​д​р​е​с​о​м​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы​ ​н​е​ ​н​а​й​д​е​н
 		 */
 		userWithEmailNotFound: string
 		/**
-		 * С​б​р​о​с​ ​п​а​р​о​л​я
+		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​и​м​е​н​е​м​ ​у​ж​е​ ​с​у​щ​е​с​т​в​у​е​т
 		 */
-		passwordReset: string
+		userWithSuchUsernameAlreadyExists: string
 		/**
-		 * С​б​р​о​с​и​т​ь​ ​п​а​р​о​л​ь
+		 * У​ ​в​а​с​ ​н​е​т​ ​а​в​а​т​а​р​а
 		 */
-		resetPassword: string
-		/**
-		 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​с​б​р​о​с​а​ ​п​а​р​о​л​я​ ​и​с​т​ё​к
-		 */
-		passwordResetTokenExpired: string
+		youDoNotHaveAvatar: string
 	}
 	$roles: {
 		/**
@@ -175,37 +175,41 @@ type RootTranslation = {
 export type TranslationFunctions = {
 	$auth: {
 		/**
-		 * Пользователь с такой электронной почтой уже существует
+		 * Завершить регистрацию
 		 */
-		userWithSuchEmailAlreadyExists: () => LocalizedString
-		/**
-		 * Пользователь с таким именем уже существует
-		 */
-		userWithSuchUsernameAlreadyExists: () => LocalizedString
-		/**
-		 * Письмо уже отправлено, проверьте почту
-		 */
-		emailAlreadySent: () => LocalizedString
-		/**
-		 * Регистрация
-		 */
-		registration: () => LocalizedString
+		completeRegistration: () => LocalizedString
 		/**
 		 * Дорогой
 		 */
 		dear: () => LocalizedString
 		/**
-		 * Завершить регистрацию
+		 * Письмо уже отправлено, проверьте почту
 		 */
-		completeRegistration: () => LocalizedString
+		emailAlreadySent: () => LocalizedString
+		/**
+		 * Неверный пароль
+		 */
+		incorrectPassword: () => LocalizedString
+		/**
+		 * Токен регистрации OAuth не найден
+		 */
+		oAuthRegistrationTokenNotFound: () => LocalizedString
+		/**
+		 * Refresh-токен не найден
+		 */
+		refreshTokenNotFound: () => LocalizedString
+		/**
+		 * Регистрация
+		 */
+		registration: () => LocalizedString
 		/**
 		 * Срок действия токена регистрации истёк
 		 */
 		registrationTokenExpired: () => LocalizedString
 		/**
-		 * Токен регистрации OAuth не найден
+		 * State не совпадают
 		 */
-		oAuthRegistrationTokenNotFound: () => LocalizedString
+		statesDoNotMatch: () => LocalizedString
 		/**
 		 * Неожиданная ошибка
 		 */
@@ -215,17 +219,13 @@ export type TranslationFunctions = {
 		 */
 		userWithEmailNotFound: () => LocalizedString
 		/**
-		 * Неверный пароль
+		 * Пользователь с такой электронной почтой уже существует
 		 */
-		incorrectPassword: () => LocalizedString
+		userWithSuchEmailAlreadyExists: () => LocalizedString
 		/**
-		 * State не совпадают
+		 * Пользователь с таким именем уже существует
 		 */
-		statesDoNotMatch: () => LocalizedString
-		/**
-		 * Refresh-токен не найден
-		 */
-		refreshTokenNotFound: () => LocalizedString
+		userWithSuchUsernameAlreadyExists: () => LocalizedString
 	}
 	$posts: {
 		/**
@@ -235,41 +235,53 @@ export type TranslationFunctions = {
 	}
 	$profile: {
 		/**
-		 * Пользователь с таким именем уже существует
+		 * Дорогой
 		 */
-		userWithSuchUsernameAlreadyExists: () => LocalizedString
-		/**
-		 * Файл не является изображением
-		 */
-		fileIsNotImage: () => LocalizedString
-		/**
-		 * У вас нет аватара
-		 */
-		youDoNotHaveAvatar: () => LocalizedString
+		dear: () => LocalizedString
 		/**
 		 * Электронная почта не указана
 		 */
 		emailIsNotSet: () => LocalizedString
 		/**
-		 * Старая и новая электронные почты совпадают
-		 */
-		oldAndNewEmailsMatch: () => LocalizedString
-		/**
 		 * Обновление электронной почты
 		 */
 		emailUpdate: () => LocalizedString
 		/**
-		 * Дорогой
-		 */
-		dear: () => LocalizedString
-		/**
-		 * Обновить электронную почту на <b>{email}</b>
-		 */
-		updateEmailTo: (arg: { email: unknown }) => LocalizedString
-		/**
 		 * Срок действия токена обновления электронной почты истёк
 		 */
 		emailUpdateTokenExpired: () => LocalizedString
+		/**
+		 * Файл не является изображением
+		 */
+		fileIsNotImage: () => LocalizedString
+		/**
+		 * Неверный старый пароль
+		 */
+		incorrectOldPassword: () => LocalizedString
+		/**
+		 * Старая и новая электронные почты совпадают
+		 */
+		oldAndNewEmailsMatch: () => LocalizedString
+		/**
+		 * Старый и новый пароли совпадают
+		 */
+		oldAndNewPasswordsMatch: () => LocalizedString
+		/**
+		 * Пароль не указан
+		 */
+		passwordIsNotSet: () => LocalizedString
+		/**
+		 * Сброс пароля
+		 */
+		passwordReset: () => LocalizedString
+		/**
+		 * Срок действия токена сброса пароля истёк
+		 */
+		passwordResetTokenExpired: () => LocalizedString
+		/**
+		 * Сбросить пароль
+		 */
+		resetPassword: () => LocalizedString
 		/**
 		 * Неожиданная ошибка
 		 */
@@ -279,33 +291,21 @@ export type TranslationFunctions = {
 		 */
 		updateEmail: () => LocalizedString
 		/**
-		 * Пароль не указан
+		 * Обновить электронную почту на <b>{email}</b>
 		 */
-		passwordIsNotSet: () => LocalizedString
-		/**
-		 * Старый и новый пароли совпадают
-		 */
-		oldAndNewPasswordsMatch: () => LocalizedString
-		/**
-		 * Неверный старый пароль
-		 */
-		incorrectOldPassword: () => LocalizedString
+		updateEmailTo: (arg: { email: unknown }) => LocalizedString
 		/**
 		 * Пользователь с таким адресом электронной почты не найден
 		 */
 		userWithEmailNotFound: () => LocalizedString
 		/**
-		 * Сброс пароля
+		 * Пользователь с таким именем уже существует
 		 */
-		passwordReset: () => LocalizedString
+		userWithSuchUsernameAlreadyExists: () => LocalizedString
 		/**
-		 * Сбросить пароль
+		 * У вас нет аватара
 		 */
-		resetPassword: () => LocalizedString
-		/**
-		 * Срок действия токена сброса пароля истёк
-		 */
-		passwordResetTokenExpired: () => LocalizedString
+		youDoNotHaveAvatar: () => LocalizedString
 	}
 	$roles: {
 		/**

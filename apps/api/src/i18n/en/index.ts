@@ -2,42 +2,42 @@ import type { Translation } from "../i18n-types"
 
 const en = {
     $auth: {
-        userWithSuchEmailAlreadyExists: "User with such email already exists",
-        userWithSuchUsernameAlreadyExists: "User with such username already exists",
-        emailAlreadySent: "Email has already been sent, check your email",
-        registration: "Registration",
-        dear: "Dear",
         completeRegistration: "Complete registration",
-        registrationTokenExpired: "Registration token expired",
+        dear: "Dear",
+        emailAlreadySent: "Email has already been sent, check your email",
+        incorrectPassword: "Incorrect password",
         oAuthRegistrationTokenNotFound: "OAuth registration token not found",
+        refreshTokenNotFound: "Refresh token not found",
+        registration: "Registration",
+        registrationTokenExpired: "Registration token expired",
+        statesDoNotMatch: "States do not match",
         unexpectedError: "Unexpected error",
         userWithEmailNotFound: "User with such email was not found",
-        incorrectPassword: "Incorrect password",
-        statesDoNotMatch: "States do not match",
-        refreshTokenNotFound: "Refresh token not found"
+        userWithSuchEmailAlreadyExists: "User with such email already exists",
+        userWithSuchUsernameAlreadyExists: "User with such username already exists"
     },
     $posts: {
         noAccess: "No access"
     },
     $profile: {
-        userWithSuchUsernameAlreadyExists: "User with such username already exists",
-        fileIsNotImage: "File is not an image",
-        youDoNotHaveAvatar: "You do not have an avatar",
-        emailIsNotSet: "Email is not set",
-        oldAndNewEmailsMatch: "Old and new emails match",
-        emailUpdate: "Email update",
         dear: "Dear",
-        updateEmailTo: "Update email to <b>{email}</b>",
+        emailIsNotSet: "Email is not set",
+        emailUpdate: "Email update",
         emailUpdateTokenExpired: "Email update token expired",
+        fileIsNotImage: "File is not an image",
+        incorrectOldPassword: "Incorrect old password",
+        oldAndNewEmailsMatch: "Old and new emails match",
+        oldAndNewPasswordsMatch: "Old and new passwords match",
+        passwordIsNotSet: "Password is not set",
+        passwordReset: "Password reset",
+        passwordResetTokenExpired: "Password reset token expired",
+        resetPassword: "Reset password",
         unexpectedError: "Unexpected error",
         updateEmail: "Update email",
-        passwordIsNotSet: "Password is not set",
-        oldAndNewPasswordsMatch: "Old and new passwords match",
-        incorrectOldPassword: "Incorrect old password",
+        updateEmailTo: "Update email to <b>{email}</b>",
         userWithEmailNotFound: "User with such email was not found",
-        passwordReset: "Password reset",
-        resetPassword: "Reset password",
-        passwordResetTokenExpired: "Password reset token expired"
+        userWithSuchUsernameAlreadyExists: "User with such username already exists",
+        youDoNotHaveAvatar: "You do not have an avatar"
     },
     $roles: {
         roleWithSuchIdIsProtected: "Role with such ID is protected"

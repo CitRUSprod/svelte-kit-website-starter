@@ -14,55 +14,7 @@ export type Translation = RootTranslation
 export type Translations = RootTranslation
 
 type RootTranslation = {
-	/**
-	 * П​р​о​и​з​о​ш​л​а​ ​о​ш​и​б​к​а
-	 */
-	errorOccurred: string
-	$$alert: {
-		/**
-		 * О​ш​и​б​к​а
-		 */
-		error: string
-		/**
-		 * И​н​ф​о​р​м​а​ц​и​я
-		 */
-		info: string
-		/**
-		 * У​с​п​е​х
-		 */
-		success: string
-		/**
-		 * П​р​е​д​у​п​р​е​ж​д​е​н​и​е
-		 */
-		warning: string
-	}
-	$$chat: {
-		/**
-		 * С​о​о​б​щ​е​н​и​е
-		 */
-		message: string
-		/**
-		 * О​т​п​р​а​в​и​т​ь
-		 */
-		send: string
-	}
 	$: {
-		/**
-		 * К​л​и​к​о​в
-		 */
-		clicked: string
-		/**
-		 * К​о​л​и​ч​е​с​т​в​о
-		 */
-		count: string
-		/**
-		 * Г​л​а​в​н​а​я
-		 */
-		home: string
-		/**
-		 * С​л​у​ч​а​й​н​о​е​ ​ч​и​с​л​о
-		 */
-		randomNumber: string
 		$$header: {
 			/**
 			 * Ч​а​т
@@ -97,34 +49,24 @@ type RootTranslation = {
 			 */
 			users: string
 		}
-		$error: {
-			/**
-			 * О​ш​и​б​к​а
-			 */
-			error: string
-			/**
-			 * Н​а​ ​г​л​а​в​н​у​ю
-			 */
-			goHome: string
-		}
-		$chat: {
-			/**
-			 * Ч​а​т
-			 */
-			chat: string
-		}
-		$simpleLayout: {
-			/**
-			 * Н​а​ ​г​л​а​в​н​у​ю
-			 */
-			goHome: string
-			/**
-			 * П​р​о​с​т​о​й​ ​л​э​й​а​у​т
-			 */
-			simpleLayout: string
-		}
 		$auth: {
 			$login: {
+				$_provider: {
+					$callback: {
+						/**
+						 * В​ы​ ​у​с​п​е​ш​н​о​ ​в​о​ш​л​и
+						 */
+						loggedInSuccessfully: string
+						/**
+						 * В​х​о​д
+						 */
+						login: string
+						/**
+						 * П​е​р​е​н​а​п​р​а​в​л​я​е​м​.​.​.
+						 */
+						redirecting: string
+					}
+				}
 				/**
 				 * В​о​й​т​и
 				 */
@@ -146,6 +88,10 @@ type RootTranslation = {
 				 */
 				login: string
 				/**
+				 * и​л​и​ ​в​о​й​т​и​ ​с​ ​п​о​м​о​щ​ь​ю
+				 */
+				orLoginWith: string
+				/**
 				 * П​а​р​о​л​ь
 				 */
 				password: string
@@ -153,26 +99,6 @@ type RootTranslation = {
 				 * Р​е​г​и​с​т​р​а​ц​и​я
 				 */
 				registration: string
-				/**
-				 * и​л​и​ ​в​о​й​т​и​ ​с​ ​п​о​м​о​щ​ь​ю
-				 */
-				orLoginWith: string
-				$_provider: {
-					$callback: {
-						/**
-						 * В​ы​ ​у​с​п​е​ш​н​о​ ​в​о​ш​л​и
-						 */
-						loggedInSuccessfully: string
-						/**
-						 * В​х​о​д
-						 */
-						login: string
-						/**
-						 * П​е​р​е​н​а​п​р​а​в​л​я​е​м​.​.​.
-						 */
-						redirecting: string
-					}
-				}
 			}
 			$logout: {
 				/**
@@ -189,6 +115,46 @@ type RootTranslation = {
 				redirecting: string
 			}
 			$registration: {
+				$complete: {
+					$_token: {
+						/**
+						 * П​е​р​е​н​а​п​р​а​в​л​я​е​м​.​.​.
+						 */
+						redirecting: string
+						/**
+						 * В​ы​ ​у​с​п​е​ш​н​о​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​л​и​с​ь
+						 */
+						registeredSuccessfully: string
+						/**
+						 * Р​е​г​и​с​т​р​а​ц​и​я
+						 */
+						registration: string
+					}
+				}
+				$oauth: {
+					$_token: {
+						/**
+						 * З​а​р​е​г​и​с​т​р​и​р​о​в​а​т​ь​с​я
+						 */
+						register: string
+						/**
+						 * В​ы​ ​у​с​п​е​ш​н​о​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​л​и​с​ь
+						 */
+						registeredSuccessfully: string
+						/**
+						 * Р​е​г​и​с​т​р​а​ц​и​я
+						 */
+						registration: string
+						/**
+						 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
+						 */
+						username: string
+					}
+				}
+				/**
+				 * П​и​с​ь​м​о​ ​с​ ​п​о​д​т​в​е​р​ж​д​е​н​и​е​м​ ​б​ы​л​о​ ​о​т​п​р​а​в​л​е​н​о​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+				 */
+				confirmationEmailSent: string
 				/**
 				 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
 				 */
@@ -197,6 +163,10 @@ type RootTranslation = {
 				 * В​х​о​д
 				 */
 				login: string
+				/**
+				 * и​л​и​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​т​ь​с​я​ ​с​ ​п​о​м​о​щ​ь​ю
+				 */
+				orRegisterWith: string
 				/**
 				 * П​а​р​о​л​ь
 				 */
@@ -217,93 +187,25 @@ type RootTranslation = {
 				 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
 				 */
 				username: string
-				/**
-				 * и​л​и​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​т​ь​с​я​ ​с​ ​п​о​м​о​щ​ь​ю
-				 */
-				orRegisterWith: string
-				/**
-				 * П​и​с​ь​м​о​ ​с​ ​п​о​д​т​в​е​р​ж​д​е​н​и​е​м​ ​б​ы​л​о​ ​о​т​п​р​а​в​л​е​н​о​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
-				 */
-				confirmationEmailSent: string
-				$complete: {
-					$_token: {
-						/**
-						 * Р​е​г​и​с​т​р​а​ц​и​я
-						 */
-						registration: string
-						/**
-						 * П​е​р​е​н​а​п​р​а​в​л​я​е​м​.​.​.
-						 */
-						redirecting: string
-						/**
-						 * В​ы​ ​у​с​п​е​ш​н​о​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​л​и​с​ь
-						 */
-						registeredSuccessfully: string
-					}
-				}
-				$oauth: {
-					$_token: {
-						/**
-						 * Р​е​г​и​с​т​р​а​ц​и​я
-						 */
-						registration: string
-						/**
-						 * В​ы​ ​у​с​п​е​ш​н​о​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​л​и​с​ь
-						 */
-						registeredSuccessfully: string
-						/**
-						 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
-						 */
-						username: string
-						/**
-						 * З​а​р​е​г​и​с​т​р​и​р​о​в​а​т​ь​с​я
-						 */
-						register: string
-					}
-				}
 			}
 		}
+		$chat: {
+			/**
+			 * Ч​а​т
+			 */
+			chat: string
+		}
+		$error: {
+			/**
+			 * О​ш​и​б​к​а
+			 */
+			error: string
+			/**
+			 * Н​а​ ​г​л​а​в​н​у​ю
+			 */
+			goHome: string
+		}
 		$posts: {
-			/**
-			 * А​в​т​о​р
-			 */
-			author: string
-			/**
-			 * С​о​з​д​а​т​ь​ ​н​о​в​ы​й​ ​п​о​с​т
-			 */
-			createPost: string
-			/**
-			 * Д​а​т​а​ ​с​о​з​д​а​н​и​я​ ​(​С​н​а​ч​а​л​а​ ​с​т​а​р​ы​е​)
-			 */
-			creationDateAsc: string
-			/**
-			 * Д​а​т​а​ ​с​о​з​д​а​н​и​я​ ​(​С​н​а​ч​а​л​а​ ​н​о​в​ы​е​)
-			 */
-			creationDateDesc: string
-			/**
-			 * В​в​е​д​и​т​е​ ​з​а​г​о​л​о​в​о​к​.​.​.
-			 */
-			enterTitle: string
-			/**
-			 * П​о​с​т​ы
-			 */
-			posts: string
-			/**
-			 * П​о​и​с​к
-			 */
-			search: string
-			/**
-			 * С​о​р​т​и​р​о​в​к​а
-			 */
-			sorting: string
-			/**
-			 * З​а​г​о​л​о​в​о​к​ ​(​А​-​Я​)
-			 */
-			titleAsc: string
-			/**
-			 * З​а​г​о​л​о​в​о​к​ ​(​Я​-​А​)
-			 */
-			titleDesc: string
 			$$dialogPostCreating: {
 				/**
 				 * О​т​м​е​н​а
@@ -339,26 +241,6 @@ type RootTranslation = {
 				title: string
 			}
 			$_id: {
-				/**
-				 * А​в​т​о​р
-				 */
-				author: string
-				/**
-				 * С​о​з​д​а​н
-				 */
-				created: string
-				/**
-				 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
-				 */
-				edit: string
-				/**
-				 * О​т​р​е​д​а​к​т​и​р​о​в​а​н
-				 */
-				edited: string
-				/**
-				 * У​д​а​л​и​т​ь
-				 */
-				remove: string
 				$$dialogPostEditing: {
 					/**
 					 * О​т​м​е​н​а
@@ -415,7 +297,67 @@ type RootTranslation = {
 					 */
 					remove: string
 				}
+				/**
+				 * А​в​т​о​р
+				 */
+				author: string
+				/**
+				 * С​о​з​д​а​н
+				 */
+				created: string
+				/**
+				 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
+				 */
+				edit: string
+				/**
+				 * О​т​р​е​д​а​к​т​и​р​о​в​а​н
+				 */
+				edited: string
+				/**
+				 * У​д​а​л​и​т​ь
+				 */
+				remove: string
 			}
+			/**
+			 * А​в​т​о​р
+			 */
+			author: string
+			/**
+			 * С​о​з​д​а​т​ь​ ​н​о​в​ы​й​ ​п​о​с​т
+			 */
+			createPost: string
+			/**
+			 * Д​а​т​а​ ​с​о​з​д​а​н​и​я​ ​(​С​н​а​ч​а​л​а​ ​с​т​а​р​ы​е​)
+			 */
+			creationDateAsc: string
+			/**
+			 * Д​а​т​а​ ​с​о​з​д​а​н​и​я​ ​(​С​н​а​ч​а​л​а​ ​н​о​в​ы​е​)
+			 */
+			creationDateDesc: string
+			/**
+			 * В​в​е​д​и​т​е​ ​з​а​г​о​л​о​в​о​к​.​.​.
+			 */
+			enterTitle: string
+			/**
+			 * П​о​с​т​ы
+			 */
+			posts: string
+			/**
+			 * П​о​и​с​к
+			 */
+			search: string
+			/**
+			 * С​о​р​т​и​р​о​в​к​а
+			 */
+			sorting: string
+			/**
+			 * З​а​г​о​л​о​в​о​к​ ​(​А​-​Я​)
+			 */
+			titleAsc: string
+			/**
+			 * З​а​г​о​л​о​в​о​к​ ​(​Я​-​А​)
+			 */
+			titleDesc: string
 		}
 		$profile: {
 			$email: {
@@ -453,26 +395,6 @@ type RootTranslation = {
 				}
 			}
 			$password: {
-				/**
-				 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
-				 */
-				email: string
-				/**
-				 * В​в​е​д​и​т​е​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у​.​.​.
-				 */
-				enterEmail: string
-				/**
-				 * С​б​р​о​с​ ​п​а​р​о​л​я
-				 */
-				passwordReset: string
-				/**
-				 * С​с​ы​л​к​а​ ​н​а​ ​с​б​р​о​с​ ​б​ы​л​а​ ​о​т​п​р​а​в​л​е​н​а​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
-				 */
-				resetLinkSent: string
-				/**
-				 * О​т​п​р​а​в​и​т​ь​ ​с​с​ы​л​к​у​ ​н​а​ ​с​б​р​о​с
-				 */
-				sendResetLink: string
 				$_token: {
 					/**
 					 * В​в​е​д​и​т​е​ ​н​о​в​ы​й​ ​п​а​р​о​л​ь​.​.​.
@@ -503,41 +425,29 @@ type RootTranslation = {
 					 */
 					reset: string
 				}
+				/**
+				 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+				 */
+				email: string
+				/**
+				 * В​в​е​д​и​т​е​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у​.​.​.
+				 */
+				enterEmail: string
+				/**
+				 * С​б​р​о​с​ ​п​а​р​о​л​я
+				 */
+				passwordReset: string
+				/**
+				 * С​с​ы​л​к​а​ ​н​а​ ​с​б​р​о​с​ ​б​ы​л​а​ ​о​т​п​р​а​в​л​е​н​а​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+				 */
+				resetLinkSent: string
+				/**
+				 * О​т​п​р​а​в​и​т​ь​ ​с​с​ы​л​к​у​ ​н​а​ ​с​б​р​о​с
+				 */
+				sendResetLink: string
 			}
 		}
 		$roles: {
-			/**
-			 * Д​е​й​с​т​в​и​я
-			 */
-			actions: string
-			/**
-			 * С​о​з​д​а​т​ь​ ​р​о​л​ь
-			 */
-			createRole: string
-			/**
-			 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
-			 */
-			edit: string
-			/**
-			 * п​у​с​т​о
-			 */
-			empty: string
-			/**
-			 * Н​а​з​в​а​н​и​е
-			 */
-			name: string
-			/**
-			 * Р​а​з​р​е​ш​е​н​и​я
-			 */
-			permissions: string
-			/**
-			 * У​д​а​л​и​т​ь
-			 */
-			remove: string
-			/**
-			 * Р​о​л​и
-			 */
-			roles: string
 			$$dialogRoleCreating: {
 				/**
 				 * Д​о​б​а​в​и​т​ь
@@ -636,80 +546,50 @@ type RootTranslation = {
 				 */
 				roleRemovingQuestion: string
 			}
-		}
-		$users: {
 			/**
 			 * Д​е​й​с​т​в​и​я
 			 */
 			actions: string
 			/**
-			 * Н​а​з​н​а​ч​и​т​ь​ ​р​о​л​ь
+			 * С​о​з​д​а​т​ь​ ​р​о​л​ь
 			 */
-			assignRole: string
+			createRole: string
 			/**
-			 * А​в​а​т​а​р
+			 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
 			 */
-			avatar: string
+			edit: string
 			/**
-			 * З​а​б​а​н​и​т​ь
+			 * п​у​с​т​о
 			 */
-			ban: string
+			empty: string
 			/**
-			 * З​а​б​а​н​е​н
+			 * Н​а​з​в​а​н​и​е
 			 */
-			banned: string
+			name: string
 			/**
-			 * П​о​д​т​в​е​р​ж​д​ё​н​н​а​я​ ​э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+			 * Р​а​з​р​е​ш​е​н​и​я
 			 */
-			confirmedEmail: string
+			permissions: string
 			/**
-			 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+			 * У​д​а​л​и​т​ь
 			 */
-			email: string
+			remove: string
 			/**
-			 * О​т​к​р​ы​т​ь
+			 * Р​о​л​и
 			 */
-			open: string
+			roles: string
+		}
+		$simpleLayout: {
 			/**
-			 * Д​а​т​а​ ​р​е​г​и​с​т​р​а​ц​и​и
+			 * Н​а​ ​г​л​а​в​н​у​ю
 			 */
-			registrationDate: string
+			goHome: string
 			/**
-			 * Р​о​л​ь
+			 * П​р​о​с​т​о​й​ ​л​э​й​а​у​т
 			 */
-			role: string
-			/**
-			 * Р​а​з​б​а​н​и​т​ь
-			 */
-			unban: string
-			/**
-			 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​р​а​з​б​а​н​е​н
-			 */
-			userUnbannedSuccessfully: string
-			/**
-			 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
-			 */
-			username: string
-			/**
-			 * П​о​л​ь​з​о​в​а​т​е​л​и
-			 */
-			users: string
-			/**
-			 * Д​а
-			 */
-			yes: string
-			/**
-			 * Н​е​т
-			 */
-			no: string
-			/**
-			 * К​т​о
-			 */
-			who: string
-			/**
-			 * П​р​и​ч​и​н​а
-			 */
-			reason: string
+			simpleLayout: string
+		}
+		$users: {
 			$$dialogRoleAssigning: {
 				/**
 				 * О​т​м​е​н​а
@@ -738,6 +618,10 @@ type RootTranslation = {
 			}
 			$$dialogUserBanning: {
 				/**
+				 * З​а​б​а​н​и​т​ь
+				 */
+				ban: string
+				/**
 				 * О​т​м​е​н​а
 				 */
 				cancel: string
@@ -750,99 +634,19 @@ type RootTranslation = {
 				 */
 				reason: string
 				/**
-				 * Б​а​н​ ​п​о​л​ь​з​о​в​а​т​е​л​я
+				 * П​о​л​ь​з​о​в​а​т​е​л​ь
 				 */
-				userBanning: string
+				user: string
 				/**
 				 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​з​а​б​а​н​е​н
 				 */
 				userBannedSuccessfully: string
 				/**
-				 * З​а​б​а​н​и​т​ь
+				 * Б​а​н​ ​п​о​л​ь​з​о​в​а​т​е​л​я
 				 */
-				ban: string
-				/**
-				 * П​о​л​ь​з​о​в​а​т​е​л​ь
-				 */
-				user: string
+				userBanning: string
 			}
 			$_id: {
-				/**
-				 * А​в​а​т​а​р
-				 */
-				avatar: string
-				/**
-				 * А​в​а​т​а​р​ ​у​с​п​е​ш​н​о​ ​о​б​н​о​в​л​ё​н
-				 */
-				avatarUpdatedSuccessfully: string
-				/**
-				 * З​а​б​а​н​е​н
-				 */
-				banned: string
-				/**
-				 * И​з​м​е​н​и​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
-				 */
-				changeEmail: string
-				/**
-				 * И​з​м​е​н​и​т​ь​ ​п​а​р​о​л​ь
-				 */
-				changePassword: string
-				/**
-				 * П​и​с​ь​м​о​ ​с​ ​п​о​д​т​в​е​р​ж​д​е​н​и​е​м​ ​б​ы​л​о​ ​о​т​п​р​а​в​л​е​н​о​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
-				 */
-				confirmationEmailSent: string
-				/**
-				 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
-				 */
-				edit: string
-				/**
-				 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
-				 */
-				email: string
-				/**
-				 * Н​е​т
-				 */
-				no: string
-				/**
-				 * П​р​о​ф​и​л​ь
-				 */
-				profile: string
-				/**
-				 * Д​а​т​а​ ​р​е​г​и​с​т​р​а​ц​и​и
-				 */
-				registrationDate: string
-				/**
-				 * У​д​а​л​и​т​ь​ ​а​в​а​т​а​р
-				 */
-				removeAvatar: string
-				/**
-				 * Р​о​л​ь
-				 */
-				role: string
-				/**
-				 * З​а​г​р​у​з​и​т​ь​ ​а​в​а​т​а​р
-				 */
-				uploadAvatar: string
-				/**
-				 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
-				 */
-				username: string
-				/**
-				 * Д​а
-				 */
-				yes: string
-				/**
-				 * А​в​т​о​р​ ​б​а​н​а
-				 */
-				banAuthor: string
-				/**
-				 * П​р​и​ч​и​н​а​ ​б​а​н​а
-				 */
-				banReason: string
-				/**
-				 * Д​а​т​а​ ​б​а​н​а
-				 */
-				banDate: string
 				$$dialogAvatarRemoving: {
 					/**
 					 * А​в​а​т​а​р​ ​у​с​п​е​ш​н​о​ ​у​д​а​л​ё​н
@@ -875,13 +679,13 @@ type RootTranslation = {
 					 */
 					change: string
 					/**
-					 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
-					 */
-					email: string
-					/**
 					 * П​и​с​ь​м​о​ ​с​ ​п​о​д​т​в​е​р​ж​д​е​н​и​е​м​ ​б​ы​л​о​ ​о​т​п​р​а​в​л​е​н​о​ ​н​а​ ​в​а​ш​ ​т​е​к​у​щ​и​й​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
 					 */
 					confirmationEmailSent: string
+					/**
+					 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+					 */
+					email: string
 					/**
 					 * И​з​м​е​н​е​н​и​е​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
 					 */
@@ -939,61 +743,209 @@ type RootTranslation = {
 					 */
 					username: string
 				}
+				/**
+				 * А​в​а​т​а​р
+				 */
+				avatar: string
+				/**
+				 * А​в​а​т​а​р​ ​у​с​п​е​ш​н​о​ ​о​б​н​о​в​л​ё​н
+				 */
+				avatarUpdatedSuccessfully: string
+				/**
+				 * А​в​т​о​р​ ​б​а​н​а
+				 */
+				banAuthor: string
+				/**
+				 * Д​а​т​а​ ​б​а​н​а
+				 */
+				banDate: string
+				/**
+				 * З​а​б​а​н​е​н
+				 */
+				banned: string
+				/**
+				 * П​р​и​ч​и​н​а​ ​б​а​н​а
+				 */
+				banReason: string
+				/**
+				 * И​з​м​е​н​и​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
+				 */
+				changeEmail: string
+				/**
+				 * И​з​м​е​н​и​т​ь​ ​п​а​р​о​л​ь
+				 */
+				changePassword: string
+				/**
+				 * П​и​с​ь​м​о​ ​с​ ​п​о​д​т​в​е​р​ж​д​е​н​и​е​м​ ​б​ы​л​о​ ​о​т​п​р​а​в​л​е​н​о​ ​н​а​ ​в​а​ш​ ​а​д​р​е​с​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+				 */
+				confirmationEmailSent: string
+				/**
+				 * Р​е​д​а​к​т​и​р​о​в​а​т​ь
+				 */
+				edit: string
+				/**
+				 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+				 */
+				email: string
+				/**
+				 * Н​е​т
+				 */
+				no: string
+				/**
+				 * П​р​о​ф​и​л​ь
+				 */
+				profile: string
+				/**
+				 * Д​а​т​а​ ​р​е​г​и​с​т​р​а​ц​и​и
+				 */
+				registrationDate: string
+				/**
+				 * У​д​а​л​и​т​ь​ ​а​в​а​т​а​р
+				 */
+				removeAvatar: string
+				/**
+				 * Р​о​л​ь
+				 */
+				role: string
+				/**
+				 * З​а​г​р​у​з​и​т​ь​ ​а​в​а​т​а​р
+				 */
+				uploadAvatar: string
+				/**
+				 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
+				 */
+				username: string
+				/**
+				 * Д​а
+				 */
+				yes: string
 			}
+			/**
+			 * Д​е​й​с​т​в​и​я
+			 */
+			actions: string
+			/**
+			 * Н​а​з​н​а​ч​и​т​ь​ ​р​о​л​ь
+			 */
+			assignRole: string
+			/**
+			 * А​в​а​т​а​р
+			 */
+			avatar: string
+			/**
+			 * З​а​б​а​н​и​т​ь
+			 */
+			ban: string
+			/**
+			 * З​а​б​а​н​е​н
+			 */
+			banned: string
+			/**
+			 * П​о​д​т​в​е​р​ж​д​ё​н​н​а​я​ ​э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+			 */
+			confirmedEmail: string
+			/**
+			 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+			 */
+			email: string
+			/**
+			 * Н​е​т
+			 */
+			no: string
+			/**
+			 * О​т​к​р​ы​т​ь
+			 */
+			open: string
+			/**
+			 * П​р​и​ч​и​н​а
+			 */
+			reason: string
+			/**
+			 * Д​а​т​а​ ​р​е​г​и​с​т​р​а​ц​и​и
+			 */
+			registrationDate: string
+			/**
+			 * Р​о​л​ь
+			 */
+			role: string
+			/**
+			 * Р​а​з​б​а​н​и​т​ь
+			 */
+			unban: string
+			/**
+			 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
+			 */
+			username: string
+			/**
+			 * П​о​л​ь​з​о​в​а​т​е​л​и
+			 */
+			users: string
+			/**
+			 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​у​с​п​е​ш​н​о​ ​р​а​з​б​а​н​е​н
+			 */
+			userUnbannedSuccessfully: string
+			/**
+			 * К​т​о
+			 */
+			who: string
+			/**
+			 * Д​а
+			 */
+			yes: string
 		}
+		/**
+		 * К​л​и​к​о​в
+		 */
+		clicked: string
+		/**
+		 * К​о​л​и​ч​е​с​т​в​о
+		 */
+		count: string
+		/**
+		 * Г​л​а​в​н​а​я
+		 */
+		home: string
+		/**
+		 * С​л​у​ч​а​й​н​о​е​ ​ч​и​с​л​о
+		 */
+		randomNumber: string
 	}
-}
-
-export type TranslationFunctions = {
-	/**
-	 * Произошла ошибка
-	 */
-	errorOccurred: () => LocalizedString
 	$$alert: {
 		/**
-		 * Ошибка
+		 * О​ш​и​б​к​а
 		 */
-		error: () => LocalizedString
+		error: string
 		/**
-		 * Информация
+		 * И​н​ф​о​р​м​а​ц​и​я
 		 */
-		info: () => LocalizedString
+		info: string
 		/**
-		 * Успех
+		 * У​с​п​е​х
 		 */
-		success: () => LocalizedString
+		success: string
 		/**
-		 * Предупреждение
+		 * П​р​е​д​у​п​р​е​ж​д​е​н​и​е
 		 */
-		warning: () => LocalizedString
+		warning: string
 	}
 	$$chat: {
 		/**
-		 * Сообщение
+		 * С​о​о​б​щ​е​н​и​е
 		 */
-		message: () => LocalizedString
+		message: string
 		/**
-		 * Отправить
+		 * О​т​п​р​а​в​и​т​ь
 		 */
-		send: () => LocalizedString
+		send: string
 	}
+	/**
+	 * П​р​о​и​з​о​ш​л​а​ ​о​ш​и​б​к​а
+	 */
+	errorOccurred: string
+}
+
+export type TranslationFunctions = {
 	$: {
-		/**
-		 * Кликов
-		 */
-		clicked: () => LocalizedString
-		/**
-		 * Количество
-		 */
-		count: () => LocalizedString
-		/**
-		 * Главная
-		 */
-		home: () => LocalizedString
-		/**
-		 * Случайное число
-		 */
-		randomNumber: () => LocalizedString
 		$$header: {
 			/**
 			 * Чат
@@ -1028,34 +980,24 @@ export type TranslationFunctions = {
 			 */
 			users: () => LocalizedString
 		}
-		$error: {
-			/**
-			 * Ошибка
-			 */
-			error: () => LocalizedString
-			/**
-			 * На главную
-			 */
-			goHome: () => LocalizedString
-		}
-		$chat: {
-			/**
-			 * Чат
-			 */
-			chat: () => LocalizedString
-		}
-		$simpleLayout: {
-			/**
-			 * На главную
-			 */
-			goHome: () => LocalizedString
-			/**
-			 * Простой лэйаут
-			 */
-			simpleLayout: () => LocalizedString
-		}
 		$auth: {
 			$login: {
+				$_provider: {
+					$callback: {
+						/**
+						 * Вы успешно вошли
+						 */
+						loggedInSuccessfully: () => LocalizedString
+						/**
+						 * Вход
+						 */
+						login: () => LocalizedString
+						/**
+						 * Перенаправляем...
+						 */
+						redirecting: () => LocalizedString
+					}
+				}
 				/**
 				 * Войти
 				 */
@@ -1077,6 +1019,10 @@ export type TranslationFunctions = {
 				 */
 				login: () => LocalizedString
 				/**
+				 * или войти с помощью
+				 */
+				orLoginWith: () => LocalizedString
+				/**
 				 * Пароль
 				 */
 				password: () => LocalizedString
@@ -1084,26 +1030,6 @@ export type TranslationFunctions = {
 				 * Регистрация
 				 */
 				registration: () => LocalizedString
-				/**
-				 * или войти с помощью
-				 */
-				orLoginWith: () => LocalizedString
-				$_provider: {
-					$callback: {
-						/**
-						 * Вы успешно вошли
-						 */
-						loggedInSuccessfully: () => LocalizedString
-						/**
-						 * Вход
-						 */
-						login: () => LocalizedString
-						/**
-						 * Перенаправляем...
-						 */
-						redirecting: () => LocalizedString
-					}
-				}
 			}
 			$logout: {
 				/**
@@ -1120,6 +1046,46 @@ export type TranslationFunctions = {
 				redirecting: () => LocalizedString
 			}
 			$registration: {
+				$complete: {
+					$_token: {
+						/**
+						 * Перенаправляем...
+						 */
+						redirecting: () => LocalizedString
+						/**
+						 * Вы успешно зарегистрировались
+						 */
+						registeredSuccessfully: () => LocalizedString
+						/**
+						 * Регистрация
+						 */
+						registration: () => LocalizedString
+					}
+				}
+				$oauth: {
+					$_token: {
+						/**
+						 * Зарегистрироваться
+						 */
+						register: () => LocalizedString
+						/**
+						 * Вы успешно зарегистрировались
+						 */
+						registeredSuccessfully: () => LocalizedString
+						/**
+						 * Регистрация
+						 */
+						registration: () => LocalizedString
+						/**
+						 * Имя пользователя
+						 */
+						username: () => LocalizedString
+					}
+				}
+				/**
+				 * Письмо с подтверждением было отправлено на ваш адрес электронной почты
+				 */
+				confirmationEmailSent: () => LocalizedString
 				/**
 				 * Электронная почта
 				 */
@@ -1128,6 +1094,10 @@ export type TranslationFunctions = {
 				 * Вход
 				 */
 				login: () => LocalizedString
+				/**
+				 * или зарегистрироваться с помощью
+				 */
+				orRegisterWith: () => LocalizedString
 				/**
 				 * Пароль
 				 */
@@ -1148,93 +1118,25 @@ export type TranslationFunctions = {
 				 * Имя пользователя
 				 */
 				username: () => LocalizedString
-				/**
-				 * или зарегистрироваться с помощью
-				 */
-				orRegisterWith: () => LocalizedString
-				/**
-				 * Письмо с подтверждением было отправлено на ваш адрес электронной почты
-				 */
-				confirmationEmailSent: () => LocalizedString
-				$complete: {
-					$_token: {
-						/**
-						 * Регистрация
-						 */
-						registration: () => LocalizedString
-						/**
-						 * Перенаправляем...
-						 */
-						redirecting: () => LocalizedString
-						/**
-						 * Вы успешно зарегистрировались
-						 */
-						registeredSuccessfully: () => LocalizedString
-					}
-				}
-				$oauth: {
-					$_token: {
-						/**
-						 * Регистрация
-						 */
-						registration: () => LocalizedString
-						/**
-						 * Вы успешно зарегистрировались
-						 */
-						registeredSuccessfully: () => LocalizedString
-						/**
-						 * Имя пользователя
-						 */
-						username: () => LocalizedString
-						/**
-						 * Зарегистрироваться
-						 */
-						register: () => LocalizedString
-					}
-				}
 			}
 		}
+		$chat: {
+			/**
+			 * Чат
+			 */
+			chat: () => LocalizedString
+		}
+		$error: {
+			/**
+			 * Ошибка
+			 */
+			error: () => LocalizedString
+			/**
+			 * На главную
+			 */
+			goHome: () => LocalizedString
+		}
 		$posts: {
-			/**
-			 * Автор
-			 */
-			author: () => LocalizedString
-			/**
-			 * Создать новый пост
-			 */
-			createPost: () => LocalizedString
-			/**
-			 * Дата создания (Сначала старые)
-			 */
-			creationDateAsc: () => LocalizedString
-			/**
-			 * Дата создания (Сначала новые)
-			 */
-			creationDateDesc: () => LocalizedString
-			/**
-			 * Введите заголовок...
-			 */
-			enterTitle: () => LocalizedString
-			/**
-			 * Посты
-			 */
-			posts: () => LocalizedString
-			/**
-			 * Поиск
-			 */
-			search: () => LocalizedString
-			/**
-			 * Сортировка
-			 */
-			sorting: () => LocalizedString
-			/**
-			 * Заголовок (А-Я)
-			 */
-			titleAsc: () => LocalizedString
-			/**
-			 * Заголовок (Я-А)
-			 */
-			titleDesc: () => LocalizedString
 			$$dialogPostCreating: {
 				/**
 				 * Отмена
@@ -1270,26 +1172,6 @@ export type TranslationFunctions = {
 				title: () => LocalizedString
 			}
 			$_id: {
-				/**
-				 * Автор
-				 */
-				author: () => LocalizedString
-				/**
-				 * Создан
-				 */
-				created: () => LocalizedString
-				/**
-				 * Редактировать
-				 */
-				edit: () => LocalizedString
-				/**
-				 * Отредактирован
-				 */
-				edited: () => LocalizedString
-				/**
-				 * Удалить
-				 */
-				remove: () => LocalizedString
 				$$dialogPostEditing: {
 					/**
 					 * Отмена
@@ -1346,7 +1228,67 @@ export type TranslationFunctions = {
 					 */
 					remove: () => LocalizedString
 				}
+				/**
+				 * Автор
+				 */
+				author: () => LocalizedString
+				/**
+				 * Создан
+				 */
+				created: () => LocalizedString
+				/**
+				 * Редактировать
+				 */
+				edit: () => LocalizedString
+				/**
+				 * Отредактирован
+				 */
+				edited: () => LocalizedString
+				/**
+				 * Удалить
+				 */
+				remove: () => LocalizedString
 			}
+			/**
+			 * Автор
+			 */
+			author: () => LocalizedString
+			/**
+			 * Создать новый пост
+			 */
+			createPost: () => LocalizedString
+			/**
+			 * Дата создания (Сначала старые)
+			 */
+			creationDateAsc: () => LocalizedString
+			/**
+			 * Дата создания (Сначала новые)
+			 */
+			creationDateDesc: () => LocalizedString
+			/**
+			 * Введите заголовок...
+			 */
+			enterTitle: () => LocalizedString
+			/**
+			 * Посты
+			 */
+			posts: () => LocalizedString
+			/**
+			 * Поиск
+			 */
+			search: () => LocalizedString
+			/**
+			 * Сортировка
+			 */
+			sorting: () => LocalizedString
+			/**
+			 * Заголовок (А-Я)
+			 */
+			titleAsc: () => LocalizedString
+			/**
+			 * Заголовок (Я-А)
+			 */
+			titleDesc: () => LocalizedString
 		}
 		$profile: {
 			$email: {
@@ -1384,26 +1326,6 @@ export type TranslationFunctions = {
 				}
 			}
 			$password: {
-				/**
-				 * Электронная почта
-				 */
-				email: () => LocalizedString
-				/**
-				 * Введите электронную почту...
-				 */
-				enterEmail: () => LocalizedString
-				/**
-				 * Сброс пароля
-				 */
-				passwordReset: () => LocalizedString
-				/**
-				 * Ссылка на сброс была отправлена на ваш адрес электронной почты
-				 */
-				resetLinkSent: () => LocalizedString
-				/**
-				 * Отправить ссылку на сброс
-				 */
-				sendResetLink: () => LocalizedString
 				$_token: {
 					/**
 					 * Введите новый пароль...
@@ -1434,41 +1356,29 @@ export type TranslationFunctions = {
 					 */
 					reset: () => LocalizedString
 				}
+				/**
+				 * Электронная почта
+				 */
+				email: () => LocalizedString
+				/**
+				 * Введите электронную почту...
+				 */
+				enterEmail: () => LocalizedString
+				/**
+				 * Сброс пароля
+				 */
+				passwordReset: () => LocalizedString
+				/**
+				 * Ссылка на сброс была отправлена на ваш адрес электронной почты
+				 */
+				resetLinkSent: () => LocalizedString
+				/**
+				 * Отправить ссылку на сброс
+				 */
+				sendResetLink: () => LocalizedString
 			}
 		}
 		$roles: {
-			/**
-			 * Действия
-			 */
-			actions: () => LocalizedString
-			/**
-			 * Создать роль
-			 */
-			createRole: () => LocalizedString
-			/**
-			 * Редактировать
-			 */
-			edit: () => LocalizedString
-			/**
-			 * пусто
-			 */
-			empty: () => LocalizedString
-			/**
-			 * Название
-			 */
-			name: () => LocalizedString
-			/**
-			 * Разрешения
-			 */
-			permissions: () => LocalizedString
-			/**
-			 * Удалить
-			 */
-			remove: () => LocalizedString
-			/**
-			 * Роли
-			 */
-			roles: () => LocalizedString
 			$$dialogRoleCreating: {
 				/**
 				 * Добавить
@@ -1567,80 +1477,50 @@ export type TranslationFunctions = {
 				 */
 				roleRemovingQuestion: (arg0: number | string | boolean) => LocalizedString
 			}
-		}
-		$users: {
 			/**
 			 * Действия
 			 */
 			actions: () => LocalizedString
 			/**
-			 * Назначить роль
+			 * Создать роль
 			 */
-			assignRole: () => LocalizedString
+			createRole: () => LocalizedString
 			/**
-			 * Аватар
+			 * Редактировать
 			 */
-			avatar: () => LocalizedString
+			edit: () => LocalizedString
 			/**
-			 * Забанить
+			 * пусто
 			 */
-			ban: () => LocalizedString
+			empty: () => LocalizedString
 			/**
-			 * Забанен
+			 * Название
 			 */
-			banned: () => LocalizedString
+			name: () => LocalizedString
 			/**
-			 * Подтверждённая электронная почта
+			 * Разрешения
 			 */
-			confirmedEmail: () => LocalizedString
+			permissions: () => LocalizedString
 			/**
-			 * Электронная почта
+			 * Удалить
 			 */
-			email: () => LocalizedString
+			remove: () => LocalizedString
 			/**
-			 * Открыть
+			 * Роли
 			 */
-			open: () => LocalizedString
+			roles: () => LocalizedString
+		}
+		$simpleLayout: {
 			/**
-			 * Дата регистрации
+			 * На главную
 			 */
-			registrationDate: () => LocalizedString
+			goHome: () => LocalizedString
 			/**
-			 * Роль
+			 * Простой лэйаут
 			 */
-			role: () => LocalizedString
-			/**
-			 * Разбанить
-			 */
-			unban: () => LocalizedString
-			/**
-			 * Пользователь успешно разбанен
-			 */
-			userUnbannedSuccessfully: () => LocalizedString
-			/**
-			 * Имя пользователя
-			 */
-			username: () => LocalizedString
-			/**
-			 * Пользователи
-			 */
-			users: () => LocalizedString
-			/**
-			 * Да
-			 */
-			yes: () => LocalizedString
-			/**
-			 * Нет
-			 */
-			no: () => LocalizedString
-			/**
-			 * Кто
-			 */
-			who: () => LocalizedString
-			/**
-			 * Причина
-			 */
-			reason: () => LocalizedString
+			simpleLayout: () => LocalizedString
+		}
+		$users: {
 			$$dialogRoleAssigning: {
 				/**
 				 * Отмена
@@ -1669,6 +1549,10 @@ export type TranslationFunctions = {
 			}
 			$$dialogUserBanning: {
 				/**
+				 * Забанить
+				 */
+				ban: () => LocalizedString
+				/**
 				 * Отмена
 				 */
 				cancel: () => LocalizedString
@@ -1681,99 +1565,19 @@ export type TranslationFunctions = {
 				 */
 				reason: () => LocalizedString
 				/**
-				 * Бан пользователя
+				 * Пользователь
 				 */
-				userBanning: () => LocalizedString
+				user: () => LocalizedString
 				/**
 				 * Пользователь успешно забанен
 				 */
 				userBannedSuccessfully: () => LocalizedString
 				/**
-				 * Забанить
+				 * Бан пользователя
 				 */
-				ban: () => LocalizedString
-				/**
-				 * Пользователь
-				 */
-				user: () => LocalizedString
+				userBanning: () => LocalizedString
 			}
 			$_id: {
-				/**
-				 * Аватар
-				 */
-				avatar: () => LocalizedString
-				/**
-				 * Аватар успешно обновлён
-				 */
-				avatarUpdatedSuccessfully: () => LocalizedString
-				/**
-				 * Забанен
-				 */
-				banned: () => LocalizedString
-				/**
-				 * Изменить электронную почту
-				 */
-				changeEmail: () => LocalizedString
-				/**
-				 * Изменить пароль
-				 */
-				changePassword: () => LocalizedString
-				/**
-				 * Письмо с подтверждением было отправлено на ваш адрес электронной почты
-				 */
-				confirmationEmailSent: () => LocalizedString
-				/**
-				 * Редактировать
-				 */
-				edit: () => LocalizedString
-				/**
-				 * Электронная почта
-				 */
-				email: () => LocalizedString
-				/**
-				 * Нет
-				 */
-				no: () => LocalizedString
-				/**
-				 * Профиль
-				 */
-				profile: () => LocalizedString
-				/**
-				 * Дата регистрации
-				 */
-				registrationDate: () => LocalizedString
-				/**
-				 * Удалить аватар
-				 */
-				removeAvatar: () => LocalizedString
-				/**
-				 * Роль
-				 */
-				role: () => LocalizedString
-				/**
-				 * Загрузить аватар
-				 */
-				uploadAvatar: () => LocalizedString
-				/**
-				 * Имя пользователя
-				 */
-				username: () => LocalizedString
-				/**
-				 * Да
-				 */
-				yes: () => LocalizedString
-				/**
-				 * Автор бана
-				 */
-				banAuthor: () => LocalizedString
-				/**
-				 * Причина бана
-				 */
-				banReason: () => LocalizedString
-				/**
-				 * Дата бана
-				 */
-				banDate: () => LocalizedString
 				$$dialogAvatarRemoving: {
 					/**
 					 * Аватар успешно удалён
@@ -1806,13 +1610,13 @@ export type TranslationFunctions = {
 					 */
 					change: () => LocalizedString
 					/**
-					 * Электронная почта
-					 */
-					email: () => LocalizedString
-					/**
 					 * Письмо с подтверждением было отправлено на ваш текущий адрес электронной почты
 					 */
 					confirmationEmailSent: () => LocalizedString
+					/**
+					 * Электронная почта
+					 */
+					email: () => LocalizedString
 					/**
 					 * Изменение электронной почты
 					 */
@@ -1870,9 +1674,205 @@ export type TranslationFunctions = {
 					 */
 					username: () => LocalizedString
 				}
+				/**
+				 * Аватар
+				 */
+				avatar: () => LocalizedString
+				/**
+				 * Аватар успешно обновлён
+				 */
+				avatarUpdatedSuccessfully: () => LocalizedString
+				/**
+				 * Автор бана
+				 */
+				banAuthor: () => LocalizedString
+				/**
+				 * Дата бана
+				 */
+				banDate: () => LocalizedString
+				/**
+				 * Забанен
+				 */
+				banned: () => LocalizedString
+				/**
+				 * Причина бана
+				 */
+				banReason: () => LocalizedString
+				/**
+				 * Изменить электронную почту
+				 */
+				changeEmail: () => LocalizedString
+				/**
+				 * Изменить пароль
+				 */
+				changePassword: () => LocalizedString
+				/**
+				 * Письмо с подтверждением было отправлено на ваш адрес электронной почты
+				 */
+				confirmationEmailSent: () => LocalizedString
+				/**
+				 * Редактировать
+				 */
+				edit: () => LocalizedString
+				/**
+				 * Электронная почта
+				 */
+				email: () => LocalizedString
+				/**
+				 * Нет
+				 */
+				no: () => LocalizedString
+				/**
+				 * Профиль
+				 */
+				profile: () => LocalizedString
+				/**
+				 * Дата регистрации
+				 */
+				registrationDate: () => LocalizedString
+				/**
+				 * Удалить аватар
+				 */
+				removeAvatar: () => LocalizedString
+				/**
+				 * Роль
+				 */
+				role: () => LocalizedString
+				/**
+				 * Загрузить аватар
+				 */
+				uploadAvatar: () => LocalizedString
+				/**
+				 * Имя пользователя
+				 */
+				username: () => LocalizedString
+				/**
+				 * Да
+				 */
+				yes: () => LocalizedString
 			}
+			/**
+			 * Действия
+			 */
+			actions: () => LocalizedString
+			/**
+			 * Назначить роль
+			 */
+			assignRole: () => LocalizedString
+			/**
+			 * Аватар
+			 */
+			avatar: () => LocalizedString
+			/**
+			 * Забанить
+			 */
+			ban: () => LocalizedString
+			/**
+			 * Забанен
+			 */
+			banned: () => LocalizedString
+			/**
+			 * Подтверждённая электронная почта
+			 */
+			confirmedEmail: () => LocalizedString
+			/**
+			 * Электронная почта
+			 */
+			email: () => LocalizedString
+			/**
+			 * Нет
+			 */
+			no: () => LocalizedString
+			/**
+			 * Открыть
+			 */
+			open: () => LocalizedString
+			/**
+			 * Причина
+			 */
+			reason: () => LocalizedString
+			/**
+			 * Дата регистрации
+			 */
+			registrationDate: () => LocalizedString
+			/**
+			 * Роль
+			 */
+			role: () => LocalizedString
+			/**
+			 * Разбанить
+			 */
+			unban: () => LocalizedString
+			/**
+			 * Имя пользователя
+			 */
+			username: () => LocalizedString
+			/**
+			 * Пользователи
+			 */
+			users: () => LocalizedString
+			/**
+			 * Пользователь успешно разбанен
+			 */
+			userUnbannedSuccessfully: () => LocalizedString
+			/**
+			 * Кто
+			 */
+			who: () => LocalizedString
+			/**
+			 * Да
+			 */
+			yes: () => LocalizedString
 		}
+		/**
+		 * Кликов
+		 */
+		clicked: () => LocalizedString
+		/**
+		 * Количество
+		 */
+		count: () => LocalizedString
+		/**
+		 * Главная
+		 */
+		home: () => LocalizedString
+		/**
+		 * Случайное число
+		 */
+		randomNumber: () => LocalizedString
 	}
+	$$alert: {
+		/**
+		 * Ошибка
+		 */
+		error: () => LocalizedString
+		/**
+		 * Информация
+		 */
+		info: () => LocalizedString
+		/**
+		 * Успех
+		 */
+		success: () => LocalizedString
+		/**
+		 * Предупреждение
+		 */
+		warning: () => LocalizedString
+	}
+	$$chat: {
+		/**
+		 * Сообщение
+		 */
+		message: () => LocalizedString
+		/**
+		 * Отправить
+		 */
+		send: () => LocalizedString
+	}
+	/**
+	 * Произошла ошибка
+	 */
+	errorOccurred: () => LocalizedString
 }
 
 export type Formatters = {}
