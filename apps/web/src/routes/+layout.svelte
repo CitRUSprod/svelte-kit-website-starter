@@ -6,7 +6,7 @@
     import Cookies from "js-cookie"
     import { browser } from "$app/environment"
     import { currentLocale, setLocale } from "$i18n/helpers"
-    import { darkTheme, userData } from "$lib/stores"
+    import { userData } from "$lib/stores"
 
     import "uno.css"
     import "@unocss/reset/tailwind.css"
@@ -18,8 +18,6 @@
     $: $userData = data.userData
 
     if (browser) {
-        darkTheme.sync()
-
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
         Cookies.set("timezone", tz, {
             path: "/",
