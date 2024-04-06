@@ -9,7 +9,7 @@ import { User } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
-import { ReplyCookie, RouteHandler } from "$/types"
+import { RouteHandler, UserPayload } from "$/types"
 import { oAuthProviders, sendEmail } from "$/utils"
 import * as utils from "./utils"
 
@@ -255,34 +255,45 @@ export const oAuthLoginCallback = (async (app, ll, { params, cookies, body }) =>
 >
 
 export const logout = (async (app, ll, { cookies }) => {
-    const localCookies: Array<ReplyCookie> = [
-        { name: "accessToken", value: undefined, options: { path: "/" } },
-        { name: "refreshToken", value: undefined, options: { path: "/" } }
-    ]
-
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
 
     if (!refreshToken) {
-        utils.getPayload(app, cookies.refreshToken)
+        try {
+            utils.getPayload(app, cookies.refreshToken)
+        } catch (err: any) {
+            return {
+                cookies: utils.getLogoutCookies(),
+                payload: err
+            }
+        }
 
         return {
-            cookies: localCookies,
+            cookies: utils.getLogoutCookies(),
             payload: new InternalServerError(ll.$auth.unexpectedError())
         }
     }
 
     await app.prisma.refreshToken.delete({ where: { id: refreshToken.id } })
 
-    return { cookies: localCookies }
+    return { cookies: utils.getLogoutCookies() }
 }) satisfies RouteHandler<
     schemasRoutes.auth.LogoutResponse,
     { cookies: schemasRoutes.auth.LogoutCookies }
 >
 
 export const refreshTokens = (async (app, ll, { cookies }) => {
-    const payload = utils.getPayload(app, cookies.refreshToken)
+    let payload: UserPayload
+
+    try {
+        payload = utils.getPayload(app, cookies.refreshToken)
+    } catch (err: any) {
+        return {
+            cookies: utils.getLogoutCookies(),
+            payload: err
+        }
+    }
 
     await utils.deleteExpiredRefreshTokens(app)
 

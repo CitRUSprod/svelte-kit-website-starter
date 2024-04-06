@@ -2,11 +2,19 @@ import { FastifyInstance } from "fastify"
 import { UnauthorizedError } from "http-errors-enhanced"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums } from "$/constants"
-import { ReplyData, UserPayload } from "$/types"
+import { ReplyCookie, ReplyData, UserPayload } from "$/types"
 
 interface PayloadWithTimestamps extends UserPayload {
     iat: string
     exp: string
+}
+
+export function getLogoutCookies() {
+    const cookies: Array<ReplyCookie> = [
+        { name: "accessToken", value: undefined, options: { path: "/" } },
+        { name: "refreshToken", value: undefined, options: { path: "/" } }
+    ]
+    return cookies
 }
 
 export function generateTokens(app: FastifyInstance, userPayload: UserPayload) {
