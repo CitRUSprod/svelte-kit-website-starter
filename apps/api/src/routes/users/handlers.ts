@@ -1,14 +1,14 @@
-import { BadRequestError } from "http-errors-enhanced"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
 import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import { UserData, RouteHandler } from "$/types"
+import { RouteHandler } from "$/types"
 
-export const getUsers = (async (app, ll, { query }) => {
-    const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
+export const getUsers = (async (app, req) => {
+    const page = await getItemsPage(req.query.page, req.query.perPage, async (skip, take) => {
         const where: Prisma.UserWhereInput = {
-            email: { contains: query.email, mode: "insensitive" },
-            username: { contains: query.username, mode: "insensitive" }
+            email: { contains: req.query.email, mode: "insensitive" },
+            username: { contains: req.query.username, mode: "insensitive" }
         }
 
         const totalItems = await app.prisma.user.count({ where })
@@ -16,7 +16,7 @@ export const getUsers = (async (app, ll, { query }) => {
             skip,
             take,
             where,
-            orderBy: { [query.sort]: query.order },
+            orderBy: { [req.query.sort]: req.query.order },
             include: { role: true, ban: { include: { author: true } } }
         })
 
@@ -25,79 +25,80 @@ export const getUsers = (async (app, ll, { query }) => {
 
     return { payload: page }
 }) satisfies RouteHandler<
-    schemasRoutes.users.GetUsersResponse,
-    { userData?: UserData; query: schemasRoutes.users.GetUsersQuery }
+    { Querystring: schemasRoutes.users.GetUsersQuery },
+    schemasRoutes.users.GetUsersResponse
 >
 
-export const getUser = (async (app, ll, { params }) => {
-    const user = await models.user.get(app, params.id)
+export const getUser = (async (app, req) => {
+    const user = await models.user.get(app, req.params.id)
     return { payload: models.user.dto(user) }
 }) satisfies RouteHandler<
-    schemasRoutes.users.GetUserResponse,
-    { userData?: UserData; params: schemasRoutes.users.GetUserParams }
+    { Params: schemasRoutes.users.GetUserParams },
+    schemasRoutes.users.GetUserResponse
 >
 
-export const assignRoleToUser = (async (app, ll, { params }) => {
-    const user = await models.user.get(app, params.id)
-    const role = await models.role.get(app, params.roleId)
+export const assignRoleToUser = (async (app, req) => {
+    const user = await models.user.get(app, req.params.id)
+    const role = await models.role.get(app, req.params.roleId)
 
-    if (user.roleId === params.roleId) {
-        throw new BadRequestError(ll.$users.userWithSuchIdIsAlready({ roleName: role.name }))
+    if (user.roleId === req.params.roleId) {
+        throw new BadRequestError(req.ll.$users.userWithSuchIdIsAlready({ roleName: role.name }))
     }
 
     const updatedUser = await app.prisma.user.update({
-        where: { id: params.id },
-        data: { roleId: params.roleId },
+        where: { id: req.params.id },
+        data: { roleId: req.params.roleId },
         include: { role: true, ban: { include: { author: true } } }
     })
 
     return { payload: models.user.dto(updatedUser) }
 }) satisfies RouteHandler<
-    schemasRoutes.users.AssignRoleToUserResponse,
-    { params: schemasRoutes.users.AssignRoleToUserParams }
+    { Params: schemasRoutes.users.AssignRoleToUserParams },
+    schemasRoutes.users.AssignRoleToUserResponse
 >
 
-export const banUser = (async (app, ll, { userData, params, body }) => {
-    const user = await models.user.get(app, params.id)
-    if (user.ban) throw new BadRequestError(ll.$users.userWithSuchIdIsAlreadyBanned())
+export const banUser = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.$users.unexpectedError())
+
+    const user = await models.user.get(app, req.params.id)
+    if (user.ban) throw new BadRequestError(req.ll.$users.userWithSuchIdIsAlreadyBanned())
 
     await app.prisma.ban.create({
         data: {
-            userId: params.id,
-            authorId: userData.id,
-            reason: body.reason,
+            userId: req.params.id,
+            authorId: req.userData.id,
+            reason: req.body.reason,
             date: new Date()
         }
     })
 
     const bannedUser = await app.prisma.user.update({
-        where: { id: params.id },
+        where: { id: req.params.id },
         data: { roleId: 1 },
         include: { role: true, ban: { include: { author: true } } }
     })
 
     return { payload: models.user.dto(bannedUser) }
 }) satisfies RouteHandler<
-    schemasRoutes.users.BanUserResponse,
     {
-        userData: UserData
-        params: schemasRoutes.users.BanUserParams
-        body: schemasRoutes.users.BanUserBody
-    }
+        Params: schemasRoutes.users.BanUserParams
+        Body: schemasRoutes.users.BanUserBody
+    },
+    schemasRoutes.users.BanUserResponse
 >
 
-export const unbanUser = (async (app, ll, { params }) => {
-    const user = await models.user.get(app, params.id)
-    if (!user.ban) throw new BadRequestError(ll.$users.userWithSuchIdIsNotBanned())
+export const unbanUser = (async (app, req) => {
+    const user = await models.user.get(app, req.params.id)
+    if (!user.ban) throw new BadRequestError(req.ll.$users.userWithSuchIdIsNotBanned())
 
     await app.prisma.ban.delete({
-        where: { userId: params.id }
+        where: { userId: req.params.id }
     })
 
-    const unbannedUser = await models.user.get(app, params.id)
+    const unbannedUser = await models.user.get(app, req.params.id)
 
     return { payload: models.user.dto(unbannedUser) }
 }) satisfies RouteHandler<
-    schemasRoutes.users.UnbanUserResponse,
-    { params: schemasRoutes.users.UnbanUserParams }
+    { Params: schemasRoutes.users.UnbanUserParams },
+    schemasRoutes.users.UnbanUserResponse
 >

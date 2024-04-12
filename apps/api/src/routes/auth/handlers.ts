@@ -13,71 +13,71 @@ import { RouteHandler, UserPayload } from "$/types"
 import { oAuthProviders, sendEmail } from "$/utils"
 import * as utils from "./utils"
 
-export const register = (async (app, ll, { body }) => {
-    const userByEmail = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (userByEmail) throw new BadRequestError(ll.$auth.userWithSuchEmailAlreadyExists())
+export const register = (async (app, req) => {
+    const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+    if (userByEmail) throw new BadRequestError(req.ll.$auth.userWithSuchEmailAlreadyExists())
 
     const userByUsername = await app.prisma.user.findFirst({
-        where: { username: { contains: body.username, mode: "insensitive" } }
+        where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
 
     await utils.deleteExpiredRegistrationTokens(app)
 
     const registrationTokenByEmail = await app.prisma.registrationToken.findFirst({
-        where: { email: body.email }
+        where: { email: req.body.email }
     })
 
     if (registrationTokenByEmail) {
-        throw new BadRequestError(ll.$auth.emailAlreadySent())
+        throw new BadRequestError(req.ll.$auth.emailAlreadySent())
     }
 
     const registrationTokenByUsername = await app.prisma.registrationToken.findFirst({
-        where: { username: body.username }
+        where: { username: req.body.username }
     })
 
     if (registrationTokenByUsername) {
-        throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
+        throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
     }
 
-    const password = await argon2.hash(body.password)
+    const password = await argon2.hash(req.body.password)
     const token = createUuid()
 
     await app.prisma.registrationToken.create({
         data: {
             token,
-            email: body.email,
-            username: body.username,
+            email: req.body.email,
+            username: req.body.username,
             password,
             creationDate: new Date()
         }
     })
 
     const url = new URL(`/auth/registration/complete/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = ll.$auth.registration()
+    const subject = req.ll.$auth.registration()
     const message = `
         <div>
-            <h3>${ll.$auth.dear()} ${body.username}</h3>
+            <h3>${req.ll.$auth.dear()} ${req.body.username}</h3>
         </div>
         <div>
-            <a href="${url}">${ll.$auth.completeRegistration()}</a>
+            <a href="${url}">${req.ll.$auth.completeRegistration()}</a>
         </div>
     `
-    await sendEmail(body.email, subject, message)
+    await sendEmail(req.body.email, subject, message)
 
     return {}
 }) satisfies RouteHandler<
-    schemasRoutes.auth.RegisterResponse,
-    { body: schemasRoutes.auth.RegisterBody }
+    { Body: schemasRoutes.auth.RegisterBody },
+    schemasRoutes.auth.RegisterResponse
 >
 
-export const completeRegistration = (async (app, ll, { params }) => {
+export const completeRegistration = (async (app, req) => {
     await utils.deleteExpiredRegistrationTokens(app)
 
     const registrationToken = await app.prisma.registrationToken.findFirst({
-        where: { token: params.registrationToken }
+        where: { token: req.params.registrationToken }
     })
-    if (!registrationToken) throw new BadRequestError(ll.$auth.registrationTokenExpired())
+    if (!registrationToken) throw new BadRequestError(req.ll.$auth.registrationTokenExpired())
 
     const user = await app.prisma.user.create({
         data: {
@@ -92,22 +92,22 @@ export const completeRegistration = (async (app, ll, { params }) => {
 
     return utils.login(app, { id: user.id }, false, true)
 }) satisfies RouteHandler<
-    schemasRoutes.auth.CompleteRegistrationResponse,
-    { params: schemasRoutes.auth.CompleteRegistrationParams }
+    { Params: schemasRoutes.auth.CompleteRegistrationParams },
+    schemasRoutes.auth.CompleteRegistrationResponse
 >
 
-export const oAuthRegister = (async (app, ll, { params, body }) => {
+export const oAuthRegister = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
-        where: { username: { contains: body.username, mode: "insensitive" } }
+        where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(ll.$auth.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
 
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
-        where: { token: params.oAuthRegistrationToken }
+        where: { token: req.params.oAuthRegistrationToken }
     })
 
     if (!oAuthRegistrationToken) {
-        throw new BadRequestError(ll.$auth.oAuthRegistrationTokenNotFound())
+        throw new BadRequestError(req.ll.$auth.oAuthRegistrationTokenNotFound())
     }
 
     let user: User
@@ -116,7 +116,7 @@ export const oAuthRegister = (async (app, ll, { params, body }) => {
         case constantsEnums.OAuthProvider.Twitch: {
             user = await app.prisma.user.create({
                 data: {
-                    username: body.username,
+                    username: req.body.username,
                     twitchId: oAuthRegistrationToken.providerUserId,
                     registrationDate: new Date()
                 }
@@ -126,7 +126,7 @@ export const oAuthRegister = (async (app, ll, { params, body }) => {
         }
 
         default: {
-            throw new InternalServerError(ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.$auth.unexpectedError())
         }
     }
 
@@ -134,26 +134,26 @@ export const oAuthRegister = (async (app, ll, { params, body }) => {
 
     return utils.login(app, { id: user.id }, true, true)
 }) satisfies RouteHandler<
-    schemasRoutes.auth.OAuthRegisterResponse,
-    { params: schemasRoutes.auth.OAuthRegisterParams; body: schemasRoutes.auth.OAuthRegisterBody }
+    { Params: schemasRoutes.auth.OAuthRegisterParams; Body: schemasRoutes.auth.OAuthRegisterBody },
+    schemasRoutes.auth.OAuthRegisterResponse
 >
 
-export const login = (async (app, ll, { body }) => {
-    const user = await app.prisma.user.findFirst({ where: { email: body.email } })
-    if (!user) throw new BadRequestError(ll.$auth.userWithEmailNotFound())
+export const login = (async (app, req) => {
+    const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+    if (!user) throw new BadRequestError(req.ll.$auth.userWithEmailNotFound())
 
-    if (!user.password) throw new BadRequestError(ll.$auth.unexpectedError())
+    if (!user.password) throw new BadRequestError(req.ll.$auth.unexpectedError())
 
-    const isCorrectPassword = await argon2.verify(user.password, body.password)
-    if (!isCorrectPassword) throw new BadRequestError(ll.$auth.incorrectPassword())
+    const isCorrectPassword = await argon2.verify(user.password, req.body.password)
+    if (!isCorrectPassword) throw new BadRequestError(req.ll.$auth.incorrectPassword())
 
     return utils.login(app, { id: user.id }, false, false)
-}) satisfies RouteHandler<schemasRoutes.auth.LoginResponse, { body: schemasRoutes.auth.LoginBody }>
+}) satisfies RouteHandler<{ Body: schemasRoutes.auth.LoginBody }, schemasRoutes.auth.LoginResponse>
 
-export const oAuthLogin = (async (app, ll, { params }) => {
+export const oAuthLogin = (async (app, req) => {
     const oAuthState = generateState()
 
-    switch (_.startCase(params.provider)) {
+    switch (_.startCase(req.params.provider)) {
         case constantsEnums.OAuthProvider.Twitch: {
             const url = await oAuthProviders.twitch.createAuthorizationURL(oAuthState)
 
@@ -172,22 +172,24 @@ export const oAuthLogin = (async (app, ll, { params }) => {
         }
 
         default: {
-            throw new InternalServerError(ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.$auth.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
-    schemasRoutes.auth.OAuthLoginResponse,
-    { params: schemasRoutes.auth.OAuthLoginParams }
+    { Params: schemasRoutes.auth.OAuthLoginParams },
+    schemasRoutes.auth.OAuthLoginResponse
 >
 
-export const oAuthLoginCallback = (async (app, ll, { params, cookies, body }) => {
-    if (cookies.oAuthState !== body.oAuthState) {
-        throw new BadRequestError(ll.$auth.statesDoNotMatch())
+export const oAuthLoginCallback = (async (app, req, cookies) => {
+    if (cookies.oAuthState !== req.body.oAuthState) {
+        throw new BadRequestError(req.ll.$auth.statesDoNotMatch())
     }
 
-    switch (_.startCase(params.provider)) {
+    switch (_.startCase(req.params.provider)) {
         case constantsEnums.OAuthProvider.Twitch: {
-            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(body.code)
+            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
+                req.body.code
+            )
 
             const res = await axios.get<{ data: Array<{ id: string }> }>(
                 "https://api.twitch.tv/helix/users",
@@ -242,19 +244,19 @@ export const oAuthLoginCallback = (async (app, ll, { params, cookies, body }) =>
         }
 
         default: {
-            throw new InternalServerError(ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.$auth.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
-    schemasRoutes.auth.OAuthLoginCallbackResponse,
     {
-        cookies: schemasRoutes.auth.OAuthLoginCallbackCookies
-        params: schemasRoutes.auth.OAuthLoginCallbackParams
-        body: schemasRoutes.auth.OAuthLoginCallbackBody
-    }
+        Params: schemasRoutes.auth.OAuthLoginCallbackParams
+        Body: schemasRoutes.auth.OAuthLoginCallbackBody
+    },
+    schemasRoutes.auth.OAuthLoginCallbackResponse,
+    schemasRoutes.auth.OAuthLoginCallbackCookies
 >
 
-export const logout = (async (app, ll, { cookies }) => {
+export const logout = (async (app, req, cookies) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
@@ -271,19 +273,16 @@ export const logout = (async (app, ll, { cookies }) => {
 
         return {
             cookies: utils.getLogoutCookies(),
-            payload: new InternalServerError(ll.$auth.unexpectedError())
+            payload: new InternalServerError(req.ll.$auth.unexpectedError())
         }
     }
 
     await app.prisma.refreshToken.delete({ where: { id: refreshToken.id } })
 
     return { cookies: utils.getLogoutCookies() }
-}) satisfies RouteHandler<
-    schemasRoutes.auth.LogoutResponse,
-    { cookies: schemasRoutes.auth.LogoutCookies }
->
+}) satisfies RouteHandler<void, schemasRoutes.auth.LogoutResponse, schemasRoutes.auth.LogoutCookies>
 
-export const refreshTokens = (async (app, ll, { cookies }) => {
+export const refreshTokens = (async (app, req, cookies) => {
     let payload: UserPayload
 
     try {
@@ -300,7 +299,7 @@ export const refreshTokens = (async (app, ll, { cookies }) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
-    if (!refreshToken) throw new InternalServerError(ll.$auth.refreshTokenNotFound())
+    if (!refreshToken) throw new InternalServerError(req.ll.$auth.refreshTokenNotFound())
 
     const tokens = utils.generateTokens(app, payload)
     await app.prisma.refreshToken.update({
@@ -330,6 +329,7 @@ export const refreshTokens = (async (app, ll, { cookies }) => {
         ]
     }
 }) satisfies RouteHandler<
+    void,
     schemasRoutes.auth.RefreshTokensResponse,
-    { cookies: schemasRoutes.auth.RefreshTokensCookies }
+    schemasRoutes.auth.RefreshTokensCookies
 >

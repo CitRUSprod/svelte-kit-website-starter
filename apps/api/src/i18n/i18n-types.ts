@@ -73,6 +73,10 @@ type RootTranslation = {
 		 * Н​е​т​ ​д​о​с​т​у​п​а
 		 */
 		noAccess: string
+		/**
+		 * Н​е​о​ж​и​д​а​н​н​а​я​ ​о​ш​и​б​к​а
+		 */
+		unexpectedError: string
 	}
 	$profile: {
 		/**
@@ -157,6 +161,10 @@ type RootTranslation = {
 	}
 	$users: {
 		/**
+		 * Н​е​о​ж​и​д​а​н​н​а​я​ ​о​ш​и​б​к​а
+		 */
+		unexpectedError: string
+		/**
 		 * П​о​л​ь​з​о​в​а​т​е​л​ь​ ​с​ ​т​а​к​и​м​ ​I​D​ ​у​ж​е​ ​"​{​r​o​l​e​N​a​m​e​}​"
 		 * @param {unknown} roleName
 		 */
@@ -232,6 +240,10 @@ export type TranslationFunctions = {
 		 * Нет доступа
 		 */
 		noAccess: () => LocalizedString
+		/**
+		 * Неожиданная ошибка
+		 */
+		unexpectedError: () => LocalizedString
 	}
 	$profile: {
 		/**
@@ -314,6 +326,10 @@ export type TranslationFunctions = {
 		roleWithSuchIdIsProtected: () => LocalizedString
 	}
 	$users: {
+		/**
+		 * Неожиданная ошибка
+		 */
+		unexpectedError: () => LocalizedString
 		/**
 		 * Пользователь с таким ID уже "{roleName}"
 		 */

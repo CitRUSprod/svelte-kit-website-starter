@@ -10,7 +10,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
             querystring: schemasRoutes.posts.getPostsQuery()
         },
         async handler(req, reply) {
-            const data = await handlers.getPosts(app, req.ll, { query: req.query })
+            const data = await handlers.getPosts(app, req)
             await reply.sendData(data)
         }
     })
@@ -22,10 +22,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            const data = await handlers.createPost(app, req.ll, {
-                userData: req.userData!,
-                body: req.body
-            })
+            const data = await handlers.createPost(app, req)
             await reply.sendData(data)
         }
     })
@@ -36,7 +33,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.posts.getPostParams()
         },
         async handler(req, reply) {
-            const data = await handlers.getPost(app, req.ll, { params: req.params })
+            const data = await handlers.getPost(app, req)
             await reply.sendData(data)
         }
     })
@@ -52,11 +49,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            const data = await handlers.updatePost(app, req.ll, {
-                userData: req.userData!,
-                params: req.params,
-                body: req.body
-            })
+            const data = await handlers.updatePost(app, req)
             await reply.sendData(data)
         }
     })
@@ -68,10 +61,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            const data = await handlers.deletePost(app, req.ll, {
-                userData: req.userData!,
-                params: req.params
-            })
+            const data = await handlers.deletePost(app, req)
             await reply.sendData(data)
         }
     })

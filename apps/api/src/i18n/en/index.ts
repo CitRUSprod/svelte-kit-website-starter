@@ -17,7 +17,8 @@ const en = {
         userWithSuchUsernameAlreadyExists: "User with such username already exists"
     },
     $posts: {
-        noAccess: "No access"
+        noAccess: "No access",
+        unexpectedError: "Unexpected error"
     },
     $profile: {
         dear: "Dear",
@@ -43,6 +44,7 @@ const en = {
         roleWithSuchIdIsProtected: "Role with such ID is protected"
     },
     $users: {
+        unexpectedError: "Unexpected error",
         userWithSuchIdIsAlready: 'User with such ID is already "{roleName}"',
         userWithSuchIdIsAlreadyBanned: "User with such ID is already banned",
         userWithSuchIdIsNotBanned: "User with such ID is not banned"

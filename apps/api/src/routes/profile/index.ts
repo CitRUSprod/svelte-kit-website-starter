@@ -10,7 +10,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.getUser(app, req.ll, { userData: req.userData! })
+            const data = await handlers.getUser(app, req)
             await reply.sendData(data)
         }
     })
@@ -22,10 +22,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.updateUser(app, req.ll, {
-                userData: req.userData!,
-                body: req.body
-            })
+            const data = await handlers.updateUser(app, req)
             await reply.sendData(data)
         }
     })
@@ -39,10 +36,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
             },
             preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
             async handler(req, reply) {
-                const data = await handlers.uploadAvatar(app, req.ll, {
-                    userData: req.userData!,
-                    body: req.body
-                })
+                const data = await handlers.uploadAvatar(app, req)
                 await reply.sendData(data)
             }
         }
@@ -54,9 +48,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.deleteAvatar(app, req.ll, {
-                userData: req.userData!
-            })
+            const data = await handlers.deleteAvatar(app, req)
             await reply.sendData(data)
         }
     })
@@ -70,10 +62,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
             },
             preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
             async handler(req, reply) {
-                const data = await handlers.sendEmailUpdateEmailToOld(app, req.ll, {
-                    userData: req.userData!,
-                    body: req.body
-                })
+                const data = await handlers.sendEmailUpdateEmailToOld(app, req)
                 await reply.sendData(data)
             }
         }
@@ -87,9 +76,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 params: schemasRoutes.profile.sendEmailUpdateEmailToNewParams()
             },
             async handler(req, reply) {
-                const data = await handlers.sendEmailUpdateEmailToNew(app, req.ll, {
-                    params: req.params
-                })
+                const data = await handlers.sendEmailUpdateEmailToNew(app, req)
                 await reply.sendData(data)
             }
         }
@@ -103,7 +90,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 params: schemasRoutes.profile.updateEmailParams()
             },
             async handler(req, reply) {
-                const data = await handlers.updateEmail(app, req.ll, { params: req.params })
+                const data = await handlers.updateEmail(app, req)
                 await reply.sendData(data)
             }
         }
@@ -118,10 +105,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
             },
             preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
             async handler(req, reply) {
-                const data = await handlers.changePassword(app, req.ll, {
-                    userData: req.userData!,
-                    body: req.body
-                })
+                const data = await handlers.changePassword(app, req)
                 await reply.sendData(data)
             }
         }
@@ -135,7 +119,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 body: schemasRoutes.profile.sendPasswordResetEmailBody()
             },
             async handler(req, reply) {
-                const data = await handlers.sendPasswordResetEmail(app, req.ll, { body: req.body })
+                const data = await handlers.sendPasswordResetEmail(app, req)
                 await reply.sendData(data)
             }
         }
@@ -151,10 +135,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.profile.resetPasswordBody()
         },
         async handler(req, reply) {
-            const data = await handlers.resetPassword(app, req.ll, {
-                params: req.params,
-                body: req.body
-            })
+            const data = await handlers.resetPassword(app, req)
             await reply.sendData(data)
         }
     })

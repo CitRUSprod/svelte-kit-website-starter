@@ -17,7 +17,8 @@ const ru = {
         userWithSuchUsernameAlreadyExists: "Пользователь с таким именем уже существует"
     },
     $posts: {
-        noAccess: "Нет доступа"
+        noAccess: "Нет доступа",
+        unexpectedError: "Неожиданная ошибка"
     },
     $profile: {
         dear: "Дорогой",
@@ -43,6 +44,7 @@ const ru = {
         roleWithSuchIdIsProtected: "Роль с таким ID защищена"
     },
     $users: {
+        unexpectedError: "Неожиданная ошибка",
         userWithSuchIdIsAlready: 'Пользователь с таким ID уже "{roleName}"',
         userWithSuchIdIsAlreadyBanned: "Пользователь с таким ID уже забанен",
         userWithSuchIdIsNotBanned: "Пользователь с таким ID не забанен"

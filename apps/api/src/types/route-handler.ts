@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest, RequestGenericInterface } from "fastify"
 import { JsonObject } from "type-fest"
-import { TranslationFunctions } from "$/i18n/helpers"
 import { UserData } from "./user"
 import { ReplyData } from "./reply-data"
 
@@ -15,6 +14,11 @@ export interface RequestData {
 }
 
 export type RouteHandler<
-    T extends JsonObject | void,
-    K extends RequestData = Record<string, never>
-> = (app: FastifyInstance, ll: TranslationFunctions, requestData: K) => Promise<ReplyData<T>>
+    Request extends RequestGenericInterface | void,
+    Response extends JsonObject | void,
+    RequestCookies extends Record<string, string | number> = Record<string, never>
+> = (
+    app: FastifyInstance,
+    request: FastifyRequest<Request extends void ? RequestGenericInterface : Request>,
+    requestCookies: RequestCookies
+) => Promise<ReplyData<Response>>

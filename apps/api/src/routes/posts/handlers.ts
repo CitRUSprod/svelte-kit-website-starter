@@ -1,14 +1,14 @@
-import { ForbiddenError } from "http-errors-enhanced"
+import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import { RouteHandler, UserData } from "$/types"
+import { RouteHandler } from "$/types"
 
-export const getPosts = (async (app, ll, { query }) => {
-    const page = await getItemsPage(query.page, query.perPage, async (skip, take) => {
+export const getPosts = (async (app, req) => {
+    const page = await getItemsPage(req.query.page, req.query.perPage, async (skip, take) => {
         const where: Prisma.PostWhereInput = {
-            title: { contains: query.title, mode: "insensitive" }
+            title: { contains: req.query.title, mode: "insensitive" }
         }
 
         const totalItems = await app.prisma.post.count({ where })
@@ -16,7 +16,7 @@ export const getPosts = (async (app, ll, { query }) => {
             skip,
             take,
             where,
-            orderBy: { [query.sort]: query.order },
+            orderBy: { [req.query.sort]: req.query.order },
             include: { author: { include: { role: true } } }
         })
 
@@ -25,70 +25,75 @@ export const getPosts = (async (app, ll, { query }) => {
 
     return { payload: page }
 }) satisfies RouteHandler<
-    schemasRoutes.posts.GetPostsResponse,
-    { query: schemasRoutes.posts.GetPostsQuery }
+    { Querystring: schemasRoutes.posts.GetPostsQuery },
+    schemasRoutes.posts.GetPostsResponse
 >
 
-export const createPost = (async (app, ll, { userData, body }) => {
+export const createPost = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
+
     const post = await app.prisma.post.create({
-        data: { ...body, authorId: userData.id, creationDate: new Date() },
+        data: { ...req.body, authorId: req.userData.id, creationDate: new Date() },
         include: { author: { include: { role: true } } }
     })
 
     return { payload: models.post.dto(post) }
 }) satisfies RouteHandler<
-    schemasRoutes.posts.CreatePostResponse,
-    { userData: UserData; body: schemasRoutes.posts.CreatePostBody }
+    { Body: schemasRoutes.posts.CreatePostBody },
+    schemasRoutes.posts.CreatePostResponse
 >
 
-export const getPost = (async (app, ll, { params }) => {
-    const post = await models.post.get(app, params.id)
+export const getPost = (async (app, req) => {
+    const post = await models.post.get(app, req.params.id)
     return { payload: models.post.dto(post) }
 }) satisfies RouteHandler<
-    schemasRoutes.posts.GetPostResponse,
-    { params: schemasRoutes.posts.GetPostParams }
+    { Params: schemasRoutes.posts.GetPostParams },
+    schemasRoutes.posts.GetPostResponse
 >
 
-export const updatePost = (async (app, ll, { userData, params, body }) => {
-    const post = await models.post.get(app, params.id)
+export const updatePost = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
 
-    if (post.authorId === userData.id) {
+    const post = await models.post.get(app, req.params.id)
+
+    if (post.authorId === req.userData.id) {
         const updatedPost = await app.prisma.post.update({
-            where: { id: params.id },
-            data: { title: body.title, content: body.content, editingDate: new Date() },
+            where: { id: req.params.id },
+            data: { title: req.body.title, content: req.body.content, editingDate: new Date() },
             include: { author: { include: { role: true } } }
         })
 
         return { payload: models.post.dto(updatedPost) }
     } else {
-        throw new ForbiddenError(ll.$posts.noAccess())
+        throw new ForbiddenError(req.ll.$posts.noAccess())
     }
 }) satisfies RouteHandler<
-    schemasRoutes.posts.UpdatePostResponse,
     {
-        userData: UserData
-        params: schemasRoutes.posts.UpdatePostParams
-        body: schemasRoutes.posts.UpdatePostBody
-    }
+        Params: schemasRoutes.posts.UpdatePostParams
+        Body: schemasRoutes.posts.UpdatePostBody
+    },
+    schemasRoutes.posts.UpdatePostResponse
 >
 
-export const deletePost = (async (app, ll, { userData, params }) => {
-    const post = await models.post.get(app, params.id)
+export const deletePost = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
+
+    const post = await models.post.get(app, req.params.id)
 
     if (
-        post.authorId === userData.id ||
-        userData.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)
+        post.authorId === req.userData.id ||
+        req.userData.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)
     ) {
         const deletedPost = await app.prisma.post.delete({
-            where: { id: params.id },
+            where: { id: req.params.id },
             include: { author: { include: { role: true } } }
         })
 
         return { payload: models.post.dto(deletedPost) }
     } else {
-        throw new ForbiddenError(ll.$posts.noAccess())
+        throw new ForbiddenError(req.ll.$posts.noAccess())
     }
 }) satisfies RouteHandler<
-    schemasRoutes.posts.DeletePostResponse,
-    { userData: UserData; params: schemasRoutes.posts.DeletePostParams }
+    { Params: schemasRoutes.posts.DeletePostParams },
+    schemasRoutes.posts.DeletePostResponse
 >
