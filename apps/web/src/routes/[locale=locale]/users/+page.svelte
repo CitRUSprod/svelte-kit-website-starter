@@ -53,7 +53,7 @@
             })
         },
         onSuccess() {
-            toasts.add("success", $ll.$.$users.userUnbannedSuccessfully())
+            toasts.add("success", $ll.userUnbannedSuccessfully())
         }
     })
 
@@ -85,10 +85,10 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$users.users()}</title>
+    <title>{$ll.users()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$users.users()}>
+<Content.Default title={$ll.users()}>
     {#if $qcGetUsers.data}
         <table>
             <thead>
@@ -96,13 +96,13 @@
                     class="u:children:p-2 u:children:border u:children:border-default u:children:bg-zinc-200 u:dark:children:bg-zinc-700"
                 >
                     <th>ID</th>
-                    <th>{$ll.$.$users.avatar()}</th>
-                    <th>{$ll.$.$users.username()}</th>
-                    <th>{$ll.$.$users.email()}</th>
-                    <th>{$ll.$.$users.role()}</th>
-                    <th>{$ll.$.$users.banned()}</th>
-                    <th>{$ll.$.$users.registrationDate()}</th>
-                    <th>{$ll.$.$users.actions()}</th>
+                    <th>{$ll.avatar()}</th>
+                    <th>{$ll.username()}</th>
+                    <th>{$ll.email()}</th>
+                    <th>{$ll.role()}</th>
+                    <th>{$ll.banned()}</th>
+                    <th>{$ll.registrationDate()}</th>
+                    <th>{$ll.actions()}</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,7 +115,7 @@
                             <div class="u:w-20 u:h-20 u:overflow-hidden">
                                 <img
                                     class="u:w-full u:h-full u:object-cover"
-                                    alt={$ll.$.$users.avatar()}
+                                    alt={$ll.avatar()}
                                     src={user.avatar ?? "/img/no-avatar.png"}
                                 />
                             </div>
@@ -125,11 +125,11 @@
                         <td>{user.role.name}</td>
                         <td>
                             {#if user.ban}
-                                <div>{$ll.$.$users.yes()}</div>
-                                <div>{$ll.$.$users.who()}: {user.ban.author.username}</div>
-                                <div>{$ll.$.$users.reason()}: {user.ban.reason}</div>
+                                <div>{$ll.yes()}</div>
+                                <div>{$ll.who()}: {user.ban.author.username}</div>
+                                <div>{$ll.reason()}: {user.ban.reason}</div>
                             {:else}
-                                <div>{$ll.$.$users.no()}</div>
+                                <div>{$ll.no()}</div>
                             {/if}
                         </td>
                         <td>{dt.getFullDate(user.registrationDate, data.tz, $currentLocale)}</td>
@@ -140,7 +140,7 @@
                                 target="_blank"
                                 variant="info"
                             >
-                                {$ll.$.$users.open()}
+                                {$ll.open()}
                             </Button>
                             {#if $userData && $userData.id !== user.id && $userData.role.permissions.includes(constantsEnums.Permission.AssignRole)}
                                 {#if !user.ban}
@@ -148,7 +148,7 @@
                                         variant="warning"
                                         on:click={() => dialogRoleAssigning.open(user)}
                                     >
-                                        {$ll.$.$users.assignRole()}
+                                        {$ll.assignRole()}
                                     </Button>
                                 {/if}
                             {/if}
@@ -160,14 +160,14 @@
                                         variant="error"
                                         on:click={() => unbanUser(user.id)}
                                     >
-                                        {$ll.$.$users.unban()}
+                                        {$ll.unban()}
                                     </Button>
                                 {:else}
                                     <Button
                                         variant="error"
                                         on:click={() => dialogUserBanning.open(user)}
                                     >
-                                        {$ll.$.$users.ban()}
+                                        {$ll.ban()}
                                     </Button>
                                 {/if}
                             {/if}

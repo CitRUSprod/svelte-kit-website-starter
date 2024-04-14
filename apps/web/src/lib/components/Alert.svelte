@@ -22,13 +22,13 @@
     function getTextByVariant(localVariant: string) {
         switch (localVariant) {
             case "success":
-                return $ll.$$alert.success()
+                return $ll.success()
             case "error":
-                return $ll.$$alert.error()
+                return $ll.error()
             case "warning":
-                return $ll.$$alert.warning()
+                return $ll.warning()
             default:
-                return $ll.$$alert.info()
+                return $ll.info()
         }
     }
 

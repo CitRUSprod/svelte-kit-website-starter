@@ -18,13 +18,13 @@
             })
         },
         onSuccess() {
-            toasts.add("success", $ll.$.$profile.$password.resetLinkSent())
+            toasts.add("success", $ll.resetLinkSent())
         }
     })
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$profile.$password.passwordReset()}</title>
+    <title>{$ll.passwordReset()}</title>
 </svelte:head>
 
 <Content.Center>
@@ -32,13 +32,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$profile.$password.passwordReset()}</h1>
+            <h1>{$ll.passwordReset()}</h1>
         </div>
         <div>
             <TextField
                 disabled={$qcSendPasswordResetEmail.loading}
-                label={$ll.$.$profile.$password.email()}
-                placeholder={$ll.$.$profile.$password.enterEmail()}
+                label={$ll.email()}
+                placeholder={$ll.enterEmail()}
                 bind:value={email}
             />
         </div>
@@ -49,7 +49,7 @@
                 variant="primary"
                 on:click={qcSendPasswordResetEmail.refresh}
             >
-                {$ll.$.$profile.$password.sendResetLink()}
+                {$ll.sendResetLink()}
             </Button>
         </div>
     </div>

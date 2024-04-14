@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$chat.chat()}</title>
+    <title>{$ll.chat()}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -45,7 +45,7 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:h-full u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$chat.chat()}</h1>
+            <h1>{$ll.chat()}</h1>
         </div>
         <Chat hideControls={!$userData} {messages} on:send={e => sendMessage(e.detail)} />
     </div>

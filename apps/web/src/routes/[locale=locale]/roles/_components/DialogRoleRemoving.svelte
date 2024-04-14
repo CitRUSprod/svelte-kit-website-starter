@@ -30,7 +30,7 @@
         },
         async onSuccess() {
             dispatch("removeRole")
-            toasts.add("success", $ll.$.$roles.$$dialogRoleRemoving.roleRemovedSuccessfully())
+            toasts.add("success", $ll.roleRemovedSuccessfully())
             close()
         }
     })
@@ -42,20 +42,20 @@
     persistent={$qcDeleteRole.loading}
 >
     <div>
-        <h1>{$ll.$.$roles.$$dialogRoleRemoving.roleRemoving()}</h1>
+        <h1>{$ll.roleRemoving()}</h1>
     </div>
     <div>
         <p>
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html $ll.$.$roles.$$dialogRoleRemoving.roleRemovingQuestion(role.name)}
+            {@html $ll.roleRemovingQuestion(role.name)}
         </p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcDeleteRole.loading} text variant="success" on:click={close}>
-            {$ll.$.$roles.$$dialogRoleRemoving.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button loading={$qcDeleteRole.loading} variant="error" on:click={qcDeleteRole.refresh}>
-            {$ll.$.$roles.$$dialogRoleRemoving.remove()}
+            {$ll.remove()}
         </Button>
     </div>
 </Dialog>

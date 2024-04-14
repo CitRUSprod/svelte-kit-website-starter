@@ -39,7 +39,7 @@
                 id: data.user.id
             })
             data.user = res.data
-            toasts.add("success", $ll.$.$users.$_id.avatarUpdatedSuccessfully())
+            toasts.add("success", $ll.avatarUpdatedSuccessfully())
         }
     })
 
@@ -53,43 +53,43 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$users.$_id.profile()}</title>
+    <title>{$ll.profile()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$users.$_id.profile()}>
+<Content.Default title={$ll.profile()}>
     <div class="u:flex u:gap-4">
         <div class="u:w-50 u:h-50 u:overflow-hidden">
             <img
                 class="u:w-full u:h-full u:object-cover"
-                alt={$ll.$.$users.$_id.avatar()}
+                alt={$ll.avatar()}
                 src={data.user.avatar ?? "/img/no-avatar.png"}
             />
         </div>
         <div>
             <ul>
-                <li><b>{$ll.$.$users.$_id.username()}:</b> {data.user.username}</li>
+                <li><b>{$ll.username()}:</b> {data.user.username}</li>
                 {#if data.user.email}
-                    <li><b>{$ll.$.$users.$_id.email()}:</b> {data.user.email}</li>
+                    <li><b>{$ll.email()}:</b> {data.user.email}</li>
                 {/if}
-                <li><b>{$ll.$.$users.$_id.role()}:</b> {data.user.role.name}</li>
+                <li><b>{$ll.role()}:</b> {data.user.role.name}</li>
                 <li>
-                    <b>{$ll.$.$users.$_id.banned()}:</b>
+                    <b>{$ll.banned()}:</b>
                     {#if data.user.ban}
-                        {$ll.$.$users.$_id.yes()}
+                        {$ll.yes()}
                     {:else}
-                        {$ll.$.$users.$_id.no()}
+                        {$ll.no()}
                     {/if}
                 </li>
                 {#if data.user.ban}
-                    <li><b>{$ll.$.$users.$_id.banAuthor()}:</b> {data.user.ban.author.username}</li>
-                    <li><b>{$ll.$.$users.$_id.banReason()}:</b> {data.user.ban.reason}</li>
+                    <li><b>{$ll.banAuthor()}:</b> {data.user.ban.author.username}</li>
+                    <li><b>{$ll.banReason()}:</b> {data.user.ban.reason}</li>
                     <li>
-                        <b>{$ll.$.$users.$_id.banDate()}:</b>
+                        <b>{$ll.banDate()}:</b>
                         {dt.getFullDateAndTime(data.user.ban.date, data.tz, $currentLocale)}
                     </li>
                 {/if}
                 <li>
-                    <b>{$ll.$.$users.$_id.registrationDate()}:</b>
+                    <b>{$ll.registrationDate()}:</b>
                     {dt.getFullDateAndTime(data.user.registrationDate, data.tz, $currentLocale)}
                 </li>
             </ul>
@@ -102,23 +102,23 @@
                 variant="warning"
                 on:click={() => avatarInput.click()}
             >
-                {$ll.$.$users.$_id.uploadAvatar()}
+                {$ll.uploadAvatar()}
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
             {#if data.user.avatar}
                 <Button variant="error" on:click={dialogAvatarRemoving.open}>
-                    {$ll.$.$users.$_id.removeAvatar()}
+                    {$ll.removeAvatar()}
                 </Button>
             {/if}
             <Button variant="warning" on:click={dialogProfileEditing.open}>
-                {$ll.$.$users.$_id.edit()}
+                {$ll.edit()}
             </Button>
             <Button variant="warning" on:click={dialogPasswordChanging.open}>
-                {$ll.$.$users.$_id.changePassword()}
+                {$ll.changePassword()}
             </Button>
             {#if $userData.email}
                 <Button variant="warning" on:click={dialogEmailChanging.open}>
-                    {$ll.$.$users.$_id.changeEmail()}
+                    {$ll.changeEmail()}
                 </Button>
             {/if}
         </div>

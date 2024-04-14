@@ -25,7 +25,7 @@
         },
         async onSuccess() {
             socket.disconnect().connect()
-            toasts.add("success", $ll.$.$auth.$registration.$oauth.$_token.registeredSuccessfully())
+            toasts.add("success", $ll.registeredSuccessfully())
             await invalidateAll()
         }
     })
@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$auth.$registration.$oauth.$_token.registration()}</title>
+    <title>{$ll.registration()}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -48,12 +48,12 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$auth.$registration.$oauth.$_token.registration()}</h1>
+            <h1>{$ll.registration()}</h1>
         </div>
         <div>
             <TextField
                 disabled={$qcRegister.loading}
-                label={$ll.$.$auth.$registration.$oauth.$_token.username()}
+                label={$ll.username()}
                 bind:value={username}
                 on:keypress={onEnter}
             />
@@ -66,7 +66,7 @@
                 variant="primary"
                 on:click={qcRegister.refresh}
             >
-                {$ll.$.$auth.$registration.$oauth.$_token.register()}
+                {$ll.register()}
             </Button>
         </div>
     </div>

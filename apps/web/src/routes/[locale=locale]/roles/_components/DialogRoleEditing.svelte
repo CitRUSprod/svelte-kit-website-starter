@@ -50,7 +50,7 @@
         },
         async onSuccess() {
             dispatch("editRole")
-            toasts.add("success", $ll.$.$roles.$$dialogRoleEditing.roleEditedSuccessfully())
+            toasts.add("success", $ll.roleEditedSuccessfully())
             close()
         }
     })
@@ -74,21 +74,17 @@
     persistent={$qcUpdateRole.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$roles.$$dialogRoleEditing.roleEditing()}</h1>
+        <h1 class="u:text-center">{$ll.roleEditing()}</h1>
     </div>
     <div>
-        <TextField
-            disabled={$qcUpdateRole.loading}
-            label={$ll.$.$roles.$$dialogRoleEditing.name()}
-            bind:value={name}
-        />
+        <TextField disabled={$qcUpdateRole.loading} label={$ll.name()} bind:value={name} />
     </div>
     <div>
         <div class="u:relative u:border u:border-default u:rounded">
             <div
                 class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-default u:text-xs u:select-none u:pointer-events-none u:z-1"
             >
-                {$ll.$.$roles.$$dialogRoleEditing.permissions()}
+                {$ll.permissions()}
             </div>
             <div class="u:flex u:flex-wrap u:gap-1 u:p-3">
                 {#each selectedPermissions as permission (permission)}
@@ -104,7 +100,7 @@
                     </div>
                 {:else}
                     <div class="u:w-full u:text-center u:opacity-30">
-                        ({$ll.$.$roles.$$dialogRoleEditing.empty()})
+                        ({$ll.empty()})
                     </div>
                 {/each}
             </div>
@@ -115,7 +111,7 @@
             <DropdownMenu
                 disabled={items.length === 0 || $qcUpdateRole.loading}
                 {items}
-                label={$ll.$.$roles.$$dialogRoleEditing.permission()}
+                label={$ll.permission()}
                 bind:value={currentPermission}
             />
         </div>
@@ -125,13 +121,13 @@
                 variant="success"
                 on:click={addPermission}
             >
-                {$ll.$.$roles.$$dialogRoleEditing.add()}
+                {$ll.add()}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdateRole.loading} text variant="error" on:click={close}>
-            {$ll.$.$roles.$$dialogRoleEditing.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!vldResultName.valid}
@@ -139,7 +135,7 @@
             variant="success"
             on:click={qcUpdateRole.refresh}
         >
-            {$ll.$.$roles.$$dialogRoleEditing.save()}
+            {$ll.save()}
         </Button>
     </div>
 </Dialog>

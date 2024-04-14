@@ -28,14 +28,14 @@
             })
         },
         async onSuccess() {
-            toasts.add("success", $ll.$.$profile.$password.$_token.passwordResetSuccessfully())
+            toasts.add("success", $ll.passwordResetSuccessfully())
             await goto($localePath("/auth/login"))
         }
     })
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$profile.$password.$_token.passwordReset()}</title>
+    <title>{$ll.passwordReset()}</title>
 </svelte:head>
 
 <Content.Center>
@@ -43,13 +43,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$profile.$password.$_token.passwordReset()}</h1>
+            <h1>{$ll.passwordReset()}</h1>
         </div>
         <div>
             <TextField
                 disabled={$qcResetPassword.loading}
-                label={$ll.$.$profile.$password.$_token.newPassword()}
-                placeholder={$ll.$.$profile.$password.$_token.enterNewPassword()}
+                label={$ll.newPassword()}
+                placeholder={$ll.enterNewPassword()}
                 type="password"
                 bind:value={newPassword}
             />
@@ -57,8 +57,8 @@
         <div>
             <TextField
                 disabled={$qcResetPassword.loading}
-                label={$ll.$.$profile.$password.$_token.newPasswordConfirmation()}
-                placeholder={$ll.$.$profile.$password.$_token.enterNewPasswordAgain()}
+                label={$ll.newPasswordConfirmation()}
+                placeholder={$ll.enterNewPasswordAgain()}
                 type="password"
                 bind:value={newPasswordConfirmation}
             />
@@ -70,7 +70,7 @@
                 variant="primary"
                 on:click={qcResetPassword.refresh}
             >
-                {$ll.$.$profile.$password.$_token.reset()}
+                {$ll.reset()}
             </Button>
         </div>
     </div>

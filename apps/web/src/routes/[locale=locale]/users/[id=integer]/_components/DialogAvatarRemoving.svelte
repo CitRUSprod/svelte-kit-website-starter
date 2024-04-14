@@ -25,10 +25,7 @@
         },
         onSuccess() {
             user.avatar = null
-            toasts.add(
-                "success",
-                $ll.$.$users.$_id.$$dialogAvatarRemoving.avatarRemovedSuccessfully()
-            )
+            toasts.add("success", $ll.avatarRemovedSuccessfully())
             close()
         }
     })
@@ -40,17 +37,17 @@
     persistent={$qcDeleteAvatar.loading}
 >
     <div>
-        <h1>{$ll.$.$users.$_id.$$dialogAvatarRemoving.avatarRemoving()}</h1>
+        <h1>{$ll.avatarRemoving()}</h1>
     </div>
     <div>
-        <p>{$ll.$.$users.$_id.$$dialogAvatarRemoving.avatarRemovingQuestion()}</p>
+        <p>{$ll.avatarRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcDeleteAvatar.loading} text variant="success" on:click={close}>
-            {$ll.$.$users.$_id.$$dialogAvatarRemoving.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button loading={$qcDeleteAvatar.loading} variant="error" on:click={qcDeleteAvatar.refresh}>
-            {$ll.$.$users.$_id.$$dialogAvatarRemoving.remove()}
+            {$ll.remove()}
         </Button>
     </div>
 </Dialog>

@@ -25,7 +25,7 @@
             return api.posts.deletePost({ id: post.id })
         },
         async onSuccess() {
-            toasts.add("success", $ll.$.$posts.$_id.$$dialogPostRemoving.postRemovedSuccessfully())
+            toasts.add("success", $ll.postRemovedSuccessfully())
             close()
             await goto($localePath("/posts"))
         }
@@ -38,17 +38,17 @@
     persistent={$qcDeletePost.loading}
 >
     <div>
-        <h1>{$ll.$.$posts.$_id.$$dialogPostRemoving.postRemoving()}</h1>
+        <h1>{$ll.postRemoving()}</h1>
     </div>
     <div>
-        <p>{$ll.$.$posts.$_id.$$dialogPostRemoving.postRemovingQuestion()}</p>
+        <p>{$ll.postRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcDeletePost.loading} text variant="success" on:click={close}>
-            {$ll.$.$posts.$_id.$$dialogPostRemoving.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button loading={$qcDeletePost.loading} variant="error" on:click={qcDeletePost.refresh}>
-            {$ll.$.$posts.$_id.$$dialogPostRemoving.remove()}
+            {$ll.remove()}
         </Button>
     </div>
 </Dialog>

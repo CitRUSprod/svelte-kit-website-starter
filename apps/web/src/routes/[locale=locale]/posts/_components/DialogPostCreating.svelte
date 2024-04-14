@@ -37,7 +37,7 @@
             })
         },
         async onSuccess(localPost) {
-            toasts.add("success", $ll.$.$posts.$$dialogPostCreating.postCreatedSuccessfully())
+            toasts.add("success", $ll.postCreatedSuccessfully())
             close()
             await goto($localePath(`/posts/${localPost.id}`))
         }
@@ -50,13 +50,13 @@
     persistent={$qcCreatePost.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$posts.$$dialogPostCreating.postCreating()}</h1>
+        <h1 class="u:text-center">{$ll.postCreating()}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcCreatePost.loading}
-            label={$ll.$.$posts.$$dialogPostCreating.title()}
-            placeholder={$ll.$.$posts.$$dialogPostCreating.enterTitle()}
+            label={$ll.title()}
+            placeholder={$ll.enterTitle()}
             bind:value={title}
         />
     </div>
@@ -64,14 +64,14 @@
         <TextArea
             class="u:resize-none"
             disabled={$qcCreatePost.loading}
-            label={$ll.$.$posts.$$dialogPostCreating.content()}
-            placeholder={$ll.$.$posts.$$dialogPostCreating.enterContent()}
+            label={$ll.content()}
+            placeholder={$ll.enterContent()}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcCreatePost.loading} text variant="error" on:click={close}>
-            {$ll.$.$posts.$$dialogPostCreating.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -79,7 +79,7 @@
             variant="success"
             on:click={qcCreatePost.refresh}
         >
-            {$ll.$.$posts.$$dialogPostCreating.create()}
+            {$ll.create()}
         </Button>
     </div>
 </Dialog>

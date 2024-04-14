@@ -44,7 +44,7 @@
         },
         onSuccess(localPost) {
             post = localPost
-            toasts.add("success", $ll.$.$posts.$_id.$$dialogPostEditing.postEditedSuccessfully())
+            toasts.add("success", $ll.postEditedSuccessfully())
             close()
         }
     })
@@ -56,13 +56,13 @@
     persistent={$qcUpdatePost.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$posts.$_id.$$dialogPostEditing.postEditing()}</h1>
+        <h1 class="u:text-center">{$ll.postEditing()}</h1>
     </div>
     <div>
         <TextField
             disabled={$qcUpdatePost.loading}
-            label={$ll.$.$posts.$_id.$$dialogPostEditing.title()}
-            placeholder={$ll.$.$posts.$_id.$$dialogPostEditing.enterTitle()}
+            label={$ll.title()}
+            placeholder={$ll.enterTitle()}
             bind:value={title}
         />
     </div>
@@ -70,14 +70,14 @@
         <TextArea
             class="u:resize-none"
             disabled={$qcUpdatePost.loading}
-            label={$ll.$.$posts.$_id.$$dialogPostEditing.content()}
-            placeholder={$ll.$.$posts.$_id.$$dialogPostEditing.enterContent()}
+            label={$ll.content()}
+            placeholder={$ll.enterContent()}
             bind:value={content}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdatePost.loading} text variant="error" on:click={close}>
-            {$ll.$.$posts.$_id.$$dialogPostEditing.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -85,7 +85,7 @@
             variant="success"
             on:click={qcUpdatePost.refresh}
         >
-            {$ll.$.$posts.$_id.$$dialogPostEditing.save()}
+            {$ll.save()}
         </Button>
     </div>
 </Dialog>

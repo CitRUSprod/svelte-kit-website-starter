@@ -26,7 +26,7 @@
     <div>
         <ul>
             <ul>
-                <b>{$ll.$.$posts.$_id.author()}:</b>
+                <b>{$ll.author()}:</b>
                 <a
                     class="u:hover:underline"
                     href={$localePath(`/users/${String(data.post.author.id)}`)}
@@ -35,12 +35,12 @@
                 </a>
             </ul>
             <ul>
-                <b>{$ll.$.$posts.$_id.created()}:</b>
+                <b>{$ll.created()}:</b>
                 {dt.getFullDateAndTime(data.post.creationDate, data.tz, $currentLocale)}
             </ul>
             {#if data.post.editingDate}
                 <ul>
-                    <b>{$ll.$.$posts.$_id.edited()}:</b>
+                    <b>{$ll.edited()}:</b>
                     {dt.getFullDateAndTime(data.post.editingDate, data.tz, $currentLocale)}
                 </ul>
             {/if}
@@ -49,16 +49,16 @@
     {#if $userData?.id === data.post.author.id}
         <div>
             <Button variant="warning" on:click={dialogPostEditing.open}>
-                {$ll.$.$posts.$_id.edit()}
+                {$ll.edit()}
             </Button>
             <Button variant="error" on:click={dialogPostRemoving.open}>
-                {$ll.$.$posts.$_id.remove()}
+                {$ll.remove()}
             </Button>
         </div>
     {:else if $userData?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
         <div>
             <Button variant="error" on:click={dialogPostRemoving.open}>
-                {$ll.$.$posts.$_id.remove()}
+                {$ll.remove()}
             </Button>
         </div>
     {/if}

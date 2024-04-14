@@ -63,15 +63,11 @@
     </div>
     {#if !hideControls}
         <div>
-            <TextField
-                placeholder={$ll.$$chat.message()}
-                bind:value={message}
-                on:keypress={onEnter}
-            />
+            <TextField placeholder={$ll.message()} bind:value={message} on:keypress={onEnter} />
         </div>
         <div>
             <Button class="u:w-full" disabled={!trimmedMessage} on:click={send}>
-                {$ll.$$chat.send()}
+                {$ll.send()}
             </Button>
         </div>
     {/if}

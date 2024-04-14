@@ -39,10 +39,7 @@
             })
         },
         onSuccess() {
-            toasts.add(
-                "success",
-                $ll.$.$users.$_id.$$dialogPasswordChanging.passwordChangedSuccessfully()
-            )
+            toasts.add("success", $ll.passwordChangedSuccessfully())
             close()
         }
     })
@@ -55,13 +52,13 @@
 >
     <div>
         <h1 class="u:text-center">
-            {$ll.$.$users.$_id.$$dialogPasswordChanging.passwordChanging()}
+            {$ll.passwordChanging()}
         </h1>
     </div>
     <div>
         <TextField
             disabled={$qcChangePassword.loading}
-            label={$ll.$.$users.$_id.$$dialogPasswordChanging.oldPassword()}
+            label={$ll.oldPassword()}
             type="password"
             bind:value={oldPassword}
         />
@@ -69,14 +66,14 @@
     <div>
         <TextField
             disabled={$qcChangePassword.loading}
-            label={$ll.$.$users.$_id.$$dialogPasswordChanging.newPassword()}
+            label={$ll.newPassword()}
             type="password"
             bind:value={newPassword}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcChangePassword.loading} text variant="error" on:click={close}>
-            {$ll.$.$users.$_id.$$dialogPasswordChanging.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -84,7 +81,7 @@
             variant="success"
             on:click={qcChangePassword.refresh}
         >
-            {$ll.$.$users.$_id.$$dialogPasswordChanging.change()}
+            {$ll.change()}
         </Button>
     </div>
 </Dialog>

@@ -25,20 +25,20 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$roles.roles()}</title>
+    <title>{$ll.roles()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$roles.roles()}>
+<Content.Default title={$ll.roles()}>
     {#if $qcGetRoles.data}
         <table>
             <thead>
                 <tr
                     class="u:children:p-2 u:children:border u:children:border-default u:children:bg-zinc-200 u:dark:children:bg-zinc-700"
                 >
-                    <th>{$ll.$.$roles.name()}</th>
-                    <th>{$ll.$.$roles.permissions()}</th>
+                    <th>{$ll.name()}</th>
+                    <th>{$ll.permissions()}</th>
                     {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
-                        <th>{$ll.$.$roles.actions()}</th>
+                        <th>{$ll.actions()}</th>
                     {/if}
                 </tr>
             </thead>
@@ -52,7 +52,7 @@
                             {#if role.permissions.length > 0}
                                 {role.permissions.join(", ")}
                             {:else}
-                                <span class="u:opacity-30">({$ll.$.$roles.empty()})</span>
+                                <span class="u:opacity-30">({$ll.empty()})</span>
                             {/if}
                         </td>
                         {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
@@ -62,13 +62,13 @@
                                         variant="warning"
                                         on:click={() => dialogRoleEditing.open(role)}
                                     >
-                                        {$ll.$.$roles.edit()}
+                                        {$ll.edit()}
                                     </Button>
                                     <Button
                                         variant="error"
                                         on:click={() => dialogRoleRemoving.open(role)}
                                     >
-                                        {$ll.$.$roles.remove()}
+                                        {$ll.remove()}
                                     </Button>
                                 {/if}
                             </td>
@@ -79,7 +79,7 @@
         </table>
         <div class="u:flex u:justify-center">
             <Button variant="success" on:click={dialogRoleCreating.open}>
-                {$ll.$.$roles.createRole()}
+                {$ll.createRole()}
             </Button>
         </div>
     {/if}

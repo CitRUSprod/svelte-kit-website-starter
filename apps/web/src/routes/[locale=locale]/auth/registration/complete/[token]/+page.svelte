@@ -7,7 +7,7 @@
     import { toasts } from "$lib/stores"
 
     if (browser) {
-        toasts.add("success", $ll.$.$auth.$registration.$complete.$_token.registeredSuccessfully())
+        toasts.add("success", $ll.registeredSuccessfully())
         goto($localePath("/"), {
             replaceState: true,
             invalidateAll: true
@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$auth.$registration.$complete.$_token.registration()}</title>
+    <title>{$ll.registration()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$auth.$registration.$complete.$_token.redirecting()} />
+<Content.Default title={$ll.redirecting()} />

@@ -36,10 +36,7 @@
         },
         onSuccess(localUser) {
             user = localUser
-            toasts.add(
-                "success",
-                $ll.$.$users.$_id.$$dialogProfileEditing.profileEditedSuccessfully()
-            )
+            toasts.add("success", $ll.profileEditedSuccessfully())
             close()
         }
     })
@@ -51,18 +48,14 @@
     persistent={$qcUpdateUser.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$users.$_id.$$dialogProfileEditing.profileEditing()}</h1>
+        <h1 class="u:text-center">{$ll.profileEditing()}</h1>
     </div>
     <div>
-        <TextField
-            disabled={$qcUpdateUser.loading}
-            label={$ll.$.$users.$_id.$$dialogProfileEditing.username()}
-            bind:value={username}
-        />
+        <TextField disabled={$qcUpdateUser.loading} label={$ll.username()} bind:value={username} />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdateUser.loading} text variant="error" on:click={close}>
-            {$ll.$.$users.$_id.$$dialogProfileEditing.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -70,7 +63,7 @@
             variant="success"
             on:click={qcUpdateUser.refresh}
         >
-            {$ll.$.$users.$_id.$$dialogProfileEditing.save()}
+            {$ll.save()}
         </Button>
     </div>
 </Dialog>

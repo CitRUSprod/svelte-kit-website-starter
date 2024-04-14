@@ -7,7 +7,7 @@
     import { toasts } from "$lib/stores"
 
     if (browser) {
-        toasts.add("success", $ll.$.$profile.$email.$from.$_token.emailChangeConfirmationSent())
+        toasts.add("success", $ll.emailChangeConfirmationSent())
         goto($localePath("/"), {
             replaceState: true,
             invalidateAll: true
@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$profile.$email.$from.$_token.emailChangeConfirmation()}</title>
+    <title>{$ll.emailChangeConfirmation()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$profile.$email.$from.$_token.redirecting()} />
+<Content.Default title={$ll.redirecting()} />

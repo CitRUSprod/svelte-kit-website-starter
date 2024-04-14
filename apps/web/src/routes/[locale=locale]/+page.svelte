@@ -11,17 +11,17 @@
 
     function addOne() {
         count++
-        toasts.add("success", `${$ll.$.count()}: ${count}`)
+        toasts.add("success", `${String($ll.count())}: ${count}`)
     }
 
     function showRandomNumber() {
         const num = _.random(1, 100)
-        toasts.add("info", `${$ll.$.randomNumber()}: ${num}`)
+        toasts.add("info", `${String($ll.randomNumber())}: ${num}`)
     }
 </script>
 
 <svelte:head>
-    <title>{$ll.$.home()}</title>
+    <title>{$ll.home()}</title>
 </svelte:head>
 
 <Content.Center>
@@ -29,10 +29,10 @@
         <h1>{env.PUBLIC_TITLE}</h1>
         <div class="u:flex u:justify-center u:gap-2 u:mt-5">
             <Button variant="primary" on:click={addOne}>
-                {$ll.$.clicked()}: {count}
+                {$ll.clicks()}: {count}
             </Button>
             <Button variant="primary" on:click={showRandomNumber}>
-                {$ll.$.randomNumber()}
+                {$ll.randomNumber()}
             </Button>
         </div>
     </div>

@@ -42,7 +42,7 @@
         },
         async onSuccess() {
             dispatch("banUser")
-            toasts.add("success", $ll.$.$users.$$dialogUserBanning.userBannedSuccessfully())
+            toasts.add("success", $ll.userBannedSuccessfully())
             close()
         }
     })
@@ -54,22 +54,22 @@
     persistent={$qcBanUser.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$users.$$dialogUserBanning.userBanning()}</h1>
+        <h1 class="u:text-center">{$ll.userBanning()}</h1>
     </div>
     <div>
-        <h3 class="u:text-center">{$ll.$.$users.$$dialogUserBanning.user()}: {username}</h3>
+        <h3 class="u:text-center">{$ll.user()}: {username}</h3>
     </div>
     <div>
         <TextField
             disabled={$qcBanUser.loading}
-            label={$ll.$.$users.$$dialogUserBanning.reason()}
-            placeholder={$ll.$.$users.$$dialogUserBanning.enterReason()}
+            label={$ll.reason()}
+            placeholder={$ll.enterReason()}
             bind:value={reason}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcBanUser.loading} text variant="error" on:click={close}>
-            {$ll.$.$users.$$dialogUserBanning.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -77,7 +77,7 @@
             variant="success"
             on:click={qcBanUser.refresh}
         >
-            {$ll.$.$users.$$dialogUserBanning.ban()}
+            {$ll.ban()}
         </Button>
     </div>
 </Dialog>

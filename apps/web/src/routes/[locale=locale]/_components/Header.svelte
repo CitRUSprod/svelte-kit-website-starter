@@ -19,25 +19,25 @@
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
         {#if $userData}
             <Button href={$localePath(`/users/${String($userData.id)}`)} variant="primary">
-                {$ll.$.$$header.profile()}
+                {$ll.profile()}
             </Button>
         {/if}
         <Button href={$localePath("/chat")} variant="primary">
-            {$ll.$.$$header.chat()}
+            {$ll.chat()}
         </Button>
         <Button href={$localePath("/lorem")} variant="primary">Lorem</Button>
         <Button href={$localePath("/simple-layout")} variant="primary">
-            {$ll.$.$$header.simpleLayout()}
+            {$ll.simpleLayout()}
         </Button>
         <Button href={$localePath("/posts")} variant="primary">
-            {$ll.$.$$header.posts()}
+            {$ll.posts()}
         </Button>
         <Button href={$localePath("/users")} variant="primary">
-            {$ll.$.$$header.users()}
+            {$ll.users()}
         </Button>
         {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
             <Button href={$localePath("/roles")} variant="primary">
-                {$ll.$.$$header.roles()}
+                {$ll.roles()}
             </Button>
         {/if}
         <LocaleSwitcher class="u:mx-1" />
@@ -46,11 +46,11 @@
         </Button>
         {#if $userData}
             <Button href={$localePath("/auth/logout")} variant="primary">
-                {$ll.$.$$header.logout()}
+                {$ll.logout()}
             </Button>
         {:else}
             <Button href={$localePath("/auth/login")} variant="primary">
-                {$ll.$.$$header.login()}
+                {$ll.login()}
             </Button>
         {/if}
     </div>

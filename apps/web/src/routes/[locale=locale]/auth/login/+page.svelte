@@ -26,7 +26,7 @@
         },
         async onSuccess() {
             socket.disconnect().connect()
-            toasts.add("success", $ll.$.$auth.$login.loggedInSuccessfully())
+            toasts.add("success", $ll.loggedInSuccessfully())
             await invalidateAll()
         }
     })
@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$auth.$login.login()}</title>
+    <title>{$ll.login()}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -49,13 +49,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$auth.$login.login()}</h1>
+            <h1>{$ll.login()}</h1>
         </div>
         <div>
             <TextField
                 autofocus
                 disabled={$qcLogin.loading}
-                label={$ll.$.$auth.$login.email()}
+                label={$ll.email()}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -63,7 +63,7 @@
         <div>
             <TextField
                 disabled={$qcLogin.loading}
-                label={$ll.$.$auth.$login.password()}
+                label={$ll.password()}
                 type="password"
                 bind:value={password}
                 on:keypress={onEnter}
@@ -71,12 +71,12 @@
         </div>
         <div>
             <a class="u:hover:underline" href={$localePath("/profile/password")}>
-                {$ll.$.$auth.$login.forgotPassword()}
+                {$ll.forgotPassword()}
             </a>
         </div>
         <div class="u:flex u:justify-between">
             <Button href={$localePath("/auth/registration")} text>
-                {$ll.$.$auth.$login.registration()}
+                {$ll.registration()}
             </Button>
             <Button
                 disabled={!completedForm}
@@ -84,11 +84,11 @@
                 variant="primary"
                 on:click={qcLogin.refresh}
             >
-                {$ll.$.$auth.$login.doLogin()}
+                {$ll.doLogin()}
             </Button>
         </div>
         <div>
-            <h3>{$ll.$.$auth.$login.orLoginWith()}</h3>
+            <h3>{$ll.orLoginWith()}</h3>
         </div>
         <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
             <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />

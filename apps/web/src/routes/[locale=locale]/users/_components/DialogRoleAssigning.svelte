@@ -41,7 +41,7 @@
         },
         onSuccess() {
             dispatch("assignRole")
-            toasts.add("success", $ll.$.$users.$$dialogRoleAssigning.roleEditedSuccessfully())
+            toasts.add("success", $ll.roleEditedSuccessfully())
             close()
         }
     })
@@ -53,29 +53,29 @@
     persistent={$qcAssignRoleToUser.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$users.$$dialogRoleAssigning.roleAssigning()}</h1>
+        <h1 class="u:text-center">{$ll.roleAssigning()}</h1>
     </div>
     <div>
-        <h3 class="u:text-center">{$ll.$.$users.$$dialogRoleAssigning.user()}: {username}</h3>
+        <h3 class="u:text-center">{$ll.user()}: {username}</h3>
     </div>
     <div>
         <DropdownMenu
             disabled={$qcAssignRoleToUser.loading}
             {items}
-            label={$ll.$.$users.$$dialogRoleAssigning.role()}
+            label={$ll.role()}
             bind:value={roleId}
         />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcAssignRoleToUser.loading} text variant="error" on:click={close}>
-            {$ll.$.$users.$$dialogRoleAssigning.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             loading={$qcAssignRoleToUser.loading}
             variant="success"
             on:click={qcAssignRoleToUser.refresh}
         >
-            {$ll.$.$users.$$dialogRoleAssigning.save()}
+            {$ll.save()}
         </Button>
     </div>
 </Dialog>

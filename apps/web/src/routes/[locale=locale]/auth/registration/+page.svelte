@@ -34,7 +34,7 @@
             })
         },
         async onSuccess() {
-            toasts.add("success", $ll.$.$auth.$registration.confirmationEmailSent())
+            toasts.add("success", $ll.confirmationEmailSent())
             await goto($localePath("/"))
         }
     })
@@ -49,7 +49,7 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$auth.$registration.registration()}</title>
+    <title>{$ll.registration()}</title>
 </svelte:head>
 
 <Content.Center class="u:p-8">
@@ -57,13 +57,13 @@
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
         <div>
-            <h1>{$ll.$.$auth.$registration.registration()}</h1>
+            <h1>{$ll.registration()}</h1>
         </div>
         <div>
             <TextField
                 autofocus
                 disabled={$qcRegister.loading}
-                label={$ll.$.$auth.$registration.email()}
+                label={$ll.email()}
                 bind:value={email}
                 on:keypress={onEnter}
             />
@@ -71,7 +71,7 @@
         <div>
             <TextField
                 disabled={$qcRegister.loading}
-                label={$ll.$.$auth.$registration.username()}
+                label={$ll.username()}
                 bind:value={username}
                 on:keypress={onEnter}
             />
@@ -79,7 +79,7 @@
         <div>
             <TextField
                 disabled={$qcRegister.loading}
-                label={$ll.$.$auth.$registration.password()}
+                label={$ll.password()}
                 type="password"
                 bind:value={password}
                 on:keypress={onEnter}
@@ -88,7 +88,7 @@
         <div>
             <TextField
                 disabled={$qcRegister.loading}
-                label={$ll.$.$auth.$registration.passwordConfirmation()}
+                label={$ll.passwordConfirmation()}
                 type="password"
                 bind:value={passwordConfirmation}
                 on:keypress={onEnter}
@@ -96,7 +96,7 @@
         </div>
         <div class="u:flex u:justify-between">
             <Button href={$localePath("/auth/login")} text>
-                {$ll.$.$auth.$registration.login()}
+                {$ll.login()}
             </Button>
             <Button
                 disabled={!completedForm}
@@ -104,11 +104,11 @@
                 variant="primary"
                 on:click={qcRegister.refresh}
             >
-                {$ll.$.$auth.$registration.register()}
+                {$ll.register()}
             </Button>
         </div>
         <div>
-            <h3>{$ll.$.$auth.$registration.orRegisterWith()}</h3>
+            <h3>{$ll.orRegisterWith()}</h3>
         </div>
         <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
             <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />

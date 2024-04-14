@@ -17,10 +17,10 @@
 
     let sortings: Array<DropdownMenuItem>
     $: sortings = [
-        { text: $ll.$.$posts.creationDateAsc(), value: "creationDate-asc" },
-        { text: $ll.$.$posts.creationDateDesc(), value: "creationDate-desc" },
-        { text: $ll.$.$posts.titleAsc(), value: "title-asc" },
-        { text: $ll.$.$posts.titleDesc(), value: "title-desc" }
+        { text: $ll.creationDateAsc(), value: "creationDate-asc" },
+        { text: $ll.creationDateDesc(), value: "creationDate-desc" },
+        { text: $ll.titleAsc(), value: "title-asc" },
+        { text: $ll.titleDesc(), value: "title-desc" }
     ]
 
     const qcGetPosts = createQueryController({
@@ -98,29 +98,29 @@
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$posts.posts()}</title>
+    <title>{$ll.posts()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$posts.posts()}>
+<Content.Default title={$ll.posts()}>
     <div class="u:flex u:justify-between u:gap-2">
         <div class="u:flex u:gap-2">
             <TextField
-                label={$ll.$.$posts.search()}
-                placeholder={$ll.$.$posts.enterTitle()}
+                label={$ll.search()}
+                placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={qcGetPosts.params.title}
                 on:input={lodash.debounce(onTitleInput, 500)}
             />
             <DropdownMenu
                 items={sortings}
-                label={$ll.$.$posts.sorting()}
+                label={$ll.sorting()}
                 bind:value={qcGetPosts.params.sortAndOrder}
                 on:change={onSortingChange}
             />
         </div>
         <div>
             <Button variant="success" on:click={dialogPostCreating.open}>
-                {$ll.$.$posts.createPost()}
+                {$ll.createPost()}
             </Button>
         </div>
     </div>
@@ -140,7 +140,7 @@
                     <div class="u:my-2 u:border-t u:border-primary" />
                     <div class="u:flex u:justify-between">
                         <span class="u:text-sm">
-                            {$ll.$.$posts.author()}: {post.author.username}
+                            {$ll.author()}: {post.author.username}
                         </span>
                         <span class="u:text-sm">
                             {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}

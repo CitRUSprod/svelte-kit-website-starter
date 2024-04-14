@@ -9,13 +9,13 @@
 
     if (browser) {
         socket.disconnect().connect()
-        toasts.add("success", $ll.$.$auth.$login.$_provider.$callback.loggedInSuccessfully())
+        toasts.add("success", $ll.loggedInSuccessfully())
         invalidateAll()
     }
 </script>
 
 <svelte:head>
-    <title>{$ll.$.$auth.$login.$_provider.$callback.login()}</title>
+    <title>{$ll.login()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.$.$auth.$login.$_provider.$callback.redirecting()} />
+<Content.Default title={$ll.redirecting()} />

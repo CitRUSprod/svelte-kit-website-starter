@@ -35,7 +35,7 @@
             })
         },
         onSuccess() {
-            toasts.add("success", $ll.$.$users.$_id.$$dialogEmailChanging.confirmationEmailSent())
+            toasts.add("success", $ll.confirmationEmailSent())
             close()
         }
     })
@@ -47,18 +47,14 @@
     persistent={$qcUpdateEmail.loading}
 >
     <div>
-        <h1 class="u:text-center">{$ll.$.$users.$_id.$$dialogEmailChanging.emailChanging()}</h1>
+        <h1 class="u:text-center">{$ll.emailChanging()}</h1>
     </div>
     <div>
-        <TextField
-            disabled={$qcUpdateEmail.loading}
-            label={$ll.$.$users.$_id.$$dialogEmailChanging.email()}
-            bind:value={email}
-        />
+        <TextField disabled={$qcUpdateEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcUpdateEmail.loading} text variant="error" on:click={close}>
-            {$ll.$.$users.$_id.$$dialogEmailChanging.cancel()}
+            {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
@@ -66,7 +62,7 @@
             variant="success"
             on:click={qcUpdateEmail.refresh}
         >
-            {$ll.$.$users.$_id.$$dialogEmailChanging.change()}
+            {$ll.change()}
         </Button>
     </div>
 </Dialog>
