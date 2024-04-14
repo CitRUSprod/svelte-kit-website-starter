@@ -10,7 +10,11 @@ function setDarkClass(value: boolean) {
 const defaultValue = false
 
 const { subscribe, update } = browser
-    ? persist(writable(defaultValue), createCookieStorage({ expires: 100 }), "darkTheme")
+    ? persist(
+          writable(defaultValue),
+          createCookieStorage({ expires: 100, samesite: "Lax" }),
+          "darkTheme"
+      )
     : writable(defaultValue)
 
 function toggle() {

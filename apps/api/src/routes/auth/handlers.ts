@@ -165,7 +165,11 @@ export const oAuthLogin = (async (app, req) => {
                     {
                         name: "oAuthState",
                         value: oAuthState,
-                        options: { path: "/", httpOnly: true }
+                        options: {
+                            path: "/",
+                            sameSite: "lax",
+                            httpOnly: true
+                        }
                     }
                 ]
             }
@@ -314,7 +318,8 @@ export const refreshTokens = (async (app, req, cookies) => {
                 value: tokens.access,
                 options: {
                     path: "/",
-                    maxAge: enums.TokenTtl.Access
+                    maxAge: enums.TokenTtl.Access,
+                    sameSite: "lax"
                 }
             },
             {
@@ -323,6 +328,7 @@ export const refreshTokens = (async (app, req, cookies) => {
                 options: {
                     path: "/",
                     maxAge: enums.TokenTtl.Refresh,
+                    sameSite: "lax",
                     httpOnly: true
                 }
             }

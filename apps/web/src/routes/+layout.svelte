@@ -21,14 +21,16 @@
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
         Cookies.set("timezone", tz, {
             path: "/",
-            expires: 100
+            expires: 100,
+            sameSite: "lax"
         })
     }
 
     watch(currentLocale, locale => {
         Cookies.set("locale", locale, {
             path: "/",
-            expires: 100
+            expires: 100,
+            sameSite: "lax"
         })
     })
 

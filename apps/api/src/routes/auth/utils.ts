@@ -112,12 +112,21 @@ export async function login(
             {
                 name: "accessToken",
                 value: tokens.access,
-                options: { path: "/", maxAge: enums.TokenTtl.Access }
+                options: {
+                    path: "/",
+                    maxAge: enums.TokenTtl.Access,
+                    sameSite: "lax"
+                }
             },
             {
                 name: "refreshToken",
                 value: tokens.refresh,
-                options: { path: "/", maxAge: enums.TokenTtl.Refresh, httpOnly: true }
+                options: {
+                    path: "/",
+                    maxAge: enums.TokenTtl.Refresh,
+                    sameSite: "lax",
+                    httpOnly: true
+                }
             }
         ]
     }
