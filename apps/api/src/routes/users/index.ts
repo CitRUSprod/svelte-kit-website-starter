@@ -10,7 +10,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.users.base],
             querystring: schemasRoutes.users.getUsersQuery()
         },
-        preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
             const data = await handlers.getUsers(app, req)
             await reply.sendData(data)
@@ -22,7 +21,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.users.base],
             params: schemasRoutes.users.getUserParams()
         },
-        preHandler: app.createPreHandler([app.setUserData]),
         async handler(req, reply) {
             const data = await handlers.getUser(app, req)
             await reply.sendData(data)
@@ -37,7 +35,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
                 params: schemasRoutes.users.assignRoleToUserParams()
             },
             preHandler: app.createPreHandler([
-                app.setUserData,
                 app.verifyAuth,
                 app.verifyPermission(constantsEnums.Permission.AssignRole)
             ]),
@@ -57,7 +54,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
                 body: schemasRoutes.users.banUserBody()
             },
             preHandler: app.createPreHandler([
-                app.setUserData,
                 app.verifyAuth,
                 app.verifyPermission(constantsEnums.Permission.BanUser)
             ]),
@@ -74,7 +70,6 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.users.unbanUserParams()
         },
         preHandler: app.createPreHandler([
-            app.setUserData,
             app.verifyAuth,
             app.verifyPermission(constantsEnums.Permission.BanUser)
         ]),

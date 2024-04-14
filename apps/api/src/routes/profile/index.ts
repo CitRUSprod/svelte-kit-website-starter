@@ -8,7 +8,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         schema: {
             tags: [constantsRoutes.profile.base]
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+        preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
             const data = await handlers.getUser(app, req)
             await reply.sendData(data)
@@ -20,7 +20,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.profile.base],
             body: schemasRoutes.profile.updateUserBody()
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+        preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
             const data = await handlers.updateUser(app, req)
             await reply.sendData(data)
@@ -34,7 +34,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 tags: [constantsRoutes.profile.base],
                 body: schemasRoutes.profile.uploadAvatarBody()
             },
-            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            preHandler: app.createPreHandler([app.verifyAuth]),
             async handler(req, reply) {
                 const data = await handlers.uploadAvatar(app, req)
                 await reply.sendData(data)
@@ -46,7 +46,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         schema: {
             tags: [constantsRoutes.profile.base]
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+        preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
             const data = await handlers.deleteAvatar(app, req)
             await reply.sendData(data)
@@ -60,7 +60,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 tags: [constantsRoutes.profile.base],
                 body: schemasRoutes.profile.sendEmailUpdateEmailToOldBody()
             },
-            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            preHandler: app.createPreHandler([app.verifyAuth]),
             async handler(req, reply) {
                 const data = await handlers.sendEmailUpdateEmailToOld(app, req)
                 await reply.sendData(data)
@@ -103,7 +103,7 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
                 tags: [constantsRoutes.profile.base],
                 body: schemasRoutes.profile.changePasswordBody()
             },
-            preHandler: app.createPreHandler([app.setUserData, app.verifyAuth]),
+            preHandler: app.createPreHandler([app.verifyAuth]),
             async handler(req, reply) {
                 const data = await handlers.changePassword(app, req)
                 await reply.sendData(data)

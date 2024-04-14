@@ -21,7 +21,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.roles.createRoleBody()
         },
         preHandler: app.createPreHandler([
-            app.setUserData,
             app.verifyAuth,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
@@ -41,7 +40,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
             body: schemasRoutes.roles.updateRoleBody()
         },
         preHandler: app.createPreHandler([
-            app.setUserData,
             app.verifyAuth,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),
@@ -57,7 +55,6 @@ export const rolesRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.roles.deleteRoleParams()
         },
         preHandler: app.createPreHandler([
-            app.setUserData,
             app.verifyAuth,
             app.verifyPermission(constantsEnums.Permission.CreateRole)
         ]),

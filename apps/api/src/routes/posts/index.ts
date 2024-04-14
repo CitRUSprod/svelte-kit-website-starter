@@ -20,7 +20,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.posts.base],
             body: schemasRoutes.posts.createPostBody()
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
             const data = await handlers.createPost(app, req)
             await reply.sendData(data)
@@ -47,7 +47,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
             params: schemasRoutes.posts.updatePostParams(),
             body: schemasRoutes.posts.updatePostBody()
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
             const data = await handlers.updatePost(app, req)
             await reply.sendData(data)
@@ -59,7 +59,7 @@ export const postsRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.posts.base],
             params: schemasRoutes.posts.deletePostParams()
         },
-        preHandler: app.createPreHandler([app.setUserData, app.verifyAuth, app.verifyNotBanned]),
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
             const data = await handlers.deletePost(app, req)
             await reply.sendData(data)
