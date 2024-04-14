@@ -61,7 +61,7 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     })
 
     const setCookie = response.headers.get("set-cookie")
-    const newCookie = `locale=${locale}; Path=/; Max-Age=${100 * 24 * 60 * 60}`
+    const newCookie = `locale=${locale}; Path=/; Max-Age=${100 * 24 * 60 * 60}; SameSite=Lax`
     response.headers.set("set-cookie", setCookie ? `${setCookie}, ${newCookie}` : newCookie)
 
     return response
