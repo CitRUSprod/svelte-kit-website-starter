@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import * as constantsEnums from "@local/constants/enums"
@@ -29,11 +29,11 @@ export function dto(user: UserData) {
     } satisfies JsonObject
 }
 
-export async function get(app: FastifyInstance, id: number) {
+export async function get(app: FastifyInstance, req: FastifyRequest, id: number) {
     const user = await app.prisma.user.findFirst({
         where: { id },
         include: { role: true, ban: { include: { author: true } } }
     })
-    if (!user) throw new BadRequestError("User with such ID was not found")
+    if (!user) throw new BadRequestError(req.ll.userWithSuchIdWasNotFound())
     return user
 }

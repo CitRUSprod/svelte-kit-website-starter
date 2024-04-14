@@ -9,13 +9,13 @@ import { RouteHandler } from "$/types"
 import * as utils from "./utils"
 
 export const getUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
     return { payload: models.user.dto(req.userData) }
 }) satisfies RouteHandler<void, schemasRoutes.profile.GetUserResponse>
 
 export const updateUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
     if (req.body.username && req.body.username !== req.userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
@@ -23,7 +23,7 @@ export const updateUser = (async (app, req) => {
         })
 
         if (userByUsername) {
-            throw new BadRequestError(req.ll.$profile.userWithSuchUsernameAlreadyExists())
+            throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
         }
     }
 
@@ -42,11 +42,11 @@ export const updateUser = (async (app, req) => {
 >
 
 export const uploadAvatar = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
     const img = req.body.img as MultipartFile
 
-    if (!isImgFile(img)) throw new BadRequestError(req.ll.$profile.fileIsNotImage())
+    if (!isImgFile(img)) throw new BadRequestError(req.ll.fileIsNotImage())
 
     const avatar = await writeFile(enums.ImgPath.Avatars, img)
 
@@ -64,8 +64,8 @@ export const uploadAvatar = (async (app, req) => {
 >
 
 export const deleteAvatar = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
-    if (!req.userData.avatar) throw new BadRequestError(req.ll.$profile.youDoNotHaveAvatar())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData.avatar) throw new BadRequestError(req.ll.youDoNotHaveAvatar())
 
     await removeFile(enums.ImgPath.Avatars, req.userData.avatar)
 
@@ -78,11 +78,11 @@ export const deleteAvatar = (async (app, req) => {
 }) satisfies RouteHandler<void, schemasRoutes.profile.DeleteAvatarResponse>
 
 export const sendEmailUpdateEmailToOld = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
-    if (!req.userData.email) throw new BadRequestError(req.ll.$profile.emailIsNotSet())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData.email) throw new BadRequestError(req.ll.emailIsNotSet())
 
     if (req.userData.email === req.body.email) {
-        throw new BadRequestError(req.ll.$profile.oldAndNewEmailsMatch())
+        throw new BadRequestError(req.ll.oldAndNewEmailsMatch())
     }
 
     await utils.deleteExpiredEmailUpdateTokens(app)
@@ -112,13 +112,13 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     }
 
     const url = new URL(`/profile/email/from/${tokenFrom}`, env.PUBLIC_BASE_URL).toString()
-    const subject = req.ll.$profile.emailUpdate()
+    const subject = req.ll.emailUpdate()
     const message = `
         <div>
-            <h3>${req.ll.$profile.dear()} ${req.userData.username}</h3>
+            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
         </div>
         <div>
-            <a href="${url}">${req.ll.$profile.updateEmailTo({ email: req.body.email })}</a>
+            <a href="${url}">${String(req.ll.updateEmailTo({ email: req.body.email }))}</a>
         </div>
     `
     await sendEmail(req.userData.email, subject, message)
@@ -136,24 +136,24 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
         where: { tokenFrom: req.params.emailUpdateToken }
     })
 
-    if (!emailUpdateToken) throw new BadRequestError(req.ll.$profile.emailUpdateTokenExpired())
+    if (!emailUpdateToken) throw new BadRequestError(req.ll.emailUpdateTokenExpired())
 
     const user = await app.prisma.user.findFirst({
         where: { id: emailUpdateToken.userId }
     })
 
-    if (!user) throw new InternalServerError(req.ll.$profile.unexpectedError())
+    if (!user) throw new InternalServerError(req.ll.unexpectedError())
 
     const { tokenTo } = emailUpdateToken
 
     const url = new URL(`/profile/email/to/${tokenTo}`, env.PUBLIC_BASE_URL).toString()
-    const subject = req.ll.$profile.emailUpdate()
+    const subject = req.ll.emailUpdate()
     const message = `
         <div>
             <h3>Dear ${user.username}</h3>
         </div>
         <div>
-            <a href="${url}">${req.ll.$profile.updateEmail()}</b></a>
+            <a href="${url}">${String(req.ll.updateEmail())}</b></a>
         </div>
     `
     await sendEmail(emailUpdateToken.email, subject, message)
@@ -170,7 +170,7 @@ export const updateEmail = (async (app, req) => {
     const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
         where: { tokenTo: req.params.emailUpdateToken }
     })
-    if (!emailUpdateToken) throw new BadRequestError(req.ll.$profile.emailUpdateTokenExpired())
+    if (!emailUpdateToken) throw new BadRequestError(req.ll.emailUpdateTokenExpired())
 
     await app.prisma.user.update({
         where: { id: emailUpdateToken.userId },
@@ -188,15 +188,15 @@ export const updateEmail = (async (app, req) => {
 >
 
 export const changePassword = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$profile.unexpectedError())
-    if (!req.userData.password) throw new BadRequestError(req.ll.$profile.passwordIsNotSet())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData.password) throw new BadRequestError(req.ll.passwordIsNotSet())
 
     if (req.body.oldPassword === req.body.newPassword) {
-        throw new BadRequestError(req.ll.$profile.oldAndNewPasswordsMatch())
+        throw new BadRequestError(req.ll.oldAndNewPasswordsMatch())
     }
 
     const isCorrectPassword = await argon2.verify(req.userData.password, req.body.oldPassword)
-    if (!isCorrectPassword) throw new BadRequestError(req.ll.$profile.incorrectOldPassword())
+    if (!isCorrectPassword) throw new BadRequestError(req.ll.incorrectOldPassword())
 
     const newPassword = await argon2.hash(req.body.newPassword)
     await app.prisma.user.update({
@@ -212,7 +212,7 @@ export const changePassword = (async (app, req) => {
 
 export const sendPasswordResetEmail = (async (app, req) => {
     const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (!user) throw new BadRequestError(req.ll.$profile.userWithEmailNotFound())
+    if (!user) throw new BadRequestError(req.ll.userWithEmailNotFound())
 
     const token = createUuid()
 
@@ -232,13 +232,13 @@ export const sendPasswordResetEmail = (async (app, req) => {
     }
 
     const url = new URL(`/profile/password/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = req.ll.$profile.passwordReset()
+    const subject = req.ll.passwordReset()
     const message = `
         <div>
-            <h3>${req.ll.$profile.dear()} ${user.username}</h3>
+            <h3>${String(req.ll.dear())} ${user.username}</h3>
         </div>
         <div>
-            <a href="${url}">${req.ll.$profile.resetPassword()}</a>
+            <a href="${url}">${String(req.ll.resetPassword())}</a>
         </div>
     `
     await sendEmail(user.email!, subject, message)
@@ -255,7 +255,7 @@ export const resetPassword = (async (app, req) => {
     const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
         where: { token: req.params.passwordResetToken }
     })
-    if (!passwordResetToken) throw new BadRequestError(req.ll.$profile.passwordResetTokenExpired())
+    if (!passwordResetToken) throw new BadRequestError(req.ll.passwordResetTokenExpired())
 
     const newPassword = await argon2.hash(req.body.newPassword)
     await app.prisma.user.update({

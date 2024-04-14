@@ -38,7 +38,7 @@ export const preHandler: FastifyPluginCallback = (app, options, done) => {
             })
 
             if (user === null) {
-                throw new InternalServerError("User with such ID was not found")
+                throw new InternalServerError(req.ll.userWithSuchIdWasNotFound())
             } else {
                 req.userData = user
             }

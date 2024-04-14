@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import { Role } from "@prisma/client"
@@ -13,8 +13,8 @@ export function dto(role: Role) {
     } satisfies JsonObject
 }
 
-export async function get(app: FastifyInstance, id: number) {
+export async function get(app: FastifyInstance, req: FastifyRequest, id: number) {
     const role = await app.prisma.role.findFirst({ where: { id } })
-    if (!role) throw new BadRequestError("Role with such ID was not found")
+    if (!role) throw new BadRequestError(req.ll.roleWithSuchIdWasNotFound())
     return role
 }

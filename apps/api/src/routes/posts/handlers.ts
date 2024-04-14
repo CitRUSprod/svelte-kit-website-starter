@@ -30,7 +30,7 @@ export const getPosts = (async (app, req) => {
 >
 
 export const createPost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
     const post = await app.prisma.post.create({
         data: { ...req.body, authorId: req.userData.id, creationDate: new Date() },
@@ -44,7 +44,7 @@ export const createPost = (async (app, req) => {
 >
 
 export const getPost = (async (app, req) => {
-    const post = await models.post.get(app, req.params.id)
+    const post = await models.post.get(app, req, req.params.id)
     return { payload: models.post.dto(post) }
 }) satisfies RouteHandler<
     { Params: schemasRoutes.posts.GetPostParams },
@@ -52,9 +52,9 @@ export const getPost = (async (app, req) => {
 >
 
 export const updatePost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
-    const post = await models.post.get(app, req.params.id)
+    const post = await models.post.get(app, req, req.params.id)
 
     if (post.authorId === req.userData.id) {
         const updatedPost = await app.prisma.post.update({
@@ -65,7 +65,7 @@ export const updatePost = (async (app, req) => {
 
         return { payload: models.post.dto(updatedPost) }
     } else {
-        throw new ForbiddenError(req.ll.$posts.noAccess())
+        throw new ForbiddenError(req.ll.noAccess())
     }
 }) satisfies RouteHandler<
     {
@@ -76,9 +76,9 @@ export const updatePost = (async (app, req) => {
 >
 
 export const deletePost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$posts.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
-    const post = await models.post.get(app, req.params.id)
+    const post = await models.post.get(app, req, req.params.id)
 
     if (
         post.authorId === req.userData.id ||
@@ -91,7 +91,7 @@ export const deletePost = (async (app, req) => {
 
         return { payload: models.post.dto(deletedPost) }
     } else {
-        throw new ForbiddenError(req.ll.$posts.noAccess())
+        throw new ForbiddenError(req.ll.noAccess())
     }
 }) satisfies RouteHandler<
     { Params: schemasRoutes.posts.DeletePostParams },

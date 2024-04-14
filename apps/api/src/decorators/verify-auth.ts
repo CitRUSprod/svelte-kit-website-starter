@@ -14,7 +14,7 @@ export const verifyAuth: FastifyPluginCallback = (app, options, done) => {
             if (req.authError) {
                 throw req.authError
             } else {
-                throw new InternalServerError("userData field is not set")
+                throw new InternalServerError(req.ll.userDataFieldIsNotSet())
             }
         }
     })

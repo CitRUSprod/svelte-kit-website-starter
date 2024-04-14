@@ -30,7 +30,7 @@ export const getUsers = (async (app, req) => {
 >
 
 export const getUser = (async (app, req) => {
-    const user = await models.user.get(app, req.params.id)
+    const user = await models.user.get(app, req, req.params.id)
     return { payload: models.user.dto(user) }
 }) satisfies RouteHandler<
     { Params: schemasRoutes.users.GetUserParams },
@@ -38,11 +38,11 @@ export const getUser = (async (app, req) => {
 >
 
 export const assignRoleToUser = (async (app, req) => {
-    const user = await models.user.get(app, req.params.id)
-    const role = await models.role.get(app, req.params.roleId)
+    const user = await models.user.get(app, req, req.params.id)
+    const role = await models.role.get(app, req, req.params.roleId)
 
     if (user.roleId === req.params.roleId) {
-        throw new BadRequestError(req.ll.$users.userWithSuchIdIsAlready({ roleName: role.name }))
+        throw new BadRequestError(req.ll.userWithSuchIdIsAlready({ roleName: role.name }))
     }
 
     const updatedUser = await app.prisma.user.update({
@@ -58,10 +58,10 @@ export const assignRoleToUser = (async (app, req) => {
 >
 
 export const banUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.$users.unexpectedError())
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
-    const user = await models.user.get(app, req.params.id)
-    if (user.ban) throw new BadRequestError(req.ll.$users.userWithSuchIdIsAlreadyBanned())
+    const user = await models.user.get(app, req, req.params.id)
+    if (user.ban) throw new BadRequestError(req.ll.userWithSuchIdIsAlreadyBanned())
 
     await app.prisma.ban.create({
         data: {
@@ -88,14 +88,14 @@ export const banUser = (async (app, req) => {
 >
 
 export const unbanUser = (async (app, req) => {
-    const user = await models.user.get(app, req.params.id)
-    if (!user.ban) throw new BadRequestError(req.ll.$users.userWithSuchIdIsNotBanned())
+    const user = await models.user.get(app, req, req.params.id)
+    if (!user.ban) throw new BadRequestError(req.ll.userWithSuchIdIsNotBanned())
 
     await app.prisma.ban.delete({
         where: { userId: req.params.id }
     })
 
-    const unbannedUser = await models.user.get(app, req.params.id)
+    const unbannedUser = await models.user.get(app, req, req.params.id)
 
     return { payload: models.user.dto(unbannedUser) }
 }) satisfies RouteHandler<

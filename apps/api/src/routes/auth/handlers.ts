@@ -15,12 +15,12 @@ import * as utils from "./utils"
 
 export const register = (async (app, req) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (userByEmail) throw new BadRequestError(req.ll.$auth.userWithSuchEmailAlreadyExists())
+    if (userByEmail) throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
 
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
 
     await utils.deleteExpiredRegistrationTokens(app)
 
@@ -29,7 +29,7 @@ export const register = (async (app, req) => {
     })
 
     if (registrationTokenByEmail) {
-        throw new BadRequestError(req.ll.$auth.emailAlreadySent())
+        throw new BadRequestError(req.ll.emailAlreadySent())
     }
 
     const registrationTokenByUsername = await app.prisma.registrationToken.findFirst({
@@ -37,7 +37,7 @@ export const register = (async (app, req) => {
     })
 
     if (registrationTokenByUsername) {
-        throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
+        throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
     }
 
     const password = await argon2.hash(req.body.password)
@@ -54,13 +54,13 @@ export const register = (async (app, req) => {
     })
 
     const url = new URL(`/auth/registration/complete/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = req.ll.$auth.registration()
+    const subject = req.ll.registration()
     const message = `
         <div>
-            <h3>${req.ll.$auth.dear()} ${req.body.username}</h3>
+            <h3>${String(req.ll.dear())} ${req.body.username}</h3>
         </div>
         <div>
-            <a href="${url}">${req.ll.$auth.completeRegistration()}</a>
+            <a href="${url}">${String(req.ll.completeRegistration())}</a>
         </div>
     `
     await sendEmail(req.body.email, subject, message)
@@ -77,7 +77,7 @@ export const completeRegistration = (async (app, req) => {
     const registrationToken = await app.prisma.registrationToken.findFirst({
         where: { token: req.params.registrationToken }
     })
-    if (!registrationToken) throw new BadRequestError(req.ll.$auth.registrationTokenExpired())
+    if (!registrationToken) throw new BadRequestError(req.ll.registrationTokenExpired())
 
     const user = await app.prisma.user.create({
         data: {
@@ -100,14 +100,14 @@ export const oAuthRegister = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(req.ll.$auth.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
 
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
         where: { token: req.params.oAuthRegistrationToken }
     })
 
     if (!oAuthRegistrationToken) {
-        throw new BadRequestError(req.ll.$auth.oAuthRegistrationTokenNotFound())
+        throw new BadRequestError(req.ll.oAuthRegistrationTokenNotFound())
     }
 
     let user: User
@@ -126,7 +126,7 @@ export const oAuthRegister = (async (app, req) => {
         }
 
         default: {
-            throw new InternalServerError(req.ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.unexpectedError())
         }
     }
 
@@ -140,12 +140,12 @@ export const oAuthRegister = (async (app, req) => {
 
 export const login = (async (app, req) => {
     const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (!user) throw new BadRequestError(req.ll.$auth.userWithEmailNotFound())
+    if (!user) throw new BadRequestError(req.ll.userWithEmailNotFound())
 
-    if (!user.password) throw new BadRequestError(req.ll.$auth.unexpectedError())
+    if (!user.password) throw new BadRequestError(req.ll.unexpectedError())
 
     const isCorrectPassword = await argon2.verify(user.password, req.body.password)
-    if (!isCorrectPassword) throw new BadRequestError(req.ll.$auth.incorrectPassword())
+    if (!isCorrectPassword) throw new BadRequestError(req.ll.incorrectPassword())
 
     return utils.login(app, { id: user.id }, false, false)
 }) satisfies RouteHandler<{ Body: schemasRoutes.auth.LoginBody }, schemasRoutes.auth.LoginResponse>
@@ -176,7 +176,7 @@ export const oAuthLogin = (async (app, req) => {
         }
 
         default: {
-            throw new InternalServerError(req.ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
@@ -186,7 +186,7 @@ export const oAuthLogin = (async (app, req) => {
 
 export const oAuthLoginCallback = (async (app, req, cookies) => {
     if (cookies.oAuthState !== req.body.oAuthState) {
-        throw new BadRequestError(req.ll.$auth.statesDoNotMatch())
+        throw new BadRequestError(req.ll.statesDoNotMatch())
     }
 
     switch (_.startCase(req.params.provider)) {
@@ -248,7 +248,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
         }
 
         default: {
-            throw new InternalServerError(req.ll.$auth.unexpectedError())
+            throw new InternalServerError(req.ll.unexpectedError())
         }
     }
 }) satisfies RouteHandler<
@@ -277,7 +277,7 @@ export const logout = (async (app, req, cookies) => {
 
         return {
             cookies: utils.getLogoutCookies(),
-            payload: new InternalServerError(req.ll.$auth.unexpectedError())
+            payload: new InternalServerError(req.ll.unexpectedError())
         }
     }
 
@@ -303,7 +303,7 @@ export const refreshTokens = (async (app, req, cookies) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
-    if (!refreshToken) throw new InternalServerError(req.ll.$auth.refreshTokenNotFound())
+    if (!refreshToken) throw new InternalServerError(req.ll.refreshTokenNotFound())
 
     const tokens = utils.generateTokens(app, payload)
     await app.prisma.refreshToken.update({

@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import { User, Post } from "@prisma/client"
@@ -17,11 +17,11 @@ export function dto(post: Post & { author: User }) {
     } satisfies JsonObject
 }
 
-export async function get(app: FastifyInstance, id: number) {
+export async function get(app: FastifyInstance, req: FastifyRequest, id: number) {
     const post = await app.prisma.post.findFirst({
         where: { id },
         include: { author: { include: { role: true } } }
     })
-    if (!post) throw new BadRequestError("Post with such ID was not found")
+    if (!post) throw new BadRequestError(req.ll.postWithSuchIdWasNotFound())
     return post
 }
