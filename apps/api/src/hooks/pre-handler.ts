@@ -6,6 +6,7 @@ import { UserPayload, UserData } from "$/types"
 declare module "fastify" {
     interface FastifyRequest {
         ll: TranslationFunctions
+        tz: string
         userData?: UserData
         authError?: HttpError
     }
@@ -22,6 +23,8 @@ export const preHandler: FastifyPluginCallback = (app, options, done) => {
         }
 
         req.ll = l[locale]
+
+        req.tz = req.cookies.timezone ?? "Europe/Moscow"
 
         let payload: UserPayload | undefined
 
