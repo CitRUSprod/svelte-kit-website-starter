@@ -36,7 +36,7 @@ const config = {
         {
             files: ["*.ts"],
             parserOptions: {
-                project: "./{apps,packages}/*/tsconfig.json"
+                project: ["./tsconfig.json", "./{apps,packages}/*/tsconfig.json"]
             }
         },
         {

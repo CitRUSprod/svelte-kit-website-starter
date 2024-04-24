@@ -1,0 +1,4 @@
+{
+    "extends": "@local/configs/typescript.json",
+    "exclude": ["node_modules", "apps", "packages"]
+}
