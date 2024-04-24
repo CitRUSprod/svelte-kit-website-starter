@@ -1,11 +1,12 @@
 import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
-import { initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
+import { detectLocale, initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
 import * as schemasModels from "@local/schemas/models"
 import { base } from "$app/paths"
 import {
     getPathnameWithoutBase,
-    detectLocale,
+    defaultLocale,
+    locales,
     i18n,
     isLocale,
     loadAllLocales,
@@ -20,7 +21,7 @@ const l = i18n()
 
 function getPreferredLocale(e: RequestEvent) {
     const acceptLanguageDetector = initAcceptLanguageHeaderDetector(e.request)
-    return detectLocale(acceptLanguageDetector)
+    return detectLocale(defaultLocale, locales, acceptLanguageDetector)
 }
 
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
