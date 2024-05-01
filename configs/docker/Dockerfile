@@ -1,11 +1,11 @@
 ARG NODE_IMAGE
 FROM ${NODE_IMAGE} AS base
 WORKDIR /project
-RUN corepack enable && corepack prepare pnpm@8.15.1 --activate
+RUN corepack enable && corepack prepare pnpm@9.0.6 --activate
 ENV PNPM_HOME=/usr/local/bin
 
 FROM base AS preparer
-RUN pnpm add -g turbo@1.12.2
+RUN pnpm add -g turbo@1.13.3
 COPY . .
 RUN turbo prune --docker web api
 
