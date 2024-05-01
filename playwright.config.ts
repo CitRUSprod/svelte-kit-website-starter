@@ -1,13 +1,14 @@
 import { config as dotenv } from "dotenv"
 import { expand } from "dotenv-expand"
-import { devices } from "@playwright/test"
+import { defineConfig, devices } from "@playwright/test"
+import { getTestsPath } from "$/tests/libs"
 
 expand(dotenv())
 
-/** @type {import("@playwright/test").PlaywrightTestConfig} */
-const config = {
-    testDir: "./tests",
-    reporter: "html",
+const config = defineConfig({
+    testDir: getTestsPath(),
+    reporter: [["html", { outputFolder: getTestsPath(".playwright/report") }]],
+    outputDir: getTestsPath(".playwright/result"),
     projects: [
         {
             name: "chrome",
@@ -24,6 +25,6 @@ const config = {
             }
         }
     ]
-}
+})
 
 export default config

@@ -1,4 +1,10 @@
 {
     "extends": "@local/configs/typescript.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "$/*": ["*"]
+        }
+    },
     "exclude": ["node_modules", "apps", "packages"]
 }

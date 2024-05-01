@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 
-const url = process.env.PUBLIC_BASE_URL
+const url = process.env.PUBLIC_BASE_URL!
 
 test.beforeEach(async ({ page }) => {
     await page.goto(url)

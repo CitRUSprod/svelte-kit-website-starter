@@ -7,8 +7,7 @@
 node_modules
 .turbo
 out
-test-results
-playwright-report
+.playwright
 .svelte-kit
 dist
 
