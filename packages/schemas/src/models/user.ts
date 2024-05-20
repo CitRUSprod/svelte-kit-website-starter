@@ -10,7 +10,7 @@ export function email() {
 export type Email = z.infer<ReturnType<typeof email>>
 
 export function username() {
-    return z.string().trim().min(3).max(32)
+    return z.string().trim().min(3).max(32).regex(/^\w+$/)
 }
 
 export type Username = z.infer<ReturnType<typeof username>>
