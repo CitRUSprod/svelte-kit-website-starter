@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test"
 const url = process.env.PUBLIC_BASE_URL!
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(url)
+    await page.goto(url, { waitUntil: "networkidle" })
 })
 
 test.describe("en", () => {
