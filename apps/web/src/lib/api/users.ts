@@ -7,7 +7,17 @@ import type { RequestData } from "$lib/types"
 export function getUsers(data: RequestData<schemasRoutes.users.GetUsersRequest> = {}) {
     return axios.get<schemasRoutes.users.GetUsersResponse>(
         createApiUrl(constantsRoutes.users.getUsers),
-        createAxiosConfig(data.headers)
+        {
+            params: {
+                page: data.page,
+                perPage: data.perPage,
+                sort: data.sort,
+                order: data.order,
+                username: data.username,
+                email: data.email
+            },
+            ...createAxiosConfig(data.headers)
+        }
     )
 }
 
