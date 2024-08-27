@@ -20,7 +20,7 @@
 </script>
 
 <svelte:element
-    this={href !== undefined && !disabled ? "a" : "button"}
+    this={href !== undefined && !disabled && !loading ? "a" : "button"}
     class={cn(
         "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top u:select-none",
         "u:active:transform",

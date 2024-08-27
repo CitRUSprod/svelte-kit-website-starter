@@ -12,6 +12,7 @@
     let variant: types.ElementVariant = "default"
 
     let content = "Button"
+    let contentLink = "Link"
     let text = false
     let icon = false
     let disabled = false
@@ -24,6 +25,35 @@
 
         <svelte:fragment slot="controls">
             <svelte:component this={Hst.Text} title="Content" bind:value={content} />
+            <svelte:component
+                this={Hst.Select}
+                options={elementVariants}
+                title="Variant"
+                bind:value={variant}
+            />
+            <svelte:component this={Hst.Checkbox} title="Text" bind:value={text} />
+            <svelte:component this={Hst.Checkbox} title="Icon" bind:value={icon} />
+            <svelte:component this={Hst.Checkbox} title="Disabled" bind:value={disabled} />
+            <svelte:component this={Hst.Checkbox} title="Loading" bind:value={loading} />
+        </svelte:fragment>
+    </svelte:component>
+
+    <svelte:component this={Hst.Variant} title="Link">
+        <Button
+            {disabled}
+            href="https://google.com"
+            {icon}
+            {loading}
+            rel="noopener noreferrer"
+            target="_blank"
+            {text}
+            {variant}
+        >
+            {contentLink}
+        </Button>
+
+        <svelte:fragment slot="controls">
+            <svelte:component this={Hst.Text} title="Content" bind:value={contentLink} />
             <svelte:component
                 this={Hst.Select}
                 options={elementVariants}
