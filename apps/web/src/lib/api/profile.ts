@@ -21,6 +21,13 @@ export function updateUser(data: RequestData<schemasRoutes.profile.UpdateUserReq
     )
 }
 
+export function deleteUser(data: RequestData<schemasRoutes.profile.DeleteUserRequest> = {}) {
+    return axios.delete<schemasRoutes.profile.DeleteUserResponse>(
+        createApiUrl(constantsRoutes.profile.deleteUser),
+        createAxiosConfig(data.headers)
+    )
+}
+
 export function uploadAvatar(data: RequestData<schemasRoutes.profile.UploadAvatarRequest>) {
     const fd = new FormData()
     fd.append("img", data.img)

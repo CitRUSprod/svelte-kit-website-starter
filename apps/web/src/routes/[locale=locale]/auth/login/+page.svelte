@@ -25,8 +25,8 @@
             })
         },
         async onSuccess() {
-            socket.disconnect().connect()
             toasts.add("success", $ll.loggedInSuccessfully())
+            socket.disconnect().connect()
             await invalidateAll()
         }
     })

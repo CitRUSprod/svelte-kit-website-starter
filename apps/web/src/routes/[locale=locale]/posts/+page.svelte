@@ -140,7 +140,8 @@
                     <div class="u:my-2 u:border-t u:border-primary" />
                     <div class="u:flex u:justify-between">
                         <span class="u:text-sm">
-                            {$ll.author()}: {post.author.username}
+                            {$ll.author()}: {post.author?.username ??
+                                `[${String($ll.deleted().toUpperCase())}]`}
                         </span>
                         <span class="u:text-sm">
                             {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}

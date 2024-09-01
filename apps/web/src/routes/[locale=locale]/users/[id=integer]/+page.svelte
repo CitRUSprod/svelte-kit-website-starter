@@ -4,7 +4,8 @@
         DialogAvatarRemoving,
         DialogProfileEditing,
         DialogPasswordChanging,
-        DialogEmailChanging
+        DialogEmailChanging,
+        DialogUserRemoving
     } from "./_components"
 
     import { dt } from "@local/utils"
@@ -20,6 +21,7 @@
     let dialogProfileEditing: DialogProfileEditing
     let dialogPasswordChanging: DialogPasswordChanging
     let dialogEmailChanging: DialogEmailChanging
+    let dialogUserRemoving: DialogUserRemoving
 
     const qcUploadAvatar = createQueryController({
         params: {
@@ -121,6 +123,9 @@
                     {$ll.changeEmail()}
                 </Button>
             {/if}
+            <Button variant="error" on:click={dialogUserRemoving.open}>
+                {$ll.removeUser()}
+            </Button>
         </div>
     {/if}
 </Content.Default>
@@ -129,3 +134,4 @@
 <DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
 <DialogPasswordChanging bind:this={dialogPasswordChanging} />
 <DialogEmailChanging bind:this={dialogEmailChanging} user={data.user} />
+<DialogUserRemoving bind:this={dialogUserRemoving} user={data.user} />

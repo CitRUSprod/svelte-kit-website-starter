@@ -5,10 +5,8 @@
     import { invalidateAll } from "$app/navigation"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
-    import { socket } from "$lib/utils"
 
     if (browser) {
-        socket.disconnect().connect()
         toasts.add("success", $ll.loggedInSuccessfully())
         invalidateAll()
     }

@@ -27,12 +27,16 @@
         <ul>
             <ul>
                 <b>{$ll.author()}:</b>
-                <a
-                    class="u:hover:underline"
-                    href={$localePath(`/users/${String(data.post.author.id)}`)}
-                >
-                    {data.post.author.username}
-                </a>
+                {#if data.post.author}
+                    <a
+                        class="u:hover:underline"
+                        href={$localePath(`/users/${String(data.post.author.id)}`)}
+                    >
+                        {data.post.author.username}
+                    </a>
+                {:else}
+                    <span>[{$ll.deleted().toUpperCase()}]</span>
+                {/if}
             </ul>
             <ul>
                 <b>{$ll.created()}:</b>
@@ -46,7 +50,7 @@
             {/if}
         </ul>
     </div>
-    {#if $userData?.id === data.post.author.id}
+    {#if data.post.author && $userData?.id === data.post.author.id}
         <div>
             <Button variant="warning" on:click={dialogPostEditing.open}>
                 {$ll.edit()}

@@ -3,12 +3,12 @@ import { BadRequestError } from "http-errors-enhanced"
 import { JsonObject } from "type-fest"
 import { User, Post } from "@prisma/client"
 
-export function dto(post: Post & { author: User }) {
+export function dto(post: Post & { author: User | null }) {
     return {
         id: post.id,
         title: post.title,
         content: post.content,
-        author: {
+        author: post.author && {
             id: post.author.id,
             username: post.author.username
         },

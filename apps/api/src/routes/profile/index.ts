@@ -27,6 +27,17 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
+    app.delete(constantsRoutes.profile.deleteUser, {
+        schema: {
+            tags: [constantsRoutes.profile.base]
+        },
+        preHandler: app.createPreHandler([app.verifyAuth]),
+        async handler(req, reply) {
+            const data = await handlers.deleteUser(app, req)
+            await reply.sendData(data)
+        }
+    })
+
     app.post<{ Body: schemasRoutes.profile.UploadAvatarBody }>(
         constantsRoutes.profile.uploadAvatar,
         {

@@ -135,6 +135,10 @@ type RootTranslation = {
 	 */
 	creationDateDesc: string
 	/**
+	 * У​д​а​л​е​н​о
+	 */
+	deleted: string
+	/**
 	 * В​о​й​т​и
 	 */
 	doLogin: string
@@ -383,6 +387,10 @@ type RootTranslation = {
 	 */
 	removeAvatar: string
 	/**
+	 * У​д​а​л​и​т​ь​ ​а​к​к​а​у​н​т
+	 */
+	removeUser: string
+	/**
 	 * С​б​р​о​с​и​т​ь
 	 */
 	reset: string
@@ -494,6 +502,22 @@ type RootTranslation = {
 	 * И​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я
 	 */
 	username: string
+	/**
+	 * А​к​к​а​у​н​т​ ​у​с​п​е​ш​н​о​ ​у​д​а​л​ё​н
+	 */
+	userRemovedSuccessfully: string
+	/**
+	 * У​д​а​л​е​н​и​е​ ​а​к​к​а​у​н​т​а
+	 */
+	userRemoving: string
+	/**
+	 * Д​л​я​ ​п​о​д​т​в​е​р​ж​д​е​н​и​я​ ​н​а​п​и​ш​и​т​е​ ​в​а​ш​е​ ​и​м​я​ ​п​о​л​ь​з​о​в​а​т​е​л​я​.
+	 */
+	userRemovingConfirmation: string
+	/**
+	 * В​ы​ ​д​е​й​с​т​в​и​т​е​л​ь​н​о​ ​х​о​т​и​т​е​ ​у​д​а​л​и​т​ь​ ​э​т​о​т​ ​а​к​к​а​у​н​т​ ​б​е​з​ ​в​о​з​м​о​ж​н​о​с​т​и​ ​в​о​с​с​т​а​н​о​в​л​е​н​и​я​?
+	 */
+	userRemovingQuestion: string
 	/**
 	 * П​о​л​ь​з​о​в​а​т​е​л​и
 	 */
@@ -637,6 +661,10 @@ export type TranslationFunctions = {
 	 * Дата создания (Сначала новые)
 	 */
 	creationDateDesc: () => LocalizedString
+	/**
+	 * Удалено
+	 */
+	deleted: () => LocalizedString
 	/**
 	 * Войти
 	 */
@@ -886,6 +914,10 @@ export type TranslationFunctions = {
 	 */
 	removeAvatar: () => LocalizedString
 	/**
+	 * Удалить аккаунт
+	 */
+	removeUser: () => LocalizedString
+	/**
 	 * Сбросить
 	 */
 	reset: () => LocalizedString
@@ -997,6 +1029,22 @@ export type TranslationFunctions = {
 	 * Имя пользователя
 	 */
 	username: () => LocalizedString
+	/**
+	 * Аккаунт успешно удалён
+	 */
+	userRemovedSuccessfully: () => LocalizedString
+	/**
+	 * Удаление аккаунта
+	 */
+	userRemoving: () => LocalizedString
+	/**
+	 * Для подтверждения напишите ваше имя пользователя.
+	 */
+	userRemovingConfirmation: () => LocalizedString
+	/**
+	 * Вы действительно хотите удалить этот аккаунт без возможности восстановления?
+	 */
+	userRemovingQuestion: () => LocalizedString
 	/**
 	 * Пользователи
 	 */

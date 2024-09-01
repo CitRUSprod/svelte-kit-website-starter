@@ -2,6 +2,7 @@ export const base = "/profile"
 
 export const getUser = `${base}/user`
 export const updateUser = `${base}/user`
+export const deleteUser = `${base}/user`
 export const uploadAvatar = `${base}/avatar`
 export const deleteAvatar = `${base}/avatar`
 export const sendEmailUpdateEmailToOld = `${base}/email`

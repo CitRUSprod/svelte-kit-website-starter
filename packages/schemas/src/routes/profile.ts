@@ -44,6 +44,20 @@ export function updateUserResponse() {
 
 export type UpdateUserResponse = z.infer<ReturnType<typeof updateUserResponse>>
 
+// DeleteUser
+
+export function deleteUserRequest() {
+    return z.void()
+}
+
+export type DeleteUserRequest = z.infer<ReturnType<typeof deleteUserRequest>>
+
+export function deleteUserResponse() {
+    return z.void()
+}
+
+export type DeleteUserResponse = z.infer<ReturnType<typeof deleteUserResponse>>
+
 // UploadAvatar
 
 export function uploadAvatarBody() {

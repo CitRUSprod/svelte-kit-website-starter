@@ -4,9 +4,10 @@ import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
 import { env, enums } from "$/constants"
-import { isImgFile, writeFile, removeFile, sendEmail, models } from "$/utils"
+import { isImgFile, writeFile, sendEmail, models } from "$/utils"
 import { RouteHandler } from "$/types"
 import * as utils from "./utils"
+import { getLogoutCookies } from "../auth/utils"
 
 export const getUser = (async (app, req) => {
     if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
@@ -41,6 +42,14 @@ export const updateUser = (async (app, req) => {
     schemasRoutes.profile.UpdateUserResponse
 >
 
+export const deleteUser = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+
+    await utils.deleteUser(app, req.userData)
+
+    return { cookies: getLogoutCookies() }
+}) satisfies RouteHandler<void, schemasRoutes.profile.DeleteUserResponse>
+
 export const uploadAvatar = (async (app, req) => {
     if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
@@ -50,7 +59,7 @@ export const uploadAvatar = (async (app, req) => {
 
     const avatar = await writeFile(enums.ImgPath.Avatars, img)
 
-    if (req.userData.avatar) await removeFile(enums.ImgPath.Avatars, req.userData.avatar)
+    await utils.removeAvatar(req.userData.avatar)
 
     await app.prisma.user.update({
         where: { id: req.userData.id },
@@ -67,7 +76,7 @@ export const deleteAvatar = (async (app, req) => {
     if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
     if (!req.userData.avatar) throw new BadRequestError(req.ll.youDoNotHaveAvatar())
 
-    await removeFile(enums.ImgPath.Avatars, req.userData.avatar)
+    await utils.removeAvatar(req.userData.avatar)
 
     await app.prisma.user.update({
         where: { id: req.userData.id },

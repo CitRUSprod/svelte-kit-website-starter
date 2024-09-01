@@ -102,8 +102,8 @@ model Post {
     id Int @id @default(autoincrement())
     title String
     content String
-    authorId Int
-    author User @relation(fields: [authorId], references: [id])
+    authorId Int?
+    author User? @relation(fields: [authorId], references: [id])
     creationDate DateTime
     editingDate DateTime?
 }

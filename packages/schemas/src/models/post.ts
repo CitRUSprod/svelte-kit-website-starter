@@ -31,10 +31,12 @@ export function post() {
         id: common.id(),
         title: title(),
         content: content(),
-        author: z.object({
-            id: common.id(),
-            username: user.username()
-        }),
+        author: z
+            .object({
+                id: common.id(),
+                username: user.username()
+            })
+            .nullable(),
         creationDate: creationDate(),
         editingDate: editingDate().nullable()
     })

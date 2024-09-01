@@ -4,7 +4,7 @@
     import { invalidateAll } from "$app/navigation"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
-    import { socket, createQueryController } from "$lib/utils"
+    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
@@ -24,7 +24,6 @@
             })
         },
         async onSuccess() {
-            socket.disconnect().connect()
             toasts.add("success", $ll.registeredSuccessfully())
             await invalidateAll()
         }
