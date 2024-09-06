@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto(url, { waitUntil: "networkidle" })
 })
 
-test.describe("en", () => {
+test.describe.serial("en", () => {
     test.use({ locale: "en-US" })
 
     test("redirect to locale url", async ({ page }) => {

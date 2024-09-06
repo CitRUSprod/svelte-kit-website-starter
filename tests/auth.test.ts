@@ -42,7 +42,7 @@ test.beforeEach(async ({ page }) => {
 
 test.setTimeout(5 * 60000)
 
-test.describe("auth", () => {
+test.describe.serial("auth", () => {
     test("register", async ({ page, userData }) => {
         await page.getByText("Login").click()
         await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
@@ -95,11 +95,38 @@ test.describe("auth", () => {
 
         await page.locator("main button").click()
         await page.getByText("Success", { exact: true }).waitFor()
-
         await page.getByText("Success", { exact: true }).waitFor({ state: "hidden" })
 
         await page.getByText("Logout").click()
         await page.getByText("Success", { exact: true }).waitFor()
+        await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
+
+        const loginButtonIsVisible = await page.getByText("Login").isVisible()
+        expect(loginButtonIsVisible).toBe(true)
+    })
+
+    test("login and delete account", async ({ page, userData }) => {
+        await page.getByText("Login").click()
+        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
+
+        const inputs = page.locator("main input")
+        const emailInput = inputs.nth(0)
+        const passwordInput = inputs.nth(1)
+
+        await emailInput.fill(userData.email)
+        await passwordInput.fill(userData.password)
+
+        await page.locator("main button").click()
+        await page.getByText("Success", { exact: true }).waitFor()
+        await page.getByText("Success", { exact: true }).waitFor({ state: "hidden" })
+
+        await page.getByText("Profile").click()
+        await page.getByText("Remove account").click()
+
+        const usernameInput = page.locator(`input[placeholder="${userData.username}"]`)
+        await usernameInput.waitFor()
+        await usernameInput.fill(userData.username)
+        await page.getByText("Remove", { exact: true }).click()
         await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
 
         const loginButtonIsVisible = await page.getByText("Login").isVisible()
