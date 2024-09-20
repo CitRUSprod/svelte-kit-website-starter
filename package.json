@@ -48,7 +48,6 @@
     "eslintConfig": {
         "extends": "./configs/eslint/index.js",
         "ignorePatterns": [
-            "!.travis.yml",
             "pnpm-lock.yaml",
             ".svelte-kit",
             "dist",
