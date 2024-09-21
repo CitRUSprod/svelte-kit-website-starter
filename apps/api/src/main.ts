@@ -59,14 +59,13 @@ app.register(staticPlugin, { root: getAbsFilesPath(), prefix: "/files" })
 
 app.register(hooks).register(decorators).register(routes)
 
-async function start() {
-    await app.ready()
-    await app.listen({
-        host: "0.0.0.0",
-        port
-    })
-    initSockets(app)
-    console.log(`Running on http://localhost:${port}`)
-}
+await app.ready()
 
-start()
+await app.listen({
+    host: "0.0.0.0",
+    port
+})
+
+initSockets(app)
+
+console.log(`Running on http://localhost:${port}`)
