@@ -152,7 +152,7 @@ export function oAuthLoginCallbackParams() {
     })
 }
 
-export type OAuthLoginCallbackParams = z.infer<ReturnType<typeof oAuthLoginParams>>
+export type OAuthLoginCallbackParams = z.infer<ReturnType<typeof oAuthLoginCallbackParams>>
 
 export function oAuthLoginCallbackBody() {
     return z.object({
@@ -179,6 +179,74 @@ export function oAuthLoginCallbackResponse() {
 }
 
 export type OAuthLoginCallbackResponse = z.infer<ReturnType<typeof oAuthLoginCallbackResponse>>
+
+// OAuthLinkCallback
+
+export function oAuthLinkCallbackCookies() {
+    return z.object({
+        oAuthState: z.string().trim().min(1)
+    })
+}
+
+export type OAuthLinkCallbackCookies = z.infer<ReturnType<typeof oAuthLinkCallbackCookies>>
+
+export function oAuthLinkCallbackParams() {
+    return z.object({
+        provider: models.oAuthRegistrationToken.provider$Kebab()
+    })
+}
+
+export type OAuthLinkCallbackParams = z.infer<ReturnType<typeof oAuthLinkCallbackParams>>
+
+export function oAuthLinkCallbackBody() {
+    return z.object({
+        code: z.string().trim().min(1),
+        oAuthState: z.string().trim().min(1)
+    })
+}
+
+export type OAuthLinkCallbackBody = z.infer<ReturnType<typeof oAuthLinkCallbackBody>>
+
+export function oAuthLinkCallbackRequest() {
+    return z.object({
+        ...oAuthLinkCallbackParams().shape,
+        ...oAuthLinkCallbackBody().shape
+    })
+}
+
+export type OAuthLinkCallbackRequest = z.infer<ReturnType<typeof oAuthLinkCallbackRequest>>
+
+export function oAuthLinkCallbackResponse() {
+    return z.void()
+}
+
+export type OAuthLinkCallbackResponse = z.infer<ReturnType<typeof oAuthLinkCallbackResponse>>
+
+// OAuthUnlink
+
+export function oAuthUnlinkParams() {
+    return z.object({
+        provider: models.oAuthRegistrationToken.provider$Kebab()
+    })
+}
+
+export type OAuthUnlinkParams = z.infer<ReturnType<typeof oAuthUnlinkParams>>
+
+export function oAuthUnlinkRequest() {
+    return z.object({
+        ...oAuthUnlinkParams().shape
+    })
+}
+
+export type OAuthUnlinkRequest = z.infer<ReturnType<typeof oAuthUnlinkRequest>>
+
+export function oAuthUnlinkResponse() {
+    return z.object({
+        ...models.user.user().shape
+    })
+}
+
+export type OAuthUnlinkResponse = z.infer<ReturnType<typeof oAuthUnlinkResponse>>
 
 // Logout
 

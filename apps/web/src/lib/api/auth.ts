@@ -68,6 +68,25 @@ export function oAuthLoginCallback(
     )
 }
 
+export function oAuthLinkCallback(data: RequestData<schemasRoutes.auth.OAuthLinkCallbackRequest>) {
+    return axios.post<schemasRoutes.auth.OAuthLinkCallbackResponse>(
+        createApiUrl(constantsRoutes.auth.oAuthLinkCallback, data.provider),
+        {
+            code: data.code,
+            oAuthState: data.oAuthState
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function oAuthUnlink(data: RequestData<schemasRoutes.auth.OAuthUnlinkRequest>) {
+    return axios.post<schemasRoutes.auth.OAuthUnlinkResponse>(
+        createApiUrl(constantsRoutes.auth.oAuthUnlink, data.provider),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
 export function logout(data: RequestData<schemasRoutes.auth.LogoutRequest> = {}) {
     return axios.post<schemasRoutes.auth.LogoutResponse>(
         createApiUrl(constantsRoutes.auth.logout),

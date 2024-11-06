@@ -43,6 +43,12 @@ export function user() {
     return z.object({
         id: common.id(),
         email: email().nullable(),
+        linkedAccounts: z
+            .object({
+                email: z.boolean(),
+                twitch: z.boolean()
+            })
+            .nullable(),
         username: username(),
         role: z.object({
             id: common.id(),

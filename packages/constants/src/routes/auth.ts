@@ -6,5 +6,7 @@ export const oAuthRegister = `${base}/register/oauth/:oAuthRegistrationToken`
 export const login = `${base}/login`
 export const oAuthLogin = `${base}/login/:provider`
 export const oAuthLoginCallback = `${base}/login/:provider/callback`
+export const oAuthLinkCallback = `${base}/link/:provider/callback`
+export const oAuthUnlink = `${base}/unlink/:provider`
 export const logout = `${base}/logout`
 export const refreshTokens = `${base}/refresh`

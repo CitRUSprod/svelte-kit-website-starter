@@ -1,6 +1,7 @@
 import type { BaseTranslation } from "../i18n-types"
 
 const ru = {
+    accountAlreadyLinked: "Этот {provider}-аккаунт уже привязан к другому аккаунту",
     banned: "Забанен",
     completeRegistration: "Завершить регистрацию",
     dear: "Дорогой",
@@ -37,6 +38,8 @@ const ru = {
     userWithSuchIdIsNotBanned: "Пользователь с таким ID не забанен",
     userWithSuchIdWasNotFound: "Пользователь с таким ID не найден",
     userWithSuchUsernameAlreadyExists: "Пользователь с таким именем уже существует",
+    youAlreadyHaveAccount: "К вашему аккаунту уже привязан другой {provider}-аккаунт",
+    youDoNotHaveAccount: "К вашему аккаунту не привязан {provider}-аккаунт",
     youDoNotHaveAvatar: "У вас нет аватара"
 } satisfies BaseTranslation
 

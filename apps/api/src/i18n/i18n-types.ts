@@ -15,6 +15,11 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
+	 * Э​т​о​т​ ​{​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т​ ​у​ж​е​ ​п​р​и​в​я​з​а​н​ ​к​ ​д​р​у​г​о​м​у​ ​а​к​к​а​у​н​т​у
+	 * @param {unknown} provider
+	 */
+	accountAlreadyLinked: RequiredParams<'provider'>
+	/**
 	 * З​а​б​а​н​е​н
 	 */
 	banned: string
@@ -161,12 +166,26 @@ type RootTranslation = {
 	 */
 	userWithSuchUsernameAlreadyExists: string
 	/**
+	 * К​ ​в​а​ш​е​м​у​ ​а​к​к​а​у​н​т​у​ ​у​ж​е​ ​п​р​и​в​я​з​а​н​ ​д​р​у​г​о​й​ ​{​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т
+	 * @param {unknown} provider
+	 */
+	youAlreadyHaveAccount: RequiredParams<'provider'>
+	/**
+	 * К​ ​в​а​ш​е​м​у​ ​а​к​к​а​у​н​т​у​ ​н​е​ ​п​р​и​в​я​з​а​н​ ​{​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т
+	 * @param {unknown} provider
+	 */
+	youDoNotHaveAccount: RequiredParams<'provider'>
+	/**
 	 * У​ ​в​а​с​ ​н​е​т​ ​а​в​а​т​а​р​а
 	 */
 	youDoNotHaveAvatar: string
 }
 
 export type TranslationFunctions = {
+	/**
+	 * Этот {provider}-аккаунт уже привязан к другому аккаунту
+	 */
+	accountAlreadyLinked: (arg: { provider: unknown }) => LocalizedString
 	/**
 	 * Забанен
 	 */
@@ -311,6 +330,14 @@ export type TranslationFunctions = {
 	 * Пользователь с таким именем уже существует
 	 */
 	userWithSuchUsernameAlreadyExists: () => LocalizedString
+	/**
+	 * К вашему аккаунту уже привязан другой {provider}-аккаунт
+	 */
+	youAlreadyHaveAccount: (arg: { provider: unknown }) => LocalizedString
+	/**
+	 * К вашему аккаунту не привязан {provider}-аккаунт
+	 */
+	youDoNotHaveAccount: (arg: { provider: unknown }) => LocalizedString
 	/**
 	 * У вас нет аватара
 	 */

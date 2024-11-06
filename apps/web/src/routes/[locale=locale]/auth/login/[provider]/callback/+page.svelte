@@ -1,15 +1,15 @@
 <script lang="ts">
     import { Content } from "$lib/components"
 
-    import { browser } from "$app/environment"
+    import { onMount } from "svelte"
     import { invalidateAll } from "$app/navigation"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
 
-    if (browser) {
+    onMount(() => {
         toasts.add("success", $ll.loggedInSuccessfully())
         invalidateAll()
-    }
+    })
 </script>
 
 <svelte:head>

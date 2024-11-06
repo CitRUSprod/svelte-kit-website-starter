@@ -85,7 +85,42 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             }
 
             const data = await handlers.oAuthLoginCallback(app, req, cookies)
-            await reply.sendData(data as any)
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{
+        Params: schemasRoutes.auth.OAuthLinkCallbackParams
+        Body: schemasRoutes.auth.OAuthLinkCallbackBody
+    }>(constantsRoutes.auth.oAuthLinkCallback, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.oAuthLinkCallbackParams(),
+            body: schemasRoutes.auth.oAuthLinkCallbackBody()
+        },
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
+        async handler(req, reply) {
+            let cookies: schemasRoutes.auth.OAuthLinkCallbackCookies
+
+            try {
+                cookies = schemasRoutes.auth.oAuthLinkCallbackCookies().parse(req.cookies)
+            } catch (err: any) {
+                throw new UnauthorizedError(err.message)
+            }
+
+            const data = await handlers.oAuthLinkCallback(app, req, cookies)
+
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{ Params: schemasRoutes.auth.OAuthUnlinkParams }>(constantsRoutes.auth.oAuthUnlink, {
+        schema: {
+            tags: [constantsRoutes.auth.base]
+        },
+        async handler(req, reply) {
+            const data = await handlers.oAuthUnlink(app, req)
+            await reply.sendData(data)
         }
     })
 

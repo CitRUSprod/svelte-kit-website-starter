@@ -47,7 +47,7 @@
     <div>
         <p>
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html $ll.roleRemovingQuestion(role.name)}
+            {@html $ll.roleRemovingQuestion({ role: role.name })}
         </p>
     </div>
     <div class="u:flex u:justify-between">

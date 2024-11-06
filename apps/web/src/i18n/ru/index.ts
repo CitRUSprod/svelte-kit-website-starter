@@ -1,6 +1,7 @@
 import type { BaseTranslation } from "../i18n-types"
 
 const ru = {
+    accountUnlinkedSuccessfully: "{provider}-аккаунт успешно отвязан",
     actions: "Действия",
     add: "Добавить",
     assignRole: "Назначить роль",
@@ -54,6 +55,7 @@ const ru = {
     goHome: "На главную",
     home: "Главная",
     info: "Информация",
+    linked: "Привязан",
     loggedInSuccessfully: "Вы успешно вошли",
     loggedOutSuccessfully: "Вы успешно вышли",
     login: "Вход",
@@ -106,7 +108,7 @@ const ru = {
     roleEditing: "Редактирование роли",
     roleRemovedSuccessfully: "Роль успешно удалена",
     roleRemoving: "Удаление роли",
-    roleRemovingQuestion: "Вы уверены, что хотите удалить роль <b>{{role}}</b>?",
+    roleRemovingQuestion: "Вы уверены, что хотите удалить роль <b>{role}</b>?",
     roles: "Роли",
     save: "Сохранить",
     search: "Поиск",
@@ -119,6 +121,8 @@ const ru = {
     titleAsc: "Заголовок (А-Я)",
     titleDesc: "Заголовок (Я-А)",
     unban: "Разбанить",
+    unlink: "Отвязать",
+    unlinked: "Не привязан",
     uploadAvatar: "Загрузить аватар",
     user: "Пользователь",
     userBannedSuccessfully: "Пользователь успешно забанен",

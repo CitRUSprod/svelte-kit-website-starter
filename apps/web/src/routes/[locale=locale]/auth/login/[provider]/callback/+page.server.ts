@@ -6,13 +6,19 @@ import { setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
 export async function load(e) {
-    if (e.locals.userData) {
+    const oAuthProviderFromCookie = e.cookies.get("link-account")
+
+    if (e.locals.userData && !oAuthProviderFromCookie) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
-    const oAuthProvider = _.startCase(e.params.provider)
+    const oAuthProvider = _.upperFirst(_.camelCase(e.params.provider))
 
     if (!Object.values(constantsEnums.OAuthProvider).includes(oAuthProvider)) {
+        redirect(302, `/${e.params.locale as string}`)
+    }
+
+    if (oAuthProviderFromCookie && oAuthProviderFromCookie !== oAuthProvider) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
@@ -23,18 +29,30 @@ export async function load(e) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
-    const res = await api.auth.oAuthLoginCallback({
-        headers: e.request.headers,
-        provider: e.params.provider,
-        code,
-        oAuthState: state
-    })
-    setCookies(e.cookies, res.headers)
+    if (e.locals.userData) {
+        e.cookies.delete("link-account", { path: "/" })
 
-    if (res.data.oAuthRegistrationToken) {
-        redirect(
-            302,
-            `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
-        )
+        const res = await api.auth.oAuthLinkCallback({
+            headers: e.request.headers,
+            provider: e.params.provider,
+            code,
+            oAuthState: state
+        })
+        setCookies(e.cookies, res.headers)
+    } else {
+        const res = await api.auth.oAuthLoginCallback({
+            headers: e.request.headers,
+            provider: e.params.provider,
+            code,
+            oAuthState: state
+        })
+        setCookies(e.cookies, res.headers)
+
+        if (res.data.oAuthRegistrationToken) {
+            redirect(
+                302,
+                `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
+            )
+        }
     }
 }

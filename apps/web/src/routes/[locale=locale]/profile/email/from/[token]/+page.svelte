@@ -1,18 +1,18 @@
 <script lang="ts">
     import { Content } from "$lib/components"
 
-    import { browser } from "$app/environment"
+    import { onMount } from "svelte"
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
 
-    if (browser) {
+    onMount(() => {
         toasts.add("success", $ll.emailChangeConfirmationSent())
         goto($localePath("/"), {
             replaceState: true,
             invalidateAll: true
         })
-    }
+    })
 </script>
 
 <svelte:head>

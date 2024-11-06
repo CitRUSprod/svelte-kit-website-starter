@@ -9,6 +9,10 @@ export function dto(user: UserData) {
     return {
         id: user.id,
         email: user.email,
+        linkedAccounts: {
+            email: user.email !== null,
+            twitch: user.twitchId !== null
+        },
         username: user.username,
         role: {
             id: user.role.id,

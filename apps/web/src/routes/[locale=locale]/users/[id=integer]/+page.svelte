@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Content, Button } from "$lib/components"
+    import { Content, Button, OAuthProviderButton } from "$lib/components"
     import {
         DialogAvatarRemoving,
         DialogProfileEditing,
@@ -8,6 +8,9 @@
         DialogUserRemoving
     } from "./_components"
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    import * as _ from "lodash-es"
+    import * as constantsEnums from "@local/constants/enums"
     import { dt } from "@local/utils"
     import { ll, currentLocale } from "$i18n/helpers"
     import { toasts, userData } from "$lib/stores"
@@ -40,7 +43,7 @@
             const res = await api.users.getUser({
                 id: data.user.id
             })
-            data.user = res.data
+            $userData = res.data
             toasts.add("success", $ll.avatarUpdatedSuccessfully())
         }
     })
@@ -52,6 +55,21 @@
             await qcUploadAvatar.refresh()
         }
     }
+
+    const qcTwitchUnlink = createQueryController({
+        fn() {
+            return api.auth.oAuthUnlink({
+                provider: _.kebabCase(constantsEnums.OAuthProvider.Twitch)
+            })
+        },
+        async onSuccess(user) {
+            $userData = user
+            toasts.add(
+                "success",
+                $ll.accountUnlinkedSuccessfully({ provider: constantsEnums.OAuthProvider.Twitch })
+            )
+        }
+    })
 </script>
 
 <svelte:head>
@@ -72,6 +90,23 @@
                 <li><b>{$ll.username()}:</b> {data.user.username}</li>
                 {#if data.user.email}
                     <li><b>{$ll.email()}:</b> {data.user.email}</li>
+                {/if}
+                {#if $userData?.id === data.user.id && $userData.linkedAccounts}
+                    <li>
+                        <b>Twitch:</b>
+                        {#if $userData.linkedAccounts.twitch}
+                            {$ll.linked()}
+                            <Button
+                                loading={$qcTwitchUnlink.loading}
+                                variant="error"
+                                on:click={qcTwitchUnlink.refresh}
+                            >
+                                {$ll.unlink()}
+                            </Button>
+                        {:else}
+                            {$ll.unlinked()}
+                        {/if}
+                    </li>
                 {/if}
                 <li><b>{$ll.role()}:</b> {data.user.role.name}</li>
                 <li>
@@ -118,7 +153,7 @@
             <Button variant="warning" on:click={dialogPasswordChanging.open}>
                 {$ll.changePassword()}
             </Button>
-            {#if $userData.email}
+            {#if $userData.linkedAccounts?.email && $userData.email}
                 <Button variant="warning" on:click={dialogEmailChanging.open}>
                     {$ll.changeEmail()}
                 </Button>
@@ -126,6 +161,11 @@
             <Button variant="error" on:click={dialogUserRemoving.open}>
                 {$ll.removeUser()}
             </Button>
+        </div>
+        <div>
+            {#if !$userData.linkedAccounts?.twitch}
+                <OAuthProviderButton linkAccount provider={constantsEnums.OAuthProvider.Twitch} />
+            {/if}
         </div>
     {/if}
 </Content.Default>

@@ -1,6 +1,7 @@
 import type { Translation } from "../i18n-types"
 
 const en = {
+    accountAlreadyLinked: "This {provider}-account is already linked to another account",
     banned: "Banned",
     completeRegistration: "Complete registration",
     dear: "Dear",
@@ -37,6 +38,8 @@ const en = {
     userWithSuchIdIsNotBanned: "User with such ID is not banned",
     userWithSuchIdWasNotFound: "User with such ID was not found",
     userWithSuchUsernameAlreadyExists: "User with such username already exists",
+    youAlreadyHaveAccount: "Another {provider}-account is already linked to your account",
+    youDoNotHaveAccount: "There is no {provider}-account linked to your account",
     youDoNotHaveAvatar: "You do not have an avatar"
 } satisfies Translation
 

@@ -10,7 +10,7 @@ import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums, env } from "$/constants"
 import { RouteHandler, UserPayload } from "$/types"
-import { oAuthProviders, sendEmail } from "$/utils"
+import { oAuthProviders, sendEmail, models } from "$/utils"
 import * as utils from "./utils"
 
 export const register = (async (app, req) => {
@@ -153,7 +153,7 @@ export const login = (async (app, req) => {
 export const oAuthLogin = (async (app, req) => {
     const oAuthState = generateState()
 
-    switch (_.startCase(req.params.provider)) {
+    switch (_.upperFirst(_.camelCase(req.params.provider))) {
         case constantsEnums.OAuthProvider.Twitch: {
             const url = await oAuthProviders.twitch.createAuthorizationURL(oAuthState)
 
@@ -189,7 +189,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
         throw new BadRequestError(req.ll.statesDoNotMatch())
     }
 
-    switch (_.startCase(req.params.provider)) {
+    switch (_.upperFirst(_.camelCase(req.params.provider))) {
         case constantsEnums.OAuthProvider.Twitch: {
             const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
                 req.body.code
@@ -258,6 +258,108 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
     },
     schemasRoutes.auth.OAuthLoginCallbackResponse,
     schemasRoutes.auth.OAuthLoginCallbackCookies
+>
+
+export const oAuthLinkCallback = (async (app, req, cookies) => {
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+
+    if (cookies.oAuthState !== req.body.oAuthState) {
+        throw new BadRequestError(req.ll.statesDoNotMatch())
+    }
+
+    switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        case constantsEnums.OAuthProvider.Twitch: {
+            if (req.userData.twitchId !== null) {
+                throw new InternalServerError(
+                    req.ll.youAlreadyHaveAccount({ provider: constantsEnums.OAuthProvider.Twitch })
+                )
+            }
+
+            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
+                req.body.code
+            )
+
+            const res = await axios.get<{ data: Array<{ id: string }> }>(
+                "https://api.twitch.tv/helix/users",
+                {
+                    headers: {
+                        Authorization: `Bearer ${twitchTokens.accessToken}`,
+                        "Client-Id": env.TWITCH_CLIENT_ID
+                    }
+                }
+            )
+
+            const twitchUser = res.data.data[0]
+
+            const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
+
+            if (user) {
+                throw new BadRequestError(
+                    req.ll.accountAlreadyLinked({ provider: constantsEnums.OAuthProvider.Twitch })
+                )
+            } else {
+                await app.prisma.user.update({
+                    where: { id: req.userData.id },
+                    data: {
+                        twitchId: twitchUser.id
+                    },
+                    include: { role: true, ban: { include: { author: true } } }
+                })
+
+                return {
+                    cookies: [
+                        {
+                            name: "oAuthState",
+                            value: undefined,
+                            options: { path: "/" }
+                        }
+                    ]
+                }
+            }
+        }
+
+        default: {
+            throw new InternalServerError(req.ll.unexpectedError())
+        }
+    }
+}) satisfies RouteHandler<
+    {
+        Params: schemasRoutes.auth.OAuthLinkCallbackParams
+        Body: schemasRoutes.auth.OAuthLinkCallbackBody
+    },
+    schemasRoutes.auth.OAuthLinkCallbackResponse,
+    schemasRoutes.auth.OAuthLinkCallbackCookies
+>
+
+export const oAuthUnlink = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+
+    switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        case constantsEnums.OAuthProvider.Twitch: {
+            if (req.userData.twitchId === null) {
+                throw new BadRequestError(
+                    req.ll.youDoNotHaveAccount({ provider: constantsEnums.OAuthProvider.Twitch })
+                )
+            }
+
+            const updatedUser = await app.prisma.user.update({
+                where: { id: req.userData.id },
+                data: {
+                    twitchId: null
+                },
+                include: { role: true, ban: { include: { author: true } } }
+            })
+
+            return { payload: models.user.dto(updatedUser) }
+        }
+
+        default: {
+            throw new InternalServerError(req.ll.unexpectedError())
+        }
+    }
+}) satisfies RouteHandler<
+    { Params: schemasRoutes.auth.OAuthUnlinkParams },
+    schemasRoutes.auth.OAuthUnlinkResponse
 >
 
 export const logout = (async (app, req, cookies) => {

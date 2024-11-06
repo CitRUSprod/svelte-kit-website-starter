@@ -23,7 +23,7 @@ import { getAbsFilesPath } from "$/utils"
 
 const port = 6702
 
-const app = fastify()
+const app = fastify({ logger: { level: "error" } })
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)

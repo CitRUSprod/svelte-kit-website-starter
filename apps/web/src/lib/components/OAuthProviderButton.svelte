@@ -5,6 +5,7 @@
     import { localePath } from "$i18n/helpers"
 
     export let provider: constantsEnums.OAuthProvider
+    export let linkAccount = false
 
     interface ButtonData {
         buttonClass: string
@@ -31,7 +32,7 @@
 
 <Button
     class={buttonData.buttonClass}
-    href={$localePath(`/auth/login/${buttonData.providerInUrl}`)}
+    href={$localePath(`/auth/${linkAccount ? "link" : "login"}/${buttonData.providerInUrl}`)}
 >
     <i class={buttonData.iconClass} />
     <span>{buttonData.text}</span>

@@ -2,9 +2,9 @@
     import { ProgressBar } from "@prgm/sveltekit-progress-bar"
     import { ToastContainer } from "./_components"
 
+    import { onMount } from "svelte"
     import { watch } from "svelte-legos"
     import Cookies from "js-cookie"
-    import { browser } from "$app/environment"
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
 
@@ -17,14 +17,14 @@
 
     $: $userData = data.userData
 
-    if (browser) {
+    onMount(() => {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
         Cookies.set("timezone", tz, {
             path: "/",
             expires: 100,
             sameSite: "lax"
         })
-    }
+    })
 
     watch(currentLocale, locale => {
         Cookies.set("locale", locale, {

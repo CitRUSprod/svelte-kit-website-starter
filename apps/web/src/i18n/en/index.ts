@@ -1,6 +1,7 @@
 import type { Translation } from "../i18n-types"
 
 const en = {
+    accountUnlinkedSuccessfully: "{provider}-account successfully unlinked",
     actions: "Actions",
     add: "Add",
     assignRole: "Assign role",
@@ -53,6 +54,7 @@ const en = {
     goHome: "Go home",
     home: "Home",
     info: "Info",
+    linked: "Linked",
     loggedInSuccessfully: "You have successfully logged in",
     loggedOutSuccessfully: "You have successfully logged out",
     login: "Login",
@@ -105,7 +107,7 @@ const en = {
     roleEditing: "Editing a role",
     roleRemovedSuccessfully: "Role successfully removed",
     roleRemoving: "Removing a role",
-    roleRemovingQuestion: "Are you sure you want to remove <b>{{role}}</b> role?",
+    roleRemovingQuestion: "Are you sure you want to remove <b>{role}</b> role?",
     roles: "Roles",
     save: "Save",
     search: "Search",
@@ -118,6 +120,8 @@ const en = {
     titleAsc: "Title (A-Z)",
     titleDesc: "Title (Z-A)",
     unban: "Unban",
+    unlink: "Unlink",
+    unlinked: "Unlinked",
     uploadAvatar: "Upload avatar",
     user: "User",
     userBannedSuccessfully: "User successfully banned",

@@ -6,13 +6,19 @@ import { setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
 export async function load(e) {
-    if (e.locals.userData) {
+    const oAuthProviderFromCookie = e.cookies.get("link-account")
+
+    if (e.locals.userData && !oAuthProviderFromCookie) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
-    const oAuthProvider = _.startCase(e.params.provider)
+    const oAuthProvider = _.upperFirst(_.camelCase(e.params.provider))
 
     if (!Object.values(constantsEnums.OAuthProvider).includes(oAuthProvider)) {
+        redirect(302, `/${e.params.locale as string}`)
+    }
+
+    if (oAuthProviderFromCookie && oAuthProviderFromCookie !== oAuthProvider) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
