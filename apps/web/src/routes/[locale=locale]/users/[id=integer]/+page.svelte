@@ -26,6 +26,9 @@
     let dialogEmailChanging: DialogEmailChanging
     let dialogUserRemoving: DialogUserRemoving
 
+    $: hasMoreThanOneLinkedAccount =
+        Object.values($userData?.linkedAccounts ?? {}).filter(value => value).length > 1
+
     const qcUploadAvatar = createQueryController({
         params: {
             img: null as File | null
@@ -96,13 +99,15 @@
                         <b>Twitch:</b>
                         {#if $userData.linkedAccounts.twitch}
                             {$ll.linked()}
-                            <Button
-                                loading={$qcTwitchUnlink.loading}
-                                variant="error"
-                                on:click={qcTwitchUnlink.refresh}
-                            >
-                                {$ll.unlink()}
-                            </Button>
+                            {#if hasMoreThanOneLinkedAccount}
+                                <Button
+                                    loading={$qcTwitchUnlink.loading}
+                                    variant="error"
+                                    on:click={qcTwitchUnlink.refresh}
+                                >
+                                    {$ll.unlink()}
+                                </Button>
+                            {/if}
                         {:else}
                             {$ll.unlinked()}
                         {/if}

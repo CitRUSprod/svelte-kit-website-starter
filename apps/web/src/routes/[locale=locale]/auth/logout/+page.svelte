@@ -7,10 +7,10 @@
     import { toasts } from "$lib/stores"
     import { socket } from "$lib/utils"
 
-    onMount(() => {
+    onMount(async () => {
         socket.disconnect().connect()
         toasts.add("success", $ll.loggedOutSuccessfully())
-        invalidateAll()
+        await invalidateAll()
     })
 </script>
 

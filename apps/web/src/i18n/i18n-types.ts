@@ -15,6 +15,11 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
+	 * {​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т​ ​у​с​п​е​ш​н​о​ ​п​р​и​в​я​з​а​н
+	 * @param {unknown} provider
+	 */
+	accountLinkedSuccessfully: RequiredParams<'provider'>
+	/**
 	 * {​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т​ ​у​с​п​е​ш​н​о​ ​о​т​в​я​з​а​н
 	 * @param {unknown} provider
 	 */
@@ -559,6 +564,10 @@ type RootTranslation = {
 }
 
 export type TranslationFunctions = {
+	/**
+	 * {provider}-аккаунт успешно привязан
+	 */
+	accountLinkedSuccessfully: (arg: { provider: unknown }) => LocalizedString
 	/**
 	 * {provider}-аккаунт успешно отвязан
 	 */

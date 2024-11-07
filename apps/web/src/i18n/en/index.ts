@@ -1,6 +1,7 @@
 import type { Translation } from "../i18n-types"
 
 const en = {
+    accountLinkedSuccessfully: "{provider}-account successfully linked",
     accountUnlinkedSuccessfully: "{provider}-account successfully unlinked",
     actions: "Actions",
     add: "Add",

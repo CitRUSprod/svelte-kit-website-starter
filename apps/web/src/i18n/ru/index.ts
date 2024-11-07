@@ -1,6 +1,7 @@
 import type { BaseTranslation } from "../i18n-types"
 
 const ru = {
+    accountLinkedSuccessfully: "{provider}-аккаунт успешно привязан",
     accountUnlinkedSuccessfully: "{provider}-аккаунт успешно отвязан",
     actions: "Действия",
     add: "Добавить",

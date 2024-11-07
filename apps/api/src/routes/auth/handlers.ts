@@ -293,10 +293,21 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
 
             const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
 
+            const oAuthStateCookie = {
+                name: "oAuthState",
+                value: undefined,
+                options: { path: "/" }
+            }
+
             if (user) {
-                throw new BadRequestError(
-                    req.ll.accountAlreadyLinked({ provider: constantsEnums.OAuthProvider.Twitch })
-                )
+                return {
+                    cookies: [oAuthStateCookie],
+                    payload: new BadRequestError(
+                        req.ll.accountAlreadyLinked({
+                            provider: constantsEnums.OAuthProvider.Twitch
+                        })
+                    )
+                }
             } else {
                 await app.prisma.user.update({
                     where: { id: req.userData.id },
@@ -307,13 +318,7 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
                 })
 
                 return {
-                    cookies: [
-                        {
-                            name: "oAuthState",
-                            value: undefined,
-                            options: { path: "/" }
-                        }
-                    ]
+                    cookies: [oAuthStateCookie]
                 }
             }
         }

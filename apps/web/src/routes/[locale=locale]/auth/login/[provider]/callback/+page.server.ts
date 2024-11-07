@@ -1,11 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import * as _ from "lodash-es"
+import { AxiosError } from "axios"
 import { redirect } from "@sveltejs/kit"
 import * as constantsEnums from "@local/constants/enums"
 import { setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
-export async function load(e) {
+interface CallbackReturn {
+    error: string | null
+    provider: string | null
+}
+
+export async function load(e): Promise<CallbackReturn> {
     const oAuthProviderFromCookie = e.cookies.get("link-account")
 
     if (e.locals.userData && !oAuthProviderFromCookie) {
@@ -32,13 +38,35 @@ export async function load(e) {
     if (e.locals.userData) {
         e.cookies.delete("link-account", { path: "/" })
 
-        const res = await api.auth.oAuthLinkCallback({
-            headers: e.request.headers,
-            provider: e.params.provider,
-            code,
-            oAuthState: state
-        })
-        setCookies(e.cookies, res.headers)
+        try {
+            const res = await api.auth.oAuthLinkCallback({
+                headers: e.request.headers,
+                provider: e.params.provider,
+                code,
+                oAuthState: state
+            })
+            setCookies(e.cookies, res.headers)
+
+            return {
+                error: null,
+                provider: oAuthProvider
+            }
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                if (err.response?.headers && err.response.data?.message) {
+                    setCookies(e.cookies, err.response.headers)
+
+                    return {
+                        error: err.response.data.message as string,
+                        provider: oAuthProvider
+                    }
+                } else {
+                    throw err
+                }
+            } else {
+                throw err
+            }
+        }
     } else {
         const res = await api.auth.oAuthLoginCallback({
             headers: e.request.headers,
@@ -53,6 +81,11 @@ export async function load(e) {
                 302,
                 `/${e.params.locale as string}/auth/registration/oauth/${res.data.oAuthRegistrationToken}`
             )
+        }
+
+        return {
+            error: null,
+            provider: null
         }
     }
 }
