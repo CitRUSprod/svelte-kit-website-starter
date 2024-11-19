@@ -90,6 +90,61 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
     })
 
     app.post<{
+        Body: schemasRoutes.auth.LinkBody
+    }>(constantsRoutes.auth.link, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            body: schemasRoutes.auth.linkBody()
+        },
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
+        async handler(req, reply) {
+            const data = await handlers.link(app, req)
+
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{
+        Params: schemasRoutes.auth.CompleteLinkingParams
+    }>(constantsRoutes.auth.completeLinking, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.completeLinkingParams()
+        },
+        async handler(req, reply) {
+            const data = await handlers.completeLinking(app, req)
+
+            await reply.sendData(data)
+        }
+    })
+
+    app.post(constantsRoutes.auth.unlink, {
+        schema: {
+            tags: [constantsRoutes.auth.base]
+        },
+        preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
+        async handler(req, reply) {
+            const data = await handlers.unlink(app, req)
+
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{
+        Params: schemasRoutes.auth.CompleteUnlinkingParams
+    }>(constantsRoutes.auth.completeUnlinking, {
+        schema: {
+            tags: [constantsRoutes.auth.base],
+            params: schemasRoutes.auth.completeUnlinkingParams()
+        },
+        async handler(req, reply) {
+            const data = await handlers.completeUnlinking(app, req)
+
+            await reply.sendData(data)
+        }
+    })
+
+    app.post<{
         Params: schemasRoutes.auth.OAuthLinkCallbackParams
         Body: schemasRoutes.auth.OAuthLinkCallbackBody
     }>(constantsRoutes.auth.oAuthLinkCallback, {

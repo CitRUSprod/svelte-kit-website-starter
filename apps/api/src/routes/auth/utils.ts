@@ -48,6 +48,22 @@ export async function deleteExpiredOAuthRegistrationTokens(app: FastifyInstance)
     })
 }
 
+export async function deleteExpiredLinkingTokens(app: FastifyInstance) {
+    await app.prisma.linkingToken.deleteMany({
+        where: {
+            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Linking * 1000) }
+        }
+    })
+}
+
+export async function deleteExpiredUnlinkingTokens(app: FastifyInstance) {
+    await app.prisma.unlinkingToken.deleteMany({
+        where: {
+            creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Unlinking * 1000) }
+        }
+    })
+}
+
 export async function deleteExpiredRefreshTokens(app: FastifyInstance) {
     await app.prisma.refreshToken.deleteMany({
         where: { creationDate: { lt: new Date(Date.now() - enums.TokenTtl.Refresh * 1000) } }

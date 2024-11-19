@@ -260,6 +260,134 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
     schemasRoutes.auth.OAuthLoginCallbackCookies
 >
 
+export const link = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (req.userData.email) throw new BadRequestError(req.ll.youAlreadyHaveEmail())
+
+    const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+    if (userByEmail) throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
+
+    await utils.deleteExpiredLinkingTokens(app)
+
+    const linkingTokenByEmail = await app.prisma.linkingToken.findFirst({
+        where: { email: req.body.email }
+    })
+
+    if (linkingTokenByEmail) {
+        throw new BadRequestError(req.ll.emailAlreadySent())
+    }
+
+    const token = createUuid()
+
+    await app.prisma.linkingToken.create({
+        data: {
+            token,
+            email: req.body.email,
+            userId: req.userData.id,
+            creationDate: new Date()
+        }
+    })
+
+    const url = new URL(`/auth/link/complete/${token}`, env.PUBLIC_BASE_URL).toString()
+    const subject = req.ll.emailLinking()
+    const message = `
+        <div>
+            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
+        </div>
+        <div>
+            <a href="${url}">${String(req.ll.linkEmail())}</a>
+        </div>
+    `
+    await sendEmail(req.body.email, subject, message)
+
+    return {}
+}) satisfies RouteHandler<{ Body: schemasRoutes.auth.LinkBody }, schemasRoutes.auth.LinkResponse>
+
+export const completeLinking = (async (app, req) => {
+    await utils.deleteExpiredLinkingTokens(app)
+
+    const linkingToken = await app.prisma.linkingToken.findFirst({
+        where: { token: req.params.linkingToken }
+    })
+    if (!linkingToken) throw new BadRequestError(req.ll.linkingTokenExpired())
+
+    await app.prisma.user.update({
+        where: { id: linkingToken.userId },
+        data: {
+            email: linkingToken.email
+        }
+    })
+
+    await app.prisma.linkingToken.delete({ where: { id: linkingToken.id } })
+
+    return {}
+}) satisfies RouteHandler<
+    { Params: schemasRoutes.auth.CompleteLinkingParams },
+    schemasRoutes.auth.CompleteLinkingResponse
+>
+
+export const unlink = (async (app, req) => {
+    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData.email) throw new BadRequestError(req.ll.emailIsNotSet())
+
+    await utils.deleteExpiredUnlinkingTokens(app)
+
+    const unlinkingTokenByEmail = await app.prisma.unlinkingToken.findFirst({
+        where: { userId: req.userData.id }
+    })
+
+    if (unlinkingTokenByEmail) {
+        throw new BadRequestError(req.ll.emailAlreadySent())
+    }
+
+    const token = createUuid()
+
+    await app.prisma.unlinkingToken.create({
+        data: {
+            token,
+            userId: req.userData.id,
+            creationDate: new Date()
+        }
+    })
+
+    const url = new URL(`/auth/unlink/complete/${token}`, env.PUBLIC_BASE_URL).toString()
+    const subject = req.ll.emailUnlinking()
+    const message = `
+        <div>
+            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
+        </div>
+        <div>
+            <a href="${url}">${String(req.ll.unlinkEmail())}</a>
+        </div>
+    `
+    await sendEmail(req.userData.email, subject, message)
+
+    return {}
+}) satisfies RouteHandler<void, schemasRoutes.auth.UnlinkResponse>
+
+export const completeUnlinking = (async (app, req) => {
+    await utils.deleteExpiredUnlinkingTokens(app)
+
+    const unlinkingToken = await app.prisma.unlinkingToken.findFirst({
+        where: { token: req.params.unlinkingToken }
+    })
+    if (!unlinkingToken) throw new BadRequestError(req.ll.unlinkingTokenExpired())
+
+    await app.prisma.user.update({
+        where: { id: unlinkingToken.userId },
+        data: {
+            email: null
+        }
+    })
+
+    await app.prisma.unlinkingToken.delete({ where: { id: unlinkingToken.id } })
+
+    return {}
+}) satisfies RouteHandler<
+    { Params: schemasRoutes.auth.CompleteUnlinkingParams },
+    schemasRoutes.auth.CompleteUnlinkingResponse
+>
+
 export const oAuthLinkCallback = (async (app, req, cookies) => {
     if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
 
@@ -313,8 +441,7 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
                     where: { id: req.userData.id },
                     data: {
                         twitchId: twitchUser.id
-                    },
-                    include: { role: true, ban: { include: { author: true } } }
+                    }
                 })
 
                 return {

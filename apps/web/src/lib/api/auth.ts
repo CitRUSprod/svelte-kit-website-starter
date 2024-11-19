@@ -55,6 +55,40 @@ export function oAuthLogin(data: RequestData<schemasRoutes.auth.OAuthLoginReques
     )
 }
 
+export function link(data: RequestData<schemasRoutes.auth.LinkRequest>) {
+    return axios.post<schemasRoutes.auth.LinkResponse>(
+        createApiUrl(constantsRoutes.auth.link),
+        {
+            email: data.email
+        },
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function completeLinking(data: RequestData<schemasRoutes.auth.CompleteLinkingRequest>) {
+    return axios.post<schemasRoutes.auth.CompleteLinkingResponse>(
+        createApiUrl(constantsRoutes.auth.completeLinking, data.linkingToken),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function unlink(data: RequestData<schemasRoutes.auth.UnlinkRequest> = {}) {
+    return axios.post<schemasRoutes.auth.UnlinkResponse>(
+        createApiUrl(constantsRoutes.auth.unlink),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
+export function completeUnlinking(data: RequestData<schemasRoutes.auth.CompleteUnlinkingRequest>) {
+    return axios.post<schemasRoutes.auth.CompleteUnlinkingResponse>(
+        createApiUrl(constantsRoutes.auth.completeUnlinking, data.unlinkingToken),
+        {},
+        createAxiosConfig(data.headers)
+    )
+}
+
 export function oAuthLoginCallback(
     data: RequestData<schemasRoutes.auth.OAuthLoginCallbackRequest>
 ) {

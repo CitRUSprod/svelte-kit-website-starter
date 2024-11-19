@@ -5,6 +5,7 @@
         DialogProfileEditing,
         DialogPasswordChanging,
         DialogEmailChanging,
+        DialogEmailLinking,
         DialogUserRemoving
     } from "./_components"
 
@@ -24,6 +25,7 @@
     let dialogProfileEditing: DialogProfileEditing
     let dialogPasswordChanging: DialogPasswordChanging
     let dialogEmailChanging: DialogEmailChanging
+    let dialogEmailLinking: DialogEmailLinking
     let dialogUserRemoving: DialogUserRemoving
 
     $: hasMoreThanOneLinkedAccount =
@@ -58,6 +60,15 @@
             await qcUploadAvatar.refresh()
         }
     }
+
+    const qcEmailUnlink = createQueryController({
+        fn() {
+            return api.auth.unlink()
+        },
+        async onSuccess() {
+            toasts.add("success", $ll.confirmationEmailSent())
+        }
+    })
 
     const qcTwitchUnlink = createQueryController({
         fn() {
@@ -158,9 +169,22 @@
             <Button variant="warning" on:click={dialogPasswordChanging.open}>
                 {$ll.changePassword()}
             </Button>
-            {#if $userData.linkedAccounts?.email && $userData.email}
+            {#if $userData.email}
                 <Button variant="warning" on:click={dialogEmailChanging.open}>
                     {$ll.changeEmail()}
+                </Button>
+            {:else}
+                <Button variant="success" on:click={dialogEmailLinking.open}>
+                    {$ll.linkEmail()}
+                </Button>
+            {/if}
+            {#if $userData.linkedAccounts?.email}
+                <Button
+                    loading={$qcEmailUnlink.loading}
+                    variant="error"
+                    on:click={qcEmailUnlink.refresh}
+                >
+                    {$ll.unlinkEmail()}
                 </Button>
             {/if}
             <Button variant="error" on:click={dialogUserRemoving.open}>
@@ -179,4 +203,5 @@
 <DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
 <DialogPasswordChanging bind:this={dialogPasswordChanging} />
 <DialogEmailChanging bind:this={dialogEmailChanging} user={data.user} />
+<DialogEmailLinking bind:this={dialogEmailLinking} user={data.user} />
 <DialogUserRemoving bind:this={dialogUserRemoving} user={data.user} />

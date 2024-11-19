@@ -40,6 +40,14 @@ type RootTranslation = {
 	 */
 	emailIsNotSet: string
 	/**
+	 * П​р​и​в​я​з​к​а​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+	 */
+	emailLinking: string
+	/**
+	 * О​т​в​я​з​к​а​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+	 */
+	emailUnlinking: string
+	/**
 	 * О​б​н​о​в​л​е​н​и​е​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
 	 */
 	emailUpdate: string
@@ -59,6 +67,14 @@ type RootTranslation = {
 	 * Н​е​в​е​р​н​ы​й​ ​п​а​р​о​л​ь
 	 */
 	incorrectPassword: string
+	/**
+	 * П​р​и​в​я​з​а​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
+	 */
+	linkEmail: string
+	/**
+	 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​п​р​и​в​я​з​к​и​ ​и​с​т​ё​к
+	 */
+	linkingTokenExpired: string
 	/**
 	 * Н​е​т​ ​д​о​с​т​у​п​а
 	 */
@@ -124,6 +140,14 @@ type RootTranslation = {
 	 */
 	unexpectedError: string
 	/**
+	 * О​т​в​я​з​а​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
+	 */
+	unlinkEmail: string
+	/**
+	 * С​р​о​к​ ​д​е​й​с​т​в​и​я​ ​т​о​к​е​н​а​ ​о​т​в​я​з​к​и​ ​и​с​т​ё​к
+	 */
+	unlinkingTokenExpired: string
+	/**
 	 * О​б​н​о​в​и​т​ь​ ​п​о​ч​т​у
 	 */
 	updateEmail: string
@@ -171,6 +195,10 @@ type RootTranslation = {
 	 */
 	youAlreadyHaveAccount: RequiredParams<'provider'>
 	/**
+	 * У​ ​в​а​с​ ​у​ж​е​ ​е​с​т​ь​ ​п​р​и​в​я​з​а​н​н​а​я​ ​э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а
+	 */
+	youAlreadyHaveEmail: string
+	/**
 	 * К​ ​в​а​ш​е​м​у​ ​а​к​к​а​у​н​т​у​ ​н​е​ ​п​р​и​в​я​з​а​н​ ​{​p​r​o​v​i​d​e​r​}​-​а​к​к​а​у​н​т
 	 * @param {unknown} provider
 	 */
@@ -207,6 +235,14 @@ export type TranslationFunctions = {
 	 */
 	emailIsNotSet: () => LocalizedString
 	/**
+	 * Привязка электронной почты
+	 */
+	emailLinking: () => LocalizedString
+	/**
+	 * Отвязка электронной почты
+	 */
+	emailUnlinking: () => LocalizedString
+	/**
 	 * Обновление электронной почты
 	 */
 	emailUpdate: () => LocalizedString
@@ -226,6 +262,14 @@ export type TranslationFunctions = {
 	 * Неверный пароль
 	 */
 	incorrectPassword: () => LocalizedString
+	/**
+	 * Привязать электронную почту
+	 */
+	linkEmail: () => LocalizedString
+	/**
+	 * Срок действия токена привязки истёк
+	 */
+	linkingTokenExpired: () => LocalizedString
 	/**
 	 * Нет доступа
 	 */
@@ -291,6 +335,14 @@ export type TranslationFunctions = {
 	 */
 	unexpectedError: () => LocalizedString
 	/**
+	 * Отвязать электронную почту
+	 */
+	unlinkEmail: () => LocalizedString
+	/**
+	 * Срок действия токена отвязки истёк
+	 */
+	unlinkingTokenExpired: () => LocalizedString
+	/**
 	 * Обновить почту
 	 */
 	updateEmail: () => LocalizedString
@@ -334,6 +386,10 @@ export type TranslationFunctions = {
 	 * К вашему аккаунту уже привязан другой {provider}-аккаунт
 	 */
 	youAlreadyHaveAccount: (arg: { provider: unknown }) => LocalizedString
+	/**
+	 * У вас уже есть привязанная электронная почта
+	 */
+	youAlreadyHaveEmail: () => LocalizedString
 	/**
 	 * К вашему аккаунту не привязан {provider}-аккаунт
 	 */

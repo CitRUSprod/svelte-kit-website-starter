@@ -32,7 +32,7 @@
 
 <Button
     class={buttonData.buttonClass}
-    href={$localePath(`/auth/${linkAccount ? "link" : "login"}/${buttonData.providerInUrl}`)}
+    href={$localePath(`/auth/${linkAccount ? "link/oauth" : "login"}/${buttonData.providerInUrl}`)}
 >
     <i class={buttonData.iconClass} />
     <span>{buttonData.text}</span>

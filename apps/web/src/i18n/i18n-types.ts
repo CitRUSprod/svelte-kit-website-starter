@@ -181,6 +181,22 @@ type RootTranslation = {
 	 */
 	emailChanging: string
 	/**
+	 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а​ ​у​с​п​е​ш​н​о​ ​п​р​и​в​я​з​а​н​а
+	 */
+	emailLinkedSuccessfully: string
+	/**
+	 * П​р​и​в​я​з​к​а​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+	 */
+	emailLinking: string
+	/**
+	 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а​ ​у​с​п​е​ш​н​о​ ​о​т​в​я​з​а​н​а
+	 */
+	emailUnlinkedSuccessfully: string
+	/**
+	 * О​т​в​я​з​к​а​ ​э​л​е​к​т​р​о​н​н​о​й​ ​п​о​ч​т​ы
+	 */
+	emailUnlinking: string
+	/**
 	 * п​у​с​т​о
 	 */
 	empty: string
@@ -233,9 +249,17 @@ type RootTranslation = {
 	 */
 	info: string
 	/**
+	 * П​р​и​в​я​з​а​т​ь
+	 */
+	link: string
+	/**
 	 * П​р​и​в​я​з​а​н
 	 */
 	linked: string
+	/**
+	 * П​р​и​в​я​з​а​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
+	 */
+	linkEmail: string
 	/**
 	 * В​ы​ ​у​с​п​е​ш​н​о​ ​в​о​ш​л​и
 	 */
@@ -506,6 +530,10 @@ type RootTranslation = {
 	 */
 	unlinked: string
 	/**
+	 * О​т​в​я​з​а​т​ь​ ​э​л​е​к​т​р​о​н​н​у​ю​ ​п​о​ч​т​у
+	 */
+	unlinkEmail: string
+	/**
 	 * З​а​г​р​у​з​и​т​ь​ ​а​в​а​т​а​р
 	 */
 	uploadAvatar: string
@@ -729,6 +757,22 @@ export type TranslationFunctions = {
 	 */
 	emailChanging: () => LocalizedString
 	/**
+	 * Электронная почта успешно привязана
+	 */
+	emailLinkedSuccessfully: () => LocalizedString
+	/**
+	 * Привязка электронной почты
+	 */
+	emailLinking: () => LocalizedString
+	/**
+	 * Электронная почта успешно отвязана
+	 */
+	emailUnlinkedSuccessfully: () => LocalizedString
+	/**
+	 * Отвязка электронной почты
+	 */
+	emailUnlinking: () => LocalizedString
+	/**
 	 * пусто
 	 */
 	empty: () => LocalizedString
@@ -781,9 +825,17 @@ export type TranslationFunctions = {
 	 */
 	info: () => LocalizedString
 	/**
+	 * Привязать
+	 */
+	link: () => LocalizedString
+	/**
 	 * Привязан
 	 */
 	linked: () => LocalizedString
+	/**
+	 * Привязать электронную почту
+	 */
+	linkEmail: () => LocalizedString
 	/**
 	 * Вы успешно вошли
 	 */
@@ -1052,6 +1104,10 @@ export type TranslationFunctions = {
 	 * Не привязан
 	 */
 	unlinked: () => LocalizedString
+	/**
+	 * Отвязать электронную почту
+	 */
+	unlinkEmail: () => LocalizedString
 	/**
 	 * Загрузить аватар
 	 */

@@ -180,6 +180,92 @@ export function oAuthLoginCallbackResponse() {
 
 export type OAuthLoginCallbackResponse = z.infer<ReturnType<typeof oAuthLoginCallbackResponse>>
 
+// Link
+
+export function linkBody() {
+    return z.object({
+        email: models.user.email()
+    })
+}
+
+export type LinkBody = z.infer<ReturnType<typeof linkBody>>
+
+export function linkRequest() {
+    return z.object({
+        ...linkBody().shape
+    })
+}
+
+export type LinkRequest = z.infer<ReturnType<typeof linkRequest>>
+
+export function linkResponse() {
+    return z.void()
+}
+
+export type LinkResponse = z.infer<ReturnType<typeof linkResponse>>
+
+// CompleteLinking
+
+export function completeLinkingParams() {
+    return z.object({
+        linkingToken: common.token()
+    })
+}
+
+export type CompleteLinkingParams = z.infer<ReturnType<typeof completeLinkingParams>>
+
+export function completeLinkingRequest() {
+    return z.object({
+        ...completeLinkingParams().shape
+    })
+}
+
+export type CompleteLinkingRequest = z.infer<ReturnType<typeof completeLinkingRequest>>
+
+export function completeLinkingResponse() {
+    return z.void()
+}
+
+export type CompleteLinkingResponse = z.infer<ReturnType<typeof completeLinkingResponse>>
+
+// Unlink
+
+export function unlinkRequest() {
+    return z.void()
+}
+
+export type UnlinkRequest = z.infer<ReturnType<typeof unlinkRequest>>
+
+export function unlinkResponse() {
+    return z.void()
+}
+
+export type UnlinkResponse = z.infer<ReturnType<typeof unlinkResponse>>
+
+// CompleteUnlinking
+
+export function completeUnlinkingParams() {
+    return z.object({
+        unlinkingToken: common.token()
+    })
+}
+
+export type CompleteUnlinkingParams = z.infer<ReturnType<typeof completeUnlinkingParams>>
+
+export function completeUnlinkingRequest() {
+    return z.object({
+        ...completeUnlinkingParams().shape
+    })
+}
+
+export type CompleteUnlinkingRequest = z.infer<ReturnType<typeof completeUnlinkingRequest>>
+
+export function completeUnlinkingResponse() {
+    return z.void()
+}
+
+export type CompleteUnlinkingResponse = z.infer<ReturnType<typeof completeUnlinkingResponse>>
+
 // OAuthLinkCallback
 
 export function oAuthLinkCallbackCookies() {
