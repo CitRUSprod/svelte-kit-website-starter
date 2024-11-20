@@ -78,6 +78,7 @@ model LinkingToken {
     id Int @id @default(autoincrement())
     token String @unique
     email String @unique
+    password String
     userId Int @unique
     user User @relation(fields: [userId], references: [id])
     creationDate DateTime

@@ -184,7 +184,8 @@ export type OAuthLoginCallbackResponse = z.infer<ReturnType<typeof oAuthLoginCal
 
 export function linkBody() {
     return z.object({
-        email: models.user.email()
+        email: models.user.email(),
+        password: models.user.password()
     })
 }
 

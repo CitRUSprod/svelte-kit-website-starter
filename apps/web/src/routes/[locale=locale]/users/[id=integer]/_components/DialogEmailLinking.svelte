@@ -1,25 +1,31 @@
 <script lang="ts">
     import { Button, TextField, Dialog } from "$lib/components"
 
-    import * as schemasModels from "@local/schemas/models"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let user: schemasModels.user.User
-
     let dialog: Dialog
 
     let email = ""
+    let password = ""
+    let passwordConfirmation = ""
 
     $: vldResultEmail = vld.user.email(email)
+    $: vldResultPassword = vld.user.password(password)
+    $: vldResultPasswordConfirmation = vld.user.password(passwordConfirmation)
 
-    $: completedForm = vldResultEmail.valid && vldResultEmail.value !== user.email
+    $: completedForm =
+        vldResultEmail.valid &&
+        vldResultPassword.valid &&
+        vldResultPassword.value === vldResultPasswordConfirmation.value
 
     export function open() {
-        email = user.email ?? ""
+        email = ""
+        password = ""
+        passwordConfirmation = ""
 
         dialog.open()
     }
@@ -31,7 +37,8 @@
     const qcLinkEmail = createQueryController({
         fn() {
             return api.auth.link({
-                email: vldResultEmail.value
+                email: vldResultEmail.value,
+                password: vldResultPassword.value
             })
         },
         onSuccess() {
@@ -50,7 +57,28 @@
         <h1 class="u:text-center">{$ll.emailLinking()}</h1>
     </div>
     <div>
-        <TextField disabled={$qcLinkEmail.loading} label={$ll.email()} bind:value={email} />
+        <TextField
+            autofocus
+            disabled={$qcLinkEmail.loading}
+            label={$ll.email()}
+            bind:value={email}
+        />
+    </div>
+    <div>
+        <TextField
+            disabled={$qcLinkEmail.loading}
+            label={$ll.password()}
+            type="password"
+            bind:value={password}
+        />
+    </div>
+    <div>
+        <TextField
+            disabled={$qcLinkEmail.loading}
+            label={$ll.passwordConfirmation()}
+            type="password"
+            bind:value={passwordConfirmation}
+        />
     </div>
     <div class="u:flex u:justify-between">
         <Button disabled={$qcLinkEmail.loading} text variant="error" on:click={close}>

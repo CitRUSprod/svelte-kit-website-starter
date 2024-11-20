@@ -203,5 +203,5 @@
 <DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
 <DialogPasswordChanging bind:this={dialogPasswordChanging} />
 <DialogEmailChanging bind:this={dialogEmailChanging} user={data.user} />
-<DialogEmailLinking bind:this={dialogEmailLinking} user={data.user} />
+<DialogEmailLinking bind:this={dialogEmailLinking} />
 <DialogUserRemoving bind:this={dialogUserRemoving} user={data.user} />

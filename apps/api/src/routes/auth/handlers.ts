@@ -277,12 +277,14 @@ export const link = (async (app, req) => {
         throw new BadRequestError(req.ll.emailAlreadySent())
     }
 
+    const password = await argon2.hash(req.body.password)
     const token = createUuid()
 
     await app.prisma.linkingToken.create({
         data: {
             token,
             email: req.body.email,
+            password,
             userId: req.userData.id,
             creationDate: new Date()
         }
@@ -314,7 +316,8 @@ export const completeLinking = (async (app, req) => {
     await app.prisma.user.update({
         where: { id: linkingToken.userId },
         data: {
-            email: linkingToken.email
+            email: linkingToken.email,
+            password: linkingToken.password
         }
     })
 
@@ -376,7 +379,8 @@ export const completeUnlinking = (async (app, req) => {
     await app.prisma.user.update({
         where: { id: unlinkingToken.userId },
         data: {
-            email: null
+            email: null,
+            password: null
         }
     })
 

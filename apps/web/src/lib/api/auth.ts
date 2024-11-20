@@ -59,7 +59,8 @@ export function link(data: RequestData<schemasRoutes.auth.LinkRequest>) {
     return axios.post<schemasRoutes.auth.LinkResponse>(
         createApiUrl(constantsRoutes.auth.link),
         {
-            email: data.email
+            email: data.email,
+            password: data.password
         },
         createAxiosConfig(data.headers)
     )
