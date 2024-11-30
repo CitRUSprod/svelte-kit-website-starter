@@ -3,6 +3,7 @@ import type { BaseTranslation } from "../i18n-types"
 const ru = {
     accountAlreadyLinked: "Этот {provider}-аккаунт уже привязан к другому аккаунту",
     banned: "Забанен",
+    cannotUnlinkLastAuthMethod: "Невозможно отвязать единственный способ входа в аккаунт",
     completeRegistration: "Завершить регистрацию",
     dear: "Дорогой",
     emailAlreadySent: "Письмо уже отправлено, проверьте почту",

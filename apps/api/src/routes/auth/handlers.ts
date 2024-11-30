@@ -376,6 +376,15 @@ export const completeUnlinking = (async (app, req) => {
     })
     if (!unlinkingToken) throw new BadRequestError(req.ll.unlinkingTokenExpired())
 
+    const user = await app.prisma.user.findUnique({
+        where: { id: unlinkingToken.userId }
+    })
+    if (!user) throw new InternalServerError(req.ll.unexpectedError())
+
+    if (user.email !== null && user.twitchId === null) {
+        throw new BadRequestError(req.ll.cannotUnlinkLastAuthMethod())
+    }
+
     await app.prisma.user.update({
         where: { id: unlinkingToken.userId },
         data: {
@@ -476,6 +485,15 @@ export const oAuthUnlink = (async (app, req) => {
                 throw new BadRequestError(
                     req.ll.youDoNotHaveAccount({ provider: constantsEnums.OAuthProvider.Twitch })
                 )
+            }
+
+            const user = await app.prisma.user.findUnique({
+                where: { id: req.userData.id }
+            })
+            if (!user) throw new InternalServerError(req.ll.unexpectedError())
+
+            if (user.email === null && user.twitchId !== null) {
+                throw new BadRequestError(req.ll.cannotUnlinkLastAuthMethod())
             }
 
             const updatedUser = await app.prisma.user.update({

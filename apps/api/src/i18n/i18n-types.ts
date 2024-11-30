@@ -24,6 +24,10 @@ type RootTranslation = {
 	 */
 	banned: string
 	/**
+	 * Н​е​в​о​з​м​о​ж​н​о​ ​о​т​в​я​з​а​т​ь​ ​е​д​и​н​с​т​в​е​н​н​ы​й​ ​с​п​о​с​о​б​ ​в​х​о​д​а​ ​в​ ​а​к​к​а​у​н​т
+	 */
+	cannotUnlinkLastAuthMethod: string
+	/**
 	 * З​а​в​е​р​ш​и​т​ь​ ​р​е​г​и​с​т​р​а​ц​и​ю
 	 */
 	completeRegistration: string
@@ -218,6 +222,10 @@ export type TranslationFunctions = {
 	 * Забанен
 	 */
 	banned: () => LocalizedString
+	/**
+	 * Невозможно отвязать единственный способ входа в аккаунт
+	 */
+	cannotUnlinkLastAuthMethod: () => LocalizedString
 	/**
 	 * Завершить регистрацию
 	 */

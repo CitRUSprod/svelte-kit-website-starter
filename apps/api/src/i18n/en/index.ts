@@ -3,6 +3,7 @@ import type { Translation } from "../i18n-types"
 const en = {
     accountAlreadyLinked: "This {provider}-account is already linked to another account",
     banned: "Banned",
+    cannotUnlinkLastAuthMethod: "Cannot unlink the only way to sign in to your account",
     completeRegistration: "Complete registration",
     dear: "Dear",
     emailAlreadySent: "Email has already been sent, check your email",
