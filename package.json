@@ -22,8 +22,8 @@
         "prepare": "husky install"
     },
     "engines": {
-        "node": "20.12.2",
-        "pnpm": "9.0.6"
+        "node": "22.11.0",
+        "pnpm": "9.14.4"
     },
     "config": {
         "commitizen": {

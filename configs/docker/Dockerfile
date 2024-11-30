@@ -1,7 +1,7 @@
 ARG NODE_IMAGE
 FROM ${NODE_IMAGE} AS base
 WORKDIR /project
-RUN corepack enable && corepack prepare pnpm@9.0.6 --activate
+RUN corepack enable && corepack prepare pnpm@9.14.4 --activate
 ENV PNPM_HOME=/usr/local/bin
 
 FROM base AS preparer
