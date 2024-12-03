@@ -19,7 +19,7 @@
 
 <Content.Default title={data.post.title}>
     <div class="u:flex u:flex-col u:gap-4">
-        {#each data.post.content.split(/\n+/) as paragraph}
+        {#each data.post.content.split(/\n+/) as paragraph (paragraph)}
             <p>{paragraph}</p>
         {/each}
     </div>

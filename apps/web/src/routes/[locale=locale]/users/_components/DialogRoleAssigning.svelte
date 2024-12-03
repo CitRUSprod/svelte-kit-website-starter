@@ -12,7 +12,7 @@
 
     let dialog: Dialog
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ assignRole: undefined }>()
 
     let userId = 0
     let username = ""

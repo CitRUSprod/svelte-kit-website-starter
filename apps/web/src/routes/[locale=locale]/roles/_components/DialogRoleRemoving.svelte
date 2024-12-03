@@ -8,7 +8,7 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ removeRole: undefined }>()
 
     let dialog: Dialog
 
@@ -46,7 +46,6 @@
     </div>
     <div>
         <p>
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $ll.roleRemovingQuestion({ role: role.name })}
         </p>
     </div>

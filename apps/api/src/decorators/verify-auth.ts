@@ -9,7 +9,7 @@ declare module "fastify" {
 }
 
 export const verifyAuth: FastifyPluginCallback = (app, options, done) => {
-    app.decorate<FastifyInstance["verifyAuth"]>("verifyAuth", async req => {
+    app.decorate<FastifyInstance["verifyAuth"]>("verifyAuth", req => {
         if (!("userData" in req)) {
             if (req.authError) {
                 throw req.authError

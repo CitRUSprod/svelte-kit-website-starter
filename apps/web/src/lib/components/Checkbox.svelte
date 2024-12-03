@@ -8,7 +8,7 @@
     export let label: string | undefined = undefined
     export let disabled = false
     export let readonly = false
-    export let checked = false as boolean
+    export let checked = false
 
     let klass: string | undefined = undefined
     export { klass as class }

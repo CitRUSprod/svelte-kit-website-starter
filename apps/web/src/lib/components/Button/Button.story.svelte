@@ -69,7 +69,7 @@
 
     <svelte:component this={Hst.Variant} title="All variants">
         <div class="u:flex u:gap-1">
-            {#each elementVariants as v}
+            {#each elementVariants as v (v)}
                 <Button {disabled} {loading} {text} variant={v}>{v}</Button>
             {/each}
         </div>
@@ -83,7 +83,7 @@
 
     <svelte:component this={Hst.Variant} title="All variants with icons">
         <div class="u:flex u:gap-1">
-            {#each elementVariants as v}
+            {#each elementVariants as v (v)}
                 <Button {disabled} icon {loading} {text} variant={v}>
                     <i class="u:i-fa-solid-exclamation-triangle" />
                 </Button>

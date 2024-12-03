@@ -15,12 +15,16 @@ import * as utils from "./utils"
 
 export const register = (async (app, req) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (userByEmail) throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
+    if (userByEmail) {
+        throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
+    }
 
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) {
+        throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
+    }
 
     await utils.deleteExpiredRegistrationTokens(app)
 
@@ -77,7 +81,9 @@ export const completeRegistration = (async (app, req) => {
     const registrationToken = await app.prisma.registrationToken.findFirst({
         where: { token: req.params.registrationToken }
     })
-    if (!registrationToken) throw new BadRequestError(req.ll.registrationTokenExpired())
+    if (!registrationToken) {
+        throw new BadRequestError(req.ll.registrationTokenExpired())
+    }
 
     const user = await app.prisma.user.create({
         data: {
@@ -100,7 +106,9 @@ export const oAuthRegister = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
-    if (userByUsername) throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
+    if (userByUsername) {
+        throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
+    }
 
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
         where: { token: req.params.oAuthRegistrationToken }
@@ -113,6 +121,7 @@ export const oAuthRegister = (async (app, req) => {
     let user: User
 
     switch (oAuthRegistrationToken.provider) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison, @typescript-eslint/no-unnecessary-condition
         case constantsEnums.OAuthProvider.Twitch: {
             user = await app.prisma.user.create({
                 data: {
@@ -140,12 +149,18 @@ export const oAuthRegister = (async (app, req) => {
 
 export const login = (async (app, req) => {
     const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (!user) throw new BadRequestError(req.ll.userWithEmailNotFound())
+    if (!user) {
+        throw new BadRequestError(req.ll.userWithEmailNotFound())
+    }
 
-    if (!user.password) throw new BadRequestError(req.ll.unexpectedError())
+    if (!user.password) {
+        throw new BadRequestError(req.ll.unexpectedError())
+    }
 
     const isCorrectPassword = await argon2.verify(user.password, req.body.password)
-    if (!isCorrectPassword) throw new BadRequestError(req.ll.incorrectPassword())
+    if (!isCorrectPassword) {
+        throw new BadRequestError(req.ll.incorrectPassword())
+    }
 
     return utils.login(app, { id: user.id }, false, false)
 }) satisfies RouteHandler<{ Body: schemasRoutes.auth.LoginBody }, schemasRoutes.auth.LoginResponse>
@@ -154,6 +169,7 @@ export const oAuthLogin = (async (app, req) => {
     const oAuthState = generateState()
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
             const url = await oAuthProviders.twitch.createAuthorizationURL(oAuthState)
 
@@ -190,6 +206,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
     }
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
             const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
                 req.body.code
@@ -261,11 +278,17 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
 >
 
 export const link = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
-    if (req.userData.email) throw new BadRequestError(req.ll.youAlreadyHaveEmail())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
+    if (req.userData.email) {
+        throw new BadRequestError(req.ll.youAlreadyHaveEmail())
+    }
 
     const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (userByEmail) throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
+    if (userByEmail) {
+        throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
+    }
 
     await utils.deleteExpiredLinkingTokens(app)
 
@@ -311,7 +334,9 @@ export const completeLinking = (async (app, req) => {
     const linkingToken = await app.prisma.linkingToken.findFirst({
         where: { token: req.params.linkingToken }
     })
-    if (!linkingToken) throw new BadRequestError(req.ll.linkingTokenExpired())
+    if (!linkingToken) {
+        throw new BadRequestError(req.ll.linkingTokenExpired())
+    }
 
     await app.prisma.user.update({
         where: { id: linkingToken.userId },
@@ -330,8 +355,12 @@ export const completeLinking = (async (app, req) => {
 >
 
 export const unlink = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
-    if (!req.userData.email) throw new BadRequestError(req.ll.emailIsNotSet())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
+    if (!req.userData.email) {
+        throw new BadRequestError(req.ll.emailIsNotSet())
+    }
 
     await utils.deleteExpiredUnlinkingTokens(app)
 
@@ -374,12 +403,16 @@ export const completeUnlinking = (async (app, req) => {
     const unlinkingToken = await app.prisma.unlinkingToken.findFirst({
         where: { token: req.params.unlinkingToken }
     })
-    if (!unlinkingToken) throw new BadRequestError(req.ll.unlinkingTokenExpired())
+    if (!unlinkingToken) {
+        throw new BadRequestError(req.ll.unlinkingTokenExpired())
+    }
 
     const user = await app.prisma.user.findUnique({
         where: { id: unlinkingToken.userId }
     })
-    if (!user) throw new InternalServerError(req.ll.unexpectedError())
+    if (!user) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     if (user.email !== null && user.twitchId === null) {
         throw new BadRequestError(req.ll.cannotUnlinkLastAuthMethod())
@@ -402,13 +435,16 @@ export const completeUnlinking = (async (app, req) => {
 >
 
 export const oAuthLinkCallback = (async (app, req, cookies) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     if (cookies.oAuthState !== req.body.oAuthState) {
         throw new BadRequestError(req.ll.statesDoNotMatch())
     }
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
             if (req.userData.twitchId !== null) {
                 throw new InternalServerError(
@@ -477,9 +513,12 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
 >
 
 export const oAuthUnlink = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
             if (req.userData.twitchId === null) {
                 throw new BadRequestError(
@@ -490,7 +529,10 @@ export const oAuthUnlink = (async (app, req) => {
             const user = await app.prisma.user.findUnique({
                 where: { id: req.userData.id }
             })
-            if (!user) throw new InternalServerError(req.ll.unexpectedError())
+
+            if (!user) {
+                throw new InternalServerError(req.ll.unexpectedError())
+            }
 
             if (user.email === null && user.twitchId !== null) {
                 throw new BadRequestError(req.ll.cannotUnlinkLastAuthMethod())
@@ -559,7 +601,9 @@ export const refreshTokens = (async (app, req, cookies) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
-    if (!refreshToken) throw new InternalServerError(req.ll.refreshTokenNotFound())
+    if (!refreshToken) {
+        throw new InternalServerError(req.ll.refreshTokenNotFound())
+    }
 
     const tokens = utils.generateTokens(app, payload)
     await app.prisma.refreshToken.update({

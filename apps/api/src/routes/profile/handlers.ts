@@ -10,13 +10,17 @@ import * as utils from "./utils"
 import { getLogoutCookies } from "../auth/utils"
 
 export const getUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     return { payload: models.user.dto(req.userData) }
 }) satisfies RouteHandler<void, schemasRoutes.profile.GetUserResponse>
 
 export const updateUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     if (req.body.username && req.body.username !== req.userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
@@ -43,7 +47,9 @@ export const updateUser = (async (app, req) => {
 >
 
 export const deleteUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     await utils.deleteUser(app, req.userData)
 
@@ -51,11 +57,15 @@ export const deleteUser = (async (app, req) => {
 }) satisfies RouteHandler<void, schemasRoutes.profile.DeleteUserResponse>
 
 export const uploadAvatar = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const img = req.body.img as MultipartFile
 
-    if (!isImgFile(img)) throw new BadRequestError(req.ll.fileIsNotImage())
+    if (!isImgFile(img)) {
+        throw new BadRequestError(req.ll.fileIsNotImage())
+    }
 
     const avatar = await writeFile(enums.ImgPath.Avatars, img)
 
@@ -73,8 +83,12 @@ export const uploadAvatar = (async (app, req) => {
 >
 
 export const deleteAvatar = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
-    if (!req.userData.avatar) throw new BadRequestError(req.ll.youDoNotHaveAvatar())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
+    if (!req.userData.avatar) {
+        throw new BadRequestError(req.ll.youDoNotHaveAvatar())
+    }
 
     await utils.removeAvatar(req.userData.avatar)
 
@@ -87,8 +101,12 @@ export const deleteAvatar = (async (app, req) => {
 }) satisfies RouteHandler<void, schemasRoutes.profile.DeleteAvatarResponse>
 
 export const sendEmailUpdateEmailToOld = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
-    if (!req.userData.email) throw new BadRequestError(req.ll.emailIsNotSet())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
+    if (!req.userData.email) {
+        throw new BadRequestError(req.ll.emailIsNotSet())
+    }
 
     if (req.userData.email === req.body.email) {
         throw new BadRequestError(req.ll.oldAndNewEmailsMatch())
@@ -145,13 +163,17 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
         where: { tokenFrom: req.params.emailUpdateToken }
     })
 
-    if (!emailUpdateToken) throw new BadRequestError(req.ll.emailUpdateTokenExpired())
+    if (!emailUpdateToken) {
+        throw new BadRequestError(req.ll.emailUpdateTokenExpired())
+    }
 
     const user = await app.prisma.user.findFirst({
         where: { id: emailUpdateToken.userId }
     })
 
-    if (!user) throw new InternalServerError(req.ll.unexpectedError())
+    if (!user) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const { tokenTo } = emailUpdateToken
 
@@ -179,7 +201,10 @@ export const updateEmail = (async (app, req) => {
     const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
         where: { tokenTo: req.params.emailUpdateToken }
     })
-    if (!emailUpdateToken) throw new BadRequestError(req.ll.emailUpdateTokenExpired())
+
+    if (!emailUpdateToken) {
+        throw new BadRequestError(req.ll.emailUpdateTokenExpired())
+    }
 
     await app.prisma.user.update({
         where: { id: emailUpdateToken.userId },
@@ -197,15 +222,23 @@ export const updateEmail = (async (app, req) => {
 >
 
 export const changePassword = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
-    if (!req.userData.password) throw new BadRequestError(req.ll.passwordIsNotSet())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
+
+    if (!req.userData.password) {
+        throw new BadRequestError(req.ll.passwordIsNotSet())
+    }
 
     if (req.body.oldPassword === req.body.newPassword) {
         throw new BadRequestError(req.ll.oldAndNewPasswordsMatch())
     }
 
     const isCorrectPassword = await argon2.verify(req.userData.password, req.body.oldPassword)
-    if (!isCorrectPassword) throw new BadRequestError(req.ll.incorrectOldPassword())
+
+    if (!isCorrectPassword) {
+        throw new BadRequestError(req.ll.incorrectOldPassword())
+    }
 
     const newPassword = await argon2.hash(req.body.newPassword)
     await app.prisma.user.update({
@@ -221,7 +254,10 @@ export const changePassword = (async (app, req) => {
 
 export const sendPasswordResetEmail = (async (app, req) => {
     const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
-    if (!user) throw new BadRequestError(req.ll.userWithEmailNotFound())
+
+    if (!user) {
+        throw new BadRequestError(req.ll.userWithEmailNotFound())
+    }
 
     const token = createUuid()
 
@@ -264,7 +300,10 @@ export const resetPassword = (async (app, req) => {
     const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
         where: { token: req.params.passwordResetToken }
     })
-    if (!passwordResetToken) throw new BadRequestError(req.ll.passwordResetTokenExpired())
+
+    if (!passwordResetToken) {
+        throw new BadRequestError(req.ll.passwordResetTokenExpired())
+    }
 
     const newPassword = await argon2.hash(req.body.newPassword)
     await app.prisma.user.update({

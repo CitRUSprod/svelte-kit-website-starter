@@ -38,6 +38,10 @@ export async function get(app: FastifyInstance, req: FastifyRequest, id: number)
         where: { id },
         include: { role: true, ban: { include: { author: true } } }
     })
-    if (!user) throw new BadRequestError(req.ll.userWithSuchIdWasNotFound())
+
+    if (!user) {
+        throw new BadRequestError(req.ll.userWithSuchIdWasNotFound())
+    }
+
     return user
 }

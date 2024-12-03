@@ -7,7 +7,7 @@
     export let pages: number
     export let loading = false
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ setPage: number }>()
 
     function setPage(localPage: number) {
         dispatch("setPage", localPage)

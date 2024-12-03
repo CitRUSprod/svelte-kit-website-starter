@@ -11,7 +11,7 @@
 
     export let permissions: Array<constantsEnums.Permission>
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ createRole: undefined }>()
 
     let dialog: Dialog
 

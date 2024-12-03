@@ -58,10 +58,14 @@ export const assignRoleToUser = (async (app, req) => {
 >
 
 export const banUser = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const user = await models.user.get(app, req, req.params.id)
-    if (user.ban) throw new BadRequestError(req.ll.userWithSuchIdIsAlreadyBanned())
+    if (user.ban) {
+        throw new BadRequestError(req.ll.userWithSuchIdIsAlreadyBanned())
+    }
 
     await app.prisma.ban.create({
         data: {
@@ -89,7 +93,9 @@ export const banUser = (async (app, req) => {
 
 export const unbanUser = (async (app, req) => {
     const user = await models.user.get(app, req, req.params.id)
-    if (!user.ban) throw new BadRequestError(req.ll.userWithSuchIdIsNotBanned())
+    if (!user.ban) {
+        throw new BadRequestError(req.ll.userWithSuchIdIsNotBanned())
+    }
 
     await app.prisma.ban.delete({
         where: { userId: req.params.id }

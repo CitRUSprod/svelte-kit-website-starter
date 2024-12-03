@@ -42,10 +42,12 @@ export async function writeFile(dirPath: string, file: MultipartFile) {
         const { width, height } = await img.metadata()
 
         if (width && height) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
             if (width > enums.ImgSize.MaxWidth) {
                 img.resize({ width: enums.ImgSize.MaxWidth })
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
             if (height > enums.ImgSize.MaxHeight) {
                 img.resize({ height: enums.ImgSize.MaxHeight })
             }

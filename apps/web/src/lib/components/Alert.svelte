@@ -12,12 +12,12 @@
     export let visible = true
     export let closable = false
 
-    let klass: string | undefined = undefined
+    let klass: string | undefined
     export { klass as class }
 
     $: variants = getElementBasicVariantObject(variant)
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ close: undefined }>()
 
     function getTextByVariant(localVariant: string) {
         switch (localVariant) {

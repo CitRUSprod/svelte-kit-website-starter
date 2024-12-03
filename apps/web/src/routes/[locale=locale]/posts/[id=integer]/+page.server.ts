@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit"
 import * as api from "$lib/api"
 
+// eslint-disable-next-line @typescript-eslint/consistent-return
 export async function load(e) {
     try {
         const res = await api.posts.getPost({

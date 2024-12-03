@@ -30,7 +30,9 @@ export const getPosts = (async (app, req) => {
 >
 
 export const createPost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const post = await app.prisma.post.create({
         data: { ...req.body, authorId: req.userData.id, creationDate: new Date() },
@@ -52,7 +54,9 @@ export const getPost = (async (app, req) => {
 >
 
 export const updatePost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const post = await models.post.get(app, req, req.params.id)
 
@@ -76,7 +80,9 @@ export const updatePost = (async (app, req) => {
 >
 
 export const deletePost = (async (app, req) => {
-    if (!req.userData) throw new InternalServerError(req.ll.unexpectedError())
+    if (!req.userData) {
+        throw new InternalServerError(req.ll.unexpectedError())
+    }
 
     const post = await models.post.get(app, req, req.params.id)
 

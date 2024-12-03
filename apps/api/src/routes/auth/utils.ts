@@ -101,12 +101,7 @@ export async function login(
     isOAuthHandler: boolean,
     isRegistrationHandler: boolean
 ): Promise<
-    ReplyData<
-        | schemasRoutes.auth.RegisterResponse
-        | schemasRoutes.auth.OAuthRegisterResponse
-        | schemasRoutes.auth.LoginResponse
-        | schemasRoutes.auth.OAuthLoginCallbackResponse
-    >
+    ReplyData<schemasRoutes.auth.RegisterResponse | schemasRoutes.auth.OAuthLoginCallbackResponse>
 > {
     await deleteExpiredRefreshTokens(app)
 

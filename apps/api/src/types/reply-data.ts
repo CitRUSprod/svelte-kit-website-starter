@@ -11,4 +11,5 @@ export interface ReplyCookie {
 
 export type ReplyData<T extends JsonObject | void> = {
     cookies?: Array<ReplyCookie>
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 } & (T extends void ? { payload?: Error | never } : { payload: Error | T })

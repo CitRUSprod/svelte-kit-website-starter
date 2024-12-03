@@ -11,7 +11,7 @@
 
     let dialog: Dialog
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ banUser: undefined }>()
 
     let userId = 0
     let username = ""

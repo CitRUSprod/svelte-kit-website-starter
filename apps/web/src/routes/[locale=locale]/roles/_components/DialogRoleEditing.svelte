@@ -12,7 +12,7 @@
 
     export let permissions: Array<constantsEnums.Permission>
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ editRole: undefined }>()
 
     let dialog: Dialog
 

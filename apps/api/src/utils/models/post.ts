@@ -22,6 +22,10 @@ export async function get(app: FastifyInstance, req: FastifyRequest, id: number)
         where: { id },
         include: { author: { include: { role: true } } }
     })
-    if (!post) throw new BadRequestError(req.ll.postWithSuchIdWasNotFound())
+
+    if (!post) {
+        throw new BadRequestError(req.ll.postWithSuchIdWasNotFound())
+    }
+
     return post
 }

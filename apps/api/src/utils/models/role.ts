@@ -15,6 +15,10 @@ export function dto(role: Role) {
 
 export async function get(app: FastifyInstance, req: FastifyRequest, id: number) {
     const role = await app.prisma.role.findFirst({ where: { id } })
-    if (!role) throw new BadRequestError(req.ll.roleWithSuchIdWasNotFound())
+
+    if (!role) {
+        throw new BadRequestError(req.ll.roleWithSuchIdWasNotFound())
+    }
+
     return role
 }

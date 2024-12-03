@@ -10,7 +10,7 @@
     export let messages: Array<ChatMessage> = []
     export let hideControls = false
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher<{ send: string }>()
 
     let message = ""
 
@@ -33,7 +33,9 @@
         }
     }
 
-    $: if (messages.length > 0) scrollDown()
+    $: if (messages.length > 0) {
+        scrollDown()
+    }
 
     function send() {
         dispatch("send", trimmedMessage)

@@ -13,11 +13,13 @@
         type Locales
     } from "$i18n/helpers"
 
-    let klass: string | undefined = undefined
+    let klass: string | undefined
     export { klass as class }
 
     async function switchLocale(newLocale: Locales | undefined) {
-        if (!newLocale || $currentLocale === newLocale) return
+        if (!newLocale || $currentLocale === newLocale) {
+            return
+        }
         await loadLocaleAsync(newLocale)
         document.querySelector("html")!.setAttribute("lang", newLocale)
         setLocale(newLocale)

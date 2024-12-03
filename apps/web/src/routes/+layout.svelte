@@ -18,6 +18,7 @@
     $: $userData = data.userData
 
     onMount(() => {
+        // eslint-disable-next-line new-cap
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
         Cookies.set("timezone", tz, {
             path: "/",

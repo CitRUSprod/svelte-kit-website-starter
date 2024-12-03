@@ -24,7 +24,9 @@ const test = base.extend<Fixtures>({
             await emailBlock.waitFor()
             const email = await emailBlock.textContent()
 
-            if (!email) throw new Error("Email not found")
+            if (!email) {
+                throw new Error("Email not found")
+            }
 
             const username = faker.internet.userName().replace(/\./g, "_")
             const password = faker.internet.password({ length: 10 })
@@ -68,11 +70,15 @@ test.describe.serial("auth", () => {
 
         const text = await messagesBlock.textContent()
 
-        if (!text) throw new Error("Text not found")
+        if (!text) {
+            throw new Error("Text not found")
+        }
 
         const registrationUrlMatch = /https?:\/\/[^)]+/.exec(text)
 
-        if (!registrationUrlMatch) throw new Error("URL not found")
+        if (!registrationUrlMatch) {
+            throw new Error("URL not found")
+        }
 
         const registrationUrl = registrationUrlMatch[0]
         await page.goto(registrationUrl, { waitUntil: "networkidle" })

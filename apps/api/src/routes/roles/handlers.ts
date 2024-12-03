@@ -18,7 +18,10 @@ export const createRole = (async (app, req) => {
 
 export const updateRole = (async (app, req) => {
     const role = await models.role.get(app, req, req.params.id)
-    if (role.protected) throw new BadRequestError(req.ll.roleWithSuchIdIsProtected())
+
+    if (role.protected) {
+        throw new BadRequestError(req.ll.roleWithSuchIdIsProtected())
+    }
 
     const updatedRole = await app.prisma.role.update({
         where: { id: req.params.id },
@@ -35,7 +38,9 @@ export const updateRole = (async (app, req) => {
 
 export const deleteRole = (async (app, req) => {
     const role = await models.role.get(app, req, req.params.id)
-    if (role.protected) throw new BadRequestError(req.ll.roleWithSuchIdIsProtected())
+    if (role.protected) {
+        throw new BadRequestError(req.ll.roleWithSuchIdIsProtected())
+    }
 
     const deletedRole = await app.prisma.role.delete({ where: { id: req.params.id } })
     return { payload: models.role.dto(deletedRole) }

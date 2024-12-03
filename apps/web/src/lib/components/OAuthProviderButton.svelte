@@ -15,14 +15,20 @@
     }
 
     function getButtonData(p: constantsEnums.OAuthProvider): ButtonData {
+        const twitchButtonData: ButtonData = {
+            buttonClass: "u:bg-purple-800! u:hover:bg-purple-700! u:active:bg-purple-900!",
+            iconClass: "u:i-mdi-twitch u:text-xl u:mr-1",
+            providerInUrl: "twitch",
+            text: "Twitch"
+        }
+
         switch (p) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             case constantsEnums.OAuthProvider.Twitch: {
-                return {
-                    buttonClass: "u:bg-purple-800! u:hover:bg-purple-700! u:active:bg-purple-900!",
-                    iconClass: "u:i-mdi-twitch u:text-xl u:mr-1",
-                    providerInUrl: "twitch",
-                    text: "Twitch"
-                }
+                return twitchButtonData
+            }
+            default: {
+                return twitchButtonData
             }
         }
     }

@@ -17,6 +17,7 @@ export function createApiUrl(route: string, ...params: Array<string | number>) {
     return apiUrl
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function getHeader<T = string>(
     headers: AxiosResponseHeaders | RawAxiosResponseHeaders,
     headerName: string
