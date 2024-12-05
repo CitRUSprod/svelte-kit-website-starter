@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 
-import { CookieSerializeOptions } from "@fastify/cookie"
-import { JsonObject } from "type-fest"
+import type { CookieSerializeOptions } from "@fastify/cookie"
+import type { JsonObject } from "type-fest"
 
 export interface ReplyCookie {
     name: string

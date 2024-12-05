@@ -1,8 +1,8 @@
-import { FastifyInstance } from "fastify"
+import type { FastifyInstance } from "fastify"
 import { UnauthorizedError } from "http-errors-enhanced"
 import * as schemasRoutes from "@local/schemas/routes"
 import { enums } from "$/constants"
-import { ReplyCookie, ReplyData, UserPayload } from "$/types"
+import type { ReplyCookie, ReplyData, UserPayload } from "$/types"
 
 interface PayloadWithTimestamps extends UserPayload {
     iat: string

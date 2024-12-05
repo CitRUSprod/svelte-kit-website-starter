@@ -1,7 +1,7 @@
-import { FastifyInstance, FastifyRequest } from "fastify"
+import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
-import { JsonObject } from "type-fest"
-import { Role } from "@prisma/client"
+import type { JsonObject } from "type-fest"
+import type { Role } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 
 export function dto(role: Role) {

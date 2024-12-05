@@ -1,4 +1,4 @@
-import { FastifyPluginCallback } from "fastify"
+import type { FastifyPluginCallback } from "fastify"
 import * as constantsRoutes from "@local/constants/routes"
 import * as schemasRoutes from "@local/schemas/routes"
 import * as handlers from "./handlers"

@@ -1,7 +1,7 @@
 import { BadRequestError } from "http-errors-enhanced"
 import * as schemasRoutes from "@local/schemas/routes"
 import { models } from "$/utils"
-import { RouteHandler } from "$/types"
+import type { RouteHandler } from "$/types"
 
 export const getRoles = (async app => {
     const roles = await app.prisma.role.findMany()

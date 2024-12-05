@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 
-import { FastifyInstance, FastifyRequest, RequestGenericInterface } from "fastify"
-import { JsonObject } from "type-fest"
-import { UserData } from "./user"
-import { ReplyData } from "./reply-data"
+import type { FastifyInstance, FastifyRequest, RequestGenericInterface } from "fastify"
+import type { JsonObject } from "type-fest"
+import type { UserData } from "./user"
+import type { ReplyData } from "./reply-data"
 
 export interface RequestData {
     userData?: UserData

@@ -1,7 +1,7 @@
 import path from "path"
 import { fileURLToPath } from "url"
 import fs from "fs-extra"
-import { MultipartFile } from "@fastify/multipart"
+import type { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
 import { env, enums } from "$/constants"

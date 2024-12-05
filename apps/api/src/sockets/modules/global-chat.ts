@@ -1,5 +1,5 @@
 import { v4 as createUuid } from "uuid"
-import { SocketModule } from "$/types"
+import type { SocketModule } from "$/types"
 
 interface RawChatMessage {
     text: string

@@ -1,11 +1,11 @@
-import { MultipartFile } from "@fastify/multipart"
+import type { MultipartFile } from "@fastify/multipart"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
 import { env, enums } from "$/constants"
 import { isImgFile, writeFile, sendEmail, models } from "$/utils"
-import { RouteHandler } from "$/types"
+import type { RouteHandler } from "$/types"
 import * as utils from "./utils"
 import { getLogoutCookies } from "../auth/utils"
 

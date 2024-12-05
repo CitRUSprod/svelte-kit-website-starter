@@ -1,4 +1,4 @@
-import { SocketModule } from "$/types"
+import type { SocketModule } from "$/types"
 import { globalChat } from "./global-chat"
 
 export const initModules: SocketModule = (socket, user) => {

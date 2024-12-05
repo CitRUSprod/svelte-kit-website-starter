@@ -1,4 +1,4 @@
-import { JsonObject } from "type-fest"
+import type { JsonObject } from "type-fest"
 
 interface ItemsData<T extends JsonObject> {
     totalItems: number

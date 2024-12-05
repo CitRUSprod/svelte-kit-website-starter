@@ -2,7 +2,7 @@ import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import { Prisma } from "@prisma/client"
 import * as schemasRoutes from "@local/schemas/routes"
 import { getItemsPage, models } from "$/utils"
-import { RouteHandler } from "$/types"
+import type { RouteHandler } from "$/types"
 
 export const getUsers = (async (app, req) => {
     const page = await getItemsPage(req.query.page, req.query.perPage, async (skip, take) => {

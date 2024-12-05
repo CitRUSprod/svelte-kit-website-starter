@@ -1,9 +1,9 @@
-import { FastifyInstance, FastifyRequest } from "fastify"
+import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
-import { JsonObject } from "type-fest"
+import type { JsonObject } from "type-fest"
 import * as constantsEnums from "@local/constants/enums"
 import { enums } from "$/constants"
-import { UserData } from "$/types"
+import type { UserData } from "$/types"
 
 export function dto(user: UserData) {
     return {

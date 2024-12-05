@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 
-import { FastifyReply, FastifyPluginCallback } from "fastify"
-import { JsonObject } from "type-fest"
-import { ReplyData } from "$/types"
+import type { FastifyReply, FastifyPluginCallback } from "fastify"
+import type { JsonObject } from "type-fest"
+import type { ReplyData } from "$/types"
 
 declare module "fastify" {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyReply {
         sendData<T extends JsonObject | void>(data: ReplyData<T>): Promise<void>
     }

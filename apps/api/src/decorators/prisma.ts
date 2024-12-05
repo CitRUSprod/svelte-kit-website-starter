@@ -1,8 +1,9 @@
-import { FastifyInstance, FastifyPluginCallback } from "fastify"
+import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { PrismaClient } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 
 declare module "fastify" {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         prisma: PrismaClient
     }

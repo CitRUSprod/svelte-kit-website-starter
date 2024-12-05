@@ -1,7 +1,7 @@
-import { FastifyInstance } from "fastify"
+import type { FastifyInstance } from "fastify"
 import { enums } from "$/constants"
 import { removeFile } from "$/utils"
-import { UserData } from "$/types"
+import type { UserData } from "$/types"
 
 export async function removeAvatar(avatar: string | null) {
     if (avatar) {

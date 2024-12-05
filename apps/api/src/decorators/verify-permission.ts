@@ -1,10 +1,11 @@
-import { FastifyInstance, FastifyPluginCallback } from "fastify"
-import { FastifyAuthFunction } from "@fastify/auth"
+import type { FastifyInstance, FastifyPluginCallback } from "fastify"
+import type { FastifyAuthFunction } from "@fastify/auth"
 import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 import * as constantsEnums from "@local/constants/enums"
 import { models } from "$/utils"
 
 declare module "fastify" {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         verifyPermission(permission: constantsEnums.Permission): FastifyAuthFunction
     }

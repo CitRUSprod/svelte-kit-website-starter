@@ -1,4 +1,4 @@
-import { FastifyPluginCallback } from "fastify"
+import type { FastifyPluginCallback } from "fastify"
 import { authRoutes } from "./auth"
 import { profileRoutes } from "./profile"
 import { usersRoutes } from "./users"
