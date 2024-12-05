@@ -1,4 +1,4 @@
-import { test as base, expect, Page } from "@playwright/test"
+import { test as base, expect, type Page } from "@playwright/test"
 import { faker } from "@faker-js/faker"
 
 const url = process.env.PUBLIC_BASE_URL!
@@ -28,7 +28,7 @@ const test = base.extend<Fixtures>({
                 throw new Error("Email not found")
             }
 
-            const username = faker.internet.userName().replace(/\./g, "_")
+            const username = faker.internet.username().replace(/\./g, "_")
             const password = faker.internet.password({ length: 10 })
 
             userDataGlobal = { dropMailPage, email, username, password }

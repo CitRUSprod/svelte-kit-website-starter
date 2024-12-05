@@ -20,7 +20,14 @@ const prettierRules = {
 
 export default [
     {
-        ignores: ["pnpm-lock.yaml", "**/.playwright", "**/.svelte-kit", "**/dist", "storage"]
+        ignores: [
+            "pnpm-lock.yaml",
+            "**/.playwright",
+            "**/.turbo",
+            "**/.svelte-kit",
+            "**/dist",
+            "storage"
+        ]
     },
     {
         plugins: { prettier }

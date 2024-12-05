@@ -171,7 +171,7 @@ export const oAuthLogin = (async (app, req) => {
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
-            const url = await oAuthProviders.twitch.createAuthorizationURL(oAuthState)
+            const url = oAuthProviders.twitch.createAuthorizationURL(oAuthState, [])
 
             return {
                 payload: {
@@ -216,7 +216,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
                 "https://api.twitch.tv/helix/users",
                 {
                     headers: {
-                        Authorization: `Bearer ${twitchTokens.accessToken}`,
+                        Authorization: `Bearer ${twitchTokens.accessToken()}`,
                         "Client-Id": env.TWITCH_CLIENT_ID
                     }
                 }
@@ -460,7 +460,7 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
                 "https://api.twitch.tv/helix/users",
                 {
                     headers: {
-                        Authorization: `Bearer ${twitchTokens.accessToken}`,
+                        Authorization: `Bearer ${twitchTokens.accessToken()}`,
                         "Client-Id": env.TWITCH_CLIENT_ID
                     }
                 }

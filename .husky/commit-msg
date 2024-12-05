@@ -1,5 +1,3 @@
 #!/usr/bin/env sh
 
-. "$(dirname "$0")/_/husky.sh"
-
 pnpx commitlint --edit $1 -g ./configs/commits/commitlint.js
