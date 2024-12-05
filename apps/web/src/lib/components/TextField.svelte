@@ -6,21 +6,37 @@
 
     import type { ElementVariant } from "$lib/types"
 
-    export let variant: ElementVariant = "default"
-    export let placeholder: string | undefined = undefined
-    export let label: string | undefined = undefined
-    export let type = "text"
-    export let disabled = false
-    export let readonly = false
-    export let autofocus = false
-    export let value: string | number | null | undefined = undefined
-    export let leftIconClass: string | undefined = undefined
-    export let rightIconClass: string | undefined = undefined
+    interface Props {
+        variant?: ElementVariant
+        placeholder?: string | undefined
+        label?: string | undefined
+        type?: string
+        disabled?: boolean
+        readonly?: boolean
+        autofocus?: boolean
+        value?: string | number | null | undefined
+        leftIconClass?: string | undefined
+        rightIconClass?: string | undefined
+        class?: string | undefined
+        [key: string]: unknown
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    let {
+        variant = "default",
+        placeholder = undefined,
+        label = undefined,
+        type = "text",
+        disabled = false,
+        readonly = false,
+        autofocus = false,
+        value = $bindable(),
+        leftIconClass = undefined,
+        rightIconClass = undefined,
+        class: klass = undefined,
+        ...rest
+    }: Props = $props()
 
-    $: variants = getElementVariantObject(variant)
+    const variants = $derived(getElementVariantObject(variant))
 </script>
 
 <div
@@ -46,7 +62,7 @@
         </div>
     {/if}
     {#if leftIconClass}
-        <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`} />
+        <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`}></i>
     {/if}
     <Input
         class={cn(
@@ -70,12 +86,9 @@
         {readonly}
         {type}
         bind:value
-        on:input
-        on:keypress
-        on:focus
-        on:blur
+        {...rest}
     />
     {#if rightIconClass}
-        <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`} />
+        <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`}></i>
     {/if}
 </div>

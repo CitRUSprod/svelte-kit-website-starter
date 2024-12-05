@@ -8,24 +8,28 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let user: schemasModels.user.User
+    interface Props {
+        user: schemasModels.user.User
+    }
 
-    let dialog: Dialog
+    const { user }: Props = $props()
 
-    let email = ""
+    let dialog = $state<Dialog>()
 
-    $: vldResultEmail = vld.user.email(email)
+    let email = $state("")
 
-    $: completedForm = vldResultEmail.valid && vldResultEmail.value !== user.email
+    const vldResultEmail = $derived(vld.user.email(email))
+
+    const completedForm = $derived(vldResultEmail.valid && vldResultEmail.value !== user.email)
 
     export function open() {
         email = user.email ?? ""
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcUpdateEmail = createQueryController({
@@ -53,14 +57,14 @@
         <TextField disabled={$qcUpdateEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateEmail.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcUpdateEmail.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcUpdateEmail.loading}
             variant="success"
-            on:click={qcUpdateEmail.refresh}
+            onclick={qcUpdateEmail.refresh}
         >
             {$ll.change()}
         </Button>

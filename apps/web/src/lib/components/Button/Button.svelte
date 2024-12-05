@@ -4,19 +4,35 @@
 
     import type { ElementVariant } from "$lib/types"
 
-    export let variant: ElementVariant = "default"
-    export let href: string | undefined = undefined
-    export let target: string | undefined = undefined
-    export let rel: string | undefined = undefined
-    export let text = false
-    export let icon = false
-    export let disabled = false
-    export let loading = false
+    interface Props {
+        variant?: ElementVariant
+        href?: string | undefined
+        target?: string | undefined
+        rel?: string | undefined
+        text?: boolean
+        icon?: boolean
+        disabled?: boolean
+        loading?: boolean
+        class?: string | undefined
+        children?: import("svelte").Snippet
+        [key: string]: unknown
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    const {
+        variant = "default",
+        href = undefined,
+        target = undefined,
+        rel = undefined,
+        text = false,
+        icon = false,
+        disabled = false,
+        loading = false,
+        class: klass = undefined,
+        children,
+        ...rest
+    }: Props = $props()
 
-    $: variants = getElementVariantObject(variant)
+    const variants = $derived(getElementVariantObject(variant))
 </script>
 
 <svelte:element
@@ -61,9 +77,9 @@
     role="button"
     tabindex="0"
     {target}
-    on:click
+    {...rest}
 >
-    <slot />
+    {@render children?.()}
     {#if loading}
         <div
             class={cn(
@@ -81,7 +97,7 @@
                 }
             )}
         >
-            <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin" />
+            <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin"></i>
         </div>
     {/if}
 </svelte:element>

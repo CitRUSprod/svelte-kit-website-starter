@@ -13,8 +13,11 @@
         type Locales
     } from "$i18n/helpers"
 
-    let klass: string | undefined
-    export { klass as class }
+    interface Props {
+        class: string | undefined
+    }
+
+    const { class: klass }: Props = $props()
 
     async function switchLocale(newLocale: Locales | undefined) {
         if (!newLocale || $currentLocale === newLocale) {
@@ -32,7 +35,7 @@
     })
 </script>
 
-<svelte:window on:popstate={({ state }) => switchLocale(state.locale)} />
+<svelte:window onpopstate={({ state }) => switchLocale(state.locale)} />
 
 <div class={cn("u:flex u:items-center u:gap-1", klass)}>
     {#each locales as locale, index (locale)}

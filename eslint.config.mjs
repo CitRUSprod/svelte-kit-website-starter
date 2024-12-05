@@ -20,7 +20,7 @@ const prettierRules = {
 
 export default [
     {
-        ignores: ["pnpm-lock.yaml", "**/.svelte-kit", "**/dist", "storage"]
+        ignores: ["pnpm-lock.yaml", "**/.playwright", "**/.svelte-kit", "**/dist", "storage"]
     },
     {
         plugins: { prettier }
@@ -34,13 +34,6 @@ export default [
     ...baseConfig,
     ...typescriptConfig,
     ...svelteTypescriptConfig,
-    {
-        files: ["**/*.svelte"],
-        rules: {
-            "no-self-assign": 0,
-            "no-undef-init": 0
-        }
-    },
     {
         files: ["**/*.json"],
         languageOptions: {

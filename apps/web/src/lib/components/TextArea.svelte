@@ -6,19 +6,33 @@
 
     import type { ElementVariant } from "$lib/types"
 
-    export let variant: ElementVariant = "default"
-    export let placeholder: string | undefined = undefined
-    export let label: string | undefined = undefined
-    export let resizable = false
-    export let disabled = false
-    export let readonly = false
-    export let autofocus = false
-    export let value: string | number | null | undefined = undefined
+    interface Props {
+        variant?: ElementVariant
+        placeholder?: string | undefined
+        label?: string | undefined
+        resizable?: boolean
+        disabled?: boolean
+        readonly?: boolean
+        autofocus?: boolean
+        value?: string | number | null | undefined
+        class?: string | undefined
+        [key: string]: unknown
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    let {
+        variant = "default",
+        placeholder = undefined,
+        label = undefined,
+        resizable = false,
+        disabled = false,
+        readonly = false,
+        autofocus = false,
+        value = $bindable(),
+        class: klass = undefined,
+        ...rest
+    }: Props = $props()
 
-    $: variants = getElementVariantObject(variant)
+    const variants = $derived(getElementVariantObject(variant))
 </script>
 
 <div
@@ -63,9 +77,6 @@
         {placeholder}
         {readonly}
         bind:value
-        on:input
-        on:keypress
-        on:focus
-        on:blur
+        {...rest}
     />
 </div>

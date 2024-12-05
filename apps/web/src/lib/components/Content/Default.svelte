@@ -1,10 +1,13 @@
 <script lang="ts">
     import cn from "classnames"
 
-    export let title: string
+    interface Props {
+        title: string
+        class?: string | undefined
+        children?: import("svelte").Snippet
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    const { title, class: klass = undefined, children }: Props = $props()
 </script>
 
 <div class="u:container u:mx-auto u:p-4">
@@ -12,6 +15,6 @@
         <h1>{title}</h1>
     </div>
     <div class={cn("u:grid u:gap-4 u:my-4", klass)}>
-        <slot />
+        {@render children?.()}
     </div>
 </div>

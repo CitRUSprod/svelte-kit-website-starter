@@ -8,7 +8,7 @@
 
     import type { RawChatMessage, ChatMessage } from "$lib/types"
 
-    let messages: Array<ChatMessage> = []
+    let messages = $state<Array<ChatMessage>>([])
 
     function sendMessage(text: string) {
         const msg: RawChatMessage = { text }
@@ -27,7 +27,6 @@
                 }
 
                 messages.push(msg)
-                messages = messages
             })
     })
 
@@ -47,6 +46,6 @@
         <div>
             <h1>{$ll.chat()}</h1>
         </div>
-        <Chat hideControls={!$userData} {messages} on:send={e => sendMessage(e.detail)} />
+        <Chat hideControls={!$userData} {messages} onSend={text => sendMessage(text)} />
     </div>
 </Content.Center>

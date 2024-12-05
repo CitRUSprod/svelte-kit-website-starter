@@ -9,7 +9,8 @@ declare module "fastify" {
 }
 
 export const verifyAuth: FastifyPluginCallback = (app, options, done) => {
-    app.decorate<FastifyInstance["verifyAuth"]>("verifyAuth", req => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    app.decorate<FastifyInstance["verifyAuth"]>("verifyAuth", async req => {
         if (!("userData" in req)) {
             if (req.authError) {
                 throw req.authError

@@ -4,18 +4,31 @@
 
     import type { DropdownMenuItem, ElementVariant } from "$lib/types"
 
-    export let variant: ElementVariant = "default"
-    export let label: string | undefined = undefined
-    export let disabled = false
-    export let value: string | number | null | undefined = undefined
-    export let items: Array<DropdownMenuItem> = []
-    export let leftIconClass: string | undefined = undefined
-    export let rightIconClass: string | undefined = "u:i-ic-baseline-keyboard-arrow-down"
+    interface Props {
+        variant?: ElementVariant
+        label?: string | undefined
+        disabled?: boolean
+        value?: string | number | null | undefined
+        items?: Array<DropdownMenuItem>
+        leftIconClass?: string | undefined
+        rightIconClass?: string | undefined
+        class?: string | undefined
+        [key: string]: unknown
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    let {
+        variant = "default",
+        label = undefined,
+        disabled = false,
+        value = $bindable(),
+        items = [],
+        leftIconClass = undefined,
+        rightIconClass = "u:i-ic-baseline-keyboard-arrow-down",
+        class: klass = undefined,
+        ...rest
+    }: Props = $props()
 
-    $: variants = getElementVariantObject(variant)
+    const variants = $derived(getElementVariantObject(variant))
 </script>
 
 <div
@@ -41,7 +54,7 @@
         </div>
     {/if}
     {#if leftIconClass}
-        <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`} />
+        <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`}></i>
     {/if}
     <select
         class={cn(
@@ -60,13 +73,13 @@
         )}
         {disabled}
         bind:value
-        on:change
+        {...rest}
     >
         {#each items as item (item.value)}
             <option value={item.value}>{item.text}</option>
         {/each}
     </select>
     {#if rightIconClass}
-        <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`} />
+        <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`}></i>
     {/if}
 </div>

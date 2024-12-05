@@ -4,12 +4,15 @@
     import { fade, scale } from "svelte/transition"
     import cn from "classnames"
 
-    export let persistent = false
+    interface Props {
+        persistent?: boolean
+        class?: string | undefined
+        children?: import("svelte").Snippet
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    const { persistent = false, class: klass = undefined, children }: Props = $props()
 
-    let visible = false
+    let visible = $state(false)
 
     export function open() {
         visible = true
@@ -34,7 +37,7 @@
             )}
             transition={scale}
         >
-            <slot />
+            {@render children?.()}
         </Dialog.Content>
     </Dialog.Portal>
 </Dialog.Root>

@@ -7,7 +7,7 @@
     import { env } from "$lib/constants"
     import { toasts } from "$lib/stores"
 
-    let count = 0
+    let count = $state(0)
 
     function addOne() {
         count++
@@ -28,10 +28,10 @@
     <div class="u:p-8 u:border-primary u:rounded-lg u:border u:text-center">
         <h1>{env.PUBLIC_TITLE}</h1>
         <div class="u:flex u:justify-center u:gap-2 u:mt-5">
-            <Button variant="primary" on:click={addOne}>
+            <Button variant="primary" onclick={addOne}>
                 {$ll.clicks()}: {count}
             </Button>
-            <Button variant="primary" on:click={showRandomNumber}>
+            <Button variant="primary" onclick={showRandomNumber}>
                 {$ll.randomNumber()}
             </Button>
         </div>

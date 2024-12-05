@@ -7,10 +7,10 @@
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
 
-    export let data
+    let { data = $bindable() } = $props()
 
-    let dialogPostEditing: DialogPostEditing
-    let dialogPostRemoving: DialogPostRemoving
+    let dialogPostEditing = $state<DialogPostEditing>()
+    let dialogPostRemoving = $state<DialogPostRemoving>()
 </script>
 
 <svelte:head>
@@ -52,16 +52,16 @@
     </div>
     {#if data.post.author && $userData?.id === data.post.author.id}
         <div>
-            <Button variant="warning" on:click={dialogPostEditing.open}>
+            <Button variant="warning" onclick={dialogPostEditing?.open}>
                 {$ll.edit()}
             </Button>
-            <Button variant="error" on:click={dialogPostRemoving.open}>
+            <Button variant="error" onclick={dialogPostRemoving?.open}>
                 {$ll.remove()}
             </Button>
         </div>
     {:else if $userData?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
         <div>
-            <Button variant="error" on:click={dialogPostRemoving.open}>
+            <Button variant="error" onclick={dialogPostRemoving?.open}>
                 {$ll.remove()}
             </Button>
         </div>

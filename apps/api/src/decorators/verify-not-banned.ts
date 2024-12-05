@@ -9,7 +9,8 @@ declare module "fastify" {
 }
 
 export const verifyNotBanned: FastifyPluginCallback = (app, options, done) => {
-    app.decorate<FastifyInstance["verifyNotBanned"]>("verifyNotBanned", req => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    app.decorate<FastifyInstance["verifyNotBanned"]>("verifyNotBanned", async req => {
         if (!req.userData) {
             throw new InternalServerError(req.ll.unexpectedError())
         }

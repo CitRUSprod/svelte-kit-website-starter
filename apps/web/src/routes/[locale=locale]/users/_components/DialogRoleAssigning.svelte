@@ -1,35 +1,37 @@
 <script lang="ts">
     import { Button, DropdownMenu, Dialog } from "$lib/components"
 
-    import { createEventDispatcher } from "svelte"
     import * as schemasModels from "@local/schemas/models"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let roles: Array<schemasModels.role.Role>
+    interface Props {
+        roles: Array<schemasModels.role.Role>
+        onAssignRole?(): void
+    }
 
-    let dialog: Dialog
+    const { roles, onAssignRole = undefined }: Props = $props()
 
-    const dispatch = createEventDispatcher<{ assignRole: undefined }>()
+    let dialog = $state<Dialog>()
 
     let userId = 0
-    let username = ""
-    let roleId = 0
+    let username = $state("")
+    let roleId = $state(0)
 
-    $: items = roles.map(r => ({ text: r.name, value: r.id }))
+    const items = $derived(roles.map(r => ({ text: r.name, value: r.id })))
 
     export function open(user: schemasModels.user.User) {
         userId = user.id
         username = user.username
         roleId = user.role.id
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcAssignRoleToUser = createQueryController({
@@ -40,7 +42,7 @@
             })
         },
         onSuccess() {
-            dispatch("assignRole")
+            onAssignRole?.()
             toasts.add("success", $ll.roleEditedSuccessfully())
             close()
         }
@@ -67,13 +69,13 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcAssignRoleToUser.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcAssignRoleToUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             loading={$qcAssignRoleToUser.loading}
             variant="success"
-            on:click={qcAssignRoleToUser.refresh}
+            onclick={qcAssignRoleToUser.refresh}
         >
             {$ll.save()}
         </Button>

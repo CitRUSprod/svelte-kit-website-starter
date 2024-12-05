@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Button, TextField, Dialog } from "$lib/components"
 
-    import { createEventDispatcher } from "svelte"
     import * as schemasModels from "@local/schemas/models"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
@@ -9,28 +8,32 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
-    const dispatch = createEventDispatcher<{ banUser: undefined }>()
+    interface Props {
+        onBanUser?(): void
+    }
+
+    const { onBanUser = undefined }: Props = $props()
 
     let userId = 0
-    let username = ""
-    let reason = ""
+    let username = $state("")
+    let reason = $state("")
 
-    $: vldResultReason = vld.ban.reason(reason)
+    const vldResultReason = $derived(vld.ban.reason(reason))
 
-    $: completedForm = vldResultReason.valid
+    const completedForm = $derived(vldResultReason.valid)
 
     export function open(user: schemasModels.user.User) {
         userId = user.id
         username = user.username
         reason = ""
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcBanUser = createQueryController({
@@ -41,7 +44,7 @@
             })
         },
         async onSuccess() {
-            dispatch("banUser")
+            onBanUser?.()
             toasts.add("success", $ll.userBannedSuccessfully())
             close()
         }
@@ -68,14 +71,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcBanUser.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcBanUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcBanUser.loading}
             variant="success"
-            on:click={qcBanUser.refresh}
+            onclick={qcBanUser.refresh}
         >
             {$ll.ban()}
         </Button>

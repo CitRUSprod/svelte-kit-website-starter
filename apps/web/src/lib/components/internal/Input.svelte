@@ -1,44 +1,29 @@
 <script lang="ts">
     import { onMount } from "svelte"
 
-    export let type: string
-    export let readonly: boolean
-    export let autofocus: boolean
-    export let value: string | number | null | undefined
+    interface Props {
+        type: string
+        readonly: boolean
+        autofocus: boolean
+        value: string | number | null | undefined
+        [key: string]: any
+    }
 
-    let input: HTMLInputElement
+    let { type, readonly, autofocus, value = $bindable(), ...rest }: Props = $props()
+
+    let input = $state<HTMLInputElement>()
 
     onMount(() => {
         if (autofocus) {
             setTimeout(() => {
-                input.focus()
+                input?.focus()
             })
         }
     })
 </script>
 
 {#if type === "number"}
-    <input
-        bind:this={input}
-        {readonly}
-        type="number"
-        bind:value
-        {...$$restProps}
-        on:input
-        on:keypress
-        on:focus
-        on:blur
-    />
+    <input bind:this={input} {readonly} type="number" bind:value {...rest} />
 {:else}
-    <input
-        {...{ type }}
-        bind:this={input}
-        {readonly}
-        bind:value
-        {...$$restProps}
-        on:input
-        on:keypress
-        on:focus
-        on:blur
-    />
+    <input {...{ type }} bind:this={input} {readonly} bind:value {...rest} />
 {/if}

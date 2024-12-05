@@ -8,11 +8,11 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let data
+    const { data } = $props()
 
-    let dialogRoleCreating: DialogRoleCreating
-    let dialogRoleEditing: DialogRoleEditing
-    let dialogRoleRemoving: DialogRoleRemoving
+    let dialogRoleCreating = $state<DialogRoleCreating>()
+    let dialogRoleEditing = $state<DialogRoleEditing>()
+    let dialogRoleRemoving = $state<DialogRoleRemoving>()
 
     const qcGetRoles = createQueryController({
         initialData: { items: data.roles },
@@ -60,13 +60,13 @@
                                 {#if !role.protected}
                                     <Button
                                         variant="warning"
-                                        on:click={() => dialogRoleEditing.open(role)}
+                                        onclick={() => dialogRoleEditing?.open(role)}
                                     >
                                         {$ll.edit()}
                                     </Button>
                                     <Button
                                         variant="error"
-                                        on:click={() => dialogRoleRemoving.open(role)}
+                                        onclick={() => dialogRoleRemoving?.open(role)}
                                     >
                                         {$ll.remove()}
                                     </Button>
@@ -78,7 +78,7 @@
             </tbody>
         </table>
         <div class="u:flex u:justify-center">
-            <Button variant="success" on:click={dialogRoleCreating.open}>
+            <Button variant="success" onclick={dialogRoleCreating?.open}>
                 {$ll.createRole()}
             </Button>
         </div>
@@ -88,7 +88,7 @@
 <DialogRoleCreating
     bind:this={dialogRoleCreating}
     {permissions}
-    on:createRole={qcGetRoles.refresh}
+    onCreateRole={qcGetRoles.refresh}
 />
-<DialogRoleEditing bind:this={dialogRoleEditing} {permissions} on:editRole={qcGetRoles.refresh} />
-<DialogRoleRemoving bind:this={dialogRoleRemoving} on:removeRole={qcGetRoles.refresh} />
+<DialogRoleEditing bind:this={dialogRoleEditing} {permissions} onEditRole={qcGetRoles.refresh} />
+<DialogRoleRemoving bind:this={dialogRoleRemoving} onRemoveRole={qcGetRoles.refresh} />

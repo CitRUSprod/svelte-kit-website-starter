@@ -8,13 +8,13 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let data
+    const { data } = $props()
 
-    let username = ""
+    let username = $state("")
 
-    $: vldResultUsername = vld.user.username(username)
+    const vldResultUsername = $derived(vld.user.username(username))
 
-    $: completedForm = vldResultUsername.valid
+    const completedForm = $derived(vldResultUsername.valid)
 
     const qcRegister = createQueryController({
         fn() {
@@ -54,7 +54,7 @@
                 disabled={$qcRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div class="u:flex">
@@ -63,7 +63,7 @@
                 disabled={!completedForm}
                 loading={$qcRegister.loading}
                 variant="primary"
-                on:click={qcRegister.refresh}
+                onclick={qcRegister.refresh}
             >
                 {$ll.register()}
             </Button>

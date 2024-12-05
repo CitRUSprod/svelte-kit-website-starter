@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
 
-    import { createEventDispatcher } from "svelte"
     import * as constantsEnums from "@local/constants/enums"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
@@ -9,32 +8,35 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let permissions: Array<constantsEnums.Permission>
+    interface Props {
+        permissions: Array<constantsEnums.Permission>
+        onCreateRole?(): void
+    }
 
-    const dispatch = createEventDispatcher<{ createRole: undefined }>()
+    const { permissions, onCreateRole = undefined }: Props = $props()
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
-    let name = ""
-    let currentPermission: constantsEnums.Permission | null = null
-    let selectedPermissions: Array<constantsEnums.Permission> = []
+    let name = $state("")
+    let currentPermission: constantsEnums.Permission | null = $state(null)
+    let selectedPermissions: Array<constantsEnums.Permission> = $state([])
 
-    $: vldResultName = vld.role.name(name)
+    const vldResultName = $derived(vld.role.name(name))
 
-    $: items = permissions
-        .filter(p => !selectedPermissions.includes(p))
-        .map(p => ({ text: p, value: p }))
+    const items = $derived(
+        permissions.filter(p => !selectedPermissions.includes(p)).map(p => ({ text: p, value: p }))
+    )
 
     export function open() {
         name = ""
         currentPermission = null
         selectedPermissions = []
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcCreateRole = createQueryController({
@@ -45,7 +47,7 @@
             })
         },
         async onSuccess() {
-            dispatch("createRole")
+            onCreateRole?.()
             toasts.add("success", $ll.roleCreatedSuccessfully())
             close()
         }
@@ -54,7 +56,6 @@
     function addPermission() {
         if (currentPermission) {
             selectedPermissions.push(currentPermission)
-            selectedPermissions = selectedPermissions
             currentPermission = null
         }
     }
@@ -89,9 +90,10 @@
                         <button
                             class="u:flex u:ml-1 u:text-xs u:cursor-pointer"
                             disabled={$qcCreateRole.loading}
-                            on:click={() => removePermission(permission)}
+                            aria-label="remove"
+                            onclick={() => removePermission(permission)}
                         >
-                            <i class="u:i-fa-solid-times" />
+                            <i class="u:i-fa-solid-times"></i>
                         </button>
                     </div>
                 {:else}
@@ -115,21 +117,21 @@
             <Button
                 disabled={!currentPermission || $qcCreateRole.loading}
                 variant="success"
-                on:click={addPermission}
+                onclick={addPermission}
             >
                 {$ll.add()}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreateRole.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcCreateRole.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!vldResultName.valid}
             loading={$qcCreateRole.loading}
             variant="success"
-            on:click={qcCreateRole.refresh}
+            onclick={qcCreateRole.refresh}
         >
             {$ll.create()}
         </Button>

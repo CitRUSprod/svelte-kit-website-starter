@@ -7,28 +7,29 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
-    let oldPassword = ""
-    let newPassword = ""
+    let oldPassword = $state("")
+    let newPassword = $state("")
 
-    $: vldResultOldPassword = vld.user.password(oldPassword)
-    $: vldResultNewPassword = vld.user.password(newPassword)
+    const vldResultOldPassword = $derived(vld.user.password(oldPassword))
+    const vldResultNewPassword = $derived(vld.user.password(newPassword))
 
-    $: completedForm =
+    const completedForm = $derived(
         vldResultOldPassword.valid &&
-        vldResultNewPassword.valid &&
-        vldResultOldPassword.value !== vldResultNewPassword.value
+            vldResultNewPassword.valid &&
+            vldResultOldPassword.value !== vldResultNewPassword.value
+    )
 
     export function open() {
         oldPassword = ""
         newPassword = ""
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcChangePassword = createQueryController({
@@ -72,14 +73,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcChangePassword.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcChangePassword.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcChangePassword.loading}
             variant="success"
-            on:click={qcChangePassword.refresh}
+            onclick={qcChangePassword.refresh}
         >
             {$ll.change()}
         </Button>

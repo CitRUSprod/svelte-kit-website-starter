@@ -8,30 +8,35 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let post: schemasModels.post.Post
+    interface Props {
+        post: schemasModels.post.Post
+    }
 
-    let dialog: Dialog
+    let { post = $bindable() }: Props = $props()
 
-    let title = ""
-    let content = ""
+    let dialog = $state<Dialog>()
 
-    $: vldResultTitle = vld.post.title(title)
-    $: vldResultContent = vld.post.content(content)
+    let title = $state("")
+    let content = $state("")
 
-    $: completedForm =
+    const vldResultTitle = $derived(vld.post.title(title))
+    const vldResultContent = $derived(vld.post.content(content))
+
+    const completedForm = $derived(
         vldResultTitle.valid &&
-        vldResultContent.valid &&
-        (vldResultTitle.value !== post.title || vldResultContent.value !== post.content)
+            vldResultContent.valid &&
+            (vldResultTitle.value !== post.title || vldResultContent.value !== post.content)
+    )
 
     export function open() {
         title = post.title
         content = post.content
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcUpdatePost = createQueryController({
@@ -76,14 +81,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdatePost.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcUpdatePost.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcUpdatePost.loading}
             variant="success"
-            on:click={qcUpdatePost.refresh}
+            onclick={qcUpdatePost.refresh}
         >
             {$ll.save()}
         </Button>

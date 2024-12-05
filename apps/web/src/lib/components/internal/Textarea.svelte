@@ -1,26 +1,22 @@
 <script lang="ts">
     import { onMount } from "svelte"
 
-    export let readonly: boolean
-    export let autofocus: boolean
-    export let value: string | number | null | undefined
+    interface Props {
+        readonly: boolean
+        autofocus: boolean
+        value: string | number | null | undefined
+        [key: string]: unknown
+    }
 
-    let textarea: HTMLTextAreaElement
+    let { readonly, autofocus, value = $bindable(), ...rest }: Props = $props()
+
+    let textarea = $state<HTMLTextAreaElement>()
 
     onMount(() => {
         if (autofocus) {
-            textarea.focus()
+            textarea?.focus()
         }
     })
 </script>
 
-<textarea
-    bind:this={textarea}
-    {readonly}
-    bind:value
-    {...$$restProps}
-    on:input
-    on:keypress
-    on:focus
-    on:blur
-/>
+<textarea bind:this={textarea} {readonly} bind:value {...rest}></textarea>

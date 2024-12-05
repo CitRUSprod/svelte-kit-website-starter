@@ -1,3 +1,6 @@
 {
-    "extends": ["@local/configs/typescript.json", "./.svelte-kit/tsconfig.json"]
+    "extends": ["@local/configs/typescript.json", "./.svelte-kit/tsconfig.json"],
+    "compilerOptions": {
+        "verbatimModuleSyntax": true
+    }
 }

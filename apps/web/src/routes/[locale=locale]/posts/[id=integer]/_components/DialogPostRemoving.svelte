@@ -8,16 +8,20 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let post: schemasModels.post.Post
+    interface Props {
+        post: schemasModels.post.Post
+    }
 
-    let dialog: Dialog
+    const { post }: Props = $props()
+
+    let dialog = $state<Dialog>()
 
     export function open() {
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcDeletePost = createQueryController({
@@ -44,10 +48,10 @@
         <p>{$ll.postRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeletePost.loading} text variant="success" on:click={close}>
+        <Button disabled={$qcDeletePost.loading} text variant="success" click={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeletePost.loading} variant="error" on:click={qcDeletePost.refresh}>
+        <Button loading={$qcDeletePost.loading} variant="error" onclick={qcDeletePost.refresh}>
             {$ll.remove()}
         </Button>
     </div>

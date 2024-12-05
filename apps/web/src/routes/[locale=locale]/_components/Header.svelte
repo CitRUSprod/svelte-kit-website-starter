@@ -41,8 +41,8 @@
             </Button>
         {/if}
         <LocaleSwitcher class="u:mx-1" />
-        <Button icon variant="primary" on:click={darkTheme.toggle}>
-            <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl" />
+        <Button icon variant="primary" onclick={darkTheme.toggle}>
+            <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl"></i>
         </Button>
         {#if $userData}
             <Button href={$localePath("/auth/logout")} variant="primary">

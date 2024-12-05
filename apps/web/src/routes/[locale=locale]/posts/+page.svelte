@@ -11,45 +11,46 @@
 
     import type { DropdownMenuItem } from "$lib/types"
 
-    export let data
+    const { data } = $props()
 
-    let dialogPostCreating: DialogPostCreating
+    let dialogPostCreating = $state<DialogPostCreating>()
 
-    let sortings: Array<DropdownMenuItem>
-    $: sortings = [
+    const sortings: Array<DropdownMenuItem> = $derived([
         { text: $ll.creationDateAsc(), value: "creationDate-asc" },
         { text: $ll.creationDateDesc(), value: "creationDate-desc" },
         { text: $ll.titleAsc(), value: "title-asc" },
         { text: $ll.titleDesc(), value: "title-desc" }
-    ]
+    ])
 
-    const qcGetPosts = createQueryController({
-        initialData: data.itemsPage,
-        params: {
-            page: data.query.page,
-            perPage: data.query.perPage,
-            sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
-            title: data.query.title
-        },
-        fn(params) {
-            const [sort, order] = params.sortAndOrder.split("-") as [
-                schemasRoutes.posts.GetPostsQuery["sort"],
-                schemasRoutes.posts.GetPostsQuery["order"]
-            ]
-            return api.posts.getPosts(
-                qp.removeDefault(
-                    {
-                        page: params.page,
-                        perPage: params.perPage,
-                        sort,
-                        order,
-                        title: params.title
-                    },
-                    data.defaultQuery
+    const qcGetPosts = $state(
+        createQueryController({
+            initialData: data.itemsPage,
+            params: {
+                page: data.query.page,
+                perPage: data.query.perPage,
+                sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
+                title: data.query.title
+            },
+            fn(params) {
+                const [sort, order] = params.sortAndOrder.split("-") as [
+                    schemasRoutes.posts.GetPostsQuery["sort"],
+                    schemasRoutes.posts.GetPostsQuery["order"]
+                ]
+                return api.posts.getPosts(
+                    qp.removeDefault(
+                        {
+                            page: params.page,
+                            perPage: params.perPage,
+                            sort,
+                            order,
+                            title: params.title
+                        },
+                        data.defaultQuery
+                    )
                 )
-            )
-        }
-    })
+            }
+        })
+    )
 
     function watchForData(d: typeof data) {
         qcGetPosts.params.page = d.query.page
@@ -59,7 +60,9 @@
         $qcGetPosts.data = d.itemsPage
     }
 
-    $: watchForData(data)
+    $effect(() => {
+        watchForData(data)
+    })
 
     async function refetchPage() {
         const [sort, order] = qcGetPosts.params.sortAndOrder.split("-") as [
@@ -109,17 +112,17 @@
                 placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={qcGetPosts.params.title}
-                on:input={lodash.debounce(onTitleInput, 500)}
+                oninput={lodash.debounce(onTitleInput, 500)}
             />
             <DropdownMenu
                 items={sortings}
                 label={$ll.sorting()}
                 bind:value={qcGetPosts.params.sortAndOrder}
-                on:change={onSortingChange}
+                onchange={onSortingChange}
             />
         </div>
         <div>
-            <Button variant="success" on:click={dialogPostCreating.open}>
+            <Button variant="success" onclick={dialogPostCreating?.open}>
                 {$ll.createPost()}
             </Button>
         </div>
@@ -137,7 +140,7 @@
                     <div>
                         <p class="u:truncate">{post.content}</p>
                     </div>
-                    <div class="u:my-2 u:border-t u:border-primary" />
+                    <div class="u:my-2 u:border-t u:border-primary"></div>
                     <div class="u:flex u:justify-between">
                         <span class="u:text-sm">
                             {$ll.author()}: {post.author?.username ??
@@ -155,7 +158,7 @@
                 loading={$qcGetPosts.loading}
                 page={$qcGetPosts.data.page}
                 pages={$qcGetPosts.data.pages}
-                on:setPage={e => setPage(e.detail)}
+                onSetPage={page => setPage(page)}
             />
         </div>
     {/if}

@@ -4,8 +4,12 @@
     import * as constantsEnums from "@local/constants/enums"
     import { localePath } from "$i18n/helpers"
 
-    export let provider: constantsEnums.OAuthProvider
-    export let linkAccount = false
+    interface Props {
+        provider: constantsEnums.OAuthProvider
+        linkAccount?: boolean
+    }
+
+    const { provider, linkAccount = false }: Props = $props()
 
     interface ButtonData {
         buttonClass: string
@@ -33,13 +37,13 @@
         }
     }
 
-    $: buttonData = getButtonData(provider)
+    const buttonData = $derived(getButtonData(provider))
 </script>
 
 <Button
     class={buttonData.buttonClass}
     href={$localePath(`/auth/${linkAccount ? "link/oauth" : "login"}/${buttonData.providerInUrl}`)}
 >
-    <i class={buttonData.iconClass} />
+    <i class={buttonData.iconClass}></i>
     <span>{buttonData.text}</span>
 </Button>

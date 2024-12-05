@@ -12,7 +12,7 @@
                 class="u:my-1 u:shadow-md u:select-none"
                 closable
                 variant={toast.variant}
-                on:close={() => toasts.remove(toast.id)}
+                onClose={() => toasts.remove(toast.id)}
             >
                 {toast.text}
             </Alert>

@@ -9,13 +9,13 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let email = ""
-    let password = ""
+    let email = $state("")
+    let password = $state("")
 
-    $: vldResultEmail = vld.user.email(email)
-    $: vldResultPassword = vld.user.password(password)
+    const vldResultEmail = $derived(vld.user.email(email))
+    const vldResultPassword = $derived(vld.user.password(password))
 
-    $: completedForm = vldResultEmail.valid && vldResultPassword.valid
+    const completedForm = $derived(vldResultEmail.valid && vldResultPassword.valid)
 
     const qcLogin = createQueryController({
         fn() {
@@ -57,7 +57,7 @@
                 disabled={$qcLogin.loading}
                 label={$ll.email()}
                 bind:value={email}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div>
@@ -66,7 +66,7 @@
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div>
@@ -82,7 +82,7 @@
                 disabled={!completedForm}
                 loading={$qcLogin.loading}
                 variant="primary"
-                on:click={qcLogin.refresh}
+                onclick={qcLogin.refresh}
             >
                 {$ll.doLogin()}
             </Button>

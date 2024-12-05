@@ -9,10 +9,10 @@
     import { createQueryController, qp } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let data
+    const { data } = $props()
 
-    let dialogRoleAssigning: DialogRoleAssigning
-    let dialogUserBanning: DialogUserBanning
+    let dialogRoleAssigning = $state<DialogRoleAssigning>()
+    let dialogUserBanning = $state<DialogUserBanning>()
 
     const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
@@ -41,21 +41,25 @@
         $qcGetUsers.data = d.itemsPage
     }
 
-    $: watchForData(data)
-
-    const qcUnbanUser = createQueryController({
-        params: {
-            id: 0
-        },
-        fn(params) {
-            return api.users.unbanUser({
-                id: params.id
-            })
-        },
-        onSuccess() {
-            toasts.add("success", $ll.userUnbannedSuccessfully())
-        }
+    $effect(() => {
+        watchForData(data)
     })
+
+    const qcUnbanUser = $state(
+        createQueryController({
+            params: {
+                id: 0
+            },
+            fn(params) {
+                return api.users.unbanUser({
+                    id: params.id
+                })
+            },
+            onSuccess() {
+                toasts.add("success", $ll.userUnbannedSuccessfully())
+            }
+        })
+    )
 
     async function unbanUser(id: number) {
         qcUnbanUser.params.id = id
@@ -146,7 +150,7 @@
                                 {#if !user.ban}
                                     <Button
                                         variant="warning"
-                                        on:click={() => dialogRoleAssigning.open(user)}
+                                        onclick={() => dialogRoleAssigning?.open(user)}
                                     >
                                         {$ll.assignRole()}
                                     </Button>
@@ -158,14 +162,14 @@
                                         loading={$qcUnbanUser.loading &&
                                             qcUnbanUser.params.id === user.id}
                                         variant="error"
-                                        on:click={() => unbanUser(user.id)}
+                                        onclick={() => unbanUser(user.id)}
                                     >
                                         {$ll.unban()}
                                     </Button>
                                 {:else}
                                     <Button
                                         variant="error"
-                                        on:click={() => dialogUserBanning.open(user)}
+                                        onclick={() => dialogUserBanning?.open(user)}
                                     >
                                         {$ll.ban()}
                                     </Button>
@@ -181,7 +185,7 @@
                 loading={$qcGetUsers.loading}
                 page={$qcGetUsers.data.page}
                 pages={$qcGetUsers.data.pages}
-                on:setPage={e => setPage(e.detail)}
+                onSetPage={page => setPage(page)}
             />
         </div>
     {/if}
@@ -190,6 +194,6 @@
 <DialogRoleAssigning
     bind:this={dialogRoleAssigning}
     roles={data.roles}
-    on:assignRole={refetchPage}
+    onAssignRole={refetchPage}
 />
-<DialogUserBanning bind:this={dialogUserBanning} on:banUser={refetchPage} />
+<DialogUserBanning bind:this={dialogUserBanning} onBanUser={refetchPage} />

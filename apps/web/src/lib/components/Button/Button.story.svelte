@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import Button from "./Button.svelte"
 
     import { elementVariants } from "$lib/utils"
@@ -96,4 +96,4 @@
             <svelte:component this={Hst.Checkbox} title="Loading" bind:value={loading} />
         </svelte:fragment>
     </svelte:component>
-</svelte:component>
+</svelte:component> -->

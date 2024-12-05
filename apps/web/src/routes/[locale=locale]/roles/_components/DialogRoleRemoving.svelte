@@ -1,35 +1,38 @@
 <script lang="ts">
     import { Button, Dialog } from "$lib/components"
 
-    import { createEventDispatcher } from "svelte"
     import * as schemasModels from "@local/schemas/models"
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    const dispatch = createEventDispatcher<{ removeRole: undefined }>()
+    interface Props {
+        onRemoveRole?(): void
+    }
 
-    let dialog: Dialog
+    const { onRemoveRole = undefined }: Props = $props()
 
-    let role: schemasModels.role.Role
+    let dialog = $state<Dialog>()
+
+    let role = $state<schemasModels.role.Role>()
 
     export function open(r: schemasModels.role.Role) {
         role = r
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcDeleteRole = createQueryController({
         fn() {
-            return api.roles.deleteRole({ id: role.id })
+            return api.roles.deleteRole({ id: role?.id ?? 0 })
         },
         async onSuccess() {
-            dispatch("removeRole")
+            onRemoveRole?.()
             toasts.add("success", $ll.roleRemovedSuccessfully())
             close()
         }
@@ -46,14 +49,14 @@
     </div>
     <div>
         <p>
-            {@html $ll.roleRemovingQuestion({ role: role.name })}
+            {@html $ll.roleRemovingQuestion({ role: role?.name })}
         </p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteRole.loading} text variant="success" on:click={close}>
+        <Button disabled={$qcDeleteRole.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeleteRole.loading} variant="error" on:click={qcDeleteRole.refresh}>
+        <Button loading={$qcDeleteRole.loading} variant="error" onclick={qcDeleteRole.refresh}>
             {$ll.remove()}
         </Button>
     </div>

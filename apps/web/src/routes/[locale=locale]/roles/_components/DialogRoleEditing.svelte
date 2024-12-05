@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
 
-    import { createEventDispatcher } from "svelte"
     import * as constantsEnums from "@local/constants/enums"
     import * as schemasModels from "@local/schemas/models"
     import { ll } from "$i18n/helpers"
@@ -10,22 +9,25 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let permissions: Array<constantsEnums.Permission>
+    interface Props {
+        permissions: Array<constantsEnums.Permission>
+        onEditRole?(): void
+    }
 
-    const dispatch = createEventDispatcher<{ editRole: undefined }>()
+    const { permissions, onEditRole = undefined }: Props = $props()
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
     let roleId = 0
-    let name = ""
-    let currentPermission: constantsEnums.Permission | null = null
-    let selectedPermissions: Array<constantsEnums.Permission> = []
+    let name = $state("")
+    let currentPermission: constantsEnums.Permission | null = $state(null)
+    let selectedPermissions: Array<constantsEnums.Permission> = $state([])
 
-    $: vldResultName = vld.role.name(name)
+    const vldResultName = $derived(vld.role.name(name))
 
-    $: items = permissions
-        .filter(p => !selectedPermissions.includes(p))
-        .map(p => ({ text: p, value: p }))
+    const items = $derived(
+        permissions.filter(p => !selectedPermissions.includes(p)).map(p => ({ text: p, value: p }))
+    )
 
     export function open(role: schemasModels.role.Role) {
         roleId = role.id
@@ -33,11 +35,11 @@
         currentPermission = null
         selectedPermissions = [...role.permissions]
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcUpdateRole = createQueryController({
@@ -49,7 +51,7 @@
             })
         },
         async onSuccess() {
-            dispatch("editRole")
+            onEditRole?.()
             toasts.add("success", $ll.roleEditedSuccessfully())
             close()
         }
@@ -58,7 +60,6 @@
     function addPermission() {
         if (currentPermission) {
             selectedPermissions.push(currentPermission)
-            selectedPermissions = selectedPermissions
             currentPermission = null
         }
     }
@@ -93,9 +94,10 @@
                         <button
                             class="u:flex u:ml-1 u:text-xs u:cursor-pointer"
                             disabled={$qcUpdateRole.loading}
-                            on:click={() => removePermission(permission)}
+                            aria-label="remove"
+                            onclick={() => removePermission(permission)}
                         >
-                            <i class="u:i-fa-solid-times" />
+                            <i class="u:i-fa-solid-times"></i>
                         </button>
                     </div>
                 {:else}
@@ -119,21 +121,21 @@
             <Button
                 disabled={!currentPermission || $qcUpdateRole.loading}
                 variant="success"
-                on:click={addPermission}
+                onclick={addPermission}
             >
                 {$ll.add()}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateRole.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcUpdateRole.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!vldResultName.valid}
             loading={$qcUpdateRole.loading}
             variant="success"
-            on:click={qcUpdateRole.refresh}
+            onclick={qcUpdateRole.refresh}
         >
             {$ll.save()}
         </Button>

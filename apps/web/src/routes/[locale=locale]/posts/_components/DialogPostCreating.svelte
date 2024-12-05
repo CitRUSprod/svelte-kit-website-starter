@@ -8,25 +8,25 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
-    let title = ""
-    let content = ""
+    let title = $state("")
+    let content = $state("")
 
-    $: vldResultTitle = vld.post.title(title)
-    $: vldResultContent = vld.post.content(content)
+    const vldResultTitle = $derived(vld.post.title(title))
+    const vldResultContent = $derived(vld.post.content(content))
 
-    $: completedForm = vldResultTitle.valid && vldResultContent.valid
+    const completedForm = $derived(vldResultTitle.valid && vldResultContent.valid)
 
     export function open() {
         title = ""
         content = ""
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcCreatePost = createQueryController({
@@ -70,14 +70,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreatePost.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcCreatePost.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcCreatePost.loading}
             variant="success"
-            on:click={qcCreatePost.refresh}
+            onclick={qcCreatePost.refresh}
         >
             {$ll.create()}
         </Button>

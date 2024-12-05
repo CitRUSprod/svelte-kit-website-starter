@@ -2,21 +2,24 @@
     import Button from "./Button/Button.svelte"
     import TextField from "./TextField.svelte"
 
-    import { tick, createEventDispatcher } from "svelte"
+    import { tick } from "svelte"
     import { ll } from "$i18n/helpers"
 
     import type { ChatMessage } from "$lib/types"
 
-    export let messages: Array<ChatMessage> = []
-    export let hideControls = false
+    interface Props {
+        messages?: Array<ChatMessage>
+        hideControls?: boolean
+        onSend?(text: string): void
+    }
 
-    const dispatch = createEventDispatcher<{ send: string }>()
+    const { messages = [], hideControls = false, onSend = undefined }: Props = $props()
 
-    let message = ""
+    let message = $state("")
 
-    $: trimmedMessage = message.trim()
+    const trimmedMessage = $derived(message.trim())
 
-    let messageContainer: HTMLElement | undefined
+    let messageContainer: HTMLElement | undefined = $state()
 
     async function scrollDown() {
         if (messageContainer) {
@@ -33,12 +36,14 @@
         }
     }
 
-    $: if (messages.length > 0) {
-        scrollDown()
-    }
+    $effect(() => {
+        if (messages.length > 0) {
+            scrollDown()
+        }
+    })
 
     function send() {
-        dispatch("send", trimmedMessage)
+        onSend?.(trimmedMessage)
         message = ""
     }
 
@@ -65,10 +70,10 @@
     </div>
     {#if !hideControls}
         <div>
-            <TextField placeholder={$ll.message()} bind:value={message} on:keypress={onEnter} />
+            <TextField placeholder={$ll.message()} bind:value={message} onkeypress={onEnter} />
         </div>
         <div>
-            <Button class="u:w-full" disabled={!trimmedMessage} on:click={send}>
+            <Button class="u:w-full" disabled={!trimmedMessage} onclick={send}>
                 {$ll.send()}
             </Button>
         </div>

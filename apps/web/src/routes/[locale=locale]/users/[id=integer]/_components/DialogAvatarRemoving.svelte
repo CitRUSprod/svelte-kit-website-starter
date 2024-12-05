@@ -7,16 +7,20 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let user: schemasModels.user.User
+    interface Props {
+        user: schemasModels.user.User
+    }
 
-    let dialog: Dialog
+    let { user = $bindable() }: Props = $props()
+
+    let dialog = $state<Dialog>()
 
     export function open() {
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcDeleteAvatar = createQueryController({
@@ -43,10 +47,10 @@
         <p>{$ll.avatarRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteAvatar.loading} text variant="success" on:click={close}>
+        <Button disabled={$qcDeleteAvatar.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeleteAvatar.loading} variant="error" on:click={qcDeleteAvatar.refresh}>
+        <Button loading={$qcDeleteAvatar.loading} variant="error" onclick={qcDeleteAvatar.refresh}>
             {$ll.remove()}
         </Button>
     </div>

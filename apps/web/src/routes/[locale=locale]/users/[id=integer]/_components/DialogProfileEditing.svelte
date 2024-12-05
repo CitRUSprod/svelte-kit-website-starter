@@ -8,24 +8,30 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let user: schemasModels.user.User
+    interface Props {
+        user: schemasModels.user.User
+    }
 
-    let dialog: Dialog
+    let { user = $bindable() }: Props = $props()
 
-    let username = ""
+    let dialog = $state<Dialog>()
 
-    $: vldResultUsername = vld.user.username(username)
+    let username = $state("")
 
-    $: completedForm = vldResultUsername.valid && vldResultUsername.value !== user.username
+    const vldResultUsername = $derived(vld.user.username(username))
+
+    const completedForm = $derived(
+        vldResultUsername.valid && vldResultUsername.value !== user.username
+    )
 
     export function open() {
         username = user.username
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcUpdateUser = createQueryController({
@@ -54,14 +60,14 @@
         <TextField disabled={$qcUpdateUser.loading} label={$ll.username()} bind:value={username} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateUser.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcUpdateUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcUpdateUser.loading}
             variant="success"
-            on:click={qcUpdateUser.refresh}
+            onclick={qcUpdateUser.refresh}
         >
             {$ll.save()}
         </Button>

@@ -3,7 +3,7 @@
     import { ToastContainer } from "./_components"
 
     import { onMount } from "svelte"
-    import { watch } from "svelte-legos"
+    import { watch } from "runed"
     import Cookies from "js-cookie"
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
@@ -11,11 +11,18 @@
     import "uno.css"
     import "@unocss/reset/tailwind.css"
 
-    export let data
+    const { data, children } = $props()
 
     setLocale(data.locale)
 
-    $: $userData = data.userData
+    $userData = data.userData
+
+    watch(
+        () => data.userData,
+        user => {
+            $userData = user
+        }
+    )
 
     onMount(() => {
         // eslint-disable-next-line new-cap
@@ -27,13 +34,16 @@
         })
     })
 
-    watch(currentLocale, locale => {
-        Cookies.set("locale", locale, {
-            path: "/",
-            expires: 100,
-            sameSite: "lax"
-        })
-    })
+    watch(
+        () => $currentLocale,
+        locale => {
+            Cookies.set("locale", locale, {
+                path: "/",
+                expires: 100,
+                sameSite: "lax"
+            })
+        }
+    )
 
     function defineAny(value: any) {
         return value
@@ -41,7 +51,7 @@
 </script>
 
 <ProgressBar class={defineAny("u:text-green-500")} />
-<slot />
+{@render children?.()}
 <ToastContainer />
 
 <style global lang="postcss">

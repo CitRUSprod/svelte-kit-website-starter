@@ -1,9 +1,12 @@
 import path from "path"
+import { fileURLToPath } from "url"
 import { presetUno, presetIcons, transformerDirectives } from "unocss"
 import { colors } from "@unocss/preset-wind"
 import extractorSvelte from "@unocss/extractor-svelte"
 import { presetBetterNestedColors } from "unocss-preset-better-nested-colors"
 import { presetScrollbar } from "unocss-preset-scrollbar"
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 function getColors([lightColor, lightShade], [darkColor, darkShade]) {
     return {
@@ -60,7 +63,7 @@ const config = {
     ],
     content: {
         pipeline: {
-            include: [path.join(__dirname, "src/**/*.svelte")]
+            include: [path.join(dirname, "src/**/*.svelte")]
         }
     },
     transformers: [transformerDirectives()],

@@ -8,22 +8,26 @@
     import { socket, createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let user: schemasModels.user.User
+    interface Props {
+        user: schemasModels.user.User
+    }
 
-    let dialog: Dialog
+    const { user }: Props = $props()
 
-    let username = ""
+    let dialog = $state<Dialog>()
 
-    $: vldResultUsername = user.username === username
+    let username = $state("")
 
-    $: completedForm = vldResultUsername
+    const vldResultUsername = $derived(user.username === username)
+
+    const completedForm = $derived(vldResultUsername)
 
     export function open() {
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcDeleteUser = createQueryController({
@@ -65,14 +69,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteUser.loading} text variant="success" on:click={close}>
+        <Button disabled={$qcDeleteUser.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcDeleteUser.loading}
             variant="error"
-            on:click={qcDeleteUser.refresh}
+            onclick={qcDeleteUser.refresh}
         >
             {$ll.remove()}
         </Button>

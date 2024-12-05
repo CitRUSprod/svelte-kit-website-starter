@@ -7,9 +7,9 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let email = ""
+    let email = $state("")
 
-    $: vldResultEmail = vld.user.email(email)
+    const vldResultEmail = $derived(vld.user.email(email))
 
     const qcSendPasswordResetEmail = createQueryController({
         fn() {
@@ -47,7 +47,7 @@
                 disabled={!vldResultEmail.valid}
                 loading={$qcSendPasswordResetEmail.loading}
                 variant="primary"
-                on:click={qcSendPasswordResetEmail.refresh}
+                onclick={qcSendPasswordResetEmail.refresh}
             >
                 {$ll.sendResetLink()}
             </Button>

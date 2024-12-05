@@ -4,16 +4,25 @@
 
     import type { ElementVariant } from "$lib/types"
 
-    export let variant: ElementVariant = "default"
-    export let label: string | undefined = undefined
-    export let disabled = false
-    export let readonly = false
-    export let checked = false
+    interface Props {
+        variant?: ElementVariant
+        label?: string | undefined
+        disabled?: boolean
+        readonly?: boolean
+        checked?: boolean
+        class?: string | undefined
+    }
 
-    let klass: string | undefined = undefined
-    export { klass as class }
+    let {
+        variant = "default",
+        label = undefined,
+        disabled = false,
+        readonly = false,
+        checked = $bindable(false),
+        class: klass = undefined
+    }: Props = $props()
 
-    $: variants = getElementVariantObject(variant)
+    const variants = $derived(getElementVariantObject(variant))
 
     function click() {
         if (!readonly && !disabled) {
@@ -32,7 +41,7 @@
         },
         klass
     )}
-    on:click={click}
+    onclick={click}
 >
     <span
         class={cn(
@@ -55,7 +64,7 @@
         )}
     >
         {#if checked}
-            <i class="u:i-fa-solid-check u:text-sm" />
+            <i class="u:i-fa-solid-check u:text-sm"></i>
         {/if}
     </span>
     {#if label}

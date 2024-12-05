@@ -1,23 +1,31 @@
 <script lang="ts">
     import Button from "./Button/Button.svelte"
 
-    import { createEventDispatcher } from "svelte"
     import cn from "classnames"
     import { ll } from "$i18n/helpers"
     import { getElementBasicVariantObject } from "$lib/utils"
 
     import type { ElementBasicVariant } from "$lib/types"
 
-    export let variant: ElementBasicVariant
-    export let visible = true
-    export let closable = false
+    interface Props {
+        variant: ElementBasicVariant
+        visible?: boolean
+        closable?: boolean
+        class?: string
+        onClose?(): void
+        children?: import("svelte").Snippet
+    }
 
-    let klass: string | undefined
-    export { klass as class }
+    let {
+        variant,
+        visible = $bindable(true),
+        closable = false,
+        class: klass = undefined,
+        onClose = undefined,
+        children
+    }: Props = $props()
 
-    $: variants = getElementBasicVariantObject(variant)
-
-    const dispatch = createEventDispatcher<{ close: undefined }>()
+    const variants = $derived(getElementBasicVariantObject(variant))
 
     function getTextByVariant(localVariant: string) {
         switch (localVariant) {
@@ -33,7 +41,7 @@
     }
 
     function close() {
-        dispatch("close")
+        onClose?.()
         visible = false
     }
 </script>
@@ -66,7 +74,7 @@
                     "u:i-fa-solid-exclamation-triangle": variants.warning,
                     "u:i-fa-solid-info-circle": variants.info
                 })}
-            />
+            ></i>
         </div>
         <div class="u:flex u:flex-1 u:justify-between">
             <div class="u:px-4 u:py-2">
@@ -81,13 +89,13 @@
                     {getTextByVariant(variant)}
                 </b>
                 <p class="u:text-content-inverse u:text-sm">
-                    <slot />
+                    {@render children?.()}
                 </p>
             </div>
             {#if closable}
                 <div class="u:pr-2 u:py-2">
-                    <Button icon text {variant} on:click={close}>
-                        <i class="u:i-fa-solid-times u:text-xl" />
+                    <Button icon text {variant} onclick={close}>
+                        <i class="u:i-fa-solid-times u:text-xl"></i>
                     </Button>
                 </div>
             {/if}

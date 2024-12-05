@@ -18,18 +18,19 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    export let data
+    const { data = $bindable() } = $props()
 
-    let avatarInput: HTMLInputElement
-    let dialogAvatarRemoving: DialogAvatarRemoving
-    let dialogProfileEditing: DialogProfileEditing
-    let dialogPasswordChanging: DialogPasswordChanging
-    let dialogEmailChanging: DialogEmailChanging
-    let dialogEmailLinking: DialogEmailLinking
-    let dialogUserRemoving: DialogUserRemoving
+    let avatarInput = $state<HTMLInputElement>()
+    let dialogAvatarRemoving = $state<DialogAvatarRemoving>()
+    let dialogProfileEditing = $state<DialogProfileEditing>()
+    let dialogPasswordChanging = $state<DialogPasswordChanging>()
+    let dialogEmailChanging = $state<DialogEmailChanging>()
+    let dialogEmailLinking = $state<DialogEmailLinking>()
+    let dialogUserRemoving = $state<DialogUserRemoving>()
 
-    $: hasMoreThanOneLinkedAccount =
+    const hasMoreThanOneLinkedAccount = $derived(
         Object.values($userData?.linkedAccounts ?? {}).filter(value => value).length > 1
+    )
 
     const qcUploadAvatar = createQueryController({
         params: {
@@ -114,7 +115,7 @@
                                 <Button
                                     loading={$qcTwitchUnlink.loading}
                                     variant="error"
-                                    on:click={qcTwitchUnlink.refresh}
+                                    onclick={qcTwitchUnlink.refresh}
                                 >
                                     {$ll.unlink()}
                                 </Button>
@@ -153,28 +154,28 @@
             <Button
                 loading={$qcUploadAvatar.loading}
                 variant="warning"
-                on:click={() => avatarInput.click()}
+                onclick={() => avatarInput?.click()}
             >
                 {$ll.uploadAvatar()}
             </Button>
-            <input bind:this={avatarInput} class="u:hidden" type="file" on:change={onSelectFile} />
+            <input bind:this={avatarInput} class="u:hidden" type="file" onchange={onSelectFile} />
             {#if data.user.avatar}
-                <Button variant="error" on:click={dialogAvatarRemoving.open}>
+                <Button variant="error" onclick={dialogAvatarRemoving?.open}>
                     {$ll.removeAvatar()}
                 </Button>
             {/if}
-            <Button variant="warning" on:click={dialogProfileEditing.open}>
+            <Button variant="warning" onclick={dialogProfileEditing?.open}>
                 {$ll.edit()}
             </Button>
-            <Button variant="warning" on:click={dialogPasswordChanging.open}>
+            <Button variant="warning" onclick={dialogPasswordChanging?.open}>
                 {$ll.changePassword()}
             </Button>
             {#if $userData.email}
-                <Button variant="warning" on:click={dialogEmailChanging.open}>
+                <Button variant="warning" onclick={dialogEmailChanging?.open}>
                     {$ll.changeEmail()}
                 </Button>
             {:else}
-                <Button variant="success" on:click={dialogEmailLinking.open}>
+                <Button variant="success" onclick={dialogEmailLinking?.open}>
                     {$ll.linkEmail()}
                 </Button>
             {/if}
@@ -182,12 +183,12 @@
                 <Button
                     loading={$qcEmailUnlink.loading}
                     variant="error"
-                    on:click={qcEmailUnlink.refresh}
+                    onclick={qcEmailUnlink.refresh}
                 >
                     {$ll.unlinkEmail()}
                 </Button>
             {/if}
-            <Button variant="error" on:click={dialogUserRemoving.open}>
+            <Button variant="error" onclick={dialogUserRemoving?.open}>
                 {$ll.removeUser()}
             </Button>
         </div>

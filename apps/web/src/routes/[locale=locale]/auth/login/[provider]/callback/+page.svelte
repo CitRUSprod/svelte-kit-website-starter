@@ -6,7 +6,7 @@
     import { ll } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
 
-    export let data
+    const { data } = $props()
 
     onMount(async () => {
         if (data.error) {

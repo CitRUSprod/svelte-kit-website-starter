@@ -9,21 +9,22 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let email = ""
-    let username = ""
-    let password = ""
-    let passwordConfirmation = ""
+    let email = $state("")
+    let username = $state("")
+    let password = $state("")
+    let passwordConfirmation = $state("")
 
-    $: vldResultEmail = vld.user.email(email)
-    $: vldResultUsername = vld.user.username(username)
-    $: vldResultPassword = vld.user.password(password)
-    $: vldResultPasswordConfirmation = vld.user.password(passwordConfirmation)
+    const vldResultEmail = $derived(vld.user.email(email))
+    const vldResultUsername = $derived(vld.user.username(username))
+    const vldResultPassword = $derived(vld.user.password(password))
+    const vldResultPasswordConfirmation = $derived(vld.user.password(passwordConfirmation))
 
-    $: completedForm =
+    const completedForm = $derived(
         vldResultEmail.valid &&
-        vldResultUsername.valid &&
-        vldResultPassword.valid &&
-        vldResultPassword.value === vldResultPasswordConfirmation.value
+            vldResultUsername.valid &&
+            vldResultPassword.valid &&
+            vldResultPassword.value === vldResultPasswordConfirmation.value
+    )
 
     const qcRegister = createQueryController({
         fn() {
@@ -65,7 +66,7 @@
                 disabled={$qcRegister.loading}
                 label={$ll.email()}
                 bind:value={email}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div>
@@ -73,7 +74,7 @@
                 disabled={$qcRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div>
@@ -82,7 +83,7 @@
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div>
@@ -91,7 +92,7 @@
                 label={$ll.passwordConfirmation()}
                 type="password"
                 bind:value={passwordConfirmation}
-                on:keypress={onEnter}
+                onkeypress={onEnter}
             />
         </div>
         <div class="u:flex u:justify-between">
@@ -102,7 +103,7 @@
                 disabled={!completedForm}
                 loading={$qcRegister.loading}
                 variant="primary"
-                on:click={qcRegister.refresh}
+                onclick={qcRegister.refresh}
             >
                 {$ll.register()}
             </Button>

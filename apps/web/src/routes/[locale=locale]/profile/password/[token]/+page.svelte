@@ -8,17 +8,18 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    export let data
+    const { data } = $props()
 
-    let newPassword = ""
-    let newPasswordConfirmation = ""
+    let newPassword = $state("")
+    let newPasswordConfirmation = $state("")
 
-    $: vldResultNewPassword = vld.user.password(newPassword)
-    $: vldResultNewPasswordConfirmation = vld.user.password(newPasswordConfirmation)
+    const vldResultNewPassword = $derived(vld.user.password(newPassword))
+    const vldResultNewPasswordConfirmation = $derived(vld.user.password(newPasswordConfirmation))
 
-    $: completedForm =
+    const completedForm = $derived(
         vldResultNewPassword.valid &&
-        vldResultNewPassword.value === vldResultNewPasswordConfirmation.value
+            vldResultNewPassword.value === vldResultNewPasswordConfirmation.value
+    )
 
     const qcResetPassword = createQueryController({
         fn() {
@@ -68,7 +69,7 @@
                 disabled={!completedForm}
                 loading={$qcResetPassword.loading}
                 variant="primary"
-                on:click={qcResetPassword.refresh}
+                onclick={qcResetPassword.refresh}
             >
                 {$ll.reset()}
             </Button>

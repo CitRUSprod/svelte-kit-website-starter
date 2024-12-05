@@ -7,31 +7,32 @@
     import * as vld from "$lib/validators"
     import * as api from "$lib/api"
 
-    let dialog: Dialog
+    let dialog = $state<Dialog>()
 
-    let email = ""
-    let password = ""
-    let passwordConfirmation = ""
+    let email = $state("")
+    let password = $state("")
+    let passwordConfirmation = $state("")
 
-    $: vldResultEmail = vld.user.email(email)
-    $: vldResultPassword = vld.user.password(password)
-    $: vldResultPasswordConfirmation = vld.user.password(passwordConfirmation)
+    const vldResultEmail = $derived(vld.user.email(email))
+    const vldResultPassword = $derived(vld.user.password(password))
+    const vldResultPasswordConfirmation = $derived(vld.user.password(passwordConfirmation))
 
-    $: completedForm =
+    const completedForm = $derived(
         vldResultEmail.valid &&
-        vldResultPassword.valid &&
-        vldResultPassword.value === vldResultPasswordConfirmation.value
+            vldResultPassword.valid &&
+            vldResultPassword.value === vldResultPasswordConfirmation.value
+    )
 
     export function open() {
         email = ""
         password = ""
         passwordConfirmation = ""
 
-        dialog.open()
+        dialog?.open()
     }
 
     export function close() {
-        dialog.close()
+        dialog?.close()
     }
 
     const qcLinkEmail = createQueryController({
@@ -81,14 +82,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcLinkEmail.loading} text variant="error" on:click={close}>
+        <Button disabled={$qcLinkEmail.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={$qcLinkEmail.loading}
             variant="success"
-            on:click={qcLinkEmail.refresh}
+            onclick={qcLinkEmail.refresh}
         >
             {$ll.link()}
         </Button>
