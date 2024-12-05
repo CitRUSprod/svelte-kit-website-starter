@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@9.14.4 --activate
 ENV PNPM_HOME=/usr/local/bin
 
 FROM base AS preparer
-RUN pnpm add -g turbo@1.13.3
+RUN pnpm add -g turbo@2.3.3
 COPY . .
 RUN turbo prune --docker web api
 
