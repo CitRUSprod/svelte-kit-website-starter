@@ -1,6 +1,6 @@
 services:
     nginx:
-        image: nginx:1.25.5-alpine
+        image: nginx:1.27.3-alpine
         restart: always
         ports:
             - ${WEBSITE_PORT}:6700
@@ -39,7 +39,7 @@ services:
         volumes:
             - ../../storage/files:/project/files
     postgres:
-        image: postgres:16.2-alpine
+        image: postgres:17.2-alpine
         restart: always
         ports:
             - ${POSTGRES_PORT}:5432
