@@ -7,11 +7,11 @@
         "dev:i18n": "typesafe-i18n",
         "dev:build": "vite dev",
         "dev:check-types": "pnpm check-types --watch",
-        "i18n": "typesafe-i18n --no-watch",
-        "build": "vite build",
+        "build": "typesafe-i18n --no-watch && vite build",
         "start": "PORT=6701 node dist",
         "check-types": "svelte-check --tsconfig tsconfig.json",
-        "stories": "histoire dev"
+        "stories": "histoire dev",
+        "prepare": "NODE_ENV=production svelte-kit sync"
     },
     "devDependencies": {
         "@histoire/plugin-svelte": "0.17.17",

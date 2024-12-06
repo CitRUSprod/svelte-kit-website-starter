@@ -7,8 +7,7 @@
         "dev:i18n": "typesafe-i18n",
         "dev:build": "tsup --config tsup/dev.ts --watch --onSuccess \"NODE_OPTIONS=--enable-source-maps pnpm start\"",
         "dev:check-types": "pnpm check-types -w --preserveWatchOutput",
-        "i18n": "typesafe-i18n --no-watch",
-        "build": "tsup --config tsup/prod.ts",
+        "build": "typesafe-i18n --no-watch && tsup --config tsup/prod.ts",
         "start": "node dist/main",
         "check-types": "tsc --pretty --noEmit",
         "prisma": "dotenv -e ../../.env -- prisma",
@@ -19,8 +18,7 @@
         "prisma:migrations:run": "pnpm prisma:migrations deploy",
         "prisma:migrations:reset": "pnpm prisma:migrations reset",
         "prisma:seeds:run": "pnpm prisma db seed",
-        "prepare": "pnpm prisma:generate",
-        "typesafe-i18n": "typesafe-i18n"
+        "prepare": "pnpm prisma:generate"
     },
     "prisma": {
         "schema": "src/prisma/schema.prisma",
