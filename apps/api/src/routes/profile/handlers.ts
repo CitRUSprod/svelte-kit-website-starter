@@ -142,10 +142,10 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     const subject = req.ll.emailUpdate()
     const message = `
         <div>
-            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
+            <h3>${req.ll.dear()} ${req.userData.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.updateEmailTo({ email: req.body.email }))}</a>
+            <a href="${url}">${req.ll.updateEmailTo({ email: req.body.email })}</a>
         </div>
     `
     await sendEmail(req.userData.email, subject, message)
@@ -184,7 +184,7 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
             <h3>Dear ${user.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.updateEmail())}</b></a>
+            <a href="${url}">${req.ll.updateEmail()}</b></a>
         </div>
     `
     await sendEmail(emailUpdateToken.email, subject, message)
@@ -280,10 +280,10 @@ export const sendPasswordResetEmail = (async (app, req) => {
     const subject = req.ll.passwordReset()
     const message = `
         <div>
-            <h3>${String(req.ll.dear())} ${user.username}</h3>
+            <h3>${req.ll.dear()} ${user.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.resetPassword())}</a>
+            <a href="${url}">${req.ll.resetPassword()}</a>
         </div>
     `
     await sendEmail(user.email!, subject, message)

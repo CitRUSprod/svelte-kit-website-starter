@@ -61,10 +61,10 @@ export const register = (async (app, req) => {
     const subject = req.ll.registration()
     const message = `
         <div>
-            <h3>${String(req.ll.dear())} ${req.body.username}</h3>
+            <h3>${req.ll.dear()} ${req.body.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.completeRegistration())}</a>
+            <a href="${url}">${req.ll.completeRegistration()}</a>
         </div>
     `
     await sendEmail(req.body.email, subject, message)
@@ -317,10 +317,10 @@ export const link = (async (app, req) => {
     const subject = req.ll.emailLinking()
     const message = `
         <div>
-            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
+            <h3>${req.ll.dear()} ${req.userData.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.linkEmail())}</a>
+            <a href="${url}">${req.ll.linkEmail()}</a>
         </div>
     `
     await sendEmail(req.body.email, subject, message)
@@ -386,10 +386,10 @@ export const unlink = (async (app, req) => {
     const subject = req.ll.emailUnlinking()
     const message = `
         <div>
-            <h3>${String(req.ll.dear())} ${req.userData.username}</h3>
+            <h3>${req.ll.dear()} ${req.userData.username}</h3>
         </div>
         <div>
-            <a href="${url}">${String(req.ll.unlinkEmail())}</a>
+            <a href="${url}">${req.ll.unlinkEmail()}</a>
         </div>
     `
     await sendEmail(req.userData.email, subject, message)

@@ -18,7 +18,7 @@
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
         {#if $userData}
-            <Button href={$localePath(`/users/${String($userData.id)}`)} variant="primary">
+            <Button href={$localePath(`/users/${$userData.id}`)} variant="primary">
                 {$ll.profile()}
             </Button>
         {/if}

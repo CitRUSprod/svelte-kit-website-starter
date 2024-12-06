@@ -11,12 +11,12 @@
 
     function addOne() {
         count++
-        toasts.add("success", `${String($ll.count())}: ${count}`)
+        toasts.add("success", `${$ll.count()}: ${count}`)
     }
 
     function showRandomNumber() {
         const num = _.random(1, 100)
-        toasts.add("info", `${String($ll.randomNumber())}: ${num}`)
+        toasts.add("info", `${$ll.randomNumber()}: ${num}`)
     }
 </script>
 
