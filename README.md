@@ -56,6 +56,52 @@ scripts/stop # Stop
 scripts/restart # Restart
 ```
 
+### First run in development mode
+
+1. Enter this command and edit the `.env` file:
+
+```sh
+scripts/clone-env
+```
+
+2. Start required docker containers for development:
+
+```sh
+scripts/dev up -d
+```
+
+3. Install project dependencies:
+
+```sh
+pnpm i
+```
+
+4. Build packages:
+
+```sh
+pnpm build
+```
+
+5. Run database migrations:
+
+```sh
+pnpm --filter api prisma:migrations:run
+```
+
+6. Seed the database:
+
+```sh
+pnpm --filter api prisma:seeds:run
+```
+
+7. Start web and api in development mode:
+
+```sh
+pnpm dev
+```
+
+After completing all steps, the application will be available at `http://localhost:[WEBSITE_PORT]` (default is http://localhost:6700).
+
 ### Tools
 
 Commit with `commitizen`:
