@@ -11,15 +11,21 @@
 
     let dialogPostEditing = $state<DialogPostEditing>()
     let dialogPostRemoving = $state<DialogPostRemoving>()
+
+    let localPost = $state(data.post)
+
+    $effect(() => {
+        localPost = data.post
+    })
 </script>
 
 <svelte:head>
-    <title>{data.post.title}</title>
+    <title>{localPost.title}</title>
 </svelte:head>
 
-<Content.Default title={data.post.title}>
+<Content.Default title={localPost.title}>
     <div class="u:flex u:flex-col u:gap-4">
-        {#each data.post.content.split(/\n+/) as paragraph (paragraph)}
+        {#each localPost.content.split(/\n+/) as paragraph (paragraph)}
             <p>{paragraph}</p>
         {/each}
     </div>
@@ -27,12 +33,12 @@
         <ul>
             <ul>
                 <b>{$ll.author()}:</b>
-                {#if data.post.author}
+                {#if localPost.author}
                     <a
                         class="u:hover:underline"
-                        href={$localePath(`/users/${String(data.post.author.id)}`)}
+                        href={$localePath(`/users/${String(localPost.author.id)}`)}
                     >
-                        {data.post.author.username}
+                        {localPost.author.username}
                     </a>
                 {:else}
                     <span>[{$ll.deleted().toUpperCase()}]</span>
@@ -40,17 +46,17 @@
             </ul>
             <ul>
                 <b>{$ll.created()}:</b>
-                {dt.getFullDateAndTime(data.post.creationDate, data.tz, $currentLocale)}
+                {dt.getFullDateAndTime(localPost.creationDate, data.tz, $currentLocale)}
             </ul>
-            {#if data.post.editingDate}
+            {#if localPost.editingDate}
                 <ul>
                     <b>{$ll.edited()}:</b>
-                    {dt.getFullDateAndTime(data.post.editingDate, data.tz, $currentLocale)}
+                    {dt.getFullDateAndTime(localPost.editingDate, data.tz, $currentLocale)}
                 </ul>
             {/if}
         </ul>
     </div>
-    {#if data.post.author && $userData?.id === data.post.author.id}
+    {#if localPost.author && $userData?.id === localPost.author.id}
         <div>
             <Button variant="warning" onclick={dialogPostEditing?.open}>
                 {$ll.edit()}
@@ -68,5 +74,5 @@
     {/if}
 </Content.Default>
 
-<DialogPostEditing bind:this={dialogPostEditing} bind:post={data.post} />
-<DialogPostRemoving bind:this={dialogPostRemoving} post={data.post} />
+<DialogPostEditing bind:this={dialogPostEditing} bind:post={localPost} />
+<DialogPostRemoving bind:this={dialogPostRemoving} post={localPost} />

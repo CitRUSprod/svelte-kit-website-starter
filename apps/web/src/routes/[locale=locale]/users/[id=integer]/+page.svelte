@@ -28,6 +28,12 @@
     let dialogEmailLinking = $state<DialogEmailLinking>()
     let dialogUserRemoving = $state<DialogUserRemoving>()
 
+    let localUser = $state(data.user)
+
+    $effect(() => {
+        localUser = data.user
+    })
+
     const hasMoreThanOneLinkedAccount = $derived(
         Object.values($userData?.linkedAccounts ?? {}).filter(value => value).length > 1
     )
@@ -97,16 +103,16 @@
             <img
                 class="u:w-full u:h-full u:object-cover"
                 alt={$ll.avatar()}
-                src={data.user.avatar ?? "/img/no-avatar.png"}
+                src={localUser.avatar ?? "/img/no-avatar.png"}
             />
         </div>
         <div>
             <ul>
-                <li><b>{$ll.username()}:</b> {data.user.username}</li>
-                {#if data.user.email}
-                    <li><b>{$ll.email()}:</b> {data.user.email}</li>
+                <li><b>{$ll.username()}:</b> {localUser.username}</li>
+                {#if localUser.email}
+                    <li><b>{$ll.email()}:</b> {localUser.email}</li>
                 {/if}
-                {#if $userData?.id === data.user.id && $userData.linkedAccounts}
+                {#if $userData?.id === localUser.id && $userData.linkedAccounts}
                     <li>
                         <b>Twitch:</b>
                         {#if $userData.linkedAccounts.twitch}
@@ -125,31 +131,31 @@
                         {/if}
                     </li>
                 {/if}
-                <li><b>{$ll.role()}:</b> {data.user.role.name}</li>
+                <li><b>{$ll.role()}:</b> {localUser.role.name}</li>
                 <li>
                     <b>{$ll.banned()}:</b>
-                    {#if data.user.ban}
+                    {#if localUser.ban}
                         {$ll.yes()}
                     {:else}
                         {$ll.no()}
                     {/if}
                 </li>
-                {#if data.user.ban}
-                    <li><b>{$ll.banAuthor()}:</b> {data.user.ban.author.username}</li>
-                    <li><b>{$ll.banReason()}:</b> {data.user.ban.reason}</li>
+                {#if localUser.ban}
+                    <li><b>{$ll.banAuthor()}:</b> {localUser.ban.author.username}</li>
+                    <li><b>{$ll.banReason()}:</b> {localUser.ban.reason}</li>
                     <li>
                         <b>{$ll.banDate()}:</b>
-                        {dt.getFullDateAndTime(data.user.ban.date, data.tz, $currentLocale)}
+                        {dt.getFullDateAndTime(localUser.ban.date, data.tz, $currentLocale)}
                     </li>
                 {/if}
                 <li>
                     <b>{$ll.registrationDate()}:</b>
-                    {dt.getFullDateAndTime(data.user.registrationDate, data.tz, $currentLocale)}
+                    {dt.getFullDateAndTime(localUser.registrationDate, data.tz, $currentLocale)}
                 </li>
             </ul>
         </div>
     </div>
-    {#if $userData?.id === data.user.id}
+    {#if $userData?.id === localUser.id}
         <div>
             <Button
                 loading={$qcUploadAvatar.loading}
@@ -159,7 +165,7 @@
                 {$ll.uploadAvatar()}
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" onchange={onSelectFile} />
-            {#if data.user.avatar}
+            {#if localUser.avatar}
                 <Button variant="error" onclick={dialogAvatarRemoving?.open}>
                     {$ll.removeAvatar()}
                 </Button>
@@ -200,9 +206,9 @@
     {/if}
 </Content.Default>
 
-<DialogAvatarRemoving bind:this={dialogAvatarRemoving} bind:user={data.user} />
-<DialogProfileEditing bind:this={dialogProfileEditing} bind:user={data.user} />
+<DialogAvatarRemoving bind:this={dialogAvatarRemoving} bind:user={localUser} />
+<DialogProfileEditing bind:this={dialogProfileEditing} bind:user={localUser} />
 <DialogPasswordChanging bind:this={dialogPasswordChanging} />
-<DialogEmailChanging bind:this={dialogEmailChanging} user={data.user} />
+<DialogEmailChanging bind:this={dialogEmailChanging} user={localUser} />
 <DialogEmailLinking bind:this={dialogEmailLinking} />
-<DialogUserRemoving bind:this={dialogUserRemoving} user={data.user} />
+<DialogUserRemoving bind:this={dialogUserRemoving} user={localUser} />
