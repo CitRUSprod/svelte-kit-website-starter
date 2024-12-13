@@ -6,6 +6,7 @@
     import * as schemasRoutes from "@local/schemas/routes"
     import { dt } from "@local/utils"
     import { ll, localePath, currentLocale } from "$i18n/helpers"
+    import { userData } from "$lib/stores"
     import { createQueryController, qp } from "$lib/utils"
     import * as api from "$lib/api"
 
@@ -121,11 +122,13 @@
                 onchange={onSortingChange}
             />
         </div>
-        <div>
-            <Button variant="success" onclick={dialogPostCreating?.open}>
-                {$ll.createPost()}
-            </Button>
-        </div>
+        {#if $userData}
+            <div>
+                <Button variant="success" onclick={dialogPostCreating?.open}>
+                    {$ll.createPost()}
+                </Button>
+            </div>
+        {/if}
     </div>
     {#if $qcGetPosts.data}
         <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
