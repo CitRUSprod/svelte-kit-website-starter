@@ -56,7 +56,9 @@ scripts/stop # Stop
 scripts/restart # Restart
 ```
 
-### First run in development mode
+### First run
+
+##### Development mode
 
 1. Enter this command and edit the `.env` file:
 
@@ -98,6 +100,27 @@ pnpm --filter api prisma:seeds:run
 
 ```sh
 pnpm dev
+```
+
+##### Production mode
+
+1. Enter this command and edit the `.env` file:
+
+```sh
+scripts/clone-env
+```
+
+2. Start required docker containers for production:
+
+```sh
+scripts/start
+```
+
+3. Seed the database:
+
+```sh
+scripts/prod exec api sh
+pnpm prisma:seeds:run
 ```
 
 After completing all steps, the application will be available at `http://localhost:[WEBSITE_PORT]` (default is http://localhost:6700).
