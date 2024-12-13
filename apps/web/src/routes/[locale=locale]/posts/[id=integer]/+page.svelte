@@ -7,7 +7,7 @@
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
 
-    let { data = $bindable() } = $props()
+    const { data } = $props()
 
     let dialogPostEditing = $state<DialogPostEditing>()
     let dialogPostRemoving = $state<DialogPostRemoving>()

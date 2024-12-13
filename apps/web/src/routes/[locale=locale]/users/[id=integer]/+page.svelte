@@ -18,7 +18,7 @@
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
 
-    const { data = $bindable() } = $props()
+    const { data } = $props()
 
     let avatarInput = $state<HTMLInputElement>()
     let dialogAvatarRemoving = $state<DialogAvatarRemoving>()
