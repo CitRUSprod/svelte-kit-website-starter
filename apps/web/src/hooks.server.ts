@@ -2,16 +2,7 @@ import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
 import { detectLocale, initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
 import * as schemasModels from "@local/schemas/models"
-import { base } from "$app/paths"
-import {
-    getPathnameWithoutBase,
-    defaultLocale,
-    locales,
-    i18n,
-    isLocale,
-    loadAllLocales,
-    type Locales
-} from "$i18n/helpers"
+import { defaultLocale, locales, i18n, isLocale, loadAllLocales, type Locales } from "$i18n/helpers"
 import { setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
@@ -26,7 +17,7 @@ function getPreferredLocale(e: RequestEvent) {
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
-    const [, locale, ...pathname] = getPathnameWithoutBase(e.url).split("/")
+    const [, locale, ...pathname] = e.url.pathname.split("/")
 
     if (!(locale && isLocale(locale))) {
         const localeFromCookie = e.cookies.get("locale")
@@ -41,7 +32,7 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
 
         redirect(
             307,
-            `${base}/${localLocale}${locale ? `/${locale}` : ""}${pathname.length > 0 ? `/${pathname.join("/")}` : ""}${e.url.search}`
+            `/${localLocale}${locale ? `/${locale}` : ""}${pathname.length > 0 ? `/${pathname.join("/")}` : ""}${e.url.search}`
         )
     }
 
