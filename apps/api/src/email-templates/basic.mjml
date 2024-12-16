@@ -1,18 +1,33 @@
 <mjml>
     <mj-head>
         <mj-title>{{subject}}</mj-title>
+        <mj-attributes>
+            <mj-all font-family="'Inter', Arial, sans-serif" />
+            <mj-text font-weight="400" font-size="16px" color="#2D3748" line-height="24px" />
+            <mj-button
+                background-color="#3182CE"
+                color="white"
+                border-radius="6px"
+                font-size="16px"
+                inner-padding="12px 24px"
+            />
+        </mj-attributes>
+        <mj-style>
+            .container { background-color: #F7FAFC; } .content { background-color: white;
+            border-radius: 8px; } .heading { color: #1A202C; font-weight: 600; }
+        </mj-style>
     </mj-head>
-    <mj-body>
-        <mj-wrapper background-color="#fff" border-radius="8px">
-            <mj-section>
-                <mj-column>
-                    <mj-text>
-                        <h2>{{subject}}</h2>
-                        <p>{{text}}</p>
-                    </mj-text>
-                    <mj-button href="{{link}}">{{linkText}}</mj-button>
-                </mj-column>
-            </mj-section>
-        </mj-wrapper>
+    <mj-body css-class="container">
+        <mj-section padding="32px 0">
+            <mj-column css-class="content" padding="40px 32px">
+                <mj-text align="center" css-class="heading" font-size="24px" padding-bottom="24px">
+                    {{subject}}
+                </mj-text>
+                <mj-divider border-color="#E2E8F0" padding="0 0 24px 0" />
+                <mj-text font-size="18px" padding-bottom="16px">{{greeting}}</mj-text>
+                <mj-text padding-bottom="32px">{{text}}</mj-text>
+                <mj-button href="{{link}}">{{linkText}}</mj-button>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>

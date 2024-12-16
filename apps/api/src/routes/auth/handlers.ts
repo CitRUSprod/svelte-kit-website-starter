@@ -61,7 +61,8 @@ export const register = (async (app, req) => {
     const subject = req.ll.registration()
 
     await sendEmail(req.body.email, subject, "basic", {
-        text: `${req.ll.dear()} ${req.body.username}!`,
+        greeting: `${req.ll.dear()} ${req.body.username}!`,
+        text: req.ll.emailRegistrationText(),
         link: url,
         linkText: req.ll.completeRegistration()
     })
@@ -314,7 +315,8 @@ export const link = (async (app, req) => {
     const subject = req.ll.emailLinking()
 
     await sendEmail(req.body.email, subject, "basic", {
-        text: `${req.ll.dear()} ${req.userData.username}!`,
+        greeting: `${req.ll.dear()} ${req.userData.username}!`,
+        text: req.ll.emailLinkingText(),
         link: url,
         linkText: req.ll.linkEmail()
     })
@@ -380,7 +382,8 @@ export const unlink = (async (app, req) => {
     const subject = req.ll.emailUnlinking()
 
     await sendEmail(req.userData.email, subject, "basic", {
-        text: `${req.ll.dear()} ${req.userData.username}!`,
+        greeting: `${req.ll.dear()} ${req.userData.username}!`,
+        text: req.ll.emailUnlinkingText(),
         link: url,
         linkText: req.ll.unlinkEmail()
     })

@@ -142,7 +142,8 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     const subject = req.ll.emailUpdate()
 
     await sendEmail(req.userData.email, subject, "basic", {
-        text: `${req.ll.dear()} ${req.userData.username}!`,
+        greeting: `${req.ll.dear()} ${req.userData.username}!`,
+        text: req.ll.emailUpdateText(),
         link: url,
         linkText: req.ll.updateEmailTo({ email: req.body.email })
     })
@@ -178,7 +179,8 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
     const subject = req.ll.emailUpdate()
 
     await sendEmail(emailUpdateToken.email, subject, "basic", {
-        text: `${req.ll.dear()} ${user.username}!`,
+        greeting: `${req.ll.dear()} ${user.username}!`,
+        text: req.ll.emailUpdateText(),
         link: url,
         linkText: req.ll.updateEmail()
     })
@@ -274,7 +276,8 @@ export const sendPasswordResetEmail = (async (app, req) => {
     const subject = req.ll.passwordReset()
 
     await sendEmail(user.email!, subject, "basic", {
-        text: `${req.ll.dear()} ${user.username}!`,
+        greeting: `${req.ll.dear()} ${user.username}!`,
+        text: req.ll.emailResetPasswordText(),
         link: url,
         linkText: req.ll.resetPassword()
     })
