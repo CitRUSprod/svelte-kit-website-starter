@@ -3,7 +3,6 @@
     import { ToastContainer } from "./_components"
 
     import { onMount } from "svelte"
-    import { watch } from "runed"
     import Cookies from "js-cookie"
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
@@ -17,12 +16,9 @@
 
     $userData = data.userData
 
-    watch(
-        () => data.userData,
-        user => {
-            $userData = user
-        }
-    )
+    $effect(() => {
+        $userData = data.userData
+    })
 
     onMount(() => {
         // eslint-disable-next-line new-cap
@@ -34,16 +30,13 @@
         })
     })
 
-    watch(
-        () => $currentLocale,
-        locale => {
-            Cookies.set("locale", locale, {
-                path: "/",
-                expires: 100,
-                sameSite: "lax"
-            })
-        }
-    )
+    $effect(() => {
+        Cookies.set("locale", $currentLocale, {
+            path: "/",
+            expires: 100,
+            sameSite: "lax"
+        })
+    })
 
     function defineAny(value: any) {
         return value
