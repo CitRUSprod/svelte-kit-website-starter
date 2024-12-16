@@ -140,15 +140,12 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
 
     const url = new URL(`/profile/email/from/${tokenFrom}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.emailUpdate()
-    const message = `
-        <div>
-            <h3>${req.ll.dear()} ${req.userData.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.updateEmailTo({ email: req.body.email })}</a>
-        </div>
-    `
-    await sendEmail(req.userData.email, subject, message)
+
+    await sendEmail(req.userData.email, subject, "basic", {
+        text: `${req.ll.dear()} ${req.userData.username}!`,
+        link: url,
+        linkText: req.ll.updateEmailTo({ email: req.body.email })
+    })
 
     return {}
 }) satisfies RouteHandler<
@@ -179,15 +176,12 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
 
     const url = new URL(`/profile/email/to/${tokenTo}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.emailUpdate()
-    const message = `
-        <div>
-            <h3>Dear ${user.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.updateEmail()}</b></a>
-        </div>
-    `
-    await sendEmail(emailUpdateToken.email, subject, message)
+
+    await sendEmail(emailUpdateToken.email, subject, "basic", {
+        text: `${req.ll.dear()} ${user.username}!`,
+        link: url,
+        linkText: req.ll.updateEmail()
+    })
 
     return {}
 }) satisfies RouteHandler<
@@ -278,15 +272,12 @@ export const sendPasswordResetEmail = (async (app, req) => {
 
     const url = new URL(`/profile/password/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.passwordReset()
-    const message = `
-        <div>
-            <h3>${req.ll.dear()} ${user.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.resetPassword()}</a>
-        </div>
-    `
-    await sendEmail(user.email!, subject, message)
+
+    await sendEmail(user.email!, subject, "basic", {
+        text: `${req.ll.dear()} ${user.username}!`,
+        link: url,
+        linkText: req.ll.resetPassword()
+    })
 
     return {}
 }) satisfies RouteHandler<

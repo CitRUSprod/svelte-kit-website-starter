@@ -69,7 +69,7 @@ export default [
         }
     },
     {
-        files: ["**/*.html"],
+        files: ["**/*.html", "**/*.mjml"],
         languageOptions: {
             parser: anyParser
         },

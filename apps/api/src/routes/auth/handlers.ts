@@ -59,15 +59,12 @@ export const register = (async (app, req) => {
 
     const url = new URL(`/auth/registration/complete/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.registration()
-    const message = `
-        <div>
-            <h3>${req.ll.dear()} ${req.body.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.completeRegistration()}</a>
-        </div>
-    `
-    await sendEmail(req.body.email, subject, message)
+
+    await sendEmail(req.body.email, subject, "basic", {
+        text: `${req.ll.dear()} ${req.body.username}!`,
+        link: url,
+        linkText: req.ll.completeRegistration()
+    })
 
     return {}
 }) satisfies RouteHandler<
@@ -315,15 +312,12 @@ export const link = (async (app, req) => {
 
     const url = new URL(`/auth/link/complete/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.emailLinking()
-    const message = `
-        <div>
-            <h3>${req.ll.dear()} ${req.userData.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.linkEmail()}</a>
-        </div>
-    `
-    await sendEmail(req.body.email, subject, message)
+
+    await sendEmail(req.body.email, subject, "basic", {
+        text: `${req.ll.dear()} ${req.userData.username}!`,
+        link: url,
+        linkText: req.ll.linkEmail()
+    })
 
     return {}
 }) satisfies RouteHandler<{ Body: schemasRoutes.auth.LinkBody }, schemasRoutes.auth.LinkResponse>
@@ -384,15 +378,12 @@ export const unlink = (async (app, req) => {
 
     const url = new URL(`/auth/unlink/complete/${token}`, env.PUBLIC_BASE_URL).toString()
     const subject = req.ll.emailUnlinking()
-    const message = `
-        <div>
-            <h3>${req.ll.dear()} ${req.userData.username}</h3>
-        </div>
-        <div>
-            <a href="${url}">${req.ll.unlinkEmail()}</a>
-        </div>
-    `
-    await sendEmail(req.userData.email, subject, message)
+
+    await sendEmail(req.userData.email, subject, "basic", {
+        text: `${req.ll.dear()} ${req.userData.username}!`,
+        link: url,
+        linkText: req.ll.unlinkEmail()
+    })
 
     return {}
 }) satisfies RouteHandler<void, schemasRoutes.auth.UnlinkResponse>
