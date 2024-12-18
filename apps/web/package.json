@@ -10,11 +10,9 @@
         "build": "typesafe-i18n --no-watch && vite build",
         "start": "PORT=6701 node dist",
         "check-types": "svelte-check --tsconfig tsconfig.json",
-        "stories": "histoire dev",
         "prepare": "NODE_ENV=production svelte-kit sync"
     },
     "devDependencies": {
-        "@histoire/plugin-svelte": "0.17.17",
         "@iconify/json": "2.2.279",
         "@local/configs": "workspace:*",
         "@prgm/sveltekit-progress-bar": "3.0.1",
@@ -30,7 +28,6 @@
         "@unocss/preset-wind": "0.65.1",
         "@unocss/reset": "0.65.1",
         "concurrently": "9.1.0",
-        "histoire": "0.17.17",
         "node-fetch": "3.3.2",
         "svelte": "5.7.0",
         "svelte-check": "4.1.1",

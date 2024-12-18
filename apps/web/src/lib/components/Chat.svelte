@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "./Button/Button.svelte"
+    import Button from "./Button.svelte"
     import TextField from "./TextField.svelte"
 
     import { tick } from "svelte"

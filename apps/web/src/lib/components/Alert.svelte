@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "./Button/Button.svelte"
+    import Button from "./Button.svelte"
 
     import cn from "classnames"
     import { ll } from "$i18n/helpers"
