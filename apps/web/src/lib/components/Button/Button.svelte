@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Button } from "bits-ui"
+
     import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
@@ -7,8 +9,6 @@
     interface Props {
         variant?: ElementVariant
         href?: string | undefined
-        target?: string | undefined
-        rel?: string | undefined
         text?: boolean
         icon?: boolean
         disabled?: boolean
@@ -21,8 +21,6 @@
     const {
         variant = "default",
         href = undefined,
-        target = undefined,
-        rel = undefined,
         text = false,
         icon = false,
         disabled = false,
@@ -35,11 +33,9 @@
     const variants = $derived(getElementVariantObject(variant))
 </script>
 
-<svelte:element
-    this={href !== undefined && !disabled && !loading ? "a" : "button"}
+<Button.Root
     class={cn(
-        "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top u:select-none",
-        "u:active:transform",
+        "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top",
         "u:disabled:cursor-not-allowed",
         {
             "u:px-4 u:rounded": !icon,
@@ -48,7 +44,7 @@
             "u:text-transparent": loading,
             "u:hover:bg-opacity-30 u:active:bg-opacity-30 u:dark:hover:bg-opacity-30 u:dark:active:bg-opacity-30":
                 text,
-            "u:active:scale-90": !disabled && !loading,
+            "u:active:transform u:active:scale-90": !disabled && !loading,
             "u:disabled:opacity-50": disabled,
             "u:bg-default": !text && variants.default,
             "u:bg-primary": !text && variants.primary,
@@ -72,11 +68,7 @@
         klass
     )}
     disabled={disabled || loading}
-    {href}
-    {rel}
-    role="button"
-    tabindex="0"
-    {target}
+    href={href && !disabled && !loading ? href : undefined}
     {...rest}
 >
     {@render children?.()}
@@ -100,4 +92,4 @@
             <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin"></i>
         </div>
     {/if}
-</svelte:element>
+</Button.Root>
