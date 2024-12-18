@@ -1,5 +1,5 @@
-import path from "path"
-import { fileURLToPath } from "url"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import fs from "fs-extra"
 import type { MultipartFile } from "@fastify/multipart"
 import sharp from "sharp"
