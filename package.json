@@ -72,7 +72,7 @@
         "prettier-plugin-svelte": "3.3.2",
         "stylelint": "16.11.0",
         "stylelint-prettier": "5.0.2",
-        "svelte": "5.7.0",
+        "svelte": "5.14.4",
         "svelte-eslint-parser": "0.43.0",
         "turbo": "2.3.3",
         "typescript": "5.7.2",
