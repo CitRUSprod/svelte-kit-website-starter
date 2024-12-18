@@ -3,6 +3,7 @@
 *.log
 
 .env
+.windsurfrules
 
 node_modules
 .turbo
