@@ -2,7 +2,7 @@
     import { Button, DropdownMenu, Dialog } from "$lib/components"
 
     import * as schemasModels from "@local/schemas/models"
-    import { ll } from "$i18n/helpers"
+    import { ll, currentLocale } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
@@ -20,7 +20,7 @@
     let username = $state("")
     let roleId = $state(0)
 
-    const items = $derived(roles.map(r => ({ text: r.name, value: r.id })))
+    const items = $derived(roles.map(r => ({ text: r.name[$currentLocale], value: r.id })))
 
     export function open(user: schemasModels.user.User) {
         userId = user.id

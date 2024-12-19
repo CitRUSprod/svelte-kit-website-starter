@@ -4,7 +4,7 @@ import { models } from "$/utils"
 import type { RouteHandler } from "$/types"
 
 export const getRoles = (async app => {
-    const roles = await app.prisma.role.findMany()
+    const roles = await app.prisma.role.findMany({ orderBy: { id: "asc" } })
     return { payload: { items: roles.map(models.role.dto) } }
 }) satisfies RouteHandler<void, schemasRoutes.roles.GetRolesResponse>
 

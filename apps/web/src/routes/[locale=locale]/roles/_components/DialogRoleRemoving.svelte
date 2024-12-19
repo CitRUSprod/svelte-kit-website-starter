@@ -2,7 +2,7 @@
     import { Button, Dialog } from "$lib/components"
 
     import * as schemasModels from "@local/schemas/models"
-    import { ll } from "$i18n/helpers"
+    import { ll, currentLocale } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
@@ -49,7 +49,7 @@
     </div>
     <div>
         <p>
-            {@html $ll.roleRemovingQuestion({ role: role?.name })}
+            {@html $ll.roleRemovingQuestion({ role: role?.name[$currentLocale] })}
         </p>
     </div>
     <div class="u:flex u:justify-between">

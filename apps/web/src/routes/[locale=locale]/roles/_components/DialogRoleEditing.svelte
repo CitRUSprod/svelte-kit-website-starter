@@ -3,7 +3,7 @@
 
     import * as constantsEnums from "@local/constants/enums"
     import * as schemasModels from "@local/schemas/models"
-    import { ll } from "$i18n/helpers"
+    import { ll, locales, type Locales } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
@@ -19,7 +19,12 @@
     let dialog = $state<Dialog>()
 
     let roleId = 0
-    let name = $state("")
+    const name = $state<Record<Locales, string>>(
+        locales.reduce<Record<string, string>>((acc, locale) => {
+            acc[locale] = ""
+            return acc
+        }, {})
+    )
     let currentPermission: constantsEnums.Permission | null = $state(null)
     let selectedPermissions: Array<constantsEnums.Permission> = $state([])
 
@@ -31,7 +36,11 @@
 
     export function open(role: schemasModels.role.Role) {
         roleId = role.id
-        name = role.name
+
+        for (const locale of locales) {
+            name[locale] = role.name[locale]
+        }
+
         currentPermission = null
         selectedPermissions = [...role.permissions]
 
@@ -77,8 +86,14 @@
     <div>
         <h1 class="u:text-center">{$ll.roleEditing()}</h1>
     </div>
-    <div>
-        <TextField disabled={$qcUpdateRole.loading} label={$ll.name()} bind:value={name} />
+    <div class="u:flex u:flex-col u:gap-4">
+        {#each locales as locale (locale)}
+            <TextField
+                disabled={$qcUpdateRole.loading}
+                label={`${$ll.name()} (${locale.toUpperCase()})`}
+                bind:value={name[locale]}
+            />
+        {/each}
     </div>
     <div>
         <div class="u:relative u:border u:border-default u:rounded">

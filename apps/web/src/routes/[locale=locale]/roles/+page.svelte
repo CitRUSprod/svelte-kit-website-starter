@@ -3,7 +3,7 @@
     import { DialogRoleCreating, DialogRoleEditing, DialogRoleRemoving } from "./_components"
 
     import * as constantsEnums from "@local/constants/enums"
-    import { ll } from "$i18n/helpers"
+    import { ll, currentLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as api from "$lib/api"
@@ -47,7 +47,7 @@
                     <tr
                         class="u:children:p-2 u:children:border u:children:border-default u:children:text-center u:children:hover:bg-zinc-100 u:dark:children:hover:bg-zinc-900 u:children:duration-200"
                     >
-                        <td>{role.name}</td>
+                        <td>{role.name[$currentLocale]}</td>
                         <td>
                             {#if role.permissions.length > 0}
                                 {role.permissions.join(", ")}

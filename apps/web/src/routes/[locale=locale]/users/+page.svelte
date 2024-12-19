@@ -126,7 +126,7 @@
                         </td>
                         <td>{user.username}</td>
                         <td>{user.email ?? "-"}</td>
-                        <td>{user.role.name}</td>
+                        <td>{user.role.name[$currentLocale]}</td>
                         <td>
                             {#if user.ban}
                                 <div>{$ll.yes()}</div>

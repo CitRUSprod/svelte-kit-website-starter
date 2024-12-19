@@ -131,7 +131,7 @@
                         {/if}
                     </li>
                 {/if}
-                <li><b>{$ll.role()}:</b> {localUser.role.name}</li>
+                <li><b>{$ll.role()}:</b> {localUser.role.name[$currentLocale]}</li>
                 <li>
                     <b>{$ll.banned()}:</b>
                     {#if localUser.ban}

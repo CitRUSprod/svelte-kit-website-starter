@@ -3,7 +3,10 @@ import { z } from "zod"
 import * as common from "$/common"
 
 export function name() {
-    return z.string().trim().toLowerCase().min(1)
+    return z.object({
+        ru: z.string().min(1),
+        en: z.string().min(1)
+    })
 }
 
 export type Name = z.infer<ReturnType<typeof name>>

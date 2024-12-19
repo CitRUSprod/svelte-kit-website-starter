@@ -3,11 +3,12 @@ import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"
 import type { Role } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
+import type { Locales } from "$/i18n/helpers"
 
 export function dto(role: Role) {
     return {
         id: role.id,
-        name: role.name,
+        name: role.name as Record<Locales, string>,
         permissions: role.permissions as Array<constantsEnums.Permission>,
         protected: role.protected
     } satisfies JsonObject

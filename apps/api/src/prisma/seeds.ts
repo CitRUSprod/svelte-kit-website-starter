@@ -6,8 +6,8 @@ const client = new PrismaClient()
 client.$connect().then(async () => {
     await client.role.createMany({
         data: [
-            { name: "user", protected: true },
-            { name: "admin", protected: true }
+            { name: { ru: "Пользователь", en: "User" }, protected: true },
+            { name: { ru: "Админ", en: "Admin" }, protected: true }
         ]
     })
 
