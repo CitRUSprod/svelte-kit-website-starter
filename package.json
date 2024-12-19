@@ -19,7 +19,7 @@
         "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
         "validate": "pnpm check-types && pnpm lint",
         "test": "playwright test",
-        "prepare": "husky install"
+        "prepare": "husky"
     },
     "packageManager": "pnpm@9.14.4",
     "engines": {
