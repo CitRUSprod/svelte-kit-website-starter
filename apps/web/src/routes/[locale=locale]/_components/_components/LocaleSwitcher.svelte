@@ -2,7 +2,7 @@
     import { Button } from "$lib/components"
 
     import cn from "classnames"
-    import { page } from "$app/stores"
+    import { page } from "$app/state"
     import { invalidateAll, afterNavigate } from "$app/navigation"
     import {
         currentLocale,
@@ -30,7 +30,7 @@
     }
 
     afterNavigate(() => {
-        const locale = $page.params.locale as Locales | undefined
+        const locale = page.params.locale as Locales | undefined
         switchLocale(locale)
     })
 </script>
@@ -41,7 +41,7 @@
     {#each locales as locale, index (locale)}
         <Button
             class={cn("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
-            href={replaceLocaleInUrl($page.url, locale)}
+            href={replaceLocaleInUrl(page.url, locale)}
             variant="primary"
         >
             {locale.toUpperCase()}
