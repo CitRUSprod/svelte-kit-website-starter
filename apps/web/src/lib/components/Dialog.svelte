@@ -23,39 +23,20 @@
     }
 </script>
 
-<Dialog.Root bind:open={visible}>
-    <Dialog.Trigger />
+<Dialog.Root closeOnEscape={!persistent} closeOnOutsideClick={!persistent} bind:open={visible}>
     <Dialog.Portal>
-        <Dialog.Overlay forceMount>
-            {#snippet child({ props, open: o })}
-                {#if o}
-                    <div
-                        class="u:fixed u:inset-0 u:bg-black u:bg-opacity-30 u:z-40"
-                        transition:fade
-                        {...props}
-                    ></div>
-                {/if}
-            {/snippet}
-        </Dialog.Overlay>
+        <Dialog.Overlay
+            class="u:fixed u:inset-0 u:bg-black u:bg-opacity-30 u:z-40"
+            transition={fade}
+        />
         <Dialog.Content
-            interactOutsideBehavior={persistent ? "ignore" : "close"}
-            escapeKeydownBehavior={persistent ? "ignore" : "close"}
-            forceMount
+            class={cn(
+                "u:fixed u:top-50% u:left-50% u:left-50% u:max-w-full u:p-8 u:bg-content u:shadow-md u:rounded-md u:translate--50% u:outline-none u:z-50",
+                klass
+            )}
+            transition={scale}
         >
-            {#snippet child({ props, open: o })}
-                {#if o}
-                    <div
-                        class={cn(
-                            "u:fixed u:top-50% u:left-50% u:left-50% u:max-w-full u:p-8 u:bg-content u:shadow-md u:rounded-md u:translate--50% u:outline-none u:z-50",
-                            klass
-                        )}
-                        transition:scale
-                        {...props}
-                    >
-                        {@render children?.()}
-                    </div>
-                {/if}
-            {/snippet}
+            {@render children?.()}
         </Dialog.Content>
     </Dialog.Portal>
 </Dialog.Root>

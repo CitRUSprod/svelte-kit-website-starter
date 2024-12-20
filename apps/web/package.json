@@ -7,10 +7,11 @@
         "dev:i18n": "typesafe-i18n",
         "dev:build": "vite dev",
         "dev:check-types": "pnpm check-types --watch",
-        "build": "typesafe-i18n --no-watch && vite build",
+        "build": "pnpm svelte-kit:sync && typesafe-i18n --no-watch && vite build",
         "start": "PORT=6701 node dist",
         "check-types": "svelte-check --tsconfig tsconfig.json",
-        "prepare": "NODE_ENV=production svelte-kit sync"
+        "svelte-kit:sync": "NODE_ENV=production svelte-kit sync",
+        "prepare": "pnpm svelte-kit:sync"
     },
     "devDependencies": {
         "@iconify/json": "2.2.286",
@@ -45,7 +46,7 @@
         "@local/utils": "workspace:*",
         "@macfja/svelte-persistent-store": "2.4.2",
         "axios": "1.7.9",
-        "bits-ui": "1.0.0-next.73",
+        "bits-ui": "0.22.0",
         "classnames": "2.5.1",
         "js-cookie": "3.0.5",
         "lodash-es": "4.17.21",

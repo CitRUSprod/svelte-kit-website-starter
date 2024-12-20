@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Checkbox, Label, useId } from "bits-ui"
+    import { Checkbox, Label } from "bits-ui"
 
     import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
@@ -8,12 +8,12 @@
 
     interface Props {
         variant?: ElementVariant
-        label?: string | undefined
+        label?: string
         disabled?: boolean
         readonly?: boolean
-        indeterminate?: boolean
-        checked?: boolean
-        class?: string | undefined
+        checked?: boolean | "indeterminate"
+        id?: string
+        class?: string
         [key: string]: unknown
     }
 
@@ -22,15 +22,13 @@
         label = undefined,
         disabled = false,
         readonly = false,
-        indeterminate = $bindable(false),
         checked = $bindable(false),
+        id = undefined,
         class: klass = undefined,
         ...rest
     }: Props = $props()
 
     const variants = $derived(getElementVariantObject(variant))
-
-    const id = useId()
 </script>
 
 <span
@@ -45,39 +43,37 @@
     )}
     {...rest}
 >
-    <Checkbox.Root
-        class={cn(
-            "u:flex u:justify-center u:items-center u:w-6 u:h-6 u:text-content-lighter u:border u:rounded u:cursor-inherit!",
-            {
-                "u:bg-content": !checked && !indeterminate,
-                "u:border-default": variants.default,
-                "u:border-primary": variants.primary,
-                "u:border-success": variants.success,
-                "u:border-error": variants.error,
-                "u:border-warning": variants.warning,
-                "u:border-info": variants.info,
-                "u:bg-default": (checked || indeterminate) && variants.default,
-                "u:bg-primary": (checked || indeterminate) && variants.primary,
-                "u:bg-success": (checked || indeterminate) && variants.success,
-                "u:bg-error": (checked || indeterminate) && variants.error,
-                "u:bg-warning": (checked || indeterminate) && variants.warning,
-                "u:bg-info": (checked || indeterminate) && variants.info
-            }
-        )}
-        {id}
-        disabled={disabled || readonly}
-        bind:indeterminate
-        bind:checked
-    >
-        {#snippet children({ checked: c, indeterminate: i })}
-            {#if i}
+    <Checkbox.Root {id} disabled={disabled || readonly} bind:checked>
+        <Checkbox.Indicator
+            class={cn(
+                "u:flex u:justify-center u:items-center u:w-6 u:h-6 u:text-content-lighter u:border u:rounded u:cursor-inherit!",
+                {
+                    "u:bg-content": !checked,
+                    "u:border-default": variants.default,
+                    "u:border-primary": variants.primary,
+                    "u:border-success": variants.success,
+                    "u:border-error": variants.error,
+                    "u:border-warning": variants.warning,
+                    "u:border-info": variants.info,
+                    "u:bg-default": checked && variants.default,
+                    "u:bg-primary": checked && variants.primary,
+                    "u:bg-success": checked && variants.success,
+                    "u:bg-error": checked && variants.error,
+                    "u:bg-warning": checked && variants.warning,
+                    "u:bg-info": checked && variants.info
+                }
+            )}
+            let:isChecked
+            let:isIndeterminate
+        >
+            {#if isIndeterminate}
                 <i class="u:i-fa-solid-minus u:text-sm"></i>
-            {:else if c}
+            {:else if isChecked}
                 <i class="u:i-fa-solid-check u:text-sm"></i>
             {/if}
-        {/snippet}
+        </Checkbox.Indicator>
     </Checkbox.Root>
-    {#if label}
+    {#if label && id}
         <Label.Root for={id} class="u:ml-1 u:cursor-inherit">{label}</Label.Root>
     {/if}
 </span>
