@@ -9,7 +9,7 @@
         "commit": "git-cz",
         "stylelint": "stylelint --color",
         "stylelint:fix": "pnpm stylelint --fix",
-        "stylelint:all": "pnpm stylelint \"**/*.svelte\" \"!storage\"",
+        "stylelint:all": "pnpm stylelint \"**/*.{css,svelte}\" \"!storage\"",
         "stylelint:fix:all": "pnpm stylelint:all --fix",
         "eslint": "eslint --color --no-error-on-unmatched-pattern",
         "eslint:fix": "pnpm eslint --fix",
@@ -35,7 +35,7 @@
         }
     },
     "lint-staged": {
-        "*.svelte": "pnpm stylelint:fix",
+        "*.{css,svelte}": "pnpm stylelint:fix",
         "*.{html,mjml,md,json,y?(a)ml,?([cm])js,ts,svelte}": "pnpm eslint:fix"
     },
     "prettier": "./configs/prettier/index.js",
