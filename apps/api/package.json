@@ -41,7 +41,7 @@
         "esbuild-plugin-raw": "0.1.8",
         "esno": "4.8.0",
         "prisma": "6.0.1",
-        "tsup": "8.3.5",
+        "tsup": "8.3.0",
         "type-fest": "4.30.0",
         "typescript": "5.7.2"
     },
