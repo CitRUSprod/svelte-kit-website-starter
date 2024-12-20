@@ -2,7 +2,7 @@ import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"
 import * as constantsEnums from "@local/constants/enums"
-import type { Locales } from "$/i18n/helpers"
+import type { Locale } from "$/i18n/helpers"
 import { enums } from "$/constants"
 import type { UserData } from "$/types"
 
@@ -17,7 +17,7 @@ export function dto(user: UserData) {
         username: user.username,
         role: {
             id: user.role.id,
-            name: user.role.name as Record<Locales, string>,
+            name: user.role.name as Record<Locale, string>,
             permissions: user.role.permissions as Array<constantsEnums.Permission>
         },
         ban: user.ban && {

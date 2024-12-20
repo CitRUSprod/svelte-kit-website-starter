@@ -1,12 +1,19 @@
-import * as constantsEnums from "@local/constants/enums"
 import { z } from "zod"
+import * as constantsEnums from "@local/constants/enums"
 import * as common from "$/common"
 
+import type { IterableElement } from "type-fest"
+
 export function name() {
-    return z.object({
-        ru: z.string().min(1),
-        en: z.string().min(1)
-    })
+    const locales = Object.values(common.locale().Values)
+
+    const obj: Record<string, z.ZodString> = {}
+
+    for (const locale of locales) {
+        obj[locale] = z.string().min(1)
+    }
+
+    return z.object(obj as Record<IterableElement<typeof locales>, z.ZodString>)
 }
 
 export type Name = z.infer<ReturnType<typeof name>>

@@ -3,7 +3,7 @@
 
     import * as constantsEnums from "@local/constants/enums"
     import * as schemasModels from "@local/schemas/models"
-    import { ll, locales, type Locales } from "$i18n/helpers"
+    import { ll, locales, type Locale } from "$i18n/helpers"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
@@ -19,7 +19,7 @@
     let dialog = $state<Dialog>()
 
     let roleId = 0
-    const name = $state<Record<Locales, string>>(
+    const name = $state<Record<Locale, string>>(
         locales.reduce<Record<string, string>>((acc, locale) => {
             acc[locale] = ""
             return acc

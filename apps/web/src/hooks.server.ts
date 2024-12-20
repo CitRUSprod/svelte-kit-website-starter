@@ -2,7 +2,7 @@ import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
 import { detectLocale, initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
 import * as schemasModels from "@local/schemas/models"
-import { defaultLocale, locales, i18n, isLocale, loadAllLocales, type Locales } from "$i18n/helpers"
+import { defaultLocale, locales, i18n, isLocale, loadAllLocales, type Locale } from "$i18n/helpers"
 import { setCookies, uniqCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
@@ -22,7 +22,7 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     if (!(locale && isLocale(locale))) {
         const localeFromCookie = e.cookies.get("locale")
 
-        let localLocale: Locales
+        let localLocale: Locale
 
         if (localeFromCookie && isLocale(localeFromCookie)) {
             localLocale = localeFromCookie

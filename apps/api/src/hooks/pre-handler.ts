@@ -1,6 +1,6 @@
 import type { FastifyPluginCallback } from "fastify"
 import { type HttpError, InternalServerError } from "http-errors-enhanced"
-import { l, isLocale, type Locales, type TranslationFunctions } from "$/i18n/helpers"
+import { l, isLocale, type Locale, type TranslationFunctions } from "$/i18n/helpers"
 import type { UserPayload, UserData } from "$/types"
 
 declare module "fastify" {
@@ -14,7 +14,7 @@ declare module "fastify" {
 
 export const preHandler: FastifyPluginCallback = (app, options, done) => {
     app.addHook("preHandler", async req => {
-        let locale: Locales
+        let locale: Locale
 
         if (req.cookies.locale && isLocale(req.cookies.locale)) {
             locale = req.cookies.locale

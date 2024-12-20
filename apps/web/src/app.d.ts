@@ -2,11 +2,11 @@
 
 declare namespace App {
     type User = import("@local/schemas/models").user.User
-    type Locales = import("$i18n/helpers").Locales
+    type Locale = import("$i18n/helpers").Locale
     type TranslationFunctions = import("$i18n/helpers").TranslationFunctions
 
     interface Locals {
-        locale: Locales
+        locale: Locale
         ll: TranslationFunctions
         tz: string
         userData: User | null

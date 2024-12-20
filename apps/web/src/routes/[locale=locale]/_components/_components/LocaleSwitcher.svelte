@@ -10,7 +10,7 @@
         setLocale,
         loadLocaleAsync,
         replaceLocaleInUrl,
-        type Locales
+        type Locale
     } from "$i18n/helpers"
 
     interface Props {
@@ -19,7 +19,7 @@
 
     const { class: klass }: Props = $props()
 
-    async function switchLocale(newLocale: Locales | undefined) {
+    async function switchLocale(newLocale: Locale | undefined) {
         if (!newLocale || $currentLocale === newLocale) {
             return
         }
@@ -30,7 +30,7 @@
     }
 
     afterNavigate(() => {
-        const locale = page.params.locale as Locales | undefined
+        const locale = page.params.locale as Locale | undefined
         switchLocale(locale)
     })
 </script>
