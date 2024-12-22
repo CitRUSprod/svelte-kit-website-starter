@@ -17,7 +17,7 @@
         "prisma:migrations:create": "pnpm prisma:migrations dev",
         "prisma:migrations:run": "pnpm prisma:migrations deploy",
         "prisma:migrations:reset": "pnpm prisma:migrations reset",
-        "prisma:seeds:run": "pnpm prisma db seed",
+        "prisma:seeds:run": "pnpm prisma db seed --",
         "prepare": "pnpm prisma:generate"
     },
     "prisma": {

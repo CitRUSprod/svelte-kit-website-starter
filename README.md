@@ -179,7 +179,8 @@ Then you can enter any of the following commands:
 pnpm prisma:migrations:create # Create migrations
 pnpm prisma:migrations:run # Run migrations
 pnpm prisma:migrations:reset # Reset migrations
-pnpm prisma:seeds:run # Run seeds
+pnpm prisma:seeds:run # Run default seeds
+pnpm prisma:seeds:run --seed test-users # Run test users seeds
 ```
 
 ### Backups
