@@ -2,8 +2,11 @@
 
 *.log
 
-.env
+.cursorrules
 .windsurfrules
+.clinerules
+
+.env
 
 node_modules
 .turbo
