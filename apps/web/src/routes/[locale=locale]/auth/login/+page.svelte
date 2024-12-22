@@ -58,6 +58,7 @@
                 label={$ll.email()}
                 bind:value={email}
                 onkeypress={onEnter}
+                data-testid="email-input"
             />
         </div>
         <div>
@@ -67,15 +68,20 @@
                 type="password"
                 bind:value={password}
                 onkeypress={onEnter}
+                data-testid="password-input"
             />
         </div>
         <div>
-            <a class="u:hover:underline" href={$localePath("/profile/password")}>
+            <a
+                class="u:hover:underline"
+                href={$localePath("/profile/password")}
+                data-testid="forgot-password-link"
+            >
                 {$ll.forgotPassword()}
             </a>
         </div>
         <div class="u:flex u:justify-between">
-            <Button href={$localePath("/auth/registration")} text>
+            <Button href={$localePath("/auth/registration")} text data-testid="registration-button">
                 {$ll.registration()}
             </Button>
             <Button
@@ -83,6 +89,7 @@
                 loading={$qcLogin.loading}
                 variant="primary"
                 onclick={qcLogin.refresh}
+                data-testid="login-button"
             >
                 {$ll.doLogin()}
             </Button>

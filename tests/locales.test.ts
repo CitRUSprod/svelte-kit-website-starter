@@ -26,7 +26,7 @@ test.describe.serial("en", () => {
     })
 
     test("switch to ru locale", async ({ page }) => {
-        await page.click("a[href='/ru']")
+        await page.getByTestId("locale-ru-button").click()
         await expect(page).toHaveTitle("Главная")
     })
 })
@@ -51,7 +51,7 @@ test.describe("ru", () => {
     })
 
     test("switch to en locale", async ({ page }) => {
-        await page.click("a[href='/en']")
+        await page.getByTestId("locale-en-button").click()
         await expect(page).toHaveTitle("Home")
     })
 })
@@ -76,7 +76,7 @@ test.describe("another", () => {
     })
 
     test("switch to ru locale", async ({ page }) => {
-        await page.click("a[href='/ru']")
+        await page.getByTestId("locale-ru-button").click()
         await expect(page).toHaveTitle("Главная")
     })
 })

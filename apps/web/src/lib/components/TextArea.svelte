@@ -49,6 +49,7 @@
         },
         klass
     )}
+    {...rest}
 >
     {#if label}
         <div
@@ -77,6 +78,5 @@
         {placeholder}
         {readonly}
         bind:value
-        {...rest}
     />
 </div>

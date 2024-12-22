@@ -46,24 +46,21 @@ test.setTimeout(5 * 60000)
 
 test.describe.serial("auth", () => {
     test("register", async ({ page, userData }) => {
-        await page.getByText("Login").click()
+        await page.getByTestId("login-header-button").click()
         await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
-        await page.getByText("Registration").click()
+        await page.getByTestId("registration-button").click()
         await page.waitForURL(`${url}/en/auth/registration`, { waitUntil: "networkidle" })
 
-        const inputs = page.locator("main input")
-        const emailInput = inputs.nth(0)
-        const usernameInput = inputs.nth(1)
-        const passwordInput = inputs.nth(2)
-        const passwordConfirmationInput = inputs.nth(3)
+        await page.getByTestId("email-input").locator("input").fill(userData.email)
+        await page.getByTestId("username-input").locator("input").fill(userData.username)
+        await page.getByTestId("password-input").locator("input").fill(userData.password)
+        await page
+            .getByTestId("password-confirmation-input")
+            .locator("input")
+            .fill(userData.password)
 
-        await emailInput.fill(userData.email)
-        await usernameInput.fill(userData.username)
-        await passwordInput.fill(userData.password)
-        await passwordConfirmationInput.fill(userData.password)
-
-        await page.getByText("Register", { exact: true }).click()
-        await page.getByText("Success", { exact: true }).waitFor()
+        await page.getByTestId("register-button").click()
+        await page.getByTestId("success-toast").waitFor()
 
         const messagesBlock = userData.dropMailPage.locator(".messages-list > li pre")
         await messagesBlock.waitFor()
@@ -84,58 +81,50 @@ test.describe.serial("auth", () => {
         await page.goto(registrationUrl, { waitUntil: "networkidle" })
         await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
 
-        const logoutButtonIsVisible = await page.getByText("Logout").isVisible()
+        const logoutButtonIsVisible = await page.getByTestId("logout-header-button").isVisible()
         expect(logoutButtonIsVisible).toBe(true)
     })
 
     test("login and logout", async ({ page, userData }) => {
-        await page.getByText("Login").click()
+        await page.getByTestId("login-header-button").click()
         await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
 
-        const inputs = page.locator("main input")
-        const emailInput = inputs.nth(0)
-        const passwordInput = inputs.nth(1)
+        await page.getByTestId("email-input").locator("input").fill(userData.email)
+        await page.getByTestId("password-input").locator("input").fill(userData.password)
 
-        await emailInput.fill(userData.email)
-        await passwordInput.fill(userData.password)
+        await page.getByTestId("login-button").click()
+        await page.getByTestId("success-toast").waitFor()
+        await page.getByTestId("success-toast").waitFor({ state: "hidden" })
 
-        await page.locator("main button").click()
-        await page.getByText("Success", { exact: true }).waitFor()
-        await page.getByText("Success", { exact: true }).waitFor({ state: "hidden" })
-
-        await page.getByText("Logout").click()
-        await page.getByText("Success", { exact: true }).waitFor()
+        await page.getByTestId("logout-header-button").click()
+        await page.getByTestId("success-toast").waitFor()
         await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
 
-        const loginButtonIsVisible = await page.getByText("Login").isVisible()
+        const loginButtonIsVisible = await page.getByTestId("login-header-button").isVisible()
         expect(loginButtonIsVisible).toBe(true)
     })
 
     test("login and delete account", async ({ page, userData }) => {
-        await page.getByText("Login").click()
+        await page.getByTestId("login-header-button").click()
         await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
 
-        const inputs = page.locator("main input")
-        const emailInput = inputs.nth(0)
-        const passwordInput = inputs.nth(1)
+        await page.getByTestId("email-input").locator("input").fill(userData.email)
+        await page.getByTestId("password-input").locator("input").fill(userData.password)
 
-        await emailInput.fill(userData.email)
-        await passwordInput.fill(userData.password)
+        await page.getByTestId("login-button").click()
+        await page.getByTestId("success-toast").waitFor()
+        await page.getByTestId("success-toast").waitFor({ state: "hidden" })
 
-        await page.locator("main button").click()
-        await page.getByText("Success", { exact: true }).waitFor()
-        await page.getByText("Success", { exact: true }).waitFor({ state: "hidden" })
+        await page.getByTestId("profile-header-button").click()
+        await page.getByTestId("remove-user-button").click()
 
-        await page.getByText("Profile").click()
-        await page.getByText("Remove account").click()
-
-        const usernameInput = page.locator(`input[placeholder="${userData.username}"]`)
+        const usernameInput = page.getByTestId("username-input").locator("input")
         await usernameInput.waitFor()
         await usernameInput.fill(userData.username)
-        await page.getByText("Remove", { exact: true }).click()
+        await page.getByTestId("remove-user-dialog-button").click()
         await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
 
-        const loginButtonIsVisible = await page.getByText("Login").isVisible()
+        const loginButtonIsVisible = await page.getByTestId("login-header-button").isVisible()
         expect(loginButtonIsVisible).toBe(true)
     })
 })

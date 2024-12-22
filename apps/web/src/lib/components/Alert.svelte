@@ -14,6 +14,7 @@
         class?: string
         onClose?(): void
         children?: import("svelte").Snippet
+        [key: string]: unknown
     }
 
     let {
@@ -22,7 +23,8 @@
         closable = false,
         class: klass = undefined,
         onClose = undefined,
-        children
+        children,
+        ...rest
     }: Props = $props()
 
     const variants = $derived(getElementBasicVariantObject(variant))
@@ -58,6 +60,7 @@
             },
             klass
         )}
+        {...rest}
     >
         <div
             class={cn("u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter", {

@@ -53,6 +53,7 @@
         },
         klass
     )}
+    {...rest}
 >
     {#if label}
         <div
@@ -86,7 +87,6 @@
         {readonly}
         {type}
         bind:value
-        {...rest}
     />
     {#if rightIconClass}
         <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`}></i>

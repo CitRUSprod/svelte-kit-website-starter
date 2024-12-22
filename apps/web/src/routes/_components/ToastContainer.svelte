@@ -13,6 +13,7 @@
                 closable
                 variant={toast.variant}
                 onClose={() => toasts.remove(toast.id)}
+                data-testid="{toast.variant}-toast"
             >
                 {toast.text}
             </Alert>

@@ -7,9 +7,10 @@
     interface Props {
         provider: constantsEnums.OAuthProvider
         linkAccount?: boolean
+        [key: string]: unknown
     }
 
-    const { provider, linkAccount = false }: Props = $props()
+    const { provider, linkAccount = false, ...rest }: Props = $props()
 
     interface ButtonData {
         buttonClass: string
@@ -43,6 +44,7 @@
 <Button
     class={buttonData.buttonClass}
     href={$localePath(`/auth/${linkAccount ? "link/oauth" : "login"}/${buttonData.providerInUrl}`)}
+    {...rest}
 >
     <i class={buttonData.iconClass}></i>
     <span>{buttonData.text}</span>

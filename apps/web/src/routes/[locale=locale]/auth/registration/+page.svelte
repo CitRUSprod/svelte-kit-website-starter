@@ -67,6 +67,7 @@
                 label={$ll.email()}
                 bind:value={email}
                 onkeypress={onEnter}
+                data-testid="email-input"
             />
         </div>
         <div>
@@ -75,6 +76,7 @@
                 label={$ll.username()}
                 bind:value={username}
                 onkeypress={onEnter}
+                data-testid="username-input"
             />
         </div>
         <div>
@@ -84,6 +86,7 @@
                 type="password"
                 bind:value={password}
                 onkeypress={onEnter}
+                data-testid="password-input"
             />
         </div>
         <div>
@@ -93,10 +96,11 @@
                 type="password"
                 bind:value={passwordConfirmation}
                 onkeypress={onEnter}
+                data-testid="password-confirmation-input"
             />
         </div>
         <div class="u:flex u:justify-between">
-            <Button href={$localePath("/auth/login")} text>
+            <Button href={$localePath("/auth/login")} text data-testid="login-button">
                 {$ll.login()}
             </Button>
             <Button
@@ -104,6 +108,7 @@
                 loading={$qcRegister.loading}
                 variant="primary"
                 onclick={qcRegister.refresh}
+                data-testid="register-button"
             >
                 {$ll.register()}
             </Button>

@@ -66,6 +66,7 @@
             label={$ll.username()}
             placeholder={user.username}
             bind:value={username}
+            data-testid="username-input"
         />
     </div>
     <div class="u:flex u:justify-between">
@@ -77,6 +78,7 @@
             loading={$qcDeleteUser.loading}
             variant="error"
             onclick={qcDeleteUser.refresh}
+            data-testid="remove-user-dialog-button"
         >
             {$ll.remove()}
         </Button>

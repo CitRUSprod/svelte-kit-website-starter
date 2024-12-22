@@ -194,7 +194,11 @@
                     {$ll.unlinkEmail()}
                 </Button>
             {/if}
-            <Button variant="error" onclick={dialogUserRemoving?.open}>
+            <Button
+                variant="error"
+                onclick={dialogUserRemoving?.open}
+                data-testid="remove-user-button"
+            >
                 {$ll.removeUser()}
             </Button>
         </div>

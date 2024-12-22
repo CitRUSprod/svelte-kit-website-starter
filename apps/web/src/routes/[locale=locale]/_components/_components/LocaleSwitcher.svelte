@@ -43,6 +43,7 @@
             class={cn("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
             href={replaceLocaleInUrl(page.url, locale)}
             variant="primary"
+            data-testid="locale-{locale}-button"
         >
             {locale.toUpperCase()}
         </Button>

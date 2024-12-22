@@ -18,6 +18,13 @@ const config = defineConfig({
             }
         },
         {
+            name: "firefox",
+            use: {
+                ...devices["Desktop Firefox"],
+                locale: "en-US"
+            }
+        },
+        {
             name: "nexus-6",
             use: {
                 ...devices["Nexus 6"],
