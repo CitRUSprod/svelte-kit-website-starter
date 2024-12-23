@@ -1,7 +1,10 @@
 <script lang="ts">
     import { Header, Footer } from "./_components"
+
+    import type { Snippet } from "svelte"
+
     interface Props {
-        children?: import("svelte").Snippet
+        children?: Snippet
     }
 
     const { children }: Props = $props()

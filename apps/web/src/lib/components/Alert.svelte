@@ -5,6 +5,7 @@
     import { ll } from "$i18n/helpers"
     import { getElementBasicVariantObject } from "$lib/utils"
 
+    import type { Snippet } from "svelte"
     import type { ElementBasicVariant } from "$lib/types"
 
     interface Props {
@@ -13,7 +14,7 @@
         closable?: boolean
         class?: string
         onClose?(): void
-        children?: import("svelte").Snippet
+        children?: Snippet
         [key: string]: unknown
     }
 

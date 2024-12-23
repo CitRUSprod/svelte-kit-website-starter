@@ -4,10 +4,12 @@
     import { fade, scale } from "svelte/transition"
     import cn from "classnames"
 
+    import type { Snippet } from "svelte"
+
     interface Props {
         persistent?: boolean
         class?: string | undefined
-        children?: import("svelte").Snippet
+        children?: Snippet
     }
 
     const { persistent = false, class: klass = undefined, children }: Props = $props()

@@ -1,10 +1,12 @@
 <script lang="ts">
     import cn from "classnames"
 
+    import type { Snippet } from "svelte"
+
     interface Props {
         title: string
         class?: string | undefined
-        children?: import("svelte").Snippet
+        children?: Snippet
     }
 
     const { title, class: klass = undefined, children }: Props = $props()

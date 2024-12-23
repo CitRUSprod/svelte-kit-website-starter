@@ -4,6 +4,7 @@
     import cn from "classnames"
     import { getElementVariantObject } from "$lib/utils"
 
+    import type { Snippet } from "svelte"
     import type { ElementVariant } from "$lib/types"
 
     interface Props {
@@ -14,7 +15,7 @@
         disabled?: boolean
         loading?: boolean
         class?: string | undefined
-        children?: import("svelte").Snippet
+        children?: Snippet
         [key: string]: unknown
     }
 
