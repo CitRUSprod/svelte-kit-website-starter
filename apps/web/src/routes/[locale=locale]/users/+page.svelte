@@ -14,12 +14,14 @@
     let dialogRoleAssigning = $state<DialogRoleAssigning>()
     let dialogUserBanning = $state<DialogUserBanning>()
 
+    const initialGetUsersParams = $state({
+        page: data.query.page,
+        perPage: data.query.perPage
+    })
+
     const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
-        params: {
-            page: data.query.page,
-            perPage: data.query.perPage
-        },
+        params: initialGetUsersParams,
         fn(params) {
             return api.users.getUsers(
                 qp.removeDefault(
@@ -45,21 +47,21 @@
         watchForData(data)
     })
 
-    const qcUnbanUser = $state(
-        createQueryController({
-            params: {
-                id: 0
-            },
-            fn(params) {
-                return api.users.unbanUser({
-                    id: params.id
-                })
-            },
-            onSuccess() {
-                toasts.add("success", $ll.userUnbannedSuccessfully())
-            }
-        })
-    )
+    const initialUnbanUserParams = $state({
+        id: 0
+    })
+
+    const qcUnbanUser = createQueryController({
+        params: initialUnbanUserParams,
+        fn(params) {
+            return api.users.unbanUser({
+                id: params.id
+            })
+        },
+        onSuccess() {
+            toasts.add("success", $ll.userUnbannedSuccessfully())
+        }
+    })
 
     async function unbanUser(id: number) {
         qcUnbanUser.params.id = id

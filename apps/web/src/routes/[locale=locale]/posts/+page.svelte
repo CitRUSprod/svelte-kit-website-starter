@@ -23,14 +23,16 @@
         { text: $ll.titleDesc(), value: "title-desc" }
     ])
 
+    const initialGetPostsParams = $state({
+        page: data.query.page,
+        perPage: data.query.perPage,
+        sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
+        title: data.query.title
+    })
+
     const qcGetPosts = createQueryController({
         initialData: data.itemsPage,
-        params: {
-            page: data.query.page,
-            perPage: data.query.perPage,
-            sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
-            title: data.query.title
-        },
+        params: initialGetPostsParams,
         async fn(params) {
             const [sort, order] = params.sortAndOrder.split("-") as [
                 schemasRoutes.posts.GetPostsQuery["sort"],
