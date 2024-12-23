@@ -88,6 +88,7 @@
                     "u:text-info": text && variants.info
                 }
             )}
+            data-indicator="loading"
         >
             <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin"></i>
         </div>

@@ -23,21 +23,21 @@
         { text: $ll.titleDesc(), value: "title-desc" }
     ])
 
-    const qcGetPosts = $state(
-        createQueryController({
-            initialData: data.itemsPage,
-            params: {
-                page: data.query.page,
-                perPage: data.query.perPage,
-                sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
-                title: data.query.title
-            },
-            fn(params) {
-                const [sort, order] = params.sortAndOrder.split("-") as [
-                    schemasRoutes.posts.GetPostsQuery["sort"],
-                    schemasRoutes.posts.GetPostsQuery["order"]
-                ]
-                return api.posts.getPosts(
+    const qcGetPosts = createQueryController({
+        initialData: data.itemsPage,
+        params: {
+            page: data.query.page,
+            perPage: data.query.perPage,
+            sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
+            title: data.query.title
+        },
+        async fn(params) {
+            const [sort, order] = params.sortAndOrder.split("-") as [
+                schemasRoutes.posts.GetPostsQuery["sort"],
+                schemasRoutes.posts.GetPostsQuery["order"]
+            ]
+            const [res] = await Promise.all([
+                api.posts.getPosts(
                     qp.removeDefault(
                         {
                             page: params.page,
@@ -48,10 +48,17 @@
                         },
                         data.defaultQuery
                     )
-                )
-            }
-        })
-    )
+                ),
+                new Promise<void>(resolve => {
+                    setTimeout(() => {
+                        resolve()
+                    }, 500)
+                })
+            ])
+
+            return res
+        }
+    })
 
     function watchForData(d: typeof data) {
         qcGetPosts.params.page = d.query.page
@@ -114,6 +121,7 @@
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={qcGetPosts.params.title}
                 oninput={lodash.debounce(onTitleInput, 500)}
+                data-testid="search-input"
             />
             <DropdownMenu
                 items={sortings}
@@ -124,7 +132,11 @@
         </div>
         {#if $userData}
             <div>
-                <Button variant="success" onclick={dialogPostCreating?.open}>
+                <Button
+                    variant="success"
+                    onclick={dialogPostCreating?.open}
+                    data-testid="create-post-button"
+                >
                     {$ll.createPost()}
                 </Button>
             </div>
@@ -136,6 +148,7 @@
                 <a
                     class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
                     href={$localePath(`/posts/${String(post.id)}`)}
+                    data-testid="post"
                 >
                     <div>
                         <h3>{post.title}</h3>
@@ -162,6 +175,7 @@
                 page={$qcGetPosts.data.page}
                 pages={$qcGetPosts.data.pages}
                 onSetPage={page => setPage(page)}
+                data-testid="posts-pagination"
             />
         </div>
     {/if}

@@ -51,7 +51,12 @@
         <Button disabled={$qcDeletePost.loading} text variant="success" click={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeletePost.loading} variant="error" onclick={qcDeletePost.refresh}>
+        <Button
+            loading={$qcDeletePost.loading}
+            variant="error"
+            onclick={qcDeletePost.refresh}
+            data-testid="remove-post-dialog-button"
+        >
             {$ll.remove()}
         </Button>
     </div>

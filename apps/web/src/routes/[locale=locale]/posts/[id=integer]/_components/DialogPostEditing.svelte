@@ -69,6 +69,7 @@
             label={$ll.title()}
             placeholder={$ll.enterTitle()}
             bind:value={title}
+            data-testid="title-input"
         />
     </div>
     <div>
@@ -78,6 +79,7 @@
             label={$ll.content()}
             placeholder={$ll.enterContent()}
             bind:value={content}
+            data-testid="content-input"
         />
     </div>
     <div class="u:flex u:justify-between">
@@ -89,6 +91,7 @@
             loading={$qcUpdatePost.loading}
             variant="success"
             onclick={qcUpdatePost.refresh}
+            data-testid="edit-post-dialog-button"
         >
             {$ll.save()}
         </Button>

@@ -6,16 +6,17 @@
         pages: number
         loading?: boolean
         onSetPage?(localPage: number): void
+        [key: string]: unknown
     }
 
-    const { page, pages, loading = false, onSetPage = undefined }: Props = $props()
+    const { page, pages, loading = false, onSetPage = undefined, ...rest }: Props = $props()
 
     function setPage(localPage: number) {
         onSetPage?.(localPage)
     }
 </script>
 
-<div class="u:flex-inline u:gap-1">
+<div class="u:flex-inline u:gap-1" {...rest}>
     <Button disabled={loading || page <= 1} variant="primary" onclick={() => setPage(1)}>
         <i class="u:i-ic-baseline-keyboard-double-arrow-left u:mx--2 u:text-3xl"></i>
     </Button>

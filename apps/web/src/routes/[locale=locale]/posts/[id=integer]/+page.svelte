@@ -58,10 +58,18 @@
     </div>
     {#if localPost.author && $userData?.id === localPost.author.id}
         <div>
-            <Button variant="warning" onclick={dialogPostEditing?.open}>
+            <Button
+                variant="warning"
+                onclick={dialogPostEditing?.open}
+                data-testid="edit-post-button"
+            >
                 {$ll.edit()}
             </Button>
-            <Button variant="error" onclick={dialogPostRemoving?.open}>
+            <Button
+                variant="error"
+                onclick={dialogPostRemoving?.open}
+                data-testid="remove-post-button"
+            >
                 {$ll.remove()}
             </Button>
         </div>
