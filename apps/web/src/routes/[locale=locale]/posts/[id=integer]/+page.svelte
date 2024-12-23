@@ -23,7 +23,7 @@
     <title>{localPost.title}</title>
 </svelte:head>
 
-<Content.Default title={localPost.title}>
+<Content.Default title={localPost.title} titleTestId="content-title" bodyTestId="content-body">
     <div class="u:flex u:flex-col u:gap-4">
         {#each localPost.content.split(/\n+/) as paragraph (paragraph)}
             <p>{paragraph}</p>
