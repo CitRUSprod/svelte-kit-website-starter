@@ -194,5 +194,5 @@ scripts/create-backup
 To restore a database from backup you can use this command:
 
 ```sh
-scripts/restore-backup [YYYY-MM-DD_hh-mm-ss] # For example 2020-05-12_21-35-00
+scripts/restore-backup [YYYY-MM-DD_hh-mm-ss] # For example 2020-05-13_21-35-00
 ```

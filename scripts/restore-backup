@@ -3,18 +3,34 @@
 SCRIPTS_DIR=$(dirname "$0")
 ROOT_DIR=$SCRIPTS_DIR/..
 STORAGE_DIR=$ROOT_DIR/storage
-BACKUPS_DIR=$STORAGE_DIR/backups
 
-ABS_ROOT_DIR=$(realpath "$ROOT_DIR")
-
-if [ "$(scripts/dev ps -q && scripts/prod ps -q)" ]
-then
-    echo Please stop containers before doing this
-else
-    cd "$STORAGE_DIR" || exit
-    sudo rm -rf postgres files
-    cd "$ABS_ROOT_DIR" || exit
-    sudo tar -xvf "$BACKUPS_DIR"/"$1".tar.gz -C "$STORAGE_DIR" > /dev/null
+if [ -z "$1" ]; then
+    echo "Specify the timestamp of the backup (e.g. 2020-05-13_21-35-00)"
+    exit 1
 fi
+
+ABS_BACKUP_DIR=$(realpath "$STORAGE_DIR"/backups/"$1")
+
+if [ ! -f "$ABS_BACKUP_DIR".tar.gz ]; then
+    echo "Backup file not found: $ABS_BACKUP_DIR.tar.gz"
+    exit 1
+fi
+
+sudo mkdir -p "$ABS_BACKUP_DIR"
+
+sudo tar -xzf "$ABS_BACKUP_DIR".tar.gz -C "$ABS_BACKUP_DIR"
+
+sudo rm -rf "$STORAGE_DIR"/files
+sudo cp -r "$ABS_BACKUP_DIR"/files "$STORAGE_DIR"
+
+. "$ROOT_DIR"/.env
+
+scripts/dev exec postgres psql -U "$POSTGRES_USER" postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();" > /dev/null
+scripts/dev exec postgres psql -U "$POSTGRES_USER" postgres -c "DROP DATABASE IF EXISTS \"$POSTGRES_DB\"" > /dev/null
+scripts/dev exec postgres psql -U "$POSTGRES_USER" postgres -c "CREATE DATABASE \"$POSTGRES_DB\"" > /dev/null
+
+sudo cat "$ABS_BACKUP_DIR"/db.sql | scripts/dev exec -T postgres psql -U "$POSTGRES_USER" "$POSTGRES_DB" > /dev/null
+
+sudo rm -rf "$ABS_BACKUP_DIR"
 
 exit 0

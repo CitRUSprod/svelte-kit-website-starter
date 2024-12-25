@@ -4,8 +4,18 @@ SCRIPTS_DIR=$(dirname "$0")
 ROOT_DIR=$SCRIPTS_DIR/..
 STORAGE_DIR=$ROOT_DIR/storage
 
-cd "$STORAGE_DIR" || exit
-sudo mkdir -p backups
-sudo tar -zcvf backups/"$(date -u +'%Y-%m-%d_%H-%M-%S')".tar.gz postgres files > /dev/null
+ABS_BACKUP_DIR=$(realpath "$STORAGE_DIR"/backups)/$(date -u +'%Y-%m-%d_%H-%M-%S')
+
+. "$ROOT_DIR"/.env
+
+sudo mkdir -p "$ABS_BACKUP_DIR"
+
+sudo cp -r "$STORAGE_DIR"/files "$ABS_BACKUP_DIR"
+
+scripts/dev exec postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" | sudo tee "$ABS_BACKUP_DIR"/db.sql > /dev/null
+
+sudo tar -zcvf "$ABS_BACKUP_DIR".tar.gz -C "$ABS_BACKUP_DIR" . > /dev/null
+
+sudo rm -rf "$ABS_BACKUP_DIR"
 
 exit 0
