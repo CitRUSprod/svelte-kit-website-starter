@@ -1,3 +1,9 @@
+volumes:
+    postgres:
+        name: ${VOLUME_PREFIX}_postgres
+    minio:
+        name: ${VOLUME_PREFIX}_minio
+
 services:
     nginx:
         extends:
@@ -8,7 +14,12 @@ services:
         environment:
             WEB_HOST: host.docker.internal
             API_HOST: host.docker.internal
+            MINIO_HOST: host.docker.internal
     postgres:
         extends:
             file: ./base.yml
             service: postgres
+    minio:
+        extends:
+            file: ./base.yml
+            service: minio

@@ -1,3 +1,9 @@
+volumes:
+    postgres:
+        name: ${VOLUME_PREFIX}_postgres
+    minio:
+        name: ${VOLUME_PREFIX}_minio
+
 services:
     nginx:
         extends:
@@ -6,6 +12,7 @@ services:
         environment:
             WEB_HOST: web
             API_HOST: api
+            MINIO_HOST: minio
         depends_on:
             - web
     web:
@@ -20,10 +27,15 @@ services:
             service: api
         depends_on:
             - postgres
+            - minio
     postgres:
         extends:
             file: ./base.yml
             service: postgres
+    minio:
+        extends:
+            file: ./base.yml
+            service: minio
     backups:
         extends:
             file: ./base.yml

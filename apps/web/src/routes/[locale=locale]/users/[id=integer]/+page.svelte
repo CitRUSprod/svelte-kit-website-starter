@@ -56,6 +56,7 @@
                 id: data.user.id
             })
             $userData = res.data
+            localUser = res.data
             toasts.add("success", $ll.avatarUpdatedSuccessfully())
         }
     })

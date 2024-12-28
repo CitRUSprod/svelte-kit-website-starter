@@ -30,7 +30,7 @@ export function dto(user: UserData) {
             date: user.ban.date.toJSON()
         },
         registrationDate: user.registrationDate.toJSON(),
-        avatar: user.avatar && `/api/v1/files/${enums.ImgPath.Avatars}/${user.avatar}`
+        avatar: user.avatar && `/files/${enums.ImgPath.Avatars}/${user.avatar}`
     } satisfies JsonObject
 }
 

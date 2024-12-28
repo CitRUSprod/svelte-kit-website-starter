@@ -4,7 +4,7 @@ import argon2 from "argon2"
 import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
 import { env, enums } from "$/constants"
-import { isImgFile, writeFile, sendEmail, models } from "$/utils"
+import { isImgFile, sendEmail, models } from "$/utils"
 import type { RouteHandler } from "$/types"
 import * as utils from "./utils"
 import { getLogoutCookies } from "../auth/utils"
@@ -67,9 +67,11 @@ export const uploadAvatar = (async (app, req) => {
         throw new BadRequestError(req.ll.fileIsNotImage())
     }
 
-    const avatar = await writeFile(enums.ImgPath.Avatars, img)
+    const avatar = await app.minio.writeFile(enums.ImgPath.Avatars, img)
 
-    await utils.removeAvatar(req.userData.avatar)
+    if (req.userData.avatar) {
+        await app.minio.removeFile(enums.ImgPath.Avatars, req.userData.avatar)
+    }
 
     await app.prisma.user.update({
         where: { id: req.userData.id },
@@ -90,7 +92,9 @@ export const deleteAvatar = (async (app, req) => {
         throw new BadRequestError(req.ll.youDoNotHaveAvatar())
     }
 
-    await utils.removeAvatar(req.userData.avatar)
+    if (req.userData.avatar) {
+        await app.minio.removeFile(enums.ImgPath.Avatars, req.userData.avatar)
+    }
 
     await app.prisma.user.update({
         where: { id: req.userData.id },

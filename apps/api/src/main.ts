@@ -1,7 +1,6 @@
 import fastify from "fastify"
 import swagger from "@fastify/swagger"
 import swaggerUi from "@fastify/swagger-ui"
-import staticPlugin from "@fastify/static"
 import multipart from "@fastify/multipart"
 import jwt from "@fastify/jwt"
 import cookie from "@fastify/cookie"
@@ -19,7 +18,6 @@ import { hooks } from "$/hooks"
 import { decorators } from "$/decorators"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
-import { getAbsFilesPath } from "$/utils"
 
 const port = 6702
 
@@ -50,8 +48,7 @@ if (env.ENABLE_DOCS) {
     })
 }
 
-app.register(staticPlugin, { root: getAbsFilesPath(), prefix: "/files" })
-    .register(multipart, { attachFieldsToBody: true })
+app.register(multipart, { attachFieldsToBody: true })
     .register(jwt, { secret: env.JWT_SECRET, cookie: { cookieName: "accessToken", signed: false } })
     .register(cookie)
     .register(auth)
