@@ -27,9 +27,9 @@ rm -rf "$MINIO_TMP_DIR"/*
 scripts/"$MODE" exec minio mc alias set local http://minio:9000 "$MINIO_USER" "$MINIO_PASSWORD" > /dev/null
 scripts/"$MODE" exec minio mc mirror local/files /backup > /dev/null
 
-sudo chown -R "$(id -u)":"$(id -g)" "$MINIO_TMP_DIR"
-sudo chmod -R 644 "$MINIO_TMP_DIR"
-sudo find "$MINIO_TMP_DIR" -type d -exec chmod 755 {} \;
+scripts/"$MODE" exec alpine chown -R "$(id -u)":"$(id -g)" /storage/minio-tmp
+scripts/"$MODE" exec alpine chmod -R 644 /storage/minio-tmp
+scripts/"$MODE" exec alpine find /storage/minio-tmp -type d -exec chmod 755 {} \;
 
 cp -r "$MINIO_TMP_DIR"/* "$ABS_BACKUP_DIR"/files
 

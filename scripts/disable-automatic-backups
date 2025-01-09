@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+SCRIPTS_DIR=$(dirname "$0")
+ROOT_DIR=$SCRIPTS_DIR/..
+
+ABS_ROOT_DIR=$(realpath "$ROOT_DIR")
+PROJECT_NAME=$(basename "$ABS_ROOT_DIR")
+
+crontab -l > /tmp/current_crontab 2> /dev/null || true
+
+if ! grep -q "# $PROJECT_NAME" /tmp/current_crontab; then
+    echo "Automatic backups are already disabled"
+    rm /tmp/current_crontab
+
+    exit 1
+fi
+
+sed -i "/# $PROJECT_NAME/d" /tmp/current_crontab
+
+crontab /tmp/current_crontab
+
+rm /tmp/current_crontab
+
+echo "Automatic backups disabled"
+
+exit 0

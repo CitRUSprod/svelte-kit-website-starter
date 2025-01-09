@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+SCRIPTS_DIR=$(dirname "$0")
+ROOT_DIR=$SCRIPTS_DIR/..
+
+ABS_ROOT_DIR=$(realpath "$ROOT_DIR")
+PROJECT_NAME=$(basename "$ABS_ROOT_DIR")
+
+if ! crontab -l 2> /dev/null | grep -q "# $PROJECT_NAME"; then
+    echo "Automatic backups are disabled"
+else
+    echo "Automatic backups are enabled"
+fi
+
+exit 0

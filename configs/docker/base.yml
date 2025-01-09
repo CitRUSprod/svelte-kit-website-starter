@@ -62,11 +62,9 @@ services:
             - minio:/data
             - ../../storage/minio-tmp:/backup
         command: server /data --console-address :9001
-    backups:
-        image: medoff/cron:v2
+    alpine:
+        image: alpine:3.21.2
         restart: always
-        environment:
-            CRON: ${BACKUPS_SCHEDULE}
-            CMD: cd /storage && mkdir -p backups && tar -zcvf backups/$(date +'%Y-%m-%d_%H-%M-%S').tar.gz postgres files
+        tty: true
         volumes:
             - ../../storage:/storage

@@ -185,11 +185,29 @@ pnpm prisma:seeds:run --seed test-users # Run test users seeds
 
 ### Backups
 
-Backups are placed in `storage/backups` folder. They are automatic in production mode. For manual backup you can use this command:
+Backups are placed in `storage/backups` folder.
+
+For manual backup you can use this command:
 
 ```sh
 scripts/create-backup
 ```
+
+For automatic backups you can use these commands:
+
+```sh
+# Enable automatic backups (using cron)
+scripts/enable-automatic-backups
+
+# Check if automatic backups are enabled
+scripts/check-automatic-backups
+
+# Disable automatic backups
+scripts/disable-automatic-backups
+```
+
+The schedule for automatic backups can be configured in `.env` file using `BACKUPS_SCHEDULE` variable in cron format.
+Example: `BACKUPS_SCHEDULE="0 3 * * *"` for daily backup at 3 AM.
 
 To restore a database from backup you can use this command:
 

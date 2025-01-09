@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+
+SCRIPTS_DIR=$(dirname "$0")
+ROOT_DIR=$SCRIPTS_DIR/..
+
+ABS_ROOT_DIR=$(realpath "$ROOT_DIR")
+PROJECT_NAME=$(basename "$ABS_ROOT_DIR")
+
+"$SCRIPTS_DIR"/clone-env
+
+. "$ROOT_DIR/.env"
+
+if [ -z "$BACKUPS_SCHEDULE" ]; then
+    echo "Error: BACKUPS_SCHEDULE not set in .env file"
+    echo "Example: BACKUPS_SCHEDULE=\"0 3 * * *\" # every day at 3 AM"
+
+    exit 1
+fi
+
+crontab -l > /tmp/current_crontab 2> /dev/null || true
+
+if grep -q "# $PROJECT_NAME" /tmp/current_crontab; then
+    echo "Automatic backups are already enabled"
+    rm /tmp/current_crontab
+
+    exit 1
+fi
+
+echo "$BACKUPS_SCHEDULE cd $ABS_ROOT_DIR && scripts/create-backup # $PROJECT_NAME" >> /tmp/current_crontab
+
+crontab /tmp/current_crontab
+
+rm /tmp/current_crontab
+
+echo "Automatic backups enabled"
+
+exit 0
