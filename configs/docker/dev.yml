@@ -23,3 +23,7 @@ services:
         extends:
             file: ./base.yml
             service: minio
+    alpine:
+        extends:
+            file: ./base.yml
+            service: alpine

@@ -11,18 +11,22 @@ elif [ -n "$(scripts/prod ps -q)" ]; then
     MODE="prod"
 else
     echo "Containers are not running"
+
     exit 1
 fi
 
 if [ -z "$1" ]; then
     echo "Specify the timestamp of the backup (e.g. 2020-05-13_21-35-00)"
+
     exit 1
 fi
 
 ABS_BACKUP_DIR=$(realpath "$STORAGE_DIR"/backups/"$1")
+BACKUP_NAME=$(basename "$ABS_BACKUP_DIR".tar.gz)
 
 if [ ! -f "$ABS_BACKUP_DIR".tar.gz ]; then
     echo "Backup file not found: $ABS_BACKUP_DIR.tar.gz"
+
     exit 1
 fi
 
@@ -45,5 +49,7 @@ scripts/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "CREATE DATAB
 cat "$ABS_BACKUP_DIR"/db.sql | scripts/"$MODE" exec -T postgres psql -U "$POSTGRES_USER" "$POSTGRES_DB" > /dev/null
 
 rm -rf "$ABS_BACKUP_DIR"
+
+echo "Backup has been restored successfully: $BACKUP_NAME"
 
 exit 0
