@@ -15,8 +15,8 @@ pnpm i
 The launch is done through `docker compose`, but with scripts `scripts/dev` and `scripts/prod`:
 
 ```sh
-scripts/dev [docker compose command]
-scripts/prod [docker compose command]
+scripts/dev <docker compose command>
+scripts/prod <docker compose command>
 ```
 
 Run the project by entering these commands and open http://localhost:6700 in your browser:
@@ -24,7 +24,7 @@ Run the project by entering these commands and open http://localhost:6700 in you
 ```sh
 # Development
 scripts/dev up -d
-pnpm dev # or "cd apps/[app]" and "pnpm dev"
+pnpm dev # or "cd apps/<app>" and "pnpm dev"
 
 # Production
 scripts/start
@@ -35,9 +35,9 @@ scripts/start
 ```sh
 scripts/dev up -d # Start
 scripts/dev down # Stop
-scripts/dev logs [app] # View app logs
-scripts/dev exec [app] sh # Enter the app container
-scripts/dev [docker compose command] # Any docker compose command
+scripts/dev logs <app> # View app logs
+scripts/dev exec <app> sh # Enter the app container
+scripts/dev <docker compose command> # Any docker compose command
 ```
 
 ### Example of production mode commands
@@ -45,9 +45,9 @@ scripts/dev [docker compose command] # Any docker compose command
 ```sh
 scripts/prod up -d # Start
 scripts/prod down # Stop
-scripts/prod logs [app] # View app logs
-scripts/prod exec [app] sh # Enter the app container
-scripts/prod [docker compose command] # Any docker compose command
+scripts/prod logs <app> # View app logs
+scripts/prod exec <app> sh # Enter the app container
+scripts/prod <docker compose command> # Any docker compose command
 
 # or shortcuts
 
@@ -123,7 +123,16 @@ scripts/prod exec api sh
 pnpm prisma:seeds:run
 ```
 
-After completing all steps, the application will be available at `http://localhost:[WEBSITE_PORT]` (default is http://localhost:6700).
+After completing all steps, the application will be available at `http://localhost:<WEBSITE_PORT>` (default is http://localhost:6700).
+
+### Project Structure
+
+- `apps` - Applications
+- `packages` - Local libraries
+- `configs` - Configuration files (docker, nginx, prettier, eslint, stylelint)
+- `scripts` - Project management scripts (start, stop, restart, backup, etc.)
+- `storage` - Storage directory for backups and other data that should not be in the repository
+- `tests` - E2E tests with Playwright
 
 ### Tools
 
@@ -196,14 +205,9 @@ scripts/create-backup
 For automatic backups you can use these commands:
 
 ```sh
-# Enable automatic backups (using cron)
-scripts/enable-automatic-backups
-
-# Check if automatic backups are enabled
-scripts/check-automatic-backups
-
-# Disable automatic backups
-scripts/disable-automatic-backups
+scripts/enable-automatic-backups # Enable automatic backups (using cron)
+scripts/check-automatic-backups # Check if automatic backups are enabled
+scripts/disable-automatic-backups # Disable automatic backups
 ```
 
 The schedule for automatic backups can be configured in `.env` file using `BACKUPS_SCHEDULE` variable in cron format.
@@ -212,5 +216,5 @@ Example: `BACKUPS_SCHEDULE="0 3 * * *"` for daily backup at 3 AM.
 To restore a database from backup you can use this command:
 
 ```sh
-scripts/restore-backup [YYYY-MM-DD_hh-mm-ss] # For example 2020-05-13_21-35-00
+scripts/restore-backup <YYYY-MM-DD_hh-mm-ss> # For example 2020-05-13_21-35-00
 ```
