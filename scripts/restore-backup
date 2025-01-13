@@ -5,9 +5,9 @@ ROOT_DIR=$SCRIPTS_DIR/..
 STORAGE_DIR=$ROOT_DIR/storage
 MINIO_TMP_DIR=$STORAGE_DIR/minio-tmp
 
-if [ -n "$(scripts/dev ps -q)" ]; then
+if [ -n "$("$SCRIPTS_DIR"/dev ps -q)" ]; then
     MODE="dev"
-elif [ -n "$(scripts/prod ps -q)" ]; then
+elif [ -n "$("$SCRIPTS_DIR"/prod ps -q)" ]; then
     MODE="prod"
 else
     echo "Containers are not running"
@@ -39,14 +39,14 @@ tar -xzf "$ABS_BACKUP_DIR".tar.gz -C "$ABS_BACKUP_DIR"
 rm -rf "$MINIO_TMP_DIR"/*
 cp -r "$ABS_BACKUP_DIR"/files/* "$MINIO_TMP_DIR"
 
-scripts/"$MODE" exec minio mc alias set local http://minio:9000 "$MINIO_USER" "$MINIO_PASSWORD" > /dev/null
-scripts/"$MODE" exec minio mc mirror --overwrite /backup local/files > /dev/null
+"$SCRIPTS_DIR"/"$MODE" exec minio mc alias set local http://minio:9000 "$MINIO_USER" "$MINIO_PASSWORD" > /dev/null
+"$SCRIPTS_DIR"/"$MODE" exec minio mc mirror --overwrite /backup local/files > /dev/null
 
-scripts/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();" > /dev/null
-scripts/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "DROP DATABASE IF EXISTS \"$POSTGRES_DB\"" > /dev/null
-scripts/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "CREATE DATABASE \"$POSTGRES_DB\"" > /dev/null
+"$SCRIPTS_DIR"/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();" > /dev/null
+"$SCRIPTS_DIR"/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "DROP DATABASE IF EXISTS \"$POSTGRES_DB\"" > /dev/null
+"$SCRIPTS_DIR"/"$MODE" exec postgres psql -U "$POSTGRES_USER" postgres -c "CREATE DATABASE \"$POSTGRES_DB\"" > /dev/null
 
-cat "$ABS_BACKUP_DIR"/db.sql | scripts/"$MODE" exec -T postgres psql -U "$POSTGRES_USER" "$POSTGRES_DB" > /dev/null
+cat "$ABS_BACKUP_DIR"/db.sql | "$SCRIPTS_DIR"/"$MODE" exec -T postgres psql -U "$POSTGRES_USER" "$POSTGRES_DB" > /dev/null
 
 rm -rf "$ABS_BACKUP_DIR"
 
