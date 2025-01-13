@@ -2,7 +2,6 @@
 import * as _ from "lodash-es"
 import { AxiosError } from "axios"
 import { redirect } from "@sveltejs/kit"
-import * as constantsEnums from "@local/constants/enums"
 import { setCookies } from "$lib/utils"
 import * as api from "$lib/api"
 
@@ -19,10 +18,6 @@ export async function load(e): Promise<CallbackReturn> {
     }
 
     const oAuthProvider = _.upperFirst(_.camelCase(e.params.provider))
-
-    if (!Object.values(constantsEnums.OAuthProvider).includes(oAuthProvider)) {
-        redirect(302, `/${e.params.locale as string}`)
-    }
 
     if (oAuthProviderFromCookie && oAuthProviderFromCookie !== oAuthProvider) {
         redirect(302, `/${e.params.locale as string}`)

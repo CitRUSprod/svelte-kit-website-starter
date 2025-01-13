@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import * as _ from "lodash-es"
 import { redirect } from "@sveltejs/kit"
-import * as constantsEnums from "@local/constants/enums"
 
 export async function load(e) {
     if (!e.locals.userData) {
@@ -9,10 +8,6 @@ export async function load(e) {
     }
 
     const oAuthProvider = _.upperFirst(_.camelCase(e.params.provider))
-
-    if (!Object.values(constantsEnums.OAuthProvider).includes(oAuthProvider)) {
-        redirect(302, `/${e.params.locale as string}`)
-    }
 
     e.cookies.set("link-account", oAuthProvider, {
         path: "/",
