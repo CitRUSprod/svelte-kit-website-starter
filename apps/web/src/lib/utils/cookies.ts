@@ -1,8 +1,8 @@
-import { parse } from "set-cookie-parser"
-import { getHeader } from "$lib/utils"
-
-import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
 import type { Cookies } from "@sveltejs/kit"
+import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
+import { parse } from "set-cookie-parser"
+
+import { getHeader } from "$lib/utils"
 
 export function setCookies(
     cookies: Cookies,
@@ -15,6 +15,7 @@ export function setCookies(
         if (!("httpOnly" in opts)) {
             opts.httpOnly = false
         }
+
         if (path) {
             cookies.set(name, value, { path, ...opts })
         }

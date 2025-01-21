@@ -1,7 +1,8 @@
-import { BadRequestError } from "http-errors-enhanced"
 import * as schemasRoutes from "@local/schemas/routes"
-import { models } from "$/utils"
+import { BadRequestError } from "http-errors-enhanced"
+
 import type { RouteHandler } from "$/types"
+import { models } from "$/utils"
 
 export const getRoles = (async app => {
     const roles = await app.prisma.role.findMany({ orderBy: { id: "asc" } })
@@ -38,6 +39,7 @@ export const updateRole = (async (app, req) => {
 
 export const deleteRole = (async (app, req) => {
     const role = await models.role.get(app, req, req.params.id)
+
     if (role.protected) {
         throw new BadRequestError(req.ll.roleWithSuchIdIsProtected())
     }

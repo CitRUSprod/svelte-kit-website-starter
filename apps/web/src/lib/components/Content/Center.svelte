@@ -1,6 +1,5 @@
 <script lang="ts">
     import cn from "classnames"
-
     import type { Snippet } from "svelte"
 
     interface Props {

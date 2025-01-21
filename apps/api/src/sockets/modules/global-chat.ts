@@ -1,4 +1,5 @@
 import { v4 as createUuid } from "uuid"
+
 import type { SocketModule } from "$/types"
 
 interface RawChatMessage {

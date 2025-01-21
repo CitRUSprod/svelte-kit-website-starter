@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Alert } from "$lib/components"
-
     import { fly, fade } from "svelte/transition"
+
+    import { Alert } from "$lib/components"
     import { toasts } from "$lib/stores"
 </script>
 

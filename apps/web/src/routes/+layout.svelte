@@ -1,14 +1,18 @@
 <script lang="ts">
     import { ProgressBar } from "@prgm/sveltekit-progress-bar"
+    import Cookies from "js-cookie"
+    import { onMount } from "svelte"
+
     import { ToastContainer } from "./_components"
 
-    import { onMount } from "svelte"
-    import Cookies from "js-cookie"
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
 
+    // eslint-disable-next-line import/no-unassigned-import
     import "uno.css"
+    // eslint-disable-next-line import/no-unassigned-import
     import "@unocss/reset/tailwind.css"
+    // eslint-disable-next-line import/no-unassigned-import
     import "$styles/global.css"
 
     const { data, children } = $props()

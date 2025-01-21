@@ -1,7 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
+import * as constantsEnums from "@local/constants/enums"
 import * as _ from "lodash-es"
 import { z } from "zod"
-import * as constantsEnums from "@local/constants/enums"
 
 export function provider() {
     return z.nativeEnum(constantsEnums.OAuthProvider)

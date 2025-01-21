@@ -1,8 +1,8 @@
 import * as constantsRoutes from "@local/constants/routes"
 import * as schemasRoutes from "@local/schemas/routes"
-import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { RequestData } from "$lib/types"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 export function register(data: RequestData<schemasRoutes.auth.RegisterRequest>) {
     return axios.post<schemasRoutes.auth.RegisterResponse>(

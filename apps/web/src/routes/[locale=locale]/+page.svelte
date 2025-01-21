@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { Content, Button } from "$lib/components"
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     import * as _ from "lodash-es"
+
     import { ll } from "$i18n/helpers"
+    import { Content, Button } from "$lib/components"
     import { env } from "$lib/constants"
     import { toasts } from "$lib/stores"
 

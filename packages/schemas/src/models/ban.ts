@@ -1,6 +1,8 @@
 import { z } from "zod"
-import * as common from "$/common"
+
 import * as user from "./user"
+
+import * as common from "$/common"
 
 export function reason() {
     return z.string().trim().min(1)

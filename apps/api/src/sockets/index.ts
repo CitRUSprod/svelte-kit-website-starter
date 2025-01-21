@@ -1,9 +1,11 @@
+import type { User } from "@prisma/client"
 import type { FastifyInstance } from "fastify"
 import { authenticate } from "socketio-jwt-auth"
-import type { User } from "@prisma/client"
+
+import { initModules } from "./modules"
+
 import { env } from "$/constants"
 import type { UserPayload } from "$/types"
-import { initModules } from "./modules"
 
 const socketTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
 

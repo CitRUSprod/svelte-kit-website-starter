@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Header, Footer } from "./_components"
-
     import type { Snippet } from "svelte"
+
+    import { Header, Footer } from "./_components"
 
     interface Props {
         children?: Snippet

@@ -1,5 +1,7 @@
 import path from "node:path"
+
 import type { MultipartFile } from "@fastify/multipart"
+
 import { enums } from "$/constants"
 
 export function getExt(file: MultipartFile) {

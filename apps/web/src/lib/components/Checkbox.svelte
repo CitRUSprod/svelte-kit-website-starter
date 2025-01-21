@@ -1,10 +1,9 @@
 <script lang="ts">
     import { Checkbox, Label } from "bits-ui"
-
     import cn from "classnames"
-    import { getElementVariantObject } from "$lib/utils"
 
     import type { ElementVariant } from "$lib/types"
+    import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant

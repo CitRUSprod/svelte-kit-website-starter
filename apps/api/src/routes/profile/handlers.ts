@@ -1,13 +1,16 @@
 import type { MultipartFile } from "@fastify/multipart"
-import { BadRequestError, InternalServerError } from "http-errors-enhanced"
-import argon2 from "argon2"
-import { v4 as createUuid } from "uuid"
 import * as schemasRoutes from "@local/schemas/routes"
-import { env, enums } from "$/constants"
-import { isImgFile, sendEmail, models } from "$/utils"
-import type { RouteHandler } from "$/types"
-import * as utils from "./utils"
+import argon2 from "argon2"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
+import { v4 as createUuid } from "uuid"
+
 import { getLogoutCookies } from "../auth/utils"
+
+import * as utils from "./utils"
+
+import { env, enums } from "$/constants"
+import type { RouteHandler } from "$/types"
+import { isImgFile, sendEmail, models } from "$/utils"
 
 export const getUser = (async (app, req) => {
     if (!req.userData) {
@@ -88,6 +91,7 @@ export const deleteAvatar = (async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
+
     if (!req.userData.avatar) {
         throw new BadRequestError(req.ll.youDoNotHaveAvatar())
     }
@@ -108,6 +112,7 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
+
     if (!req.userData.email) {
         throw new BadRequestError(req.ll.emailIsNotSet())
     }

@@ -1,5 +1,7 @@
-import { AxiosError, type AxiosResponse } from "axios"
+import type { AxiosResponse } from "axios"
+import { AxiosError } from "axios"
 import { writable, get } from "svelte/store"
+
 import { ll } from "$i18n/helpers"
 import { toasts } from "$lib/stores"
 

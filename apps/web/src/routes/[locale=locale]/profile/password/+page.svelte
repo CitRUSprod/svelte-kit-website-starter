@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { Content, Button, TextField } from "$lib/components"
-
     import { ll } from "$i18n/helpers"
+    import * as api from "$lib/api"
+    import { Content, Button, TextField } from "$lib/components"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
-    import * as api from "$lib/api"
 
     let email = $state("")
 

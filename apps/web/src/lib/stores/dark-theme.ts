@@ -1,7 +1,7 @@
+import { persist, createCookieStorage } from "@macfja/svelte-persistent-store"
 import { writable } from "svelte/store"
 
 import { browser } from "$app/environment"
-import { persist, createCookieStorage } from "@macfja/svelte-persistent-store"
 
 function setDarkClass(value: boolean) {
     document.documentElement.classList[value ? "add" : "remove"]("dark")

@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Button } from "bits-ui"
-
     import cn from "classnames"
-    import { getElementVariantObject } from "$lib/utils"
-
     import type { Snippet } from "svelte"
+
     import type { ElementVariant } from "$lib/types"
+    import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant

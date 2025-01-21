@@ -2,8 +2,9 @@
 
 import type { FastifyInstance, FastifyRequest, RequestGenericInterface } from "fastify"
 import type { JsonObject } from "type-fest"
-import type { UserData } from "./user"
+
 import type { ReplyData } from "./reply-data"
+import type { UserData } from "./user"
 
 export interface RequestData {
     userData?: UserData

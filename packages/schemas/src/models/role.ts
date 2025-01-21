@@ -1,8 +1,8 @@
-import { z } from "zod"
 import * as constantsEnums from "@local/constants/enums"
-import * as common from "$/common"
-
 import type { IterableElement } from "type-fest"
+import { z } from "zod"
+
+import * as common from "$/common"
 
 export function name() {
     const locales = Object.values(common.locale().Values)

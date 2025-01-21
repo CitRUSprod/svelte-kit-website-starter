@@ -1,6 +1,8 @@
 import { z } from "zod"
-import * as common from "$/common"
+
 import * as user from "./user"
+
+import * as common from "$/common"
 
 export function title() {
     return z.string().trim().min(1).max(100)

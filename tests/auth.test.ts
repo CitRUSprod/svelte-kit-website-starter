@@ -1,5 +1,6 @@
-import { test as base, expect, type Page } from "@playwright/test"
 import { faker } from "@faker-js/faker"
+import type { Page } from "@playwright/test"
+import { test as base, expect } from "@playwright/test"
 
 const url = process.env.PUBLIC_BASE_URL!
 

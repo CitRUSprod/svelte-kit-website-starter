@@ -1,8 +1,8 @@
 import * as constantsRoutes from "@local/constants/routes"
 import * as schemasRoutes from "@local/schemas/routes"
-import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 import type { RequestData } from "$lib/types"
+import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
 export function getUser(data: RequestData<schemasRoutes.profile.GetUserRequest> = {}) {
     return axios.get<schemasRoutes.profile.GetUserResponse>(

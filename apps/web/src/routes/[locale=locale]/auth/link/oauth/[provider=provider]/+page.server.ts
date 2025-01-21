@@ -1,6 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import * as _ from "lodash-es"
 import { redirect } from "@sveltejs/kit"
+import * as _ from "lodash-es"
 
 export async function load(e) {
     if (!e.locals.userData) {

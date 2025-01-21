@@ -1,7 +1,8 @@
-import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import type { FastifyAuthFunction } from "@fastify/auth"
-import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 import * as constantsEnums from "@local/constants/enums"
+import type { FastifyInstance, FastifyPluginCallback } from "fastify"
+import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
+
 import { models } from "$/utils"
 
 declare module "fastify" {

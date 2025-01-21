@@ -1,9 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import * as _ from "lodash-es"
-import { redirect } from "@sveltejs/kit"
 import * as constantsEnums from "@local/constants/enums"
-import { setCookies } from "$lib/utils"
+import { redirect } from "@sveltejs/kit"
+import * as _ from "lodash-es"
+
 import * as api from "$lib/api"
+import { setCookies } from "$lib/utils"
 
 export async function load(e) {
     const oAuthProviderFromCookie = e.cookies.get("link-account")

@@ -1,9 +1,9 @@
-import anyParser from "any-eslint-parser"
-import prettier from "eslint-plugin-prettier"
-
 import baseConfig from "@citrus-linting/eslint-config"
-import typescriptConfig from "@citrus-linting/eslint-config/typescript"
 import svelteTypescriptConfig from "@citrus-linting/eslint-config/svelte-typescript"
+import typescriptConfig from "@citrus-linting/eslint-config/typescript"
+import anyParser from "any-eslint-parser"
+import prettierConfig from "eslint-config-prettier"
+import prettier from "eslint-plugin-prettier"
 
 typescriptConfig[0].languageOptions.parserOptions.project = [
     "./tsconfig.json",
@@ -18,7 +18,7 @@ const prettierRules = {
     "prefer-arrow-callback": 0
 }
 
-export default [
+const config = [
     {
         ignores: [
             "pnpm-lock.yaml",
@@ -76,5 +76,8 @@ export default [
         rules: {
             "prettier/prettier": [2, { parser: "html" }]
         }
-    }
+    },
+    prettierConfig
 ]
+
+export default config

@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { Button } from "$lib/components"
-
     import cn from "classnames"
-    import { page } from "$app/state"
+
     import { invalidateAll, afterNavigate } from "$app/navigation"
+    import { page } from "$app/state"
+    import type { Locale } from "$i18n/helpers"
     import {
         currentLocale,
         locales,
         setLocale,
         loadLocaleAsync,
-        replaceLocaleInUrl,
-        type Locale
+        replaceLocaleInUrl
     } from "$i18n/helpers"
+    import { Button } from "$lib/components"
 
     interface Props {
         class: string | undefined
@@ -23,6 +23,7 @@
         if (!newLocale || $currentLocale === newLocale) {
             return
         }
+
         await loadLocaleAsync(newLocale)
         document.querySelector("html")!.setAttribute("lang", newLocale)
         setLocale(newLocale)

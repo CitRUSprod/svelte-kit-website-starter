@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { Content, Button } from "$lib/components"
-    import { DialogPostEditing, DialogPostRemoving } from "./_components"
-
     import * as constantsEnums from "@local/constants/enums"
     import { dt } from "@local/utils"
+
+    import { DialogPostEditing, DialogPostRemoving } from "./_components"
+
     import { ll, localePath, currentLocale } from "$i18n/helpers"
+    import { Content, Button } from "$lib/components"
     import { userData } from "$lib/stores"
 
     const { data } = $props()

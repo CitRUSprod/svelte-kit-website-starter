@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { Content, Button } from "$lib/components"
-
     import { page } from "$app/state"
     import { ll, localePath } from "$i18n/helpers"
+    import { Content, Button } from "$lib/components"
 </script>
 
 <svelte:head>

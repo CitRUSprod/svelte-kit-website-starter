@@ -1,12 +1,12 @@
 <script lang="ts">
+    import cn from "classnames"
+    import type { Snippet } from "svelte"
+
     import Button from "./Button.svelte"
 
-    import cn from "classnames"
     import { ll } from "$i18n/helpers"
-    import { getElementBasicVariantObject } from "$lib/utils"
-
-    import type { Snippet } from "svelte"
     import type { ElementBasicVariant } from "$lib/types"
+    import { getElementBasicVariantObject } from "$lib/utils"
 
     interface Props {
         variant: ElementBasicVariant

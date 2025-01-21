@@ -1,6 +1,7 @@
+import * as schemasRoutes from "@local/schemas/routes"
 import type { FastifyInstance } from "fastify"
 import { UnauthorizedError } from "http-errors-enhanced"
-import * as schemasRoutes from "@local/schemas/routes"
+
 import { enums } from "$/constants"
 import type { ReplyCookie, ReplyData, UserPayload } from "$/types"
 

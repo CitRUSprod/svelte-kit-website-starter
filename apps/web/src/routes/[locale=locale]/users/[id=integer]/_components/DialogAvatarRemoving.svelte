@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { Button, Dialog } from "$lib/components"
-
     import * as schemasModels from "@local/schemas/models"
+
     import { ll } from "$i18n/helpers"
+    import * as api from "$lib/api"
+    import { Button, Dialog } from "$lib/components"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
-    import * as api from "$lib/api"
 
     interface Props {
         user: schemasModels.user.User

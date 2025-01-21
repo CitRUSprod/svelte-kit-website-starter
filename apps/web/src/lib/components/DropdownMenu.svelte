@@ -1,8 +1,8 @@
 <script lang="ts">
     import cn from "classnames"
-    import { getElementVariantObject } from "$lib/utils"
 
     import type { DropdownMenuItem, ElementVariant } from "$lib/types"
+    import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant

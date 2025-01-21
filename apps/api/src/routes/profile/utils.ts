@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify"
+
 import { enums } from "$/constants"
 import type { UserData } from "$/types"
 

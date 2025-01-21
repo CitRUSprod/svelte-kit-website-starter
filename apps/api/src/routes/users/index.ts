@@ -1,7 +1,8 @@
-import type { FastifyPluginCallback } from "fastify"
 import * as constantsEnums from "@local/constants/enums"
 import * as constantsRoutes from "@local/constants/routes"
 import * as schemasRoutes from "@local/schemas/routes"
+import type { FastifyPluginCallback } from "fastify"
+
 import * as handlers from "./handlers"
 
 export const usersRoutes: FastifyPluginCallback = (app, options, done) => {

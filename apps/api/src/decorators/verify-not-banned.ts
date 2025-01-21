@@ -1,5 +1,5 @@
-import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import type { FastifyAuthFunction } from "@fastify/auth"
+import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 
 declare module "fastify" {

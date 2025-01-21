@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
-
     import * as constantsEnums from "@local/constants/enums"
     import * as schemasModels from "@local/schemas/models"
-    import { ll, locales, type Locale } from "$i18n/helpers"
+
+    import type { Locale } from "$i18n/helpers"
+    import { ll, locales } from "$i18n/helpers"
+    import * as api from "$lib/api"
+    import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
     import { toasts } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
-    import * as api from "$lib/api"
 
     interface Props {
         permissions: Array<constantsEnums.Permission>

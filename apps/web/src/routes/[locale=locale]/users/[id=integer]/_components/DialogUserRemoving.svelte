@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { Button, TextField, Dialog } from "$lib/components"
-
     import * as schemasModels from "@local/schemas/models"
+
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
+    import * as api from "$lib/api"
+    import { Button, TextField, Dialog } from "$lib/components"
     import { toasts } from "$lib/stores"
     import { socket, createQueryController } from "$lib/utils"
-    import * as api from "$lib/api"
 
     interface Props {
         user: schemasModels.user.User

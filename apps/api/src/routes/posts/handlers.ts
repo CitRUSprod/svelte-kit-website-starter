@@ -1,9 +1,10 @@
-import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
-import { Prisma } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
-import { getItemsPage, models } from "$/utils"
+import { Prisma } from "@prisma/client"
+import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
+
 import type { RouteHandler } from "$/types"
+import { getItemsPage, models } from "$/utils"
 
 export const getPosts = (async (app, req) => {
     const page = await getItemsPage(req.query.page, req.query.perPage, async (skip, take) => {

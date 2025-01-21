@@ -47,7 +47,7 @@
         ]
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "1.1.1",
+        "@citrus-linting/eslint-config": "1.2.1",
         "@citrus-linting/prettier-config": "0.6.0",
         "@citrus-linting/stylelint-config": "0.5.3",
         "@commitlint/cli": "19.6.1",
@@ -55,6 +55,7 @@
         "@faker-js/faker": "9.3.0",
         "@local/configs": "workspace:*",
         "@playwright/test": "1.49.1",
+        "@stylistic/eslint-plugin": "2.13.0",
         "@types/eslint": "9.6.1",
         "any-eslint-parser": "1.0.1",
         "commitizen": "4.3.1",
@@ -62,6 +63,8 @@
         "dotenv": "16.4.7",
         "dotenv-expand": "12.0.1",
         "eslint": "9.17.0",
+        "eslint-config-prettier": "10.0.1",
+        "eslint-plugin-import": "2.31.0",
         "eslint-plugin-prettier": "5.2.1",
         "eslint-plugin-svelte": "2.46.1",
         "globals": "15.14.0",
@@ -74,7 +77,6 @@
         "stylelint-prettier": "5.0.2",
         "svelte": "5.15.0",
         "svelte-eslint-parser": "0.43.0",
-        "tiny-parse-argv": "2.8.0",
         "turbo": "2.3.3",
         "typescript": "5.7.2",
         "typescript-eslint": "8.18.1"

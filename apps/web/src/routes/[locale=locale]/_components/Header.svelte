@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { Button } from "$lib/components"
+    import * as constantsEnums from "@local/constants/enums"
+
     import { LocaleSwitcher } from "./_components"
 
-    import * as constantsEnums from "@local/constants/enums"
     import { ll, localePath } from "$i18n/helpers"
+    import { Button } from "$lib/components"
     import { env } from "$lib/constants"
     import { darkTheme, userData } from "$lib/stores"
 </script>

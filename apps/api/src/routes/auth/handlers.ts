@@ -1,20 +1,22 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import * as _ from "lodash-es"
-import { BadRequestError, InternalServerError } from "http-errors-enhanced"
-import axios from "axios"
-import { generateState } from "arctic"
-import argon2 from "argon2"
-import { v4 as createUuid } from "uuid"
-import type { User } from "@prisma/client"
 import * as constantsEnums from "@local/constants/enums"
 import * as schemasRoutes from "@local/schemas/routes"
+import type { User } from "@prisma/client"
+import { generateState } from "arctic"
+import argon2 from "argon2"
+import axios from "axios"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
+import * as _ from "lodash-es"
+import { v4 as createUuid } from "uuid"
+
+import * as utils from "./utils"
+
 import { enums, env } from "$/constants"
 import type { RouteHandler, UserPayload } from "$/types"
 import { oAuthProviders, sendEmail, models } from "$/utils"
-import * as utils from "./utils"
 
 export const register = (async (app, req) => {
     const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+
     if (userByEmail) {
         throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
     }
@@ -22,6 +24,7 @@ export const register = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
+
     if (userByUsername) {
         throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
     }
@@ -79,6 +82,7 @@ export const completeRegistration = (async (app, req) => {
     const registrationToken = await app.prisma.registrationToken.findFirst({
         where: { token: req.params.registrationToken }
     })
+
     if (!registrationToken) {
         throw new BadRequestError(req.ll.registrationTokenExpired())
     }
@@ -104,6 +108,7 @@ export const oAuthRegister = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { contains: req.body.username, mode: "insensitive" } }
     })
+
     if (userByUsername) {
         throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
     }
@@ -147,6 +152,7 @@ export const oAuthRegister = (async (app, req) => {
 
 export const login = (async (app, req) => {
     const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+
     if (!user) {
         throw new BadRequestError(req.ll.userWithEmailNotFound())
     }
@@ -156,6 +162,7 @@ export const login = (async (app, req) => {
     }
 
     const isCorrectPassword = await argon2.verify(user.password, req.body.password)
+
     if (!isCorrectPassword) {
         throw new BadRequestError(req.ll.incorrectPassword())
     }
@@ -279,11 +286,13 @@ export const link = (async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
+
     if (req.userData.email) {
         throw new BadRequestError(req.ll.youAlreadyHaveEmail())
     }
 
     const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+
     if (userByEmail) {
         throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
     }
@@ -330,6 +339,7 @@ export const completeLinking = (async (app, req) => {
     const linkingToken = await app.prisma.linkingToken.findFirst({
         where: { token: req.params.linkingToken }
     })
+
     if (!linkingToken) {
         throw new BadRequestError(req.ll.linkingTokenExpired())
     }
@@ -354,6 +364,7 @@ export const unlink = (async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
+
     if (!req.userData.email) {
         throw new BadRequestError(req.ll.emailIsNotSet())
     }
@@ -397,6 +408,7 @@ export const completeUnlinking = (async (app, req) => {
     const unlinkingToken = await app.prisma.unlinkingToken.findFirst({
         where: { token: req.params.unlinkingToken }
     })
+
     if (!unlinkingToken) {
         throw new BadRequestError(req.ll.unlinkingTokenExpired())
     }
@@ -404,6 +416,7 @@ export const completeUnlinking = (async (app, req) => {
     const user = await app.prisma.user.findUnique({
         where: { id: unlinkingToken.userId }
     })
+
     if (!user) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -442,7 +455,9 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
         case constantsEnums.OAuthProvider.Twitch: {
             if (req.userData.twitchId !== null) {
                 throw new InternalServerError(
-                    req.ll.youAlreadyHaveAccount({ provider: constantsEnums.OAuthProvider.Twitch })
+                    req.ll.youAlreadyHaveAccount({
+                        provider: constantsEnums.OAuthProvider.Twitch
+                    })
                 )
             }
 
@@ -516,7 +531,9 @@ export const oAuthUnlink = (async (app, req) => {
         case constantsEnums.OAuthProvider.Twitch: {
             if (req.userData.twitchId === null) {
                 throw new BadRequestError(
-                    req.ll.youDoNotHaveAccount({ provider: constantsEnums.OAuthProvider.Twitch })
+                    req.ll.youDoNotHaveAccount({
+                        provider: constantsEnums.OAuthProvider.Twitch
+                    })
                 )
             }
 
@@ -595,6 +612,7 @@ export const refreshTokens = (async (app, req, cookies) => {
     const refreshToken = await app.prisma.refreshToken.findFirst({
         where: { token: cookies.refreshToken }
     })
+
     if (!refreshToken) {
         throw new InternalServerError(req.ll.refreshTokenNotFound())
     }

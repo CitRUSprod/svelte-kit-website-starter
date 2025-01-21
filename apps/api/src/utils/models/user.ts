@@ -1,9 +1,10 @@
+import * as constantsEnums from "@local/constants/enums"
 import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"
-import * as constantsEnums from "@local/constants/enums"
-import type { Locale } from "$/i18n/helpers"
+
 import { enums } from "$/constants"
+import type { Locale } from "$/i18n/helpers"
 import type { UserData } from "$/types"
 
 export function dto(user: UserData) {

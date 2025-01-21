@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { Button } from "$lib/components"
-
     import * as constantsEnums from "@local/constants/enums"
+
     import { localePath } from "$i18n/helpers"
+    import { Button } from "$lib/components"
 
     interface Props {
         provider: constantsEnums.OAuthProvider
@@ -32,6 +32,7 @@
             case constantsEnums.OAuthProvider.Twitch: {
                 return twitchButtonData
             }
+
             default: {
                 return twitchButtonData
             }

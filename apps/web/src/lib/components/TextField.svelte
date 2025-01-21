@@ -1,10 +1,10 @@
 <script lang="ts">
+    import cn from "classnames"
+
     import { Input } from "./internal"
 
-    import cn from "classnames"
-    import { getElementVariantObject } from "$lib/utils"
-
     import type { ElementVariant } from "$lib/types"
+    import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant

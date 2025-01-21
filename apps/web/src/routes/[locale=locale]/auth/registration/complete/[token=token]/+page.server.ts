@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit"
-import { setCookies } from "$lib/utils"
+
 import * as api from "$lib/api"
+import { setCookies } from "$lib/utils"
 
 export async function load(e) {
     try {

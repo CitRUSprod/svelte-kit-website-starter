@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { Content } from "$lib/components"
-
     import { onMount } from "svelte"
+
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
+    import { Content } from "$lib/components"
     import { toasts } from "$lib/stores"
 
     onMount(() => {

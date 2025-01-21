@@ -1,8 +1,9 @@
-import { Client } from "minio"
-import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import type { MultipartFile } from "@fastify/multipart"
+import type { FastifyInstance, FastifyPluginCallback } from "fastify"
+import { Client } from "minio"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
+
 import { env, enums } from "$/constants"
 import { getExt, isImgFile } from "$/utils"
 

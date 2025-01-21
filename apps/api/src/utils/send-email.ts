@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer"
 import mjml2html from "mjml"
+import nodemailer from "nodemailer"
+
 import { env } from "$/constants"
 import { emailTemplates } from "$/email-templates"
 

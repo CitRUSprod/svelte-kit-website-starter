@@ -1,5 +1,5 @@
-const path = require("node:path")
 const fs = require("node:fs")
+const path = require("node:path")
 
 const types = {
     feat: "A new feature",
@@ -24,9 +24,10 @@ function getScopes(...pathParts) {
 
     if (fs.existsSync(scopesPath)) {
         const filesAndFolders = fs.readdirSync(scopesPath)
-        const scopes = filesAndFolders.filter(item =>
-            fs.statSync(getRootPath(...pathParts, item)).isDirectory()
-        )
+        const scopes = filesAndFolders.filter(item => {
+            const p = getRootPath(...pathParts, item)
+            return fs.statSync(p).isDirectory()
+        })
         return scopes
     }
 

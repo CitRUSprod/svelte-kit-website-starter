@@ -1,7 +1,9 @@
 import { z } from "zod"
-import * as common from "$/common"
-import * as role from "./role"
+
 import * as ban from "./ban"
+import * as role from "./role"
+
+import * as common from "$/common"
 
 export function email() {
     return z.string().trim().toLowerCase().email()

@@ -1,5 +1,7 @@
-import basicAxios, { type AxiosResponseHeaders, type RawAxiosResponseHeaders } from "axios"
 import * as constantsRoutes from "@local/constants/routes"
+import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios"
+import basicAxios from "axios"
+
 import { browser } from "$app/environment"
 import { env } from "$lib/constants"
 import { uniqCookies } from "$lib/utils"

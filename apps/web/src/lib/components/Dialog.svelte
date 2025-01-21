@@ -1,10 +1,8 @@
 <script lang="ts">
     import { Dialog } from "bits-ui"
-
-    import { fade, scale } from "svelte/transition"
     import cn from "classnames"
-
     import type { Snippet } from "svelte"
+    import { fade, scale } from "svelte/transition"
 
     interface Props {
         persistent?: boolean

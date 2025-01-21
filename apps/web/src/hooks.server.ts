@@ -1,10 +1,13 @@
-import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit"
+import * as schemasModels from "@local/schemas/models"
+import type { Handle, RequestEvent } from "@sveltejs/kit"
+import { redirect } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
 import { detectLocale, initAcceptLanguageHeaderDetector } from "typesafe-i18n/detectors"
-import * as schemasModels from "@local/schemas/models"
-import { defaultLocale, locales, i18n, isLocale, loadAllLocales, type Locale } from "$i18n/helpers"
-import { setCookies, uniqCookies } from "$lib/utils"
+
+import type { Locale } from "$i18n/helpers"
+import { defaultLocale, locales, i18n, isLocale, loadAllLocales } from "$i18n/helpers"
 import * as api from "$lib/api"
+import { setCookies, uniqCookies } from "$lib/utils"
 
 loadAllLocales()
 
@@ -30,10 +33,9 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
             localLocale = getPreferredLocale(e)
         }
 
-        redirect(
-            307,
-            `/${localLocale}${locale ? `/${locale}` : ""}${pathname.length > 0 ? `/${pathname.join("/")}` : ""}${e.url.search}`
-        )
+        const localPathname = pathname.length > 0 ? `/${pathname.join("/")}` : ""
+
+        redirect(307, `/${localLocale}${locale ? `/${locale}` : ""}${localPathname}${e.url.search}`)
     }
 
     const ll = l[locale]
@@ -49,7 +51,8 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
 
     const response = await resolve(e, {
         transformPageChunk({ html }) {
-            return html.replace(/<html.*>/, `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`)
+            const template = `<html lang="${locale}"${dark ? ' class="dark"' : ""}>`
+            return html.replace(/<html.*>/, template)
         }
     })
 

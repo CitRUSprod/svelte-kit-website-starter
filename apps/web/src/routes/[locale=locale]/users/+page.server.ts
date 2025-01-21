@@ -1,6 +1,7 @@
 import * as schemasRoutes from "@local/schemas/routes"
-import { qp } from "$lib/utils"
+
 import * as api from "$lib/api"
+import { qp } from "$lib/utils"
 
 const defaultQuery: schemasRoutes.users.GetUsersQuery = {
     page: 1,

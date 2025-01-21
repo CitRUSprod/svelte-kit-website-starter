@@ -1,10 +1,11 @@
-import fastify from "fastify"
+import auth from "@fastify/auth"
+import cookie from "@fastify/cookie"
+import jwt from "@fastify/jwt"
+import multipart from "@fastify/multipart"
 import swagger from "@fastify/swagger"
 import swaggerUi from "@fastify/swagger-ui"
-import multipart from "@fastify/multipart"
-import jwt from "@fastify/jwt"
-import cookie from "@fastify/cookie"
-import auth from "@fastify/auth"
+import { parseZodError, ZodError } from "@local/utils"
+import fastify from "fastify"
 import socketIo from "fastify-socket.io"
 import {
     jsonSchemaTransform,
@@ -12,10 +13,10 @@ import {
     validatorCompiler
 } from "fastify-type-provider-zod"
 import { BadRequestError } from "http-errors-enhanced"
-import { parseZodError, ZodError } from "@local/utils"
+
 import { env } from "$/constants"
-import { hooks } from "$/hooks"
 import { decorators } from "$/decorators"
+import { hooks } from "$/hooks"
 import { routes } from "$/routes"
 import { initSockets } from "$/sockets"
 
@@ -43,9 +44,7 @@ if (env.ENABLE_DOCS) {
             }
         },
         transform: jsonSchemaTransform
-    }).register(swaggerUi, {
-        routePrefix: "/docs"
-    })
+    }).register(swaggerUi, { routePrefix: "/docs" })
 }
 
 app.register(multipart, { attachFieldsToBody: true })

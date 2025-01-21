@@ -1,7 +1,8 @@
-import type { FastifyPluginCallback } from "fastify"
-import { UnauthorizedError } from "http-errors-enhanced"
 import * as constantsRoutes from "@local/constants/routes"
 import * as schemasRoutes from "@local/schemas/routes"
+import type { FastifyPluginCallback } from "fastify"
+import { UnauthorizedError } from "http-errors-enhanced"
+
 import * as handlers from "./handlers"
 
 export const authRoutes: FastifyPluginCallback = (app, options, done) => {

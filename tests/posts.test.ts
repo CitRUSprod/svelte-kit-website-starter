@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test"
 import { faker } from "@faker-js/faker"
+import { test, expect } from "@playwright/test"
 
 const url = process.env.PUBLIC_BASE_URL!
 

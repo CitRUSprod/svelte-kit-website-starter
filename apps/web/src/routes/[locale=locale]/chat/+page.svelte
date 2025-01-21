@@ -1,12 +1,11 @@
 <script lang="ts">
-    import { Content, Chat } from "$lib/components"
-
     import { onMount, onDestroy } from "svelte"
-    import { ll } from "$i18n/helpers"
-    import { userData } from "$lib/stores"
-    import { socket } from "$lib/utils"
 
+    import { ll } from "$i18n/helpers"
+    import { Content, Chat } from "$lib/components"
+    import { userData } from "$lib/stores"
     import type { RawChatMessage, ChatMessage } from "$lib/types"
+    import { socket } from "$lib/utils"
 
     let messages = $state<Array<ChatMessage>>([])
 

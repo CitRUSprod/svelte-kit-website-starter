@@ -1,6 +1,7 @@
+import { defineConfig, devices } from "@playwright/test"
 import { config as dotenv } from "dotenv"
 import { expand } from "dotenv-expand"
-import { defineConfig, devices } from "@playwright/test"
+
 import { getTestsPath } from "$/tests/libs"
 
 expand(dotenv())

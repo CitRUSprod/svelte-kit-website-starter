@@ -1,5 +1,5 @@
-import unocss from "unocss/vite"
 import { sveltekit } from "@sveltejs/kit/vite"
+import unocss from "unocss/vite"
 import dynamicImport from "vite-plugin-dynamic-import"
 
 const isWsl = "WSL_DISTRO_NAME" in process.env

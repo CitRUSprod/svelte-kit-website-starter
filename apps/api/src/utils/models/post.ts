@@ -1,7 +1,7 @@
+import type { User, Post } from "@prisma/client"
 import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"
-import type { User, Post } from "@prisma/client"
 
 export function dto(post: Post & { author: User | null }) {
     return {

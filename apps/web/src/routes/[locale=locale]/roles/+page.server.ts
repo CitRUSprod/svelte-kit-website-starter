@@ -1,5 +1,6 @@
-import { redirect } from "@sveltejs/kit"
 import * as constantsEnums from "@local/constants/enums"
+import { redirect } from "@sveltejs/kit"
+
 import * as api from "$lib/api"
 
 export async function load(e) {

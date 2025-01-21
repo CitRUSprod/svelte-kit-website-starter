@@ -1,8 +1,9 @@
-import { BadRequestError, InternalServerError } from "http-errors-enhanced"
-import { Prisma } from "@prisma/client"
 import * as schemasRoutes from "@local/schemas/routes"
-import { getItemsPage, models } from "$/utils"
+import { Prisma } from "@prisma/client"
+import { BadRequestError, InternalServerError } from "http-errors-enhanced"
+
 import type { RouteHandler } from "$/types"
+import { getItemsPage, models } from "$/utils"
 
 export const getUsers = (async (app, req) => {
     const page = await getItemsPage(req.query.page, req.query.perPage, async (skip, take) => {
@@ -63,6 +64,7 @@ export const banUser = (async (app, req) => {
     }
 
     const user = await models.user.get(app, req, req.params.id)
+
     if (user.ban) {
         throw new BadRequestError(req.ll.userWithSuchIdIsAlreadyBanned())
     }
@@ -93,6 +95,7 @@ export const banUser = (async (app, req) => {
 
 export const unbanUser = (async (app, req) => {
     const user = await models.user.get(app, req, req.params.id)
+
     if (!user.ban) {
         throw new BadRequestError(req.ll.userWithSuchIdIsNotBanned())
     }

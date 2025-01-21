@@ -1,9 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import * as _ from "lodash-es"
-import { AxiosError } from "axios"
 import { redirect } from "@sveltejs/kit"
-import { setCookies } from "$lib/utils"
+import { AxiosError } from "axios"
+import * as _ from "lodash-es"
+
 import * as api from "$lib/api"
+import { setCookies } from "$lib/utils"
 
 interface CallbackReturn {
     error: string | null

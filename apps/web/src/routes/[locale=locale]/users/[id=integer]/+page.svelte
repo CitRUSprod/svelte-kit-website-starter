@@ -1,5 +1,8 @@
 <script lang="ts">
-    import { Content, Button, OAuthProviderButton } from "$lib/components"
+    import * as constantsEnums from "@local/constants/enums"
+    import { dt } from "@local/utils"
+    import * as _ from "lodash-es"
+
     import {
         DialogAvatarRemoving,
         DialogProfileEditing,
@@ -9,14 +12,11 @@
         DialogUserRemoving
     } from "./_components"
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    import * as _ from "lodash-es"
-    import * as constantsEnums from "@local/constants/enums"
-    import { dt } from "@local/utils"
     import { ll, currentLocale } from "$i18n/helpers"
+    import * as api from "$lib/api"
+    import { Content, Button, OAuthProviderButton } from "$lib/components"
     import { toasts, userData } from "$lib/stores"
     import { createQueryController } from "$lib/utils"
-    import * as api from "$lib/api"
 
     const { data } = $props()
 

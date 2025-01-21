@@ -1,4 +1,5 @@
 import { Twitch } from "arctic"
+
 import { env } from "$/constants"
 
 export const twitch = new Twitch(

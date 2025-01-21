@@ -1,5 +1,6 @@
-import { defineConfig } from "tsup"
 import defu from "defu"
+import { defineConfig } from "tsup"
+
 import baseConfig from "./base"
 
 export default defu(

@@ -1,8 +1,10 @@
 import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
+import utc from "dayjs/plugin/utc.js"
 
+// eslint-disable-next-line import/no-unassigned-import
 import "dayjs/locale/ru.js"
+// eslint-disable-next-line import/no-unassigned-import
 import "dayjs/locale/en.js"
 
 dayjs.extend(utc)

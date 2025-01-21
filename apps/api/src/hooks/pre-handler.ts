@@ -1,6 +1,9 @@
 import type { FastifyPluginCallback } from "fastify"
-import { type HttpError, InternalServerError } from "http-errors-enhanced"
-import { l, isLocale, type Locale, type TranslationFunctions } from "$/i18n/helpers"
+import type { HttpError } from "http-errors-enhanced"
+import { InternalServerError } from "http-errors-enhanced"
+
+import type { Locale, TranslationFunctions } from "$/i18n/helpers"
+import { l, isLocale } from "$/i18n/helpers"
 import type { UserPayload, UserData } from "$/types"
 
 declare module "fastify" {

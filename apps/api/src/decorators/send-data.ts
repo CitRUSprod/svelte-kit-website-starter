@@ -2,6 +2,7 @@
 
 import type { FastifyReply, FastifyPluginCallback } from "fastify"
 import type { JsonObject } from "type-fest"
+
 import type { ReplyData } from "$/types"
 
 declare module "fastify" {

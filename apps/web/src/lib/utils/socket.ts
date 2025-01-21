@@ -1,6 +1,7 @@
-import io from "socket.io-client"
-import { parse } from "set-cookie-parser"
 import * as constantsRoutes from "@local/constants/routes"
+import { parse } from "set-cookie-parser"
+import io from "socket.io-client"
+
 import { createApiUrl } from "./axios"
 
 export const socket = io({

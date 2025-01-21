@@ -1,6 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import * as _ from "lodash-es"
 import * as constantsEnums from "@local/constants/enums"
+import * as _ from "lodash-es"
 
 export function match(param: string) {
     const oAuthProvider = _.upperFirst(_.camelCase(param))

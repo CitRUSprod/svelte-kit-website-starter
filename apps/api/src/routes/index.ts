@@ -1,9 +1,10 @@
 import type { FastifyPluginCallback } from "fastify"
+
 import { authRoutes } from "./auth"
-import { profileRoutes } from "./profile"
-import { usersRoutes } from "./users"
-import { rolesRoutes } from "./roles"
 import { postsRoutes } from "./posts"
+import { profileRoutes } from "./profile"
+import { rolesRoutes } from "./roles"
+import { usersRoutes } from "./users"
 
 export const routes: FastifyPluginCallback = (app, options, done) => {
     app.register(authRoutes)
