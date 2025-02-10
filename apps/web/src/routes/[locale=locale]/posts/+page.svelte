@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as schemasRoutes from "@local/schemas/routes"
     import { dt } from "@local/utils"
-    import * as lodash from "lodash-es"
+    import * as _ from "lodash-es"
 
     import { DialogPostCreating } from "./_components"
 
@@ -14,6 +14,16 @@
 
     const { data } = $props()
 
+    const defaultQueryParams = schemasRoutes.posts.getPostsQuery().parse({})
+
+    const queryParams = qp.createStore({
+        page: qp.number(defaultQueryParams.page),
+        perPage: qp.number(defaultQueryParams.perPage),
+        sort: qp.string(defaultQueryParams.sort),
+        order: qp.string(defaultQueryParams.order),
+        title: qp.string(defaultQueryParams.title ?? "")
+    })
+
     let dialogPostCreating = $state<DialogPostCreating>()
 
     const sortings: Array<DropdownMenuItem> = $derived([
@@ -24,10 +34,10 @@
     ])
 
     const initialGetPostsParams = $state({
-        page: data.query.page,
-        perPage: data.query.perPage,
-        sortAndOrder: `${data.query.sort as string}-${data.query.order as string}`,
-        title: data.query.title
+        page: $queryParams.page,
+        perPage: $queryParams.perPage,
+        sortAndOrder: `${$queryParams.sort}-${$queryParams.order}`,
+        title: $queryParams.title
     })
 
     const qcGetPosts = createQueryController({
@@ -38,19 +48,15 @@
                 schemasRoutes.posts.GetPostsQuery["sort"],
                 schemasRoutes.posts.GetPostsQuery["order"]
             ]
+
             const [res] = await Promise.all([
-                api.posts.getPosts(
-                    qp.removeDefault(
-                        {
-                            page: params.page,
-                            perPage: params.perPage,
-                            sort,
-                            order,
-                            title: params.title
-                        },
-                        data.defaultQuery
-                    )
-                ),
+                api.posts.getPosts({
+                    page: params.page,
+                    perPage: params.perPage,
+                    sort,
+                    order,
+                    title: params.title
+                }),
                 new Promise<void>(resolve => {
                     setTimeout(() => {
                         resolve()
@@ -62,35 +68,15 @@
         }
     })
 
-    function watchForData(d: typeof data) {
-        qcGetPosts.params.page = d.query.page
-        qcGetPosts.params.perPage = d.query.perPage
-        qcGetPosts.params.sortAndOrder = `${d.query.sort as string}-${d.query.order as string}`
-        qcGetPosts.params.title = d.query.title
-        $qcGetPosts.data = d.itemsPage
-    }
-
-    $effect(() => {
-        watchForData(data)
-    })
-
     async function refetchPage() {
-        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-") as [
-            schemasRoutes.posts.GetPostsQuery["sort"],
-            schemasRoutes.posts.GetPostsQuery["order"]
-        ]
-        qp.setForCurrentPage(
-            qp.removeDefault(
-                {
-                    page: qcGetPosts.params.page,
-                    perPage: qcGetPosts.params.perPage,
-                    sort,
-                    order,
-                    title: qcGetPosts.params.title
-                },
-                data.defaultQuery
-            )
-        )
+        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-")
+
+        $queryParams.page = qcGetPosts.params.page
+        $queryParams.perPage = qcGetPosts.params.perPage
+        $queryParams.sort = sort
+        $queryParams.order = order
+        $queryParams.title = qcGetPosts.params.title
+
         await qcGetPosts.refresh()
     }
 
@@ -122,7 +108,7 @@
                 placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={qcGetPosts.params.title}
-                oninput={lodash.debounce(onTitleInput, 500)}
+                oninput={_.debounce(onTitleInput, 500)}
                 data-testid="search-input"
             />
             <DropdownMenu

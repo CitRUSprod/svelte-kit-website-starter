@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as constantsEnums from "@local/constants/enums"
+    import * as schemasRoutes from "@local/schemas/routes"
     import { dt } from "@local/utils"
 
     import { DialogRoleAssigning, DialogUserBanning } from "./_components"
@@ -12,40 +13,30 @@
 
     const { data } = $props()
 
+    const defaultQueryParams = schemasRoutes.users.getUsersQuery().parse({})
+
+    const queryParams = qp.createStore({
+        page: qp.number(defaultQueryParams.page),
+        perPage: qp.number(defaultQueryParams.perPage)
+    })
+
     let dialogRoleAssigning = $state<DialogRoleAssigning>()
     let dialogUserBanning = $state<DialogUserBanning>()
 
     const initialGetUsersParams = $state({
-        page: data.query.page,
-        perPage: data.query.perPage
+        page: $queryParams.page,
+        perPage: $queryParams.perPage
     })
 
     const qcGetUsers = createQueryController({
         initialData: data.itemsPage,
         params: initialGetUsersParams,
         fn(params) {
-            return api.users.getUsers(
-                qp.removeDefault(
-                    {
-                        page: params.page,
-                        perPage: params.perPage,
-                        sort: "registrationDate",
-                        order: "asc"
-                    },
-                    data.defaultQuery
-                )
-            )
+            return api.users.getUsers({
+                page: params.page,
+                perPage: params.perPage
+            })
         }
-    })
-
-    function watchForData(d: typeof data) {
-        qcGetUsers.params.page = d.query.page
-        qcGetUsers.params.perPage = d.query.perPage
-        $qcGetUsers.data = d.itemsPage
-    }
-
-    $effect(() => {
-        watchForData(data)
     })
 
     const initialUnbanUserParams = $state({
@@ -71,17 +62,9 @@
     }
 
     async function refetchPage() {
-        qp.setForCurrentPage(
-            qp.removeDefault(
-                {
-                    page: qcGetUsers.params.page,
-                    perPage: qcGetUsers.params.perPage,
-                    sort: "registrationDate",
-                    order: "asc"
-                },
-                data.defaultQuery
-            )
-        )
+        $queryParams.page = qcGetUsers.params.page
+        $queryParams.perPage = qcGetUsers.params.perPage
+
         await qcGetUsers.refresh()
     }
 

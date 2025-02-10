@@ -53,6 +53,7 @@
         "runed": "0.21.0",
         "set-cookie-parser": "2.7.1",
         "socket.io-client": "4.8.1",
+        "sveltekit-search-params": "3.0.0",
         "tslib": "2.8.1",
         "typesafe-i18n": "5.26.2"
     }

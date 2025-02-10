@@ -6,11 +6,16 @@ import * as models from "$/models"
 // GetUsers
 
 export function getUsersQuery() {
+    const { page, perPage } = common.pagination().shape
+    const { sort, order } = common.sorting("registrationDate", "email", "username").shape
+
     return z.object({
-        ...common.pagination().shape,
-        ...common.sorting("registrationDate", "email", "username").shape,
-        email: models.user.email().optional(),
-        username: models.user.username().optional()
+        page: page.catch(1),
+        perPage: perPage.catch(10),
+        sort: sort.catch("registrationDate"),
+        order: order.catch("asc"),
+        email: models.user.email().optional().catch(undefined),
+        username: models.user.username().optional().catch(undefined)
     })
 }
 

@@ -6,10 +6,15 @@ import * as models from "$/models"
 // GetPosts
 
 export function getPostsQuery() {
+    const { page, perPage } = common.pagination().shape
+    const { sort, order } = common.sorting("creationDate", "title").shape
+
     return z.object({
-        ...common.pagination().shape,
-        ...common.sorting("creationDate", "title").shape,
-        title: models.post.title().optional()
+        page: page.catch(1),
+        perPage: perPage.catch(10),
+        sort: sort.catch("creationDate"),
+        order: order.catch("asc"),
+        title: models.post.title().optional().catch(undefined)
     })
 }
 
