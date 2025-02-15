@@ -8,7 +8,6 @@ import { env, enums } from "$/constants"
 import { getExt, isImgFile } from "$/utils"
 
 declare module "fastify" {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         minio: {
             writeFile(dirPath: string, file: MultipartFile): Promise<string>

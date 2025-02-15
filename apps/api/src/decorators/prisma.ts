@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client"
 import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 
 declare module "fastify" {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         prisma: PrismaClient
     }

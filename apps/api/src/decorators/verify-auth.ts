@@ -3,7 +3,6 @@ import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { InternalServerError } from "http-errors-enhanced"
 
 declare module "fastify" {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         verifyAuth: FastifyAuthFunction
     }

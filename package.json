@@ -21,10 +21,22 @@
         "test": "playwright test",
         "prepare": "husky"
     },
-    "packageManager": "pnpm@9.14.4",
+    "packageManager": "pnpm@10.4.0",
     "engines": {
-        "node": "22.11.0",
-        "pnpm": "9.14.4"
+        "node": "22.14.0",
+        "pnpm": "10.4.0"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@prisma/client",
+            "@prisma/engines",
+            "argon2",
+            "esbuild",
+            "fastify-socket.io",
+            "prisma",
+            "sharp",
+            "svelte-preprocess"
+        ]
     },
     "config": {
         "commitizen": {
@@ -50,35 +62,35 @@
         "@citrus-linting/eslint-config": "1.2.1",
         "@citrus-linting/prettier-config": "0.6.0",
         "@citrus-linting/stylelint-config": "0.5.3",
-        "@commitlint/cli": "19.6.1",
+        "@commitlint/cli": "19.7.1",
         "@commitlint/types": "19.5.0",
-        "@faker-js/faker": "9.3.0",
+        "@faker-js/faker": "9.5.0",
         "@local/configs": "workspace:*",
-        "@playwright/test": "1.49.1",
-        "@stylistic/eslint-plugin": "2.13.0",
+        "@playwright/test": "1.50.1",
+        "@stylistic/eslint-plugin": "3.1.0",
         "@types/eslint": "9.6.1",
         "any-eslint-parser": "1.0.1",
         "commitizen": "4.3.1",
-        "cz-customizable": "7.3.0",
+        "cz-customizable": "7.4.0",
         "dotenv": "16.4.7",
         "dotenv-expand": "12.0.1",
-        "eslint": "9.17.0",
+        "eslint": "9.20.1",
         "eslint-config-prettier": "10.0.1",
         "eslint-plugin-import": "2.31.0",
-        "eslint-plugin-prettier": "5.2.1",
+        "eslint-plugin-prettier": "5.2.3",
         "eslint-plugin-svelte": "2.46.1",
-        "globals": "15.14.0",
+        "globals": "15.15.0",
         "husky": "9.1.7",
-        "lint-staged": "15.2.11",
-        "postcss-html": "1.7.0",
-        "prettier": "3.4.2",
-        "prettier-plugin-svelte": "3.3.2",
-        "stylelint": "16.12.0",
-        "stylelint-prettier": "5.0.2",
-        "svelte": "5.15.0",
+        "lint-staged": "15.4.3",
+        "postcss-html": "1.8.0",
+        "prettier": "3.5.1",
+        "prettier-plugin-svelte": "3.3.3",
+        "stylelint": "16.14.1",
+        "stylelint-prettier": "5.0.3",
+        "svelte": "5.20.1",
         "svelte-eslint-parser": "0.43.0",
-        "turbo": "2.3.3",
-        "typescript": "5.7.2",
-        "typescript-eslint": "8.18.1"
+        "turbo": "2.4.2",
+        "typescript": "5.7.3",
+        "typescript-eslint": "8.24.0"
     }
 }

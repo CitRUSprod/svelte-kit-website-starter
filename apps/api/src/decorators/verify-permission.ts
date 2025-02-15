@@ -6,7 +6,6 @@ import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 import { models } from "$/utils"
 
 declare module "fastify" {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     interface FastifyInstance {
         verifyPermission(permission: constantsEnums.Permission): FastifyAuthFunction
     }

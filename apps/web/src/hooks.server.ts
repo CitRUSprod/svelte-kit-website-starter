@@ -18,7 +18,6 @@ function getPreferredLocale(e: RequestEvent) {
     return detectLocale(defaultLocale, locales, acceptLanguageDetector)
 }
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     const [, locale, ...pathname] = e.url.pathname.split("/")
 
@@ -63,7 +62,6 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
     return response
 }
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const authHandle: Handle = async ({ event: e, resolve }) => {
     let userData: schemasModels.user.User | null = null
 

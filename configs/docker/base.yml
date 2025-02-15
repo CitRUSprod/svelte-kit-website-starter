@@ -1,6 +1,6 @@
 services:
     nginx:
-        image: nginx:1.27.3-alpine
+        image: nginx:1.27.4-alpine
         restart: always
         ports:
             - ${WEBSITE_PORT}:6700
@@ -12,7 +12,7 @@ services:
             dockerfile: configs/docker/Dockerfile
             target: web
             args:
-                NODE_IMAGE: node:22.11.0-alpine
+                NODE_IMAGE: node:22.14.0-alpine
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
                 PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
         restart: always
@@ -22,7 +22,7 @@ services:
             dockerfile: configs/docker/Dockerfile
             target: api
             args:
-                NODE_IMAGE: node:22.11.0-alpine
+                NODE_IMAGE: node:22.14.0-alpine
         restart: always
         environment:
             PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
@@ -39,7 +39,7 @@ services:
             MAILER_NAME: ${MAILER_NAME}
             ENABLE_DOCS: ${ENABLE_DOCS}
     postgres:
-        image: postgres:17.2-alpine
+        image: postgres:17.3-alpine
         restart: always
         ports:
             - ${POSTGRES_PORT}:5432
@@ -51,7 +51,7 @@ services:
         volumes:
             - postgres:/var/lib/postgresql/data
     minio:
-        image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+        image: minio/minio:RELEASE.2025-02-07T23-21-09Z
         restart: always
         ports:
             - ${MINIO_PORT}:9000
@@ -63,7 +63,7 @@ services:
             - ../../storage/minio-tmp:/backup
         command: server /data --console-address :9001
     alpine:
-        image: alpine:3.21.2
+        image: alpine:3.21.3
         restart: always
         tty: true
         volumes:
