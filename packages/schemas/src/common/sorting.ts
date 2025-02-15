@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 export function sorting<T extends string>(field: T, ...fields: Array<T>) {
     return z.object({

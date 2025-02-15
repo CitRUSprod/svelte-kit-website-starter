@@ -13,11 +13,11 @@
 
     const { data } = $props()
 
-    const defaultQueryParams = schemasRoutes.users.getUsersQuery().parse({})
+    const paramSchemas = schemasRoutes.users.getUsersQuery().shape
 
     const queryParams = qp.createStore({
-        page: qp.number(defaultQueryParams.page),
-        perPage: qp.number(defaultQueryParams.perPage)
+        page: qp.param(paramSchemas.page),
+        perPage: qp.param(paramSchemas.perPage)
     })
 
     let dialogRoleAssigning = $state<DialogRoleAssigning>()

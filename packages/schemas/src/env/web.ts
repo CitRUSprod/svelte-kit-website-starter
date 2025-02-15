@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 export function web() {
     return z.object({

@@ -1,47 +1,29 @@
+import { z } from "@local/utils"
 import { queryParameters } from "sveltekit-search-params"
 
-export function boolean(defaultValue: boolean) {
+export function param<T extends z.ZodType>(schema: T) {
+    const defaultValue: z.infer<T> = schema.parse(undefined)
+
     return {
-        encode(v: boolean) {
+        encode(v: z.infer<T>) {
             return v === defaultValue ? undefined : String(v)
         },
-        decode(v: string | null) {
-            return v !== null && v !== "false"
+        decode(v: string | null): z.infer<T> {
+            return schema.parse(v)
         },
         defaultValue
     }
 }
 
-export function number(defaultValue: number) {
-    return {
-        encode(v: number) {
-            return v === defaultValue ? undefined : String(v)
-        },
-        decode(v: string | null) {
-            return v ? Number(v) : null
-        },
-        defaultValue
-    }
+export function params<T extends z.ZodRawShape>(
+    schema: z.ZodObject<T>
+): { [K in keyof T]: ReturnType<typeof param<T[K]>> } {
+    return Object.fromEntries(
+        Object.entries(schema.shape).map(([key, sch]) => [key, param(sch)])
+    ) as { [K in keyof T]: ReturnType<typeof param<T[K]>> }
 }
 
-export function string(defaultValue: string) {
-    return {
-        encode(v: string) {
-            return v === defaultValue ? undefined : v
-        },
-        decode(v: string | null) {
-            return v
-        },
-        defaultValue
-    }
-}
-
-export function createStore<
-    T extends Record<
-        string,
-        ReturnType<typeof boolean> | ReturnType<typeof number> | ReturnType<typeof string>
-    >
->(options: T) {
+export function createStore<T extends Record<string, ReturnType<typeof param>>>(options: T) {
     return queryParameters(options, {
         showDefaults: false,
         sort: true

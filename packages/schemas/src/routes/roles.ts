@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 import * as common from "$/common"
 import * as models from "$/models"

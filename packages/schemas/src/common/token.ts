@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 export function token() {
     return z.string().trim().length(36)

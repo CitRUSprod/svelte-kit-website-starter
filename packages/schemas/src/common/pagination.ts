@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 export function page() {
     return z.coerce.number().int().min(1)

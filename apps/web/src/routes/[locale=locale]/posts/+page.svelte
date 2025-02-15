@@ -2,6 +2,7 @@
     import * as schemasRoutes from "@local/schemas/routes"
     import { dt } from "@local/utils"
     import * as _ from "lodash-es"
+    import type { Split } from "type-fest"
 
     import { DialogPostCreating } from "./_components"
 
@@ -12,28 +13,36 @@
     import type { DropdownMenuItem } from "$lib/types"
     import { createQueryController, qp } from "$lib/utils"
 
+    type SortAndOrder =
+        `${schemasRoutes.posts.GetPostsQuery["sort"]}-${schemasRoutes.posts.GetPostsQuery["order"]}`
+
     const { data } = $props()
 
-    const defaultQueryParams = schemasRoutes.posts.getPostsQuery().parse({})
+    const paramSchemas = schemasRoutes.posts.getPostsQuery().shape
 
     const queryParams = qp.createStore({
-        page: qp.number(defaultQueryParams.page),
-        perPage: qp.number(defaultQueryParams.perPage),
-        sort: qp.string(defaultQueryParams.sort),
-        order: qp.string(defaultQueryParams.order),
-        title: qp.string(defaultQueryParams.title ?? "")
+        page: qp.param(paramSchemas.page),
+        perPage: qp.param(paramSchemas.perPage),
+        sort: qp.param(paramSchemas.sort),
+        order: qp.param(paramSchemas.order),
+        title: qp.param(paramSchemas.title.default(""))
     })
 
     let dialogPostCreating = $state<DialogPostCreating>()
 
-    const sortings: Array<DropdownMenuItem> = $derived([
+    const sortings = $derived<Array<DropdownMenuItem<SortAndOrder>>>([
         { text: $ll.creationDateAsc(), value: "creationDate-asc" },
         { text: $ll.creationDateDesc(), value: "creationDate-desc" },
         { text: $ll.titleAsc(), value: "title-asc" },
         { text: $ll.titleDesc(), value: "title-desc" }
     ])
 
-    const initialGetPostsParams = $state({
+    const initialGetPostsParams = $state<{
+        page: number
+        perPage: number
+        sortAndOrder: SortAndOrder
+        title: string
+    }>({
         page: $queryParams.page,
         perPage: $queryParams.perPage,
         sortAndOrder: `${$queryParams.sort}-${$queryParams.order}`,
@@ -44,10 +53,7 @@
         initialData: data.itemsPage,
         params: initialGetPostsParams,
         async fn(params) {
-            const [sort, order] = params.sortAndOrder.split("-") as [
-                schemasRoutes.posts.GetPostsQuery["sort"],
-                schemasRoutes.posts.GetPostsQuery["order"]
-            ]
+            const [sort, order] = params.sortAndOrder.split("-") as Split<SortAndOrder, "-">
 
             const [res] = await Promise.all([
                 api.posts.getPosts({
@@ -69,7 +75,7 @@
     })
 
     async function refetchPage() {
-        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-")
+        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-") as Split<SortAndOrder, "-">
 
         $queryParams.page = qcGetPosts.params.page
         $queryParams.perPage = qcGetPosts.params.perPage

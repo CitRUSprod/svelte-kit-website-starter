@@ -245,7 +245,7 @@ importers:
         version: 12.0.1
       esbuild-plugin-raw:
         specifier: 0.1.8
-        version: 0.1.8(esbuild@0.24.2)
+        version: 0.1.8(esbuild@0.23.1)
       esno:
         specifier: 4.8.0
         version: 4.8.0
@@ -415,15 +415,15 @@ importers:
       '@local/constants':
         specifier: workspace:*
         version: link:../constants
+      '@local/utils':
+        specifier: workspace:*
+        version: link:../utils
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
       tslib:
         specifier: 2.8.1
         version: 2.8.1
-      zod:
-        specifier: 3.24.1
-        version: 3.24.1
     devDependencies:
       '@local/configs':
         specifier: workspace:*
@@ -7470,9 +7470,9 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  esbuild-plugin-raw@0.1.8(esbuild@0.24.2):
+  esbuild-plugin-raw@0.1.8(esbuild@0.23.1):
     dependencies:
-      esbuild: 0.24.2
+      esbuild: 0.23.1
 
   esbuild@0.23.1:
     optionalDependencies:

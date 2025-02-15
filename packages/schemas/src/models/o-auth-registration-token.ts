@@ -1,6 +1,6 @@
 import * as constantsEnums from "@local/constants/enums"
+import { z } from "@local/utils"
 import * as _ from "lodash-es"
-import { z } from "zod"
 
 export function provider() {
     return z.nativeEnum(constantsEnums.OAuthProvider)

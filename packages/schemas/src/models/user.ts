@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@local/utils"
 
 import * as ban from "./ban"
 import * as role from "./role"
