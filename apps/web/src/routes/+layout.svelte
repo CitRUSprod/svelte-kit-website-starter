@@ -42,12 +42,8 @@
             sameSite: "lax"
         })
     })
-
-    function defineAny(value: any) {
-        return value
-    }
 </script>
 
-<ProgressBar class={defineAny("u:text-green-500")} />
+<ProgressBar class={"u:text-green-500" as any} />
 {@render children?.()}
 <ToastContainer />
