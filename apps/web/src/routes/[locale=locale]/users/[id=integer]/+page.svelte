@@ -38,14 +38,13 @@
         Object.values($userData?.linkedAccounts ?? {}).filter(value => value).length > 1
     )
 
+    let uploadAvatarImg = $state<File | null>(null)
+
     const qcUploadAvatar = createQueryController({
-        params: {
-            img: null as File | null
-        },
-        fn(params) {
-            if (params.img) {
+        fn() {
+            if (uploadAvatarImg) {
                 return api.profile.uploadAvatar({
-                    img: params.img
+                    img: uploadAvatarImg
                 })
             } else {
                 throw new Error("File is not selected")
@@ -64,7 +63,7 @@
     async function onSelectFile(e: { currentTarget: HTMLInputElement }) {
         if (e.currentTarget.files && e.currentTarget.files.length > 0) {
             const file = e.currentTarget.files[0]
-            qcUploadAvatar.params.img = file
+            uploadAvatarImg = file
             await qcUploadAvatar.refresh()
         }
     }

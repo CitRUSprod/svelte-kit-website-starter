@@ -17,22 +17,15 @@ interface QueryControllerStoreData<T> {
     loading: boolean
 }
 
-type QueryControllerParams = Record<string, unknown>
-
-interface QueryControllerOptions<T, K extends QueryControllerParams | undefined> {
+interface QueryControllerOptions<T> {
     initialData?: T
-    params?: K
-    fn: K extends undefined
-        ? (this: void) => Promise<AxiosResponse<T>>
-        : (this: void, params: K) => Promise<AxiosResponse<T>>
+    fn(this: void): Promise<AxiosResponse<T>>
     onSuccess?(this: void, data: T): void | Promise<void>
     onError?(this: void, error: ApiError): void | Promise<void>
     onUnexpectedError?(this: void, error: unknown): void | Promise<void>
 }
 
-export function createQueryController<T, K extends QueryControllerParams | undefined = undefined>(
-    options: QueryControllerOptions<T, K>
-) {
+export function createQueryController<T>(options: QueryControllerOptions<T>) {
     const { subscribe, update, set } = writable<QueryControllerStoreData<T>>({
         data: options.initialData,
         error: undefined,
@@ -49,7 +42,7 @@ export function createQueryController<T, K extends QueryControllerParams | undef
         let err: unknown
 
         try {
-            res = await options.fn(options.params as any)
+            res = await options.fn()
         } catch (error: unknown) {
             err = error
         }
@@ -94,11 +87,8 @@ export function createQueryController<T, K extends QueryControllerParams | undef
         subscribe,
         update,
         set,
-        ...(options.params ? { params: options.params } : {}),
         refresh
     }
 
-    return queryController as K extends undefined
-        ? Omit<typeof queryController, "params">
-        : Required<typeof queryController>
+    return queryController as Required<typeof queryController>
 }

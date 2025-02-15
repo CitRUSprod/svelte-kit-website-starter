@@ -37,67 +37,46 @@
         { text: $ll.titleDesc(), value: "title-desc" }
     ])
 
-    const initialGetPostsParams = $state<{
-        page: number
-        perPage: number
-        sortAndOrder: SortAndOrder
-        title: string
-    }>({
-        page: $queryParams.page,
-        perPage: $queryParams.perPage,
-        sortAndOrder: `${$queryParams.sort}-${$queryParams.order}`,
-        title: $queryParams.title
-    })
+    const sortAndOrder = {
+        get value(): SortAndOrder {
+            return `${$queryParams.sort}-${$queryParams.order}`
+        },
+        set value(v) {
+            const [sort, order] = v.split("-") as Split<SortAndOrder, "-">
+            $queryParams.sort = sort
+            $queryParams.order = order
+        }
+    }
 
     const qcGetPosts = createQueryController({
         initialData: data.itemsPage,
-        params: initialGetPostsParams,
-        async fn(params) {
-            const [sort, order] = params.sortAndOrder.split("-") as Split<SortAndOrder, "-">
-
-            const [res] = await Promise.all([
-                api.posts.getPosts({
-                    page: params.page,
-                    perPage: params.perPage,
-                    sort,
-                    order,
-                    title: params.title
-                }),
-                new Promise<void>(resolve => {
-                    setTimeout(() => {
-                        resolve()
-                    }, 500)
-                })
-            ])
-
-            return res
+        fn() {
+            return api.posts.getPosts({
+                page: $queryParams.page,
+                perPage: $queryParams.perPage,
+                sort: $queryParams.sort,
+                order: $queryParams.order,
+                title: $queryParams.title
+            })
         }
     })
 
     async function refetchPage() {
-        const [sort, order] = qcGetPosts.params.sortAndOrder.split("-") as Split<SortAndOrder, "-">
-
-        $queryParams.page = qcGetPosts.params.page
-        $queryParams.perPage = qcGetPosts.params.perPage
-        $queryParams.sort = sort
-        $queryParams.order = order
-        $queryParams.title = qcGetPosts.params.title
-
         await qcGetPosts.refresh()
     }
 
     async function onTitleInput() {
-        qcGetPosts.params.page = 1
+        $queryParams.page = 1
         await refetchPage()
     }
 
     async function onSortingChange() {
-        qcGetPosts.params.page = 1
+        $queryParams.page = 1
         await refetchPage()
     }
 
     async function setPage(localPage: number) {
-        qcGetPosts.params.page = localPage
+        $queryParams.page = localPage
         await refetchPage()
     }
 </script>
@@ -113,14 +92,14 @@
                 label={$ll.search()}
                 placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
-                bind:value={qcGetPosts.params.title}
+                bind:value={$queryParams.title}
                 oninput={_.debounce(onTitleInput, 500)}
                 data-testid="search-input"
             />
             <DropdownMenu
                 items={sortings}
                 label={$ll.sorting()}
-                bind:value={qcGetPosts.params.sortAndOrder}
+                bind:value={sortAndOrder.value}
                 onchange={onSortingChange}
             />
         </div>
