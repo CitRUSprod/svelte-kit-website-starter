@@ -1,5 +1,5 @@
 <script lang="ts">
-    import cn from "classnames"
+    import type { ClassValue } from "svelte/elements"
 
     import { invalidateAll, afterNavigate } from "$app/navigation"
     import { page } from "$app/state"
@@ -14,10 +14,10 @@
     import { Button } from "$lib/components"
 
     interface Props {
-        class: string | undefined
+        class?: ClassValue
     }
 
-    const { class: klass }: Props = $props()
+    const { class: klass = undefined }: Props = $props()
 
     async function switchLocale(newLocale: Locale | undefined) {
         if (!newLocale || $currentLocale === newLocale) {
@@ -38,10 +38,10 @@
 
 <svelte:window onpopstate={({ state }) => switchLocale(state.locale)} />
 
-<div class={cn("u:flex u:items-center u:gap-1", klass)}>
+<div class={["u:flex u:items-center u:gap-1", klass]}>
     {#each locales as locale, index (locale)}
         <Button
-            class={cn("u:px-1", { "u:opacity-50": $currentLocale !== locale })}
+            class={["u:px-1", { "u:opacity-50": $currentLocale !== locale }]}
             href={replaceLocaleInUrl(page.url, locale)}
             variant="primary"
             data-testid="locale-{locale}-button"

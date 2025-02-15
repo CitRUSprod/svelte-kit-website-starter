@@ -1,18 +1,18 @@
 <script lang="ts">
-    import cn from "classnames"
+    import type { ClassValue } from "svelte/elements"
 
     import type { DropdownMenuItem, ElementVariant } from "$lib/types"
     import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant
-        label?: string | undefined
+        label?: string
         disabled?: boolean
-        value?: string | number | null | undefined
+        value: string | number | null | undefined
         items?: Array<DropdownMenuItem>
-        leftIconClass?: string | undefined
-        rightIconClass?: string | undefined
-        class?: string | undefined
+        leftIconClass?: string
+        rightIconClass?: string
+        class?: ClassValue
         [key: string]: unknown
     }
 
@@ -32,7 +32,7 @@
 </script>
 
 <div
-    class={cn(
+    class={[
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
@@ -44,7 +44,7 @@
             "u:text-info": variants.info
         },
         klass
-    )}
+    ]}
 >
     {#if label}
         <div
@@ -57,7 +57,7 @@
         <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`}></i>
     {/if}
     <select
-        class={cn(
+        class={[
             "u:w-full u:h-10 u:px-3 u:bg-content u:text-content-inverse u:border u:rounded u:outline-none u:appearance-none u:cursor-pointer",
             "u:disabled:cursor-not-allowed",
             {
@@ -70,7 +70,7 @@
                 "u:border-warning": variants.warning,
                 "u:border-info": variants.info
             }
-        )}
+        ]}
         {disabled}
         bind:value
         {...rest}

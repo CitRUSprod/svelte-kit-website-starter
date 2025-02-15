@@ -1,12 +1,12 @@
 <script lang="ts">
-    import cn from "classnames"
     import type { Snippet } from "svelte"
+    import type { ClassValue } from "svelte/elements"
 
     interface Props {
         title: string
         titleTestId?: string
         bodyTestId?: string
-        class?: string | undefined
+        class?: ClassValue
         children?: Snippet
     }
 
@@ -23,7 +23,7 @@
     <div>
         <h1 data-testid={titleTestId}>{title}</h1>
     </div>
-    <div class={cn("u:grid u:gap-4 u:my-4", klass)} data-testid={bodyTestId}>
+    <div class={["u:grid u:gap-4 u:my-4", klass]} data-testid={bodyTestId}>
         {@render children?.()}
     </div>
 </div>

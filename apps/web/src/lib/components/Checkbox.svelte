@@ -1,18 +1,18 @@
 <script lang="ts">
     import { Checkbox, Label, useId } from "bits-ui"
-    import cn from "classnames"
+    import type { ClassValue } from "svelte/elements"
 
     import type { ElementVariant } from "$lib/types"
     import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant
-        label?: string | undefined
+        label?: string
         disabled?: boolean
         readonly?: boolean
         indeterminate?: boolean
         checked?: boolean
-        class?: string | undefined
+        class?: ClassValue
         [key: string]: unknown
     }
 
@@ -33,7 +33,7 @@
 </script>
 
 <span
-    class={cn(
+    class={[
         "u:inline-flex u:items-center u:w-auto u:gap-1 u:align-top",
         {
             "u:cursor-pointer": !disabled && !readonly,
@@ -41,11 +41,11 @@
             "u:cursor-[default]": readonly
         },
         klass
-    )}
+    ]}
     {...rest}
 >
     <Checkbox.Root
-        class={cn(
+        class={[
             "u:flex u:justify-center u:items-center u:w-6 u:h-6 u:text-content-lighter u:border u:rounded u:cursor-inherit!",
             {
                 "u:bg-content": !checked && !indeterminate,
@@ -62,7 +62,7 @@
                 "u:bg-warning": (checked || indeterminate) && variants.warning,
                 "u:bg-info": (checked || indeterminate) && variants.info
             }
-        )}
+        ]}
         {id}
         disabled={disabled || readonly}
         bind:indeterminate

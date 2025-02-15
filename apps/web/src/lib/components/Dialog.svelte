@@ -1,12 +1,12 @@
 <script lang="ts">
     import { Dialog } from "bits-ui"
-    import cn from "classnames"
     import type { Snippet } from "svelte"
+    import type { ClassValue } from "svelte/elements"
     import { fade, scale } from "svelte/transition"
 
     interface Props {
         persistent?: boolean
-        class?: string | undefined
+        class?: ClassValue
         children?: Snippet
     }
 
@@ -45,10 +45,10 @@
             {#snippet child({ props, open: o })}
                 {#if o}
                     <div
-                        class={cn(
+                        class={[
                             "u:fixed u:top-50% u:left-50% u:left-50% u:max-w-full u:p-8 u:bg-content u:shadow-md u:rounded-md u:translate--50% u:outline-none u:z-50",
                             klass
-                        )}
+                        ]}
                         transition:scale
                         {...props}
                     >

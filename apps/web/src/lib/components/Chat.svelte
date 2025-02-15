@@ -19,7 +19,7 @@
 
     const trimmedMessage = $derived(message.trim())
 
-    let messageContainer: HTMLElement | undefined = $state()
+    let messageContainer = $state<HTMLElement>()
 
     async function scrollDown() {
         if (messageContainer) {

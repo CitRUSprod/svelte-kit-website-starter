@@ -1,6 +1,6 @@
 <script lang="ts">
-    import cn from "classnames"
     import type { Snippet } from "svelte"
+    import type { ClassValue } from "svelte/elements"
 
     import Button from "./Button.svelte"
 
@@ -12,7 +12,7 @@
         variant: ElementBasicVariant
         visible?: boolean
         closable?: boolean
-        class?: string
+        class?: ClassValue
         onClose?(): void
         children?: Snippet
         [key: string]: unknown
@@ -51,7 +51,7 @@
 
 {#if visible}
     <div
-        class={cn(
+        class={[
             "u:flex u:w-full u:rounded-md u:bg-content u:border-2",
             {
                 "u:border-success": variants.success,
@@ -60,35 +60,41 @@
                 "u:border-info": variants.info
             },
             klass
-        )}
+        ]}
         {...rest}
     >
         <div
-            class={cn("u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter", {
-                "u:bg-success": variants.success,
-                "u:bg-error": variants.error,
-                "u:bg-warning": variants.warning,
-                "u:bg-info": variants.info
-            })}
+            class={[
+                "u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter",
+                {
+                    "u:bg-success": variants.success,
+                    "u:bg-error": variants.error,
+                    "u:bg-warning": variants.warning,
+                    "u:bg-info": variants.info
+                }
+            ]}
         >
             <i
-                class={cn("u:text-xl", {
-                    "u:i-fa-solid-check": variants.success,
-                    "u:i-fa-solid-times-circle": variants.error,
-                    "u:i-fa-solid-exclamation-triangle": variants.warning,
-                    "u:i-fa-solid-info-circle": variants.info
-                })}
+                class={[
+                    "u:text-xl",
+                    {
+                        "u:i-fa-solid-check": variants.success,
+                        "u:i-fa-solid-times-circle": variants.error,
+                        "u:i-fa-solid-exclamation-triangle": variants.warning,
+                        "u:i-fa-solid-info-circle": variants.info
+                    }
+                ]}
             ></i>
         </div>
         <div class="u:flex u:flex-1 u:justify-between">
             <div class="u:px-4 u:py-2">
                 <b
-                    class={cn({
+                    class={{
                         "u:text-success": variants.success,
                         "u:text-error": variants.error,
                         "u:text-warning": variants.warning,
                         "u:text-info": variants.info
-                    })}
+                    }}
                 >
                     {getTextByVariant(variant)}
                 </b>

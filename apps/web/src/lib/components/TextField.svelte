@@ -1,5 +1,5 @@
 <script lang="ts">
-    import cn from "classnames"
+    import type { ClassValue } from "svelte/elements"
 
     import { Input } from "./internal"
 
@@ -8,16 +8,16 @@
 
     interface Props {
         variant?: ElementVariant
-        placeholder?: string | undefined
-        label?: string | undefined
+        placeholder?: string
+        label?: string
         type?: string
         disabled?: boolean
         readonly?: boolean
         autofocus?: boolean
-        value?: string | number | null | undefined
-        leftIconClass?: string | undefined
-        rightIconClass?: string | undefined
-        class?: string | undefined
+        value: string | number | null | undefined
+        leftIconClass?: string
+        rightIconClass?: string
+        class?: ClassValue
         [key: string]: unknown
     }
 
@@ -40,7 +40,7 @@
 </script>
 
 <div
-    class={cn(
+    class={[
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
@@ -52,7 +52,7 @@
             "u:text-info": variants.info
         },
         klass
-    )}
+    ]}
     {...rest}
 >
     {#if label}
@@ -66,7 +66,7 @@
         <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`}></i>
     {/if}
     <Input
-        class={cn(
+        class={[
             "u:w-full u:h-10 u:px-3 u:bg-content u:text-content-inverse u:border u:rounded u:placeholder-opacity-80 u:outline-none",
             "u:dark:placeholder-opacity-80",
             "u:disabled:cursor-not-allowed",
@@ -80,7 +80,7 @@
                 "u:border-warning u:placeholder-text-warning-lighter": variants.warning,
                 "u:border-info u:placeholder-text-info-lighter": variants.info
             }
-        )}
+        ]}
         {autofocus}
         {disabled}
         {placeholder}

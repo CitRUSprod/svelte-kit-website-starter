@@ -1,5 +1,5 @@
 <script lang="ts">
-    import cn from "classnames"
+    import type { ClassValue } from "svelte/elements"
 
     import { Textarea } from "./internal"
 
@@ -8,14 +8,14 @@
 
     interface Props {
         variant?: ElementVariant
-        placeholder?: string | undefined
-        label?: string | undefined
+        placeholder?: string
+        label?: string
         resizable?: boolean
         disabled?: boolean
         readonly?: boolean
         autofocus?: boolean
-        value?: string | number | null | undefined
-        class?: string | undefined
+        value: string | number | null | undefined
+        class?: ClassValue
         [key: string]: unknown
     }
 
@@ -36,7 +36,7 @@
 </script>
 
 <div
-    class={cn(
+    class={[
         "u:relative u:flex u:items-center",
         {
             "u:opacity-50": disabled,
@@ -48,7 +48,7 @@
             "u:text-info": variants.info
         },
         klass
-    )}
+    ]}
     {...rest}
 >
     {#if label}
@@ -59,7 +59,7 @@
         </div>
     {/if}
     <Textarea
-        class={cn(
+        class={[
             "u:w-full u:h-40 u:px-3 u:py-2 u:bg-content u:text-content-inverse u:border u:rounded u:placeholder-opacity-80 u:outline-none",
             "u:dark:placeholder-opacity-80",
             "u:disabled:cursor-not-allowed",
@@ -72,7 +72,7 @@
                 "u:border-info u:placeholder-text-info-lighter": variants.info,
                 "u:resize-none": !resizable
             }
-        )}
+        ]}
         {autofocus}
         {disabled}
         {placeholder}

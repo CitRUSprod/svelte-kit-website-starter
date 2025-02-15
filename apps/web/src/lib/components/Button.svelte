@@ -1,19 +1,19 @@
 <script lang="ts">
     import { Button } from "bits-ui"
-    import cn from "classnames"
     import type { Snippet } from "svelte"
+    import type { ClassValue } from "svelte/elements"
 
     import type { ElementVariant } from "$lib/types"
     import { getElementVariantObject } from "$lib/utils"
 
     interface Props {
         variant?: ElementVariant
-        href?: string | undefined
+        href?: string
         text?: boolean
         icon?: boolean
         disabled?: boolean
         loading?: boolean
-        class?: string | undefined
+        class?: ClassValue
         children?: Snippet
         [key: string]: unknown
     }
@@ -34,7 +34,7 @@
 </script>
 
 <Button.Root
-    class={cn(
+    class={[
         "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top",
         "u:disabled:cursor-not-allowed",
         {
@@ -66,7 +66,7 @@
             "u:text-info": !loading && text && variants.info
         },
         klass
-    )}
+    ]}
     disabled={disabled || loading}
     href={href && !disabled && !loading ? href : undefined}
     {...rest}
@@ -74,7 +74,7 @@
     {@render children?.()}
     {#if loading}
         <div
-            class={cn(
+            class={[
                 "u:absolute u:top-0 u:left-0 u:flex u:justify-center u:items-center u:w-full u:h-full",
                 {
                     "u:rounded": !icon,
@@ -87,7 +87,7 @@
                     "u:text-warning": text && variants.warning,
                     "u:text-info": text && variants.info
                 }
-            )}
+            ]}
             data-indicator="loading"
         >
             <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin"></i>
