@@ -1,12 +1,13 @@
 <script lang="ts">
     import { Dialog } from "bits-ui"
     import cn from "classnames"
+    import type { Snippet } from "svelte"
     import { fade, scale } from "svelte/transition"
 
     interface Props {
         persistent?: boolean
         class?: string | undefined
-        children?: import("svelte").Snippet
+        children?: Snippet
     }
 
     const { persistent = false, class: klass = undefined, children }: Props = $props()
