@@ -50,6 +50,7 @@
 
     const qGetPosts = useQuery({
         initialData: data.itemsPage,
+        minResponseTime: 500,
         fn() {
             return api.posts.getPosts({
                 page: queryParams.page,

@@ -13,6 +13,7 @@ interface ApiError {
 
 interface QueryOptions<T> {
     initialData?: T
+    minResponseTime?: number
     fn(this: void): Promise<AxiosResponse<T>>
     onSuccess?(this: void, data: T): void | Promise<void>
     onError?(this: void, error: ApiError): void | Promise<void>
@@ -30,10 +31,25 @@ export function useQuery<T>(options: QueryOptions<T>) {
         let res: AxiosResponse<T>
         let errorLocal: unknown
 
-        try {
-            res = await options.fn()
-        } catch (err: unknown) {
-            errorLocal = err
+        async function tryToFetch() {
+            try {
+                res = await options.fn()
+            } catch (err: unknown) {
+                errorLocal = err
+            }
+        }
+
+        if (options.minResponseTime) {
+            await Promise.all([
+                tryToFetch(),
+                new Promise<void>(resolve => {
+                    setTimeout(() => {
+                        resolve()
+                    }, options.minResponseTime)
+                })
+            ])
+        } else {
+            await tryToFetch()
         }
 
         if (errorLocal) {

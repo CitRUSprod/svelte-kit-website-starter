@@ -25,6 +25,7 @@
 
     const qGetUsers = useQuery({
         initialData: data.itemsPage,
+        minResponseTime: 500,
         fn() {
             return api.users.getUsers({
                 page: queryParams.page,
