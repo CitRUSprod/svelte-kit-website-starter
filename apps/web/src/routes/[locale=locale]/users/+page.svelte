@@ -8,16 +8,17 @@
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, SimplePagination } from "$lib/components"
+    import { useQueryParams } from "$lib/hooks"
     import { toasts, userData } from "$lib/stores"
-    import { createQueryController, qp } from "$lib/utils"
+    import { createQueryController } from "$lib/utils"
 
     const { data } = $props()
 
     const paramSchemas = schemasRoutes.users.getUsersQuery().shape
 
-    const queryParams = qp.createStore({
-        page: qp.param(paramSchemas.page),
-        perPage: qp.param(paramSchemas.perPage)
+    const queryParams = useQueryParams({
+        page: paramSchemas.page,
+        perPage: paramSchemas.perPage
     })
 
     let dialogRoleAssigning = $state<DialogRoleAssigning>()
@@ -27,8 +28,8 @@
         initialData: data.itemsPage,
         fn() {
             return api.users.getUsers({
-                page: $queryParams.page,
-                perPage: $queryParams.perPage
+                page: queryParams.page,
+                perPage: queryParams.perPage
             })
         }
     })
@@ -53,7 +54,7 @@
     }
 
     async function setPage(localPage: number) {
-        $queryParams.page = localPage
+        queryParams.page = localPage
         await qcGetUsers.refresh()
     }
 </script>

@@ -9,9 +9,10 @@
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
+    import { useQueryParams } from "$lib/hooks"
     import { userData } from "$lib/stores"
     import type { DropdownMenuItem } from "$lib/types"
-    import { createQueryController, qp } from "$lib/utils"
+    import { createQueryController } from "$lib/utils"
 
     type SortAndOrder =
         `${schemasRoutes.posts.GetPostsQuery["sort"]}-${schemasRoutes.posts.GetPostsQuery["order"]}`
@@ -20,12 +21,12 @@
 
     const paramSchemas = schemasRoutes.posts.getPostsQuery().shape
 
-    const queryParams = qp.createStore({
-        page: qp.param(paramSchemas.page),
-        perPage: qp.param(paramSchemas.perPage),
-        sort: qp.param(paramSchemas.sort),
-        order: qp.param(paramSchemas.order),
-        title: qp.param(paramSchemas.title.default(""))
+    const queryParams = useQueryParams({
+        page: paramSchemas.page,
+        perPage: paramSchemas.perPage,
+        sort: paramSchemas.sort,
+        order: paramSchemas.order,
+        title: paramSchemas.title.transform(v => v ?? "")
     })
 
     let dialogPostCreating = $state<DialogPostCreating>()
@@ -39,12 +40,12 @@
 
     const sortAndOrder = {
         get value(): SortAndOrder {
-            return `${$queryParams.sort}-${$queryParams.order}`
+            return `${queryParams.sort}-${queryParams.order}`
         },
         set value(v) {
             const [sort, order] = v.split("-") as Split<SortAndOrder, "-">
-            $queryParams.sort = sort
-            $queryParams.order = order
+            queryParams.sort = sort
+            queryParams.order = order
         }
     }
 
@@ -52,11 +53,11 @@
         initialData: data.itemsPage,
         fn() {
             return api.posts.getPosts({
-                page: $queryParams.page,
-                perPage: $queryParams.perPage,
-                sort: $queryParams.sort,
-                order: $queryParams.order,
-                title: $queryParams.title
+                page: queryParams.page,
+                perPage: queryParams.perPage,
+                sort: queryParams.sort,
+                order: queryParams.order,
+                title: queryParams.title
             })
         }
     })
@@ -66,17 +67,17 @@
     }
 
     async function onTitleInput() {
-        $queryParams.page = 1
+        queryParams.page = 1
         await refetchPage()
     }
 
     async function onSortingChange() {
-        $queryParams.page = 1
+        queryParams.page = 1
         await refetchPage()
     }
 
     async function setPage(localPage: number) {
-        $queryParams.page = localPage
+        queryParams.page = localPage
         await refetchPage()
     }
 </script>
@@ -92,7 +93,7 @@
                 label={$ll.search()}
                 placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
-                bind:value={$queryParams.title}
+                bind:value={queryParams.title}
                 oninput={_.debounce(onTitleInput, 500)}
                 data-testid="search-input"
             />
