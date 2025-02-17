@@ -5,8 +5,8 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let email = $state("")
@@ -26,7 +26,7 @@
             vldResultPassword.value === vldResultPasswordConfirmation.value
     )
 
-    const qcRegister = createQueryController({
+    const qRegister = useQuery({
         fn() {
             return api.auth.register({
                 email: vldResultEmail.value,
@@ -42,7 +42,7 @@
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && completedForm) {
-            await qcRegister.refresh()
+            await qRegister.refetch()
             const input = e.target as HTMLInputElement
             input.focus()
         }
@@ -63,7 +63,7 @@
         <div>
             <TextField
                 autofocus
-                disabled={$qcRegister.loading}
+                disabled={qRegister.loading}
                 label={$ll.email()}
                 bind:value={email}
                 onkeypress={onEnter}
@@ -72,7 +72,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcRegister.loading}
+                disabled={qRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
                 onkeypress={onEnter}
@@ -81,7 +81,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcRegister.loading}
+                disabled={qRegister.loading}
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
@@ -91,7 +91,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcRegister.loading}
+                disabled={qRegister.loading}
                 label={$ll.passwordConfirmation()}
                 type="password"
                 bind:value={passwordConfirmation}
@@ -105,9 +105,9 @@
             </Button>
             <Button
                 disabled={!completedForm}
-                loading={$qcRegister.loading}
+                loading={qRegister.loading}
                 variant="primary"
-                onclick={qcRegister.refresh}
+                onclick={qRegister.refetch}
                 data-testid="register-button"
             >
                 {$ll.register()}

@@ -5,8 +5,9 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { socket, createQueryController } from "$lib/utils"
+    import { socket } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let email = $state("")
@@ -17,7 +18,7 @@
 
     const completedForm = $derived(vldResultEmail.valid && vldResultPassword.valid)
 
-    const qcLogin = createQueryController({
+    const qLogin = useQuery({
         fn() {
             return api.auth.login({
                 email: vldResultEmail.value,
@@ -33,7 +34,7 @@
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && completedForm) {
-            await qcLogin.refresh()
+            await qLogin.refetch()
             const input = e.target as HTMLInputElement
             input.focus()
         }
@@ -54,7 +55,7 @@
         <div>
             <TextField
                 autofocus
-                disabled={$qcLogin.loading}
+                disabled={qLogin.loading}
                 label={$ll.email()}
                 bind:value={email}
                 onkeypress={onEnter}
@@ -63,7 +64,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcLogin.loading}
+                disabled={qLogin.loading}
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
@@ -86,9 +87,9 @@
             </Button>
             <Button
                 disabled={!completedForm}
-                loading={$qcLogin.loading}
+                loading={qLogin.loading}
                 variant="primary"
-                onclick={qcLogin.refresh}
+                onclick={qLogin.refetch}
                 data-testid="login-button"
             >
                 {$ll.doLogin()}

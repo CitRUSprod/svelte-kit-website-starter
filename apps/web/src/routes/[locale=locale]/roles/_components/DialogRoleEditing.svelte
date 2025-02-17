@@ -6,8 +6,8 @@
     import { ll, locales } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     interface Props {
@@ -52,7 +52,7 @@
         dialog?.close()
     }
 
-    const qcUpdateRole = createQueryController({
+    const qUpdateRole = useQuery({
         fn() {
             return api.roles.updateRole({
                 id: roleId,
@@ -82,7 +82,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcUpdateRole.loading}
+    persistent={qUpdateRole.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.roleEditing()}</h1>
@@ -90,7 +90,7 @@
     <div class="u:flex u:flex-col u:gap-4">
         {#each locales as locale (locale)}
             <TextField
-                disabled={$qcUpdateRole.loading}
+                disabled={qUpdateRole.loading}
                 label={`${$ll.name()} (${locale.toUpperCase()})`}
                 bind:value={name[locale]}
             />
@@ -109,7 +109,7 @@
                         <span>{permission}</span>
                         <button
                             class="u:flex u:ml-1 u:text-xs u:cursor-pointer"
-                            disabled={$qcUpdateRole.loading}
+                            disabled={qUpdateRole.loading}
                             aria-label="remove"
                             onclick={() => removePermission(permission)}
                         >
@@ -127,7 +127,7 @@
     <div class="u:flex u:gap-1">
         <div class="u:flex-1">
             <DropdownMenu
-                disabled={items.length === 0 || $qcUpdateRole.loading}
+                disabled={items.length === 0 || qUpdateRole.loading}
                 {items}
                 label={$ll.permission()}
                 bind:value={currentPermission}
@@ -135,7 +135,7 @@
         </div>
         <div>
             <Button
-                disabled={!currentPermission || $qcUpdateRole.loading}
+                disabled={!currentPermission || qUpdateRole.loading}
                 variant="success"
                 onclick={addPermission}
             >
@@ -144,14 +144,14 @@
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateRole.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdateRole.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!vldResultName.valid}
-            loading={$qcUpdateRole.loading}
+            loading={qUpdateRole.loading}
             variant="success"
-            onclick={qcUpdateRole.refresh}
+            onclick={qUpdateRole.refetch}
         >
             {$ll.save()}
         </Button>

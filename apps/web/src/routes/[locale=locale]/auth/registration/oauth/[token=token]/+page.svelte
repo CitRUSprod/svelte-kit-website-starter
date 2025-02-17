@@ -3,8 +3,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     const { data } = $props()
@@ -15,7 +15,7 @@
 
     const completedForm = $derived(vldResultUsername.valid)
 
-    const qcRegister = createQueryController({
+    const qRegister = useQuery({
         fn() {
             return api.auth.oAuthRegister({
                 oAuthRegistrationToken: data.token,
@@ -30,7 +30,7 @@
 
     async function onEnter(e: KeyboardEvent) {
         if (e.key === "Enter" && completedForm) {
-            await qcRegister.refresh()
+            await qRegister.refetch()
             const input = e.target as HTMLInputElement
             input.focus()
         }
@@ -50,7 +50,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcRegister.loading}
+                disabled={qRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
                 onkeypress={onEnter}
@@ -60,9 +60,9 @@
             <Button
                 class="u:w-full"
                 disabled={!completedForm}
-                loading={$qcRegister.loading}
+                loading={qRegister.loading}
                 variant="primary"
-                onclick={qcRegister.refresh}
+                onclick={qRegister.refetch}
             >
                 {$ll.register()}
             </Button>

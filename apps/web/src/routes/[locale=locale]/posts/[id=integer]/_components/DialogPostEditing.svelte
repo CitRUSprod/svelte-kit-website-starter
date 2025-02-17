@@ -4,8 +4,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, TextArea, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     interface Props {
@@ -39,7 +39,7 @@
         dialog?.close()
     }
 
-    const qcUpdatePost = createQueryController({
+    const qUpdatePost = useQuery({
         fn() {
             return api.posts.updatePost({
                 id: post.id,
@@ -58,14 +58,14 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$qcUpdatePost.loading}
+    persistent={qUpdatePost.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.postEditing()}</h1>
     </div>
     <div>
         <TextField
-            disabled={$qcUpdatePost.loading}
+            disabled={qUpdatePost.loading}
             label={$ll.title()}
             placeholder={$ll.enterTitle()}
             bind:value={title}
@@ -75,7 +75,7 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$qcUpdatePost.loading}
+            disabled={qUpdatePost.loading}
             label={$ll.content()}
             placeholder={$ll.enterContent()}
             bind:value={content}
@@ -83,14 +83,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdatePost.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdatePost.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcUpdatePost.loading}
+            loading={qUpdatePost.loading}
             variant="success"
-            onclick={qcUpdatePost.refresh}
+            onclick={qUpdatePost.refetch}
             data-testid="edit-post-dialog-button"
         >
             {$ll.save()}

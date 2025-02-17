@@ -3,8 +3,8 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     const { data } = $props()
@@ -20,7 +20,7 @@
             vldResultNewPassword.value === vldResultNewPasswordConfirmation.value
     )
 
-    const qcResetPassword = createQueryController({
+    const qResetPassword = useQuery({
         fn() {
             return api.profile.resetPassword({
                 passwordResetToken: data.token,
@@ -47,7 +47,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcResetPassword.loading}
+                disabled={qResetPassword.loading}
                 label={$ll.newPassword()}
                 placeholder={$ll.enterNewPassword()}
                 type="password"
@@ -56,7 +56,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcResetPassword.loading}
+                disabled={qResetPassword.loading}
                 label={$ll.newPasswordConfirmation()}
                 placeholder={$ll.enterNewPasswordAgain()}
                 type="password"
@@ -66,9 +66,9 @@
         <div>
             <Button
                 disabled={!completedForm}
-                loading={$qcResetPassword.loading}
+                loading={qResetPassword.loading}
                 variant="primary"
-                onclick={qcResetPassword.refresh}
+                onclick={qResetPassword.refetch}
             >
                 {$ll.reset()}
             </Button>

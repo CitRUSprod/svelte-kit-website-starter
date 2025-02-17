@@ -4,8 +4,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     interface Props {
@@ -34,7 +34,7 @@
         dialog?.close()
     }
 
-    const qcUpdateUser = createQueryController({
+    const qUpdateUser = useQuery({
         fn() {
             return api.profile.updateUser({
                 username: vldResultUsername.value
@@ -51,23 +51,23 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcUpdateUser.loading}
+    persistent={qUpdateUser.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.profileEditing()}</h1>
     </div>
     <div>
-        <TextField disabled={$qcUpdateUser.loading} label={$ll.username()} bind:value={username} />
+        <TextField disabled={qUpdateUser.loading} label={$ll.username()} bind:value={username} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdateUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcUpdateUser.loading}
+            loading={qUpdateUser.loading}
             variant="success"
-            onclick={qcUpdateUser.refresh}
+            onclick={qUpdateUser.refetch}
         >
             {$ll.save()}
         </Button>

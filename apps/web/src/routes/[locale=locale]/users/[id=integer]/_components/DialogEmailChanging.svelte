@@ -4,8 +4,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     interface Props {
@@ -32,7 +32,7 @@
         dialog?.close()
     }
 
-    const qcUpdateEmail = createQueryController({
+    const qUpdateEmail = useQuery({
         fn() {
             return api.profile.sendEmailUpdateEmailToOld({
                 email: vldResultEmail.value
@@ -48,23 +48,23 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcUpdateEmail.loading}
+    persistent={qUpdateEmail.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.emailChanging()}</h1>
     </div>
     <div>
-        <TextField disabled={$qcUpdateEmail.loading} label={$ll.email()} bind:value={email} />
+        <TextField disabled={qUpdateEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcUpdateEmail.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdateEmail.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcUpdateEmail.loading}
+            loading={qUpdateEmail.loading}
             variant="success"
-            onclick={qcUpdateEmail.refresh}
+            onclick={qUpdateEmail.refetch}
         >
             {$ll.change()}
         </Button>

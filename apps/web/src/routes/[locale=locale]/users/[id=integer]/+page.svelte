@@ -15,8 +15,8 @@
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, OAuthProviderButton } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts, userData } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
 
     const { data } = $props()
 
@@ -40,7 +40,7 @@
 
     let uploadAvatarImg = $state<File | null>(null)
 
-    const qcUploadAvatar = createQueryController({
+    const qUploadAvatar = useQuery({
         fn() {
             if (uploadAvatarImg) {
                 return api.profile.uploadAvatar({
@@ -64,11 +64,11 @@
         if (e.currentTarget.files && e.currentTarget.files.length > 0) {
             const file = e.currentTarget.files[0]
             uploadAvatarImg = file
-            await qcUploadAvatar.refresh()
+            await qUploadAvatar.refetch()
         }
     }
 
-    const qcEmailUnlink = createQueryController({
+    const qEmailUnlink = useQuery({
         fn() {
             return api.auth.unlink()
         },
@@ -77,7 +77,7 @@
         }
     })
 
-    const qcTwitchUnlink = createQueryController({
+    const qTwitchUnlink = useQuery({
         fn() {
             return api.auth.oAuthUnlink({
                 provider: _.kebabCase(constantsEnums.OAuthProvider.Twitch)
@@ -119,9 +119,9 @@
                             {$ll.linked()}
                             {#if hasMoreThanOneLinkedAccount}
                                 <Button
-                                    loading={$qcTwitchUnlink.loading}
+                                    loading={qTwitchUnlink.loading}
                                     variant="error"
-                                    onclick={qcTwitchUnlink.refresh}
+                                    onclick={qTwitchUnlink.refetch}
                                 >
                                     {$ll.unlink()}
                                 </Button>
@@ -158,7 +158,7 @@
     {#if $userData?.id === localUser.id}
         <div>
             <Button
-                loading={$qcUploadAvatar.loading}
+                loading={qUploadAvatar.loading}
                 variant="warning"
                 onclick={() => avatarInput?.click()}
             >
@@ -187,9 +187,9 @@
             {/if}
             {#if $userData.linkedAccounts?.email}
                 <Button
-                    loading={$qcEmailUnlink.loading}
+                    loading={qEmailUnlink.loading}
                     variant="error"
-                    onclick={qcEmailUnlink.refresh}
+                    onclick={qEmailUnlink.refetch}
                 >
                     {$ll.unlinkEmail()}
                 </Button>

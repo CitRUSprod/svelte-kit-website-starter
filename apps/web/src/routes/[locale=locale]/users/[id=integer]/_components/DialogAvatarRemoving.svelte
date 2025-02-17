@@ -4,8 +4,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
 
     interface Props {
         user: schemasModels.user.User
@@ -23,7 +23,7 @@
         dialog?.close()
     }
 
-    const qcDeleteAvatar = createQueryController({
+    const qDeleteAvatar = useQuery({
         fn() {
             return api.profile.deleteAvatar()
         },
@@ -38,7 +38,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcDeleteAvatar.loading}
+    persistent={qDeleteAvatar.loading}
 >
     <div>
         <h1>{$ll.avatarRemoving()}</h1>
@@ -47,10 +47,10 @@
         <p>{$ll.avatarRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteAvatar.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteAvatar.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeleteAvatar.loading} variant="error" onclick={qcDeleteAvatar.refresh}>
+        <Button loading={qDeleteAvatar.loading} variant="error" onclick={qDeleteAvatar.refetch}>
             {$ll.remove()}
         </Button>
     </div>

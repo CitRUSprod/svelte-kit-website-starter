@@ -5,8 +5,9 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { socket, createQueryController } from "$lib/utils"
+    import { socket } from "$lib/utils"
 
     interface Props {
         user: schemasModels.user.User
@@ -30,7 +31,7 @@
         dialog?.close()
     }
 
-    const qcDeleteUser = createQueryController({
+    const qDeleteUser = useQuery({
         fn() {
             return api.profile.deleteUser()
         },
@@ -49,7 +50,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcDeleteUser.loading}
+    persistent={qDeleteUser.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.userRemoving()}</h1>
@@ -62,7 +63,7 @@
     </div>
     <div>
         <TextField
-            disabled={$qcDeleteUser.loading}
+            disabled={qDeleteUser.loading}
             label={$ll.username()}
             placeholder={user.username}
             bind:value={username}
@@ -70,14 +71,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteUser.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteUser.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcDeleteUser.loading}
+            loading={qDeleteUser.loading}
             variant="error"
-            onclick={qcDeleteUser.refresh}
+            onclick={qDeleteUser.refetch}
             data-testid="remove-user-dialog-button"
         >
             {$ll.remove()}

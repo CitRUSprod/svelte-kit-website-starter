@@ -4,8 +4,8 @@
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, DropdownMenu, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
 
     interface Props {
         roles: Array<schemasModels.role.Role>
@@ -34,7 +34,7 @@
         dialog?.close()
     }
 
-    const qcAssignRoleToUser = createQueryController({
+    const qAssignRoleToUser = useQuery({
         fn() {
             return api.users.assignRoleToUser({
                 id: userId,
@@ -52,7 +52,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcAssignRoleToUser.loading}
+    persistent={qAssignRoleToUser.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.roleAssigning()}</h1>
@@ -62,20 +62,20 @@
     </div>
     <div>
         <DropdownMenu
-            disabled={$qcAssignRoleToUser.loading}
+            disabled={qAssignRoleToUser.loading}
             {items}
             label={$ll.role()}
             bind:value={roleId}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcAssignRoleToUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qAssignRoleToUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
-            loading={$qcAssignRoleToUser.loading}
+            loading={qAssignRoleToUser.loading}
             variant="success"
-            onclick={qcAssignRoleToUser.refresh}
+            onclick={qAssignRoleToUser.refetch}
         >
             {$ll.save()}
         </Button>

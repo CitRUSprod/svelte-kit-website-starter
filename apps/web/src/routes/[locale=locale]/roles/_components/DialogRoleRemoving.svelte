@@ -4,8 +4,8 @@
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
 
     interface Props {
         onRemoveRole?(): void
@@ -27,7 +27,7 @@
         dialog?.close()
     }
 
-    const qcDeleteRole = createQueryController({
+    const qDeleteRole = useQuery({
         fn() {
             return api.roles.deleteRole({ id: role?.id ?? 0 })
         },
@@ -42,7 +42,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcDeleteRole.loading}
+    persistent={qDeleteRole.loading}
 >
     <div>
         <h1>{$ll.roleRemoving()}</h1>
@@ -53,10 +53,10 @@
         </p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeleteRole.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteRole.loading} text variant="success" onclick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={$qcDeleteRole.loading} variant="error" onclick={qcDeleteRole.refresh}>
+        <Button loading={qDeleteRole.loading} variant="error" onclick={qDeleteRole.refetch}>
             {$ll.remove()}
         </Button>
     </div>

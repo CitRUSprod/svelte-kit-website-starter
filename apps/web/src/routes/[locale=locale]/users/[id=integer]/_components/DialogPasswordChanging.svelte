@@ -2,8 +2,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let dialog = $state<Dialog>()
@@ -31,7 +31,7 @@
         dialog?.close()
     }
 
-    const qcChangePassword = createQueryController({
+    const qChangePassword = useQuery({
         fn() {
             return api.profile.changePassword({
                 oldPassword: vldResultOldPassword.value,
@@ -48,7 +48,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcChangePassword.loading}
+    persistent={qChangePassword.loading}
 >
     <div>
         <h1 class="u:text-center">
@@ -57,7 +57,7 @@
     </div>
     <div>
         <TextField
-            disabled={$qcChangePassword.loading}
+            disabled={qChangePassword.loading}
             label={$ll.oldPassword()}
             type="password"
             bind:value={oldPassword}
@@ -65,21 +65,21 @@
     </div>
     <div>
         <TextField
-            disabled={$qcChangePassword.loading}
+            disabled={qChangePassword.loading}
             label={$ll.newPassword()}
             type="password"
             bind:value={newPassword}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcChangePassword.loading} text variant="error" onclick={close}>
+        <Button disabled={qChangePassword.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcChangePassword.loading}
+            loading={qChangePassword.loading}
             variant="success"
-            onclick={qcChangePassword.refresh}
+            onclick={qChangePassword.refetch}
         >
             {$ll.change()}
         </Button>

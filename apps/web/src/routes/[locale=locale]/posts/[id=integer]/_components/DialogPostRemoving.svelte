@@ -5,8 +5,8 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
 
     interface Props {
         post: schemasModels.post.Post
@@ -24,7 +24,7 @@
         dialog?.close()
     }
 
-    const qcDeletePost = createQueryController({
+    const qDeletePost = useQuery({
         fn() {
             return api.posts.deletePost({ id: post.id })
         },
@@ -39,7 +39,7 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcDeletePost.loading}
+    persistent={qDeletePost.loading}
 >
     <div>
         <h1>{$ll.postRemoving()}</h1>
@@ -48,13 +48,13 @@
         <p>{$ll.postRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcDeletePost.loading} text variant="success" click={close}>
+        <Button disabled={qDeletePost.loading} text variant="success" click={close}>
             {$ll.cancel()}
         </Button>
         <Button
-            loading={$qcDeletePost.loading}
+            loading={qDeletePost.loading}
             variant="error"
-            onclick={qcDeletePost.refresh}
+            onclick={qDeletePost.refetch}
             data-testid="remove-post-dialog-button"
         >
             {$ll.remove()}

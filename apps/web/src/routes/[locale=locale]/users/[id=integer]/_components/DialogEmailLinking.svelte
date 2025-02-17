@@ -2,8 +2,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let dialog = $state<Dialog>()
@@ -34,7 +34,7 @@
         dialog?.close()
     }
 
-    const qcLinkEmail = createQueryController({
+    const qLinkEmail = useQuery({
         fn() {
             return api.auth.link({
                 email: vldResultEmail.value,
@@ -51,22 +51,17 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcLinkEmail.loading}
+    persistent={qLinkEmail.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.emailLinking()}</h1>
     </div>
     <div>
-        <TextField
-            autofocus
-            disabled={$qcLinkEmail.loading}
-            label={$ll.email()}
-            bind:value={email}
-        />
+        <TextField autofocus disabled={qLinkEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div>
         <TextField
-            disabled={$qcLinkEmail.loading}
+            disabled={qLinkEmail.loading}
             label={$ll.password()}
             type="password"
             bind:value={password}
@@ -74,21 +69,21 @@
     </div>
     <div>
         <TextField
-            disabled={$qcLinkEmail.loading}
+            disabled={qLinkEmail.loading}
             label={$ll.passwordConfirmation()}
             type="password"
             bind:value={passwordConfirmation}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcLinkEmail.loading} text variant="error" onclick={close}>
+        <Button disabled={qLinkEmail.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcLinkEmail.loading}
+            loading={qLinkEmail.loading}
             variant="success"
-            onclick={qcLinkEmail.refresh}
+            onclick={qLinkEmail.refetch}
         >
             {$ll.link()}
         </Button>

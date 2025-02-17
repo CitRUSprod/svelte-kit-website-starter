@@ -4,8 +4,8 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let dialog = $state<Dialog>()
@@ -36,7 +36,7 @@
         dialog?.close()
     }
 
-    const qcBanUser = createQueryController({
+    const qBanUser = useQuery({
         fn() {
             return api.users.banUser({
                 id: userId,
@@ -51,11 +51,7 @@
     })
 </script>
 
-<Dialog
-    bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
-    persistent={$qcBanUser.loading}
->
+<Dialog bind:this={dialog} class="u:flex u:flex-col u:gap-4 u:w-100" persistent={qBanUser.loading}>
     <div>
         <h1 class="u:text-center">{$ll.userBanning()}</h1>
     </div>
@@ -64,21 +60,21 @@
     </div>
     <div>
         <TextField
-            disabled={$qcBanUser.loading}
+            disabled={qBanUser.loading}
             label={$ll.reason()}
             placeholder={$ll.enterReason()}
             bind:value={reason}
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcBanUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qBanUser.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcBanUser.loading}
+            loading={qBanUser.loading}
             variant="success"
-            onclick={qcBanUser.refresh}
+            onclick={qBanUser.refetch}
         >
             {$ll.ban()}
         </Button>

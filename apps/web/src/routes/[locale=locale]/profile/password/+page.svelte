@@ -2,15 +2,15 @@
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let email = $state("")
 
     const vldResultEmail = $derived(vld.user.email(email))
 
-    const qcSendPasswordResetEmail = createQueryController({
+    const qSendPasswordResetEmail = useQuery({
         fn() {
             return api.profile.sendPasswordResetEmail({
                 email: vldResultEmail.value
@@ -35,7 +35,7 @@
         </div>
         <div>
             <TextField
-                disabled={$qcSendPasswordResetEmail.loading}
+                disabled={qSendPasswordResetEmail.loading}
                 label={$ll.email()}
                 placeholder={$ll.enterEmail()}
                 bind:value={email}
@@ -44,9 +44,9 @@
         <div>
             <Button
                 disabled={!vldResultEmail.valid}
-                loading={$qcSendPasswordResetEmail.loading}
+                loading={qSendPasswordResetEmail.loading}
                 variant="primary"
-                onclick={qcSendPasswordResetEmail.refresh}
+                onclick={qSendPasswordResetEmail.refetch}
             >
                 {$ll.sendResetLink()}
             </Button>

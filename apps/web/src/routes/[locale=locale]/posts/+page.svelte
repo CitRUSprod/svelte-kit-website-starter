@@ -9,10 +9,9 @@
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
-    import { useQueryParams } from "$lib/hooks"
+    import { useQueryParams, useQuery } from "$lib/hooks"
     import { userData } from "$lib/stores"
     import type { DropdownMenuItem } from "$lib/types"
-    import { createQueryController } from "$lib/utils"
 
     type SortAndOrder =
         `${schemasRoutes.posts.GetPostsQuery["sort"]}-${schemasRoutes.posts.GetPostsQuery["order"]}`
@@ -49,7 +48,7 @@
         }
     }
 
-    const qcGetPosts = createQueryController({
+    const qGetPosts = useQuery({
         initialData: data.itemsPage,
         fn() {
             return api.posts.getPosts({
@@ -62,23 +61,19 @@
         }
     })
 
-    async function refetchPage() {
-        await qcGetPosts.refresh()
-    }
-
     async function onTitleInput() {
         queryParams.page = 1
-        await refetchPage()
+        await qGetPosts.refetch()
     }
 
     async function onSortingChange() {
         queryParams.page = 1
-        await refetchPage()
+        await qGetPosts.refetch()
     }
 
     async function setPage(localPage: number) {
         queryParams.page = localPage
-        await refetchPage()
+        await qGetPosts.refetch()
     }
 </script>
 
@@ -116,43 +111,41 @@
             </div>
         {/if}
     </div>
-    {#if $qcGetPosts.data}
-        <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
-            {#each $qcGetPosts.data.items as post (post.id)}
-                <a
-                    class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
-                    href={$localePath(`/posts/${String(post.id)}`)}
-                    data-testid="post"
-                >
-                    <div>
-                        <h3>{post.title}</h3>
-                    </div>
-                    <div>
-                        <p class="u:truncate">{post.content}</p>
-                    </div>
-                    <div class="u:my-2 u:border-t u:border-primary"></div>
-                    <div class="u:flex u:justify-between">
-                        <span class="u:text-sm">
-                            {$ll.author()}: {post.author?.username ??
-                                `[${$ll.deleted().toUpperCase()}]`}
-                        </span>
-                        <span class="u:text-sm">
-                            {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}
-                        </span>
-                    </div>
-                </a>
-            {/each}
-        </div>
-        <div class="u:flex u:justify-center">
-            <SimplePagination
-                loading={$qcGetPosts.loading}
-                page={$qcGetPosts.data.page}
-                pages={$qcGetPosts.data.pages}
-                onSetPage={page => setPage(page)}
-                data-testid="posts-pagination"
-            />
-        </div>
-    {/if}
+    <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
+        {#each qGetPosts.data.items as post (post.id)}
+            <a
+                class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
+                href={$localePath(`/posts/${String(post.id)}`)}
+                data-testid="post"
+            >
+                <div>
+                    <h3>{post.title}</h3>
+                </div>
+                <div>
+                    <p class="u:truncate">{post.content}</p>
+                </div>
+                <div class="u:my-2 u:border-t u:border-primary"></div>
+                <div class="u:flex u:justify-between">
+                    <span class="u:text-sm">
+                        {$ll.author()}: {post.author?.username ??
+                            `[${$ll.deleted().toUpperCase()}]`}
+                    </span>
+                    <span class="u:text-sm">
+                        {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}
+                    </span>
+                </div>
+            </a>
+        {/each}
+    </div>
+    <div class="u:flex u:justify-center">
+        <SimplePagination
+            loading={qGetPosts.loading}
+            page={qGetPosts.data.page}
+            pages={qGetPosts.data.pages}
+            onSetPage={page => setPage(page)}
+            data-testid="posts-pagination"
+        />
+    </div>
 </Content.Default>
 
 <DialogPostCreating bind:this={dialogPostCreating} />

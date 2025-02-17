@@ -3,8 +3,8 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, TextField, TextArea, Dialog } from "$lib/components"
+    import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { createQueryController } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let dialog = $state<Dialog>()
@@ -28,7 +28,7 @@
         dialog?.close()
     }
 
-    const qcCreatePost = createQueryController({
+    const qCreatePost = useQuery({
         fn() {
             return api.posts.createPost({
                 title: vldResultTitle.value,
@@ -46,14 +46,14 @@
 <Dialog
     bind:this={dialog}
     class="u:flex u:flex-col u:gap-4 u:w-200"
-    persistent={$qcCreatePost.loading}
+    persistent={qCreatePost.loading}
 >
     <div>
         <h1 class="u:text-center">{$ll.postCreating()}</h1>
     </div>
     <div>
         <TextField
-            disabled={$qcCreatePost.loading}
+            disabled={qCreatePost.loading}
             label={$ll.title()}
             placeholder={$ll.enterTitle()}
             bind:value={title}
@@ -63,7 +63,7 @@
     <div>
         <TextArea
             class="u:resize-none"
-            disabled={$qcCreatePost.loading}
+            disabled={qCreatePost.loading}
             label={$ll.content()}
             placeholder={$ll.enterContent()}
             bind:value={content}
@@ -71,14 +71,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={$qcCreatePost.loading} text variant="error" onclick={close}>
+        <Button disabled={qCreatePost.loading} text variant="error" onclick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
-            loading={$qcCreatePost.loading}
+            loading={qCreatePost.loading}
             variant="success"
-            onclick={qcCreatePost.refresh}
+            onclick={qCreatePost.refetch}
             data-testid="create-post-dialog-button"
         >
             {$ll.create()}
