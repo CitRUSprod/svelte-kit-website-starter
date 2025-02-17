@@ -111,41 +111,43 @@
             </div>
         {/if}
     </div>
-    <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
-        {#each qGetPosts.data.items as post (post.id)}
-            <a
-                class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
-                href={$localePath(`/posts/${String(post.id)}`)}
-                data-testid="post"
-            >
-                <div>
-                    <h3>{post.title}</h3>
-                </div>
-                <div>
-                    <p class="u:truncate">{post.content}</p>
-                </div>
-                <div class="u:my-2 u:border-t u:border-primary"></div>
-                <div class="u:flex u:justify-between">
-                    <span class="u:text-sm">
-                        {$ll.author()}: {post.author?.username ??
-                            `[${$ll.deleted().toUpperCase()}]`}
-                    </span>
-                    <span class="u:text-sm">
-                        {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}
-                    </span>
-                </div>
-            </a>
-        {/each}
-    </div>
-    <div class="u:flex u:justify-center">
-        <SimplePagination
-            loading={qGetPosts.loading}
-            page={qGetPosts.data.page}
-            pages={qGetPosts.data.pages}
-            onSetPage={page => setPage(page)}
-            data-testid="posts-pagination"
-        />
-    </div>
+    {#if qGetPosts.data}
+        <div class="u:grid u:grid-cols-1 u:sm:grid-cols-2 u:lg:grid-cols-3 u:gap-4">
+            {#each qGetPosts.data.items as post (post.id)}
+                <a
+                    class="u:p-4 u:border-primary u:rounded-lg u:border u:transition u:hover:bg-primary u:hover:bg-opacity-20 u:dark:hover:bg-opacity-20"
+                    href={$localePath(`/posts/${String(post.id)}`)}
+                    data-testid="post"
+                >
+                    <div>
+                        <h3>{post.title}</h3>
+                    </div>
+                    <div>
+                        <p class="u:truncate">{post.content}</p>
+                    </div>
+                    <div class="u:my-2 u:border-t u:border-primary"></div>
+                    <div class="u:flex u:justify-between">
+                        <span class="u:text-sm">
+                            {$ll.author()}: {post.author?.username ??
+                                `[${$ll.deleted().toUpperCase()}]`}
+                        </span>
+                        <span class="u:text-sm">
+                            {dt.getFullDateAndTime(post.creationDate, data.tz, $currentLocale)}
+                        </span>
+                    </div>
+                </a>
+            {/each}
+        </div>
+        <div class="u:flex u:justify-center">
+            <SimplePagination
+                loading={qGetPosts.loading}
+                page={qGetPosts.data.page}
+                pages={qGetPosts.data.pages}
+                onSetPage={page => setPage(page)}
+                data-testid="posts-pagination"
+            />
+        </div>
+    {/if}
 </Content.Default>
 
 <DialogPostCreating bind:this={dialogPostCreating} />

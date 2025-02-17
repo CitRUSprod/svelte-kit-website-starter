@@ -19,19 +19,6 @@ interface QueryOptions<T> {
     onUnexpectedError?(this: void, error: unknown): void | Promise<void>
 }
 
-export function useQuery<T>(options: QueryOptions<T> & { initialData: T }): {
-    data: T
-    error: unknown
-    loading: boolean
-    refetch(): Promise<void>
-}
-export function useQuery<T>(options: QueryOptions<T>): {
-    data: T | undefined
-    error: unknown
-    loading: boolean
-    refetch(): Promise<void>
-}
-
 export function useQuery<T>(options: QueryOptions<T>) {
     let data = $state(options.initialData)
     let error = $state()
