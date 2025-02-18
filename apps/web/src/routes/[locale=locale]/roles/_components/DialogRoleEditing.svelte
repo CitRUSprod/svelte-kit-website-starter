@@ -5,7 +5,7 @@
     import type { Locale } from "$i18n/helpers"
     import { ll, locales } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Button, TextField, DropdownMenu, Dialog } from "$lib/components"
+    import { Button, TextField, Select, Dialog } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
@@ -26,8 +26,8 @@
             return acc
         }, {})
     )
-    let currentPermission: constantsEnums.Permission | null = $state(null)
-    let selectedPermissions: Array<constantsEnums.Permission> = $state([])
+    let currentPermission = $state<constantsEnums.Permission>()
+    let selectedPermissions = $state<Array<constantsEnums.Permission>>([])
 
     const vldResultName = $derived(vld.role.name(name))
 
@@ -42,7 +42,7 @@
             name[locale] = role.name[locale]
         }
 
-        currentPermission = null
+        currentPermission = undefined
         selectedPermissions = [...role.permissions]
 
         dialog?.open()
@@ -70,7 +70,7 @@
     function addPermission() {
         if (currentPermission) {
             selectedPermissions.push(currentPermission)
-            currentPermission = null
+            currentPermission = undefined
         }
     }
 
@@ -126,7 +126,7 @@
     </div>
     <div class="u:flex u:gap-1">
         <div class="u:flex-1">
-            <DropdownMenu
+            <Select
                 disabled={items.length === 0 || qUpdateRole.loading}
                 {items}
                 label={$ll.permission()}

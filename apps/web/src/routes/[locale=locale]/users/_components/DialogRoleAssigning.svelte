@@ -3,7 +3,7 @@
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Button, DropdownMenu, Dialog } from "$lib/components"
+    import { Button, Select, Dialog } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
 
@@ -18,14 +18,16 @@
 
     let userId = 0
     let username = $state("")
-    let roleId = $state(0)
+    let roleId = $state("0")
 
-    const items = $derived(roles.map(r => ({ text: r.name[$currentLocale], value: r.id })))
+    const items = $derived(
+        roles.map(r => ({ text: r.name[$currentLocale], value: r.id.toString() }))
+    )
 
     export function open(user: schemasModels.user.User) {
         userId = user.id
         username = user.username
-        roleId = user.role.id
+        roleId = user.role.id.toString()
 
         dialog?.open()
     }
@@ -38,7 +40,7 @@
         fn() {
             return api.users.assignRoleToUser({
                 id: userId,
-                roleId
+                roleId: parseInt(roleId)
             })
         },
         onSuccess() {
@@ -61,7 +63,7 @@
         <h3 class="u:text-center">{$ll.user()}: {username}</h3>
     </div>
     <div>
-        <DropdownMenu
+        <Select
             disabled={qAssignRoleToUser.loading}
             {items}
             label={$ll.role()}

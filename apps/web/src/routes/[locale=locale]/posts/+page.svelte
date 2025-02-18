@@ -8,10 +8,9 @@
 
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, TextField, DropdownMenu, SimplePagination } from "$lib/components"
+    import { Content, Button, TextField, Select, SimplePagination } from "$lib/components"
     import { useQueryParams, useQuery } from "$lib/hooks"
     import { userData } from "$lib/stores"
-    import type { DropdownMenuItem } from "$lib/types"
 
     type SortAndOrder =
         `${schemasRoutes.posts.GetPostsQuery["sort"]}-${schemasRoutes.posts.GetPostsQuery["order"]}`
@@ -30,7 +29,7 @@
 
     let dialogPostCreating = $state<DialogPostCreating>()
 
-    const sortings = $derived<Array<DropdownMenuItem<SortAndOrder>>>([
+    const sortings = $derived<Array<{ text: string; value: SortAndOrder }>>([
         { text: $ll.creationDateAsc(), value: "creationDate-asc" },
         { text: $ll.creationDateDesc(), value: "creationDate-desc" },
         { text: $ll.titleAsc(), value: "title-asc" },
@@ -93,11 +92,11 @@
                 oninput={_.debounce(onTitleInput, 500)}
                 data-testid="search-input"
             />
-            <DropdownMenu
+            <Select
                 items={sortings}
                 label={$ll.sorting()}
                 bind:value={sortAndOrder.value}
-                onchange={onSortingChange}
+                onChange={onSortingChange}
             />
         </div>
         {#if $userData}
