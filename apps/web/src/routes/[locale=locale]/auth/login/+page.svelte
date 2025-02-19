@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as constantsEnums from "@local/constants/enums"
+    import * as constantsEnums from "@repo/constants/enums"
 
     import { invalidateAll } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import * as constantsEnums from "@local/constants/enums"
-    import * as schemasRoutes from "@local/schemas/routes"
-    import { dt } from "@local/utils"
+    import * as constantsEnums from "@repo/constants/enums"
+    import * as schemasRoutes from "@repo/schemas/routes"
+    import { dt } from "@repo/utils"
 
     import { DialogRoleAssigning, DialogUserBanning } from "./_components"
 

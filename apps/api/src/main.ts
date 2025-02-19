@@ -4,7 +4,7 @@ import jwt from "@fastify/jwt"
 import multipart from "@fastify/multipart"
 import swagger from "@fastify/swagger"
 import swaggerUi from "@fastify/swagger-ui"
-import { parseZodError, ZodError } from "@local/utils"
+import { parseZodError, ZodError } from "@repo/utils"
 import fastify from "fastify"
 import socketIo from "fastify-socket.io"
 import {

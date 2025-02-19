@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as constantsEnums from "@local/constants/enums"
+    import * as constantsEnums from "@repo/constants/enums"
 
     import { DialogRoleCreating, DialogRoleEditing, DialogRoleRemoving } from "./_components"
 

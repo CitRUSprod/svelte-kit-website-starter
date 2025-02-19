@@ -1,5 +1,5 @@
-import * as schemasModels from "@local/schemas/models"
-import { createValidator } from "@local/utils"
+import * as schemasModels from "@repo/schemas/models"
+import { createValidator } from "@repo/utils"
 
 export const email = createValidator(schemasModels.user.email())
 export const username = createValidator(schemasModels.user.username())

@@ -1,5 +1,5 @@
-import * as schemasRoutes from "@local/schemas/routes"
 import { Prisma } from "@prisma/client"
+import * as schemasRoutes from "@repo/schemas/routes"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 
 import type { RouteHandler } from "$/types"

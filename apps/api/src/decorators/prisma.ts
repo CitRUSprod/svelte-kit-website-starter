@@ -1,5 +1,5 @@
-import * as constantsEnums from "@local/constants/enums"
 import { PrismaClient } from "@prisma/client"
+import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 
 declare module "fastify" {

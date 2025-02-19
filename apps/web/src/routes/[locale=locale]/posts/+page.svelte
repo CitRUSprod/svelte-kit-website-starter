@@ -1,6 +1,6 @@
 <script lang="ts">
-    import * as schemasRoutes from "@local/schemas/routes"
-    import { dt } from "@local/utils"
+    import * as schemasRoutes from "@repo/schemas/routes"
+    import { dt } from "@repo/utils"
     import * as _ from "lodash-es"
     import type { Split } from "type-fest"
 

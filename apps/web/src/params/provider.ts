@@ -1,4 +1,4 @@
-import * as constantsEnums from "@local/constants/enums"
+import * as constantsEnums from "@repo/constants/enums"
 import * as _ from "lodash-es"
 
 export function match(param: string) {

@@ -1,4 +1,4 @@
-import { z } from "@local/utils"
+import { z } from "@repo/utils"
 
 export function id() {
     return z.coerce.number().int().min(1)

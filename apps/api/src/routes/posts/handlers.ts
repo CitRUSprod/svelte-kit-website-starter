@@ -1,6 +1,6 @@
-import * as constantsEnums from "@local/constants/enums"
-import * as schemasRoutes from "@local/schemas/routes"
 import { Prisma } from "@prisma/client"
+import * as constantsEnums from "@repo/constants/enums"
+import * as schemasRoutes from "@repo/schemas/routes"
 import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 
 import type { RouteHandler } from "$/types"

@@ -65,7 +65,7 @@
         "@commitlint/cli": "19.7.1",
         "@commitlint/types": "19.5.0",
         "@faker-js/faker": "9.5.0",
-        "@local/configs": "workspace:*",
+        "@repo/configs": "workspace:*",
         "@playwright/test": "1.50.1",
         "@stylistic/eslint-plugin": "3.1.0",
         "@types/eslint": "9.6.1",

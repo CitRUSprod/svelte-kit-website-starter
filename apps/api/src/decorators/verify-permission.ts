@@ -1,5 +1,5 @@
 import type { FastifyAuthFunction } from "@fastify/auth"
-import * as constantsEnums from "@local/constants/enums"
+import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyPluginCallback } from "fastify"
 import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 

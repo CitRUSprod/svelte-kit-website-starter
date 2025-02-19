@@ -1,4 +1,4 @@
-import * as constantsRoutes from "@local/constants/routes"
+import * as constantsRoutes from "@repo/constants/routes"
 import { parse } from "set-cookie-parser"
 import io from "socket.io-client"
 

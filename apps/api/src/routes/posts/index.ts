@@ -1,5 +1,5 @@
-import * as constantsRoutes from "@local/constants/routes"
-import * as schemasRoutes from "@local/schemas/routes"
+import * as constantsRoutes from "@repo/constants/routes"
+import * as schemasRoutes from "@repo/schemas/routes"
 import type { FastifyPluginCallback } from "fastify"
 
 import * as handlers from "./handlers"

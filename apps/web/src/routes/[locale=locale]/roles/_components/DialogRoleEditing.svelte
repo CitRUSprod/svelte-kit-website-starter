@@ -1,6 +1,6 @@
 <script lang="ts">
-    import * as constantsEnums from "@local/constants/enums"
-    import * as schemasModels from "@local/schemas/models"
+    import * as constantsEnums from "@repo/constants/enums"
+    import * as schemasModels from "@repo/schemas/models"
 
     import type { Locale } from "$i18n/helpers"
     import { ll, locales } from "$i18n/helpers"

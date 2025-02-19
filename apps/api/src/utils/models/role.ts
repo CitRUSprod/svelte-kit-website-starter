@@ -1,5 +1,5 @@
-import * as constantsEnums from "@local/constants/enums"
 import type { Role } from "@prisma/client"
+import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"

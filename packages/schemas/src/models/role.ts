@@ -1,5 +1,5 @@
-import * as constantsEnums from "@local/constants/enums"
-import { z } from "@local/utils"
+import * as constantsEnums from "@repo/constants/enums"
+import { z } from "@repo/utils"
 import type { IterableElement } from "type-fest"
 
 import * as common from "$/common"

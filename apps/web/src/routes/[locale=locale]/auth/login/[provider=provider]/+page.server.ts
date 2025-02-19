@@ -1,4 +1,4 @@
-import * as constantsEnums from "@local/constants/enums"
+import * as constantsEnums from "@repo/constants/enums"
 import { redirect } from "@sveltejs/kit"
 import * as _ from "lodash-es"
 

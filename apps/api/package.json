@@ -25,7 +25,7 @@
         "seed": "esno src/prisma/seeds.ts"
     },
     "devDependencies": {
-        "@local/configs": "workspace:*",
+        "@repo/configs": "workspace:*",
         "@total-typescript/ts-reset": "0.6.1",
         "@types/fs-extra": "11.0.4",
         "@types/lodash-es": "4.17.12",
@@ -52,9 +52,9 @@
         "@fastify/multipart": "9.0.3",
         "@fastify/swagger": "9.4.2",
         "@fastify/swagger-ui": "5.2.1",
-        "@local/constants": "workspace:*",
-        "@local/schemas": "workspace:*",
-        "@local/utils": "workspace:*",
+        "@repo/constants": "workspace:*",
+        "@repo/schemas": "workspace:*",
+        "@repo/utils": "workspace:*",
         "@prisma/client": "6.3.1",
         "arctic": "3.3.0",
         "argon2": "0.41.1",

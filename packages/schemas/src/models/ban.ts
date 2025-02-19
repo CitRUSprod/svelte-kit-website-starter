@@ -1,4 +1,4 @@
-import { z } from "@local/utils"
+import { z } from "@repo/utils"
 
 import * as user from "./user"
 

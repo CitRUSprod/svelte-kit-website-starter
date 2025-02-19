@@ -1,4 +1,4 @@
-import { z } from "@local/utils"
+import { z } from "@repo/utils"
 
 export function web() {
     return z.object({

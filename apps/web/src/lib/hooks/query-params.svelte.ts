@@ -1,4 +1,4 @@
-import { z } from "@local/utils"
+import { z } from "@repo/utils"
 import * as _ from "lodash-es"
 
 import { pushState } from "$app/navigation"

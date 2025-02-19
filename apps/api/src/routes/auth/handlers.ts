@@ -1,6 +1,6 @@
-import * as constantsEnums from "@local/constants/enums"
-import * as schemasRoutes from "@local/schemas/routes"
 import type { User } from "@prisma/client"
+import * as constantsEnums from "@repo/constants/enums"
+import * as schemasRoutes from "@repo/schemas/routes"
 import { generateState } from "arctic"
 import argon2 from "argon2"
 import axios from "axios"

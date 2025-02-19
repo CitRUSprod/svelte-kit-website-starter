@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@local/schemas/models"
+    import * as schemasModels from "@repo/schemas/models"
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"

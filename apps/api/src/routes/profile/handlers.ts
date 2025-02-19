@@ -1,5 +1,5 @@
 import type { MultipartFile } from "@fastify/multipart"
-import * as schemasRoutes from "@local/schemas/routes"
+import * as schemasRoutes from "@repo/schemas/routes"
 import argon2 from "argon2"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 import { v4 as createUuid } from "uuid"

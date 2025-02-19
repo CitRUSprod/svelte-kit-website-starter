@@ -1,4 +1,4 @@
-import * as schemasRoutes from "@local/schemas/routes"
+import * as schemasRoutes from "@repo/schemas/routes"
 
 import * as api from "$lib/api"
 

@@ -1,5 +1,5 @@
-import * as constantsEnums from "@local/constants/enums"
-import { z } from "@local/utils"
+import * as constantsEnums from "@repo/constants/enums"
+import { z } from "@repo/utils"
 import * as _ from "lodash-es"
 
 export function provider() {

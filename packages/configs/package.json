@@ -1,5 +1,5 @@
 {
-    "name": "@local/configs",
+    "name": "@repo/configs",
     "private": true,
     "type": "module"
 }

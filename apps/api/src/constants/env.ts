@@ -1,4 +1,4 @@
-import * as schemasEnv from "@local/schemas/env"
-import { parseDataBySchema } from "@local/utils"
+import * as schemasEnv from "@repo/schemas/env"
+import { parseDataBySchema } from "@repo/utils"
 
 export const env = parseDataBySchema(schemasEnv.api(), process.env)

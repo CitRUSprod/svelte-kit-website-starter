@@ -1,4 +1,4 @@
-import * as schemasModels from "@local/schemas/models"
+import * as schemasModels from "@repo/schemas/models"
 import type { Handle, RequestEvent } from "@sveltejs/kit"
 import { redirect } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"

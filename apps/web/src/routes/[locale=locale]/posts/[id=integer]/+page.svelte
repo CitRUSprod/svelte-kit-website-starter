@@ -1,6 +1,6 @@
 <script lang="ts">
-    import * as constantsEnums from "@local/constants/enums"
-    import { dt } from "@local/utils"
+    import * as constantsEnums from "@repo/constants/enums"
+    import { dt } from "@repo/utils"
 
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
