@@ -36,10 +36,6 @@ type RootTranslation = {
 	 */
 	dear: string
 	/**
-	 * П​и​с​ь​м​о​ ​у​ж​е​ ​о​т​п​р​а​в​л​е​н​о​,​ ​п​р​о​в​е​р​ь​т​е​ ​п​о​ч​т​у
-	 */
-	emailAlreadySent: string
-	/**
 	 * Э​л​е​к​т​р​о​н​н​а​я​ ​п​о​ч​т​а​ ​н​е​ ​у​к​а​з​а​н​а
 	 */
 	emailIsNotSet: string
@@ -254,10 +250,6 @@ export type TranslationFunctions = {
 	 * Дорогой
 	 */
 	dear: () => LocalizedString
-	/**
-	 * Письмо уже отправлено, проверьте почту
-	 */
-	emailAlreadySent: () => LocalizedString
 	/**
 	 * Электронная почта не указана
 	 */

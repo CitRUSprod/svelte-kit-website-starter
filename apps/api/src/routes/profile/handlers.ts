@@ -27,7 +27,7 @@ export const updateUser = (async (app, req) => {
 
     if (req.body.username && req.body.username !== req.userData.username) {
         const userByUsername = await app.prisma.user.findFirst({
-            where: { username: { contains: req.body.username, mode: "insensitive" } }
+            where: { username: { equals: req.body.username, mode: "insensitive" } }
         })
 
         if (userByUsername) {

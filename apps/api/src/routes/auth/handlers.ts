@@ -22,7 +22,7 @@ export const register = (async (app, req) => {
     }
 
     const userByUsername = await app.prisma.user.findFirst({
-        where: { username: { contains: req.body.username, mode: "insensitive" } }
+        where: { username: { equals: req.body.username, mode: "insensitive" } }
     })
 
     if (userByUsername) {
@@ -36,15 +36,7 @@ export const register = (async (app, req) => {
     })
 
     if (registrationTokenByEmail) {
-        throw new BadRequestError(req.ll.emailAlreadySent())
-    }
-
-    const registrationTokenByUsername = await app.prisma.registrationToken.findFirst({
-        where: { username: req.body.username }
-    })
-
-    if (registrationTokenByUsername) {
-        throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
+        await app.prisma.registrationToken.delete({ where: { id: registrationTokenByEmail.id } })
     }
 
     const password = await argon2.hash(req.body.password)
@@ -106,7 +98,7 @@ export const completeRegistration = (async (app, req) => {
 
 export const oAuthRegister = (async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
-        where: { username: { contains: req.body.username, mode: "insensitive" } }
+        where: { username: { equals: req.body.username, mode: "insensitive" } }
     })
 
     if (userByUsername) {
@@ -304,7 +296,7 @@ export const link = (async (app, req) => {
     })
 
     if (linkingTokenByEmail) {
-        throw new BadRequestError(req.ll.emailAlreadySent())
+        await app.prisma.linkingToken.delete({ where: { id: linkingTokenByEmail.id } })
     }
 
     const password = await argon2.hash(req.body.password)
@@ -376,7 +368,7 @@ export const unlink = (async (app, req) => {
     })
 
     if (unlinkingTokenByEmail) {
-        throw new BadRequestError(req.ll.emailAlreadySent())
+        await app.prisma.unlinkingToken.delete({ where: { id: unlinkingTokenByEmail.id } })
     }
 
     const token = createUuid()

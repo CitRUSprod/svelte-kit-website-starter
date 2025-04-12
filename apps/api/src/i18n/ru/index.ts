@@ -6,7 +6,6 @@ const ru = {
     cannotUnlinkLastAuthMethod: "Невозможно отвязать единственный способ входа в аккаунт",
     completeRegistration: "Завершить регистрацию",
     dear: "Дорогой",
-    emailAlreadySent: "Письмо уже отправлено, проверьте почту",
     emailIsNotSet: "Электронная почта не указана",
     emailLinking: "Привязка электронной почты",
     emailLinkingText:

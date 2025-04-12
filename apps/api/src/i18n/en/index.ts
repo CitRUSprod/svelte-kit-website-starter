@@ -6,7 +6,6 @@ const en = {
     cannotUnlinkLastAuthMethod: "Cannot unlink the only way to sign in to your account",
     completeRegistration: "Complete registration",
     dear: "Dear",
-    emailAlreadySent: "Email has already been sent, check your email",
     emailIsNotSet: "Email is not set",
     emailLinking: "Email linking",
     emailLinkingText: "To link your email to your account, please click the link below.",
