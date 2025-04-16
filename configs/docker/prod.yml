@@ -13,6 +13,8 @@ services:
             WEB_HOST: web
             API_HOST: api
             MINIO_HOST: minio
+            MINIO_PORT: 9000
+            MINIO_CONSOLE_PORT: 9001
         depends_on:
             - web
     web:

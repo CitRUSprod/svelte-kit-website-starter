@@ -21,7 +21,7 @@ const bucketName = "files"
 export const minio: FastifyPluginCallback = (app, options, done) => {
     const minioClient = new Client({
         endPoint: env.IS_DOCKER_CONTAINER ? "minio" : "localhost",
-        port: 9000,
+        port: env.IS_DOCKER_CONTAINER ? 9000 : env.MINIO_DEV_PORT,
         useSSL: false,
         accessKey: env.MINIO_USER,
         secretKey: env.MINIO_PASSWORD

@@ -4,6 +4,7 @@ export function api() {
     return z.object({
         IS_DOCKER_CONTAINER: z.coerce.boolean(),
         PUBLIC_BASE_URL: z.string().trim().url(),
+        MINIO_DEV_PORT: z.coerce.number().int().min(1),
         MINIO_USER: z.string().trim().min(1),
         MINIO_PASSWORD: z.string().trim().min(1),
         JWT_SECRET: z.string().trim().min(6),
