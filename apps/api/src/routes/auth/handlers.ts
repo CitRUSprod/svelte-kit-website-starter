@@ -105,6 +105,8 @@ export const oAuthRegister = (async (app, req) => {
         throw new BadRequestError(req.ll.userWithSuchUsernameAlreadyExists())
     }
 
+    await utils.deleteExpiredOAuthRegistrationTokens(app)
+
     const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
         where: { token: req.params.oAuthRegistrationToken }
     })
