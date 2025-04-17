@@ -12,11 +12,11 @@ importers:
         specifier: 1.2.1
         version: 1.2.1
       '@citrus-linting/prettier-config':
-        specifier: 0.6.0
-        version: 0.6.0
+        specifier: 1.0.0
+        version: 1.0.0
       '@citrus-linting/stylelint-config':
-        specifier: 0.5.3
-        version: 0.5.3
+        specifier: 1.0.0
+        version: 1.0.0
       '@commitlint/cli':
         specifier: 19.7.1
         version: 19.7.1(@types/node@22.13.4)(typescript@5.7.3)
@@ -26,12 +26,12 @@ importers:
       '@faker-js/faker':
         specifier: 9.5.0
         version: 9.5.0
-      '@repo/configs':
-        specifier: workspace:*
-        version: link:packages/configs
       '@playwright/test':
         specifier: 1.50.1
         version: 1.50.1
+      '@repo/configs':
+        specifier: workspace:*
+        version: link:packages/configs
       '@stylistic/eslint-plugin':
         specifier: 3.1.0
         version: 3.1.0(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)
@@ -128,6 +128,9 @@ importers:
       '@fastify/swagger-ui':
         specifier: 5.2.1
         version: 5.2.1
+      '@prisma/client':
+        specifier: 6.3.1
+        version: 6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3)
       '@repo/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -137,9 +140,6 @@ importers:
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@prisma/client':
-        specifier: 6.3.1
-        version: 6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3)
       arctic:
         specifier: 3.3.0
         version: 3.3.0
@@ -264,6 +264,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@macfja/svelte-persistent-store':
+        specifier: 2.4.2
+        version: 2.4.2(svelte@5.20.1)
       '@repo/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -273,9 +276,6 @@ importers:
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@macfja/svelte-persistent-store':
-        specifier: 2.4.2
-        version: 2.4.2(svelte@5.20.1)
       axios:
         specifier: 1.7.9
         version: 1.7.9
@@ -307,12 +307,12 @@ importers:
       '@iconify/json':
         specifier: 2.2.307
         version: 2.2.307
-      '@repo/configs':
-        specifier: workspace:*
-        version: link:../../packages/configs
       '@prgm/sveltekit-progress-bar':
         specifier: 3.0.1
         version: 3.0.1(@sveltejs/kit@2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.1)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)))(svelte@5.20.1)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)))(svelte@5.20.1)
+      '@repo/configs':
+        specifier: workspace:*
+        version: link:../../packages/configs
       '@sveltejs/adapter-node':
         specifier: 5.2.12
         version: 5.2.12(@sveltejs/kit@2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.1)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)))(svelte@5.20.1)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)))
@@ -512,11 +512,11 @@ packages:
   '@citrus-linting/eslint-config@1.2.1':
     resolution: {integrity: sha512-6tnTIwv2lx/vO62CQSye1xXtRItjqxg+JH5cSR7L+teB0vkMNcDDt6fh9skBjOk+sL8upQLy9W0twM91EQrueA==}
 
-  '@citrus-linting/prettier-config@0.6.0':
-    resolution: {integrity: sha512-WBYaK3VNe8Kwa7SiQKjodgDBMltUBi7stZJgdNTMZntmjralqOqu9E9w89TFjcenNJjbRHm9BsPfJF4gnQkkkQ==}
+  '@citrus-linting/prettier-config@1.0.0':
+    resolution: {integrity: sha512-Ss5I266lz+LDzvVipVgJ2CDYs41IlmLVvl78cOFKeeF1jFxBwlYVPsg4As4IUrstp4vRn5OmUdeSboabgu7cpA==}
 
-  '@citrus-linting/stylelint-config@0.5.3':
-    resolution: {integrity: sha512-71HHnL9H4J8SUSG0BCRCf9uN/+G8s5QaLDZ2qVTow6toZRqd9TKfFxLF7OA8K1hXzTbgM/6UfGwC96A3GBv46g==}
+  '@citrus-linting/stylelint-config@1.0.0':
+    resolution: {integrity: sha512-QxyqU+6wWcfnogrUneaJrubok0RbJul390NWfjROiwPQk1J4wgVQLesu444rE0fS3MVTfCn6ejAsSCSvu5Pkfw==}
 
   '@commitlint/cli@19.7.1':
     resolution: {integrity: sha512-iObGjR1tE/PfDtDTEfd+tnRkB3/HJzpQqRTyofS2MPPkDn1mp3DBC8SoPDayokfAy+xKhF8+bwRCJO25Nea0YQ==}
@@ -5112,9 +5112,9 @@ snapshots:
 
   '@citrus-linting/eslint-config@1.2.1': {}
 
-  '@citrus-linting/prettier-config@0.6.0': {}
+  '@citrus-linting/prettier-config@1.0.0': {}
 
-  '@citrus-linting/stylelint-config@0.5.3': {}
+  '@citrus-linting/stylelint-config@1.0.0': {}
 
   '@commitlint/cli@19.7.1(@types/node@22.13.4)(typescript@5.7.3)':
     dependencies:

@@ -50,18 +50,10 @@
         "*.{css,svelte}": "pnpm stylelint:fix",
         "*.{html,mjml,md,json,y?(a)ml,?([cm])js,ts,svelte}": "pnpm eslint:fix"
     },
-    "prettier": "./configs/prettier/index.js",
-    "stylelint": {
-        "extends": "./configs/stylelint/index.js",
-        "ignoreFiles": [
-            "**/.svelte-kit/**/*",
-            "**/dist/**/*"
-        ]
-    },
     "devDependencies": {
         "@citrus-linting/eslint-config": "1.2.1",
-        "@citrus-linting/prettier-config": "0.6.0",
-        "@citrus-linting/stylelint-config": "0.5.3",
+        "@citrus-linting/prettier-config": "1.0.0",
+        "@citrus-linting/stylelint-config": "1.0.0",
         "@commitlint/cli": "19.7.1",
         "@commitlint/types": "19.5.0",
         "@faker-js/faker": "9.5.0",

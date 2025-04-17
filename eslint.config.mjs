@@ -18,6 +18,7 @@ const prettierRules = {
     "prefer-arrow-callback": 0
 }
 
+/** @type {import('eslint').Linter.Config[]} */
 const config = [
     {
         ignores: [

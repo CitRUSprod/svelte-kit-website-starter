@@ -2,6 +2,7 @@
 const config = {
     customSyntax: "postcss-html",
     extends: ["@citrus-linting/stylelint-config"],
+    ignores: ["**/.svelte-kit/**/*", "**/dist/**/*"],
     plugins: ["stylelint-prettier"],
     rules: {
         "prettier/prettier": true,
@@ -9,4 +10,4 @@ const config = {
     }
 }
 
-module.exports = config
+export default config
