@@ -218,3 +218,13 @@ To restore a database from backup you can use this command:
 ```sh
 scripts/restore-backup <YYYY-MM-DD_hh-mm-ss> # For example 2020-05-13_21-35-00
 ```
+
+### Adminer
+
+Adminer is available at: http://localhost:6700/admin/adminer.
+Login credentials: `POSTGRES_USER`, `POSTGRES_PASSWORD` and `POSTGRES_DB` from `.env`.
+
+### MinIO
+
+MinIO Console is available at: http://localhost:6700/admin/minio.
+Login credentials: `MINIO_USER` and `MINIO_PASSWORD` from `.env`.
