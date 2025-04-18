@@ -11,6 +11,10 @@ export const usersRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.users.base],
             querystring: schemasRoutes.users.getUsersQuery()
         },
+        preHandler: app.createPreHandler([
+            app.verifyAuth,
+            app.verifyPermission(constantsEnums.Permission.GetOtherUserEmail)
+        ]),
         async handler(req, reply) {
             const data = await handlers.getUsers(app, req)
             await reply.sendData(data)

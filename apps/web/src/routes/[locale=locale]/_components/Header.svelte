@@ -37,9 +37,15 @@
         <Button href={$localePath("/posts")} variant="primary" data-testid="posts-header-button">
             {$ll.posts()}
         </Button>
-        <Button href={$localePath("/users")} variant="primary" data-testid="users-header-button">
-            {$ll.users()}
-        </Button>
+        {#if $userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)}
+            <Button
+                href={$localePath("/users")}
+                variant="primary"
+                data-testid="users-header-button"
+            >
+                {$ll.users()}
+            </Button>
+        {/if}
         {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
             <Button
                 href={$localePath("/roles")}
