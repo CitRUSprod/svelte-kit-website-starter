@@ -15,19 +15,24 @@ services:
             WEB_HOST: host.docker.internal
             API_HOST: host.docker.internal
             MINIO_HOST: host.docker.internal
-            MINIO_PORT: ${MINIO_DEV_PORT}
-            MINIO_CONSOLE_PORT: ${MINIO_DEV_CONSOLE_PORT}
     postgres:
         extends:
             file: ./base.yml
             service: postgres
+        ports:
+            - 6703:5432
+    adminer:
+        extends:
+            file: ./base.yml
+            service: adminer
+        depends_on:
+            - postgres
     minio:
         extends:
             file: ./base.yml
             service: minio
         ports:
-            - ${MINIO_DEV_PORT}:9000
-            - ${MINIO_DEV_CONSOLE_PORT}:9001
+            - 6704:9000
     alpine:
         extends:
             file: ./base.yml

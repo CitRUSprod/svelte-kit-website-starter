@@ -10,21 +10,29 @@ server {
     }
 
     location /files/ {
-        proxy_pass http://${MINIO_HOST}:${MINIO_PORT}/files/;
+        proxy_pass http://minio:9000/files/;
         proxy_set_header Host $http_host;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 3600;
     }
 
-    location /minio/ {
-        proxy_pass http://${MINIO_HOST}:${MINIO_CONSOLE_PORT}/;
+    location /admin/adminer/ {
+        proxy_pass http://adminer:8080/;
         proxy_set_header Host $http_host;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 3600;
-        sub_filter 'href="/' 'href="/minio/';
-        sub_filter 'src="/' 'src="/minio/';
+    }
+
+    location /admin/minio/ {
+        proxy_pass http://minio:9001/;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 3600;
+        sub_filter 'href="/' 'href="/admin/minio/';
+        sub_filter 'src="/' 'src="/admin/minio/';
         sub_filter_once off;
     }
 

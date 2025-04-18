@@ -27,7 +27,6 @@ services:
         environment:
             PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-            MINIO_DEV_PORT: ${MINIO_DEV_PORT}
             MINIO_USER: ${MINIO_USER}
             MINIO_PASSWORD: ${MINIO_PASSWORD}
             JWT_SECRET: ${JWT_SECRET}
@@ -42,8 +41,6 @@ services:
     postgres:
         image: postgres:17.3-alpine
         restart: always
-        ports:
-            - ${POSTGRES_PORT}:5432
         environment:
             POSTGRES_HOST: postgres
             POSTGRES_USER: ${POSTGRES_USER}
@@ -51,6 +48,9 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
         volumes:
             - postgres:/var/lib/postgresql/data
+    adminer:
+        image: adminer:5.2.1
+        restart: always
     minio:
         image: minio/minio:RELEASE.2025-02-07T23-21-09Z
         restart: always
