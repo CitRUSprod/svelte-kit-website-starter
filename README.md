@@ -160,6 +160,12 @@ Format with formatters:
 pnpm format
 ```
 
+Test with `playwright`:
+
+```sh
+pnpm test
+```
+
 ### Environment variables
 
 All environment variables are written to the `.env` file. If it doesn't exist, just enter this command:
