@@ -39,7 +39,7 @@
 <Select.Root type="single" bind:value onValueChange={onChange} {...rest}>
     <Select.Trigger
         class={[
-            "u:relative u:flex u:items-center u:h-10 u:px-3 u:bg-content u:border u:rounded u:text-left u:outline-none u:appearance-none u:cursor-pointer",
+            "u:relative u:flex u:items-center u:w-full u:h-10 u:px-3 u:bg-content u:border u:rounded u:text-left u:outline-none u:appearance-none u:cursor-pointer",
             "u:disabled:cursor-not-allowed",
             {
                 "u:pl-10": leftIconClass,
@@ -73,7 +73,7 @@
         {/if}
     </Select.Trigger>
     <Select.Portal>
-        <Select.Content>
+        <Select.Content class="u:z-100">
             <Select.Viewport
                 class={[
                     "u:w-[var(--bits-select-anchor-width)] u:bg-content u:text-content-inverse u:border u:rounded u:outline-none u:appearance-none u:cursor-pointer",
