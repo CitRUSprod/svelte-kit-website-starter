@@ -7,7 +7,7 @@
         "build": "pnpm turbo build",
         "check-types": "pnpm turbo check-types",
         "commit": "git-cz",
-        "stylelint": "stylelint --color",
+        "stylelint": "stylelint --color --allow-empty-input",
         "stylelint:fix": "pnpm stylelint --fix",
         "stylelint:all": "pnpm stylelint \"**/*.{css,svelte}\" \"!storage\"",
         "stylelint:fix:all": "pnpm stylelint:all --fix",
