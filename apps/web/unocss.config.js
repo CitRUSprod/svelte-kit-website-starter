@@ -2,8 +2,8 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import extractorSvelte from "@unocss/extractor-svelte"
-import { colors } from "@unocss/preset-wind"
-import { presetUno, presetIcons, transformerDirectives } from "unocss"
+import { colors, presetWind3 } from "@unocss/preset-wind3"
+import { presetIcons, transformerDirectives } from "unocss"
 import { presetBetterNestedColors } from "unocss-preset-better-nested-colors"
 import { presetScrollbar } from "unocss-preset-scrollbar"
 
@@ -52,7 +52,7 @@ const specialColors = {
 const config = {
     extractors: [extractorSvelte],
     presets: [
-        presetUno(),
+        presetWind3(),
         presetBetterNestedColors({
             colors: {
                 ...colors,
