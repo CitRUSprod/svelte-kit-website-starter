@@ -24,8 +24,8 @@ const config = [
         ignores: [
             "pnpm-lock.yaml",
             "**/.playwright",
-            "**/.turbo",
             "**/.svelte-kit",
+            "**/.turbo",
             "**/dist",
             "storage"
         ]
