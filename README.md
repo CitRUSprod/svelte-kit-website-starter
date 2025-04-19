@@ -219,6 +219,12 @@ To restore a database from backup you can use this command:
 scripts/restore-backup <YYYY-MM-DD_hh-mm-ss> # For example 2020-05-13_21-35-00
 ```
 
+### Swagger
+
+Swagger UI is available at: http://localhost:6700/api/v1/swagger.
+
+To enable Swagger UI, set the `ENABLE_SWAGGER=true` variable in your `.env` file.
+
 ### Adminer
 
 Adminer is available at: http://localhost:6700/admin/adminer.

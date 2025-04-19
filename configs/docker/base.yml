@@ -37,7 +37,7 @@ services:
             MAILER_EMAIL: ${MAILER_EMAIL}
             MAILER_PASSWORD: ${MAILER_PASSWORD}
             MAILER_NAME: ${MAILER_NAME}
-            ENABLE_DOCS: ${ENABLE_DOCS}
+            ENABLE_SWAGGER: ${ENABLE_SWAGGER}
     postgres:
         image: postgres:17.4-alpine
         restart: always

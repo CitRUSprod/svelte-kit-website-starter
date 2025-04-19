@@ -6,10 +6,10 @@ export function api() {
         PUBLIC_BASE_URL: z.string().trim().url(),
         MINIO_USER: z.string().trim().min(1),
         MINIO_PASSWORD: z.string().trim().min(1),
+        ENABLE_SWAGGER: z.string().transform(v => v === "true"),
         JWT_SECRET: z.string().trim().min(6),
         TWITCH_CLIENT_ID: z.string().trim().length(30),
         TWITCH_CLIENT_SECRET: z.string().trim().length(30),
-        ENABLE_DOCS: z.coerce.boolean(),
         MAILER_HOST: z
             .string()
             .trim()

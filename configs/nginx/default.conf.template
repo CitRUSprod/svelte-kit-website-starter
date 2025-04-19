@@ -43,5 +43,8 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 3600;
         client_max_body_size 1G;
+        sub_filter 'href="/swagger' 'href="/api/v1/swagger';
+        sub_filter 'src="/swagger' 'src="/api/v1/swagger';
+        sub_filter_once off;
     }
 }

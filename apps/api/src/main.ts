@@ -35,7 +35,7 @@ app.setErrorHandler(err => {
     }
 })
 
-if (env.ENABLE_DOCS) {
+if (env.ENABLE_SWAGGER) {
     app.register(swagger, {
         swagger: {
             info: {
@@ -44,7 +44,7 @@ if (env.ENABLE_DOCS) {
             }
         },
         transform: jsonSchemaTransform
-    }).register(swaggerUi, { routePrefix: "/docs" })
+    }).register(swaggerUi, { routePrefix: "/swagger" })
 }
 
 app.register(multipart, { attachFieldsToBody: true })
