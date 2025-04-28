@@ -2,7 +2,7 @@
 
 *.log
 
-.cursorrules
+.cursor*
 .windsurfrules
 .clinerules
 
