@@ -8,7 +8,7 @@ function generateTitle() {
 }
 
 function generateContent() {
-    return faker.lorem.word({ length: { min: 20, max: 100 } })
+    return faker.lorem.sentences({ min: 1, max: 3 })
 }
 
 const postTitle = generateTitle()

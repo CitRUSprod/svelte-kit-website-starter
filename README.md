@@ -162,7 +162,7 @@ pnpm format
 Test with `playwright`:
 
 ```sh
-pnpm test
+pnpm test:e2e
 ```
 
 ### Environment variables
