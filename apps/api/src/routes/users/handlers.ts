@@ -1,7 +1,7 @@
-import { Prisma } from "@prisma/client"
 import * as schemasRoutes from "@repo/schemas/routes"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
 
+import { Prisma } from "$/prisma/generated/client"
 import type { RouteHandler } from "$/types"
 import { getItemsPage, models } from "$/utils"
 

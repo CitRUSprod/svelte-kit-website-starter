@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -e
+
+if ! command -v docker > /dev/null 2>&1; then
+    echo "Docker is not installed"
+    echo "Please install Docker to continue"
+
+    exit 1
+fi
+
+if ! docker info > /dev/null 2>&1; then
+    echo "Docker is installed but not running or not properly configured for WSL"
+    echo "Please start Docker Desktop and ensure WSL integration is enabled"
+
+    exit 1
+fi
+
+exit 0

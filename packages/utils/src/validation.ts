@@ -5,7 +5,7 @@ export function parseZodError(err: z.ZodError) {
     return fromZodError(err)
 }
 
-export function createValidator<T extends z.Schema>(schema: T) {
+export function createValidator<T extends z.ZodType>(schema: T) {
     function validator(value: z.infer<typeof schema>) {
         const result = schema.safeParse(value)
 
@@ -20,7 +20,7 @@ export function createValidator<T extends z.Schema>(schema: T) {
     return validator
 }
 
-export function parseDataBySchema<T extends z.Schema>(schema: T, data: unknown) {
+export function parseDataBySchema<T extends z.ZodType>(schema: T, data: unknown) {
     const result = schema.safeParse(data)
 
     if (result.success) {

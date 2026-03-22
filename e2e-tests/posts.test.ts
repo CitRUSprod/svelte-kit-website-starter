@@ -17,10 +17,12 @@ const updatedPostTitle = generateTitle()
 const updatedPostContent = generateContent()
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" })
+    await page.goto(url, { waitUntil: "load" })
+    await page.waitForTimeout(2000)
 
     await page.getByTestId("login-header-button").click()
-    await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
+    await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "load" })
+    await page.waitForTimeout(2000)
 
     await page.getByTestId("email-input").locator("input").fill("test.user@example.com")
     await page.getByTestId("password-input").locator("input").fill("qwerty123")
@@ -30,7 +32,8 @@ test.beforeEach(async ({ page }) => {
     await page.getByTestId("success-toast").waitFor({ state: "hidden" })
 
     await page.getByTestId("posts-header-button").click()
-    await page.waitForURL(`${url}/en/posts`, { waitUntil: "networkidle" })
+    await page.waitForURL(`${url}/en/posts`, { waitUntil: "load" })
+    await page.waitForTimeout(2000)
 })
 
 test.describe("posts", () => {
@@ -63,7 +66,8 @@ test.describe("posts", () => {
             .waitFor({ state: "hidden" })
 
         await page.getByTestId("post").click()
-        await page.waitForURL(new RegExp(`^${url}/en/posts/\\d+$`), { waitUntil: "networkidle" })
+        await page.waitForURL(new RegExp(`^${url}/en/posts/\\d+$`), { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         await page.getByTestId("edit-post-button").click()
 
@@ -91,7 +95,8 @@ test.describe("posts", () => {
             .waitFor({ state: "hidden" })
 
         await page.getByTestId("post").click()
-        await page.waitForURL(new RegExp(`^${url}/en/posts/\\d+$`), { waitUntil: "networkidle" })
+        await page.waitForURL(new RegExp(`^${url}/en/posts/\\d+$`), { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         await page.getByTestId("remove-post-button").click()
 

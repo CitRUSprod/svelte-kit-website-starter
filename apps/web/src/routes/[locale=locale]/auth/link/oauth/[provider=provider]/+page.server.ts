@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit"
-import * as _ from "lodash-es"
+import * as _ from "es-toolkit"
 
 export async function load(e) {
     if (!e.locals.userData) {

@@ -25,8 +25,10 @@ const config = [
             "pnpm-lock.yaml",
             "**/.playwright",
             "**/.svelte-kit",
+            "**/.template",
             "**/.turbo",
             "**/dist",
+            "**/prisma/generated",
             "storage"
         ]
     },

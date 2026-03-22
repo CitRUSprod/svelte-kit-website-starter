@@ -1,5 +1,6 @@
 import type { MultipartFile } from "@fastify/multipart"
 import type { FastifyInstance, FastifyPluginCallback } from "fastify"
+// eslint-disable-next-line import/no-deprecated
 import { Client } from "minio"
 import sharp from "sharp"
 import { v4 as createUuid } from "uuid"
@@ -19,6 +20,7 @@ declare module "fastify" {
 const bucketName = "files"
 
 export const minio: FastifyPluginCallback = (app, options, done) => {
+    // eslint-disable-next-line import/no-deprecated
     const minioClient = new Client({
         endPoint: env.IS_DOCKER_CONTAINER ? "minio" : "localhost",
         port: env.IS_DOCKER_CONTAINER ? 9000 : 6704,

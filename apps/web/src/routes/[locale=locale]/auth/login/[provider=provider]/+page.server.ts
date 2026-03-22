@@ -1,6 +1,6 @@
 import * as constantsEnums from "@repo/constants/enums"
 import { redirect } from "@sveltejs/kit"
-import * as _ from "lodash-es"
+import * as _ from "es-toolkit"
 
 import * as api from "$lib/api"
 import { setCookies } from "$lib/utils"

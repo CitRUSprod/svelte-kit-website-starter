@@ -1,16 +1,18 @@
 ARG NODE_IMAGE
 FROM ${NODE_IMAGE} AS base
 WORKDIR /project
-RUN corepack enable && corepack prepare pnpm@10.8.1 --activate
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 ENV PNPM_HOME=/usr/local/bin
 
 FROM base AS preparer
-RUN pnpm add -g turbo@2.5.0
+RUN pnpm add -g turbo@2.8.19
 COPY . .
 RUN turbo prune --docker web api
 
 FROM base AS installer
+ARG POSTGRES_URL
 COPY --from=preparer /project/out/json .
+COPY --from=preparer /project/out/full/apps/api/prisma.config.ts ./apps/api/
 COPY --from=preparer /project/out/full/apps/api/src/prisma/schema.prisma ./apps/api/src/prisma/
 RUN pnpm i
 COPY . .

@@ -1,4 +1,4 @@
-import type { User, Role, Ban } from "@prisma/client"
+import type { User, Role, Ban } from "$/prisma/generated/client"
 
 export interface UserPayload {
     id: number

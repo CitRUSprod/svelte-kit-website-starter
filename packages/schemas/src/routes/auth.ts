@@ -131,7 +131,7 @@ export type OAuthLoginRequest = z.infer<ReturnType<typeof oAuthLoginRequest>>
 
 export function oAuthLoginResponse() {
     return z.object({
-        redirectUrl: z.string().trim().url()
+        redirectUrl: z.url().trim()
     })
 }
 

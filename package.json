@@ -2,7 +2,7 @@
     "name": "svelte-kit-website-starter",
     "private": true,
     "scripts": {
-        "turbo": "turbo --no-daemon",
+        "turbo": "turbo",
         "dev": "pnpm turbo dev",
         "build": "pnpm turbo build",
         "check-types": "pnpm turbo check-types",
@@ -21,22 +21,10 @@
         "test": "playwright test",
         "prepare": "husky"
     },
-    "packageManager": "pnpm@10.8.1",
+    "packageManager": "pnpm@10.32.1",
     "engines": {
-        "node": "22.14.0",
-        "pnpm": "10.8.1"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@prisma/client",
-            "@prisma/engines",
-            "argon2",
-            "esbuild",
-            "fastify-socket.io",
-            "prisma",
-            "sharp",
-            "svelte-preprocess"
-        ]
+        "node": "24.14.0",
+        "pnpm": "10.32.1"
     },
     "config": {
         "commitizen": {
@@ -51,38 +39,37 @@
         "*.{html,mjml,md,json,y?(a)ml,?([cm])js,ts,svelte}": "pnpm eslint:fix"
     },
     "devDependencies": {
-        "@citrus-linting/eslint-config": "1.3.0",
-        "@citrus-linting/prettier-config": "1.0.0",
-        "@citrus-linting/stylelint-config": "1.0.0",
-        "@commitlint/cli": "19.8.0",
-        "@commitlint/types": "19.8.0",
-        "@faker-js/faker": "9.7.0",
+        "@citrus-linting/eslint-config": "1.3.1",
+        "@citrus-linting/prettier-config": "1.0.1",
+        "@citrus-linting/stylelint-config": "1.1.0",
+        "@commitlint/cli": "20.5.0",
+        "@commitlint/types": "20.5.0",
+        "@faker-js/faker": "10.3.0",
+        "@playwright/test": "1.58.2",
         "@repo/configs": "workspace:*",
-        "@playwright/test": "1.52.0",
-        "@stylistic/eslint-plugin": "4.2.0",
-        "@types/eslint": "9.6.1",
+        "@stylistic/eslint-plugin": "5.6.1",
         "any-eslint-parser": "1.0.1",
         "commitizen": "4.3.1",
-        "cz-customizable": "7.4.0",
-        "dotenv": "16.5.0",
-        "dotenv-expand": "12.0.2",
-        "eslint": "9.25.0",
-        "eslint-config-prettier": "10.1.2",
-        "eslint-plugin-import": "2.31.0",
-        "eslint-plugin-prettier": "5.2.6",
-        "eslint-plugin-svelte": "3.5.1",
-        "globals": "16.0.0",
+        "cz-customizable": "7.5.1",
+        "dotenv": "17.3.1",
+        "dotenv-expand": "12.0.3",
+        "eslint": "9.39.4",
+        "eslint-config-prettier": "10.1.8",
+        "eslint-plugin-import": "2.32.0",
+        "eslint-plugin-prettier": "5.5.5",
+        "eslint-plugin-svelte": "3.15.2",
+        "globals": "17.4.0",
         "husky": "9.1.7",
-        "lint-staged": "15.5.1",
-        "postcss-html": "1.8.0",
-        "prettier": "3.5.3",
-        "prettier-plugin-svelte": "3.3.3",
-        "stylelint": "16.18.0",
+        "lint-staged": "16.4.0",
+        "postcss-html": "1.8.1",
+        "prettier": "3.8.1",
+        "prettier-plugin-svelte": "3.5.1",
+        "stylelint": "17.5.0",
         "stylelint-prettier": "5.0.3",
-        "svelte": "5.28.1",
-        "svelte-eslint-parser": "1.1.2",
-        "turbo": "2.5.0",
-        "typescript": "5.8.3",
-        "typescript-eslint": "8.30.1"
+        "svelte": "5.54.0",
+        "svelte-eslint-parser": "1.6.0",
+        "turbo": "2.8.19",
+        "typescript": "5.9.3",
+        "typescript-eslint": "8.57.1"
     }
 }

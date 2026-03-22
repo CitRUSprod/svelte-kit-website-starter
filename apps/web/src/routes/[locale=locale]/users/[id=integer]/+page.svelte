@@ -1,7 +1,8 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
     import { dt } from "@repo/utils"
-    import * as _ from "lodash-es"
+    import * as _ from "es-toolkit"
+    import { untrack } from "svelte"
 
     import {
         DialogAvatarRemoving,
@@ -28,7 +29,7 @@
     let dialogEmailLinking = $state<DialogEmailLinking>()
     let dialogUserRemoving = $state<DialogUserRemoving>()
 
-    let localUser = $state(data.user)
+    let localUser = $state(untrack(() => data.user))
 
     $effect(() => {
         localUser = data.user

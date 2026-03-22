@@ -1,13 +1,18 @@
 /** @type {import("stylelint").Config} */
 const config = {
-    customSyntax: "postcss-html",
     extends: ["@citrus-linting/stylelint-config"],
-    ignores: ["**/.svelte-kit/**/*", "**/dist/**/*"],
+    ignoreFiles: ["**/.svelte-kit/**/*", "**/.template", "**/dist/**/*"],
     plugins: ["stylelint-prettier"],
     rules: {
         "prettier/prettier": true,
         "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global"] }]
-    }
+    },
+    overrides: [
+        {
+            files: ["*.html", "*.svelte"],
+            customSyntax: "postcss-html"
+        }
+    ]
 }
 
 export default config

@@ -2,9 +2,13 @@
 
 *.log
 
+.cline*
+.roo*
+.kilocode*
 .cursor*
-.windsurfrules
-.clinerules
+.codeium*
+.trae*
+.gemini*
 
 .env
 
@@ -14,6 +18,8 @@ out
 .playwright
 .svelte-kit
 dist
+i18n-*.ts
+**/prisma/generated
 
 /storage/*
 !/storage/.gitkeep

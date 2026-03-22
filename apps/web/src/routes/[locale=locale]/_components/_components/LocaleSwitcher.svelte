@@ -6,6 +6,7 @@
     import type { Locale } from "$i18n/helpers"
     import {
         currentLocale,
+        isLocale,
         locales,
         setLocale,
         loadLocaleAsync,
@@ -31,8 +32,11 @@
     }
 
     afterNavigate(() => {
-        const locale = page.params.locale as Locale | undefined
-        switchLocale(locale)
+        const { locale } = page.params
+
+        if (locale && isLocale(locale)) {
+            switchLocale(locale)
+        }
     })
 </script>
 

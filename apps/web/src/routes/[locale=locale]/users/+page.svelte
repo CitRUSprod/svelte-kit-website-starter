@@ -2,6 +2,7 @@
     import * as constantsEnums from "@repo/constants/enums"
     import * as schemasRoutes from "@repo/schemas/routes"
     import { dt } from "@repo/utils"
+    import { untrack } from "svelte"
 
     import { DialogRoleAssigning, DialogUserBanning } from "./_components"
 
@@ -24,7 +25,7 @@
     let dialogUserBanning = $state<DialogUserBanning>()
 
     const qGetUsers = useQuery({
-        initialData: data.itemsPage,
+        initialData: untrack(() => data.itemsPage),
         minResponseTime: 500,
         fn() {
             return api.users.getUsers({

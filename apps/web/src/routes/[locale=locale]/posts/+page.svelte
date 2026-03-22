@@ -1,7 +1,8 @@
 <script lang="ts">
     import * as schemasRoutes from "@repo/schemas/routes"
     import { dt } from "@repo/utils"
-    import * as _ from "lodash-es"
+    import * as _ from "es-toolkit"
+    import { untrack } from "svelte"
     import type { Split } from "type-fest"
 
     import { DialogPostCreating } from "./_components"
@@ -48,7 +49,7 @@
     }
 
     const qGetPosts = useQuery({
-        initialData: data.itemsPage,
+        initialData: untrack(() => data.itemsPage),
         minResponseTime: 500,
         fn() {
             return api.posts.getPosts({

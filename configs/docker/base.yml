@@ -1,7 +1,7 @@
 services:
     nginx:
-        image: nginx:1.27.5-alpine
-        restart: always
+        image: nginx:1.29.6-alpine-slim
+        restart: unless-stopped
         ports:
             - ${WEBSITE_PORT}:6700
         volumes:
@@ -12,18 +12,20 @@ services:
             dockerfile: configs/docker/Dockerfile
             target: web
             args:
-                NODE_IMAGE: node:22.14.0-alpine
+                NODE_IMAGE: node:24.14.0-alpine
+                POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
                 PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
-        restart: always
+        restart: unless-stopped
     api:
         build:
             context: ../..
             dockerfile: configs/docker/Dockerfile
             target: api
             args:
-                NODE_IMAGE: node:22.14.0-alpine
-        restart: always
+                NODE_IMAGE: node:24.14.0-alpine
+                POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+        restart: unless-stopped
         environment:
             PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
@@ -39,32 +41,32 @@ services:
             MAILER_NAME: ${MAILER_NAME}
             ENABLE_SWAGGER: ${ENABLE_SWAGGER}
     postgres:
-        image: postgres:17.4-alpine
-        restart: always
+        image: postgres:18.3-alpine
+        restart: unless-stopped
         environment:
             POSTGRES_HOST: postgres
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
         volumes:
-            - postgres:/var/lib/postgresql/data
+            - ../../storage/postgres:/var/lib/postgresql
     adminer:
-        image: adminer:5.2.1
-        restart: always
+        image: adminer:5.4.2
+        restart: unless-stopped
     minio:
-        image: minio/minio:RELEASE.2025-04-08T15-41-24Z
-        restart: always
+        image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+        restart: unless-stopped
         environment:
             MINIO_ROOT_USER: ${MINIO_USER}
             MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
         volumes:
-            - minio:/data
+            - ../../storage/minio:/data
             - ../../storage/minio-tmp:/backup
             - ../minio:/minio
         command: server /data --console-address :9001
     alpine:
-        image: alpine:3.21.3
-        restart: always
+        image: alpine:3.23.3
+        restart: unless-stopped
         tty: true
         volumes:
             - ../../storage:/storage

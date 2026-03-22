@@ -3,7 +3,8 @@ import { z } from "@repo/utils"
 export function api() {
     return z.object({
         IS_DOCKER_CONTAINER: z.coerce.boolean(),
-        PUBLIC_BASE_URL: z.string().trim().url(),
+        PUBLIC_BASE_URL: z.url().trim(),
+        POSTGRES_URL: z.string().trim().min(1),
         MINIO_USER: z.string().trim().min(1),
         MINIO_PASSWORD: z.string().trim().min(1),
         ENABLE_SWAGGER: z.string().transform(v => v === "true"),
@@ -17,7 +18,7 @@ export function api() {
                 /^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/
             ),
         MAILER_PORT: z.coerce.number().int().min(1),
-        MAILER_EMAIL: z.string().trim().toLowerCase().email(),
+        MAILER_EMAIL: z.email().trim().toLowerCase(),
         MAILER_PASSWORD: z.string().trim().min(1),
         MAILER_NAME: z.string().trim().min(1)
     })

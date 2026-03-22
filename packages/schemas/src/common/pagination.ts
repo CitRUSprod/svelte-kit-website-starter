@@ -24,7 +24,7 @@ export function totalItems() {
 
 export type TotalItems = z.infer<ReturnType<typeof totalItems>>
 
-export function itemsData<T extends z.AnyZodObject>(item: T) {
+export function itemsData<T extends z.ZodObject<any>>(item: T) {
     return z.object({
         totalItems: totalItems(),
         items: z.array(item)
@@ -33,7 +33,7 @@ export function itemsData<T extends z.AnyZodObject>(item: T) {
 
 export type ItemsData = z.infer<ReturnType<typeof itemsData>>
 
-export function itemsPage<T extends z.AnyZodObject>(item: T) {
+export function itemsPage<T extends z.ZodObject<any>>(item: T) {
     return z.object({
         page: page(),
         pages: pages(),

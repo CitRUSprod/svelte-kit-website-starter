@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
+    import { untrack } from "svelte"
 
     import { DialogRoleCreating, DialogRoleEditing, DialogRoleRemoving } from "./_components"
 
@@ -16,7 +17,7 @@
     let dialogRoleRemoving = $state<DialogRoleRemoving>()
 
     const qGetRoles = useQuery({
-        initialData: { items: data.roles },
+        initialData: { items: untrack(() => data.roles) },
         fn() {
             return api.roles.getRoles()
         }

@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+set -e
+
+SCRIPTS_DIR=$(dirname "$0")
+
+"$SCRIPTS_DIR"/check-docker
+
 docker image prune -f > /dev/null
 
 exit 0

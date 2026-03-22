@@ -6,7 +6,7 @@ import * as role from "./role"
 import * as common from "$/common"
 
 export function email() {
-    return z.string().trim().toLowerCase().email()
+    return z.email().trim().toLowerCase()
 }
 
 export type Email = z.infer<ReturnType<typeof email>>

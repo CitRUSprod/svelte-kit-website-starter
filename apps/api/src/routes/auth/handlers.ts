@@ -1,16 +1,16 @@
-import type { User } from "@prisma/client"
 import * as constantsEnums from "@repo/constants/enums"
 import * as schemasRoutes from "@repo/schemas/routes"
 import { generateState } from "arctic"
 import argon2 from "argon2"
 import axios from "axios"
+import * as _ from "es-toolkit"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
-import * as _ from "lodash-es"
 import { v4 as createUuid } from "uuid"
 
 import * as utils from "./utils"
 
 import { enums, env } from "$/constants"
+import type { User } from "$/prisma/generated/client"
 import type { RouteHandler, UserPayload } from "$/types"
 import { oAuthProviders, sendEmail, models } from "$/utils"
 

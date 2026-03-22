@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -e
+
 SCRIPTS_DIR=$(dirname "$0")
 ROOT_DIR=$SCRIPTS_DIR/..
 STORAGE_DIR=$ROOT_DIR/storage
@@ -7,6 +9,8 @@ MINIO_TMP_DIR=$STORAGE_DIR/minio-tmp
 
 ABS_BACKUP_DIR=$(realpath "$STORAGE_DIR"/backups)/$(date -u +'%Y-%m-%d_%H-%M-%S')
 BACKUP_NAME=$(basename "$ABS_BACKUP_DIR".tar.gz)
+
+"$SCRIPTS_DIR"/check-docker
 
 if [ -n "$("$SCRIPTS_DIR"/run dev ps -q)" ]; then
     MODE="dev"
@@ -33,7 +37,9 @@ rm -rf "$MINIO_TMP_DIR"/*
 "$SCRIPTS_DIR"/"$MODE" exec alpine chmod -R 644 /storage/minio-tmp
 "$SCRIPTS_DIR"/"$MODE" exec alpine find /storage/minio-tmp -type d -exec chmod 755 {} \;
 
-cp -r "$MINIO_TMP_DIR"/* "$ABS_BACKUP_DIR"/files
+if [ "$(ls -A "$MINIO_TMP_DIR" 2>/dev/null)" ]; then
+    cp -r "$MINIO_TMP_DIR"/* "$ABS_BACKUP_DIR"/files
+fi
 
 "$SCRIPTS_DIR"/"$MODE" exec postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" | tee "$ABS_BACKUP_DIR"/db.sql > /dev/null
 

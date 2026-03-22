@@ -1,7 +1,7 @@
 <script lang="ts">
     import { ProgressBar } from "@prgm/sveltekit-progress-bar"
     import Cookies from "js-cookie"
-    import { onMount } from "svelte"
+    import { onMount, untrack } from "svelte"
 
     import { ToastContainer } from "./_components"
 
@@ -17,9 +17,9 @@
 
     const { data, children } = $props()
 
-    setLocale(data.locale)
+    setLocale(untrack(() => data.locale))
 
-    $userData = data.userData
+    $userData = untrack(() => data.userData)
 
     $effect(() => {
         $userData = data.userData

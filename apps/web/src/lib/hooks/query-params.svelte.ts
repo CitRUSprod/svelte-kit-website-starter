@@ -1,10 +1,10 @@
 import { z } from "@repo/utils"
-import * as _ from "lodash-es"
+import * as _ from "es-toolkit"
 
 import { pushState } from "$app/navigation"
 import { page } from "$app/state"
 
-type Schema = Record<string, z.ZodSchema>
+type Schema = Record<string, z.ZodType>
 
 const debouncedPushState = _.debounce(pushState, 200)
 

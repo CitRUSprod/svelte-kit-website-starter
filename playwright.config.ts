@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test"
 import { config as dotenv } from "dotenv"
 import { expand } from "dotenv-expand"
 
-import { getTestsPath } from "$/tests/libs"
+import { getTestsPath } from "$/e2e-tests/libs"
 
 expand(dotenv())
 

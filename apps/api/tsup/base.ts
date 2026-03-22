@@ -1,5 +1,5 @@
-import raw from "esbuild-plugin-raw"
 import { defineConfig } from "tsup"
+import raw from "unplugin-raw/esbuild"
 
 export default defineConfig({
     entry: ["src/main.ts"],

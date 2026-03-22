@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
     import { dt } from "@repo/utils"
+    import { untrack } from "svelte"
 
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
@@ -13,7 +14,7 @@
     let dialogPostEditing = $state<DialogPostEditing>()
     let dialogPostRemoving = $state<DialogPostRemoving>()
 
-    let localPost = $state(data.post)
+    let localPost = $state(untrack(() => data.post))
 
     $effect(() => {
         localPost = data.post

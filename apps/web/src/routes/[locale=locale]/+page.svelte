@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as _ from "lodash-es"
+    import * as _ from "es-toolkit"
 
     import { ll } from "$i18n/helpers"
     import { Content, Button } from "$lib/components"

@@ -1,11 +1,15 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
 import argon2 from "argon2"
 import parseArgv from "tiny-parse-argv"
+
+import { env } from "$/constants"
+import { PrismaClient } from "$/prisma/generated/client"
 
 const userRoleId = 1
 const adminRoleId = 2
 
-const client = new PrismaClient()
+const adapter = new PrismaPg({ connectionString: env.POSTGRES_URL })
+const client = new PrismaClient({ adapter })
 const args = parseArgv(process.argv)
 
 function seedIs(seed: string) {

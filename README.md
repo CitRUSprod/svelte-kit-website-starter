@@ -119,8 +119,7 @@ scripts/start
 3. Seed the database:
 
 ```sh
-scripts/prod exec api sh
-pnpm prisma:seeds:run
+scripts/prod exec api pnpm prisma:seeds:run
 ```
 
 After completing all steps, the application will be available at `http://localhost:<WEBSITE_PORT>` (default is http://localhost:6700).

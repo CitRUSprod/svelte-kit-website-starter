@@ -1,8 +1,8 @@
-import { Prisma } from "@prisma/client"
 import * as constantsEnums from "@repo/constants/enums"
 import * as schemasRoutes from "@repo/schemas/routes"
 import { ForbiddenError, InternalServerError } from "http-errors-enhanced"
 
+import { Prisma } from "$/prisma/generated/client"
 import type { RouteHandler } from "$/types"
 import { getItemsPage, models } from "$/utils"
 

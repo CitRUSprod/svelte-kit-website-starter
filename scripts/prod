@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
+set -e
+
 SCRIPTS_DIR=$(dirname "$0")
+
+"$SCRIPTS_DIR"/check-docker
 
 if [ -n "$("$SCRIPTS_DIR"/run dev ps -q)" ]; then
     echo "Development containers are already running. Stop them before starting production environment"

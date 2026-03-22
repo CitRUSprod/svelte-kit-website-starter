@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 
+set -e
+
 SCRIPTS_DIR=$(dirname "$0")
+
+"$SCRIPTS_DIR"/check-docker
+
 ROOT_DIR=$SCRIPTS_DIR/..
 DOCKER_CONFIGS_DIR=$ROOT_DIR/configs/docker
 

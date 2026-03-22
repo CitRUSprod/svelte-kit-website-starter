@@ -1,10 +1,10 @@
-import type { Role } from "@prisma/client"
 import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
 import type { JsonObject } from "type-fest"
 
 import type { Locale } from "$/i18n/helpers"
+import type { Role } from "$/prisma/generated/client"
 
 export function dto(role: Role) {
     return {

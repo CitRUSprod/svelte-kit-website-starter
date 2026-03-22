@@ -29,7 +29,7 @@ const test = base.extend<Fixtures>({
                 throw new Error("Email not found")
             }
 
-            const username = faker.internet.username().replace(/\./g, "_")
+            const username = faker.internet.username().replace(/[.-]/g, "_")
             const password = faker.internet.password({ length: 10 })
 
             userDataGlobal = { dropMailPage, email, username, password }
@@ -40,7 +40,8 @@ const test = base.extend<Fixtures>({
 })
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" })
+    await page.goto(url, { waitUntil: "load" })
+    await page.waitForTimeout(2000)
 })
 
 test.setTimeout(5 * 60000)
@@ -48,9 +49,11 @@ test.setTimeout(5 * 60000)
 test.describe.serial("auth", () => {
     test("register", async ({ page, userData }) => {
         await page.getByTestId("login-header-button").click()
-        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
         await page.getByTestId("registration-button").click()
-        await page.waitForURL(`${url}/en/auth/registration`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en/auth/registration`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         await page.getByTestId("email-input").locator("input").fill(userData.email)
         await page.getByTestId("username-input").locator("input").fill(userData.username)
@@ -79,8 +82,10 @@ test.describe.serial("auth", () => {
         }
 
         const registrationUrl = registrationUrlMatch[0]
-        await page.goto(registrationUrl, { waitUntil: "networkidle" })
-        await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
+        await page.goto(registrationUrl, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
+        await page.waitForURL(`${url}/en`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         const logoutButtonIsVisible = await page.getByTestId("logout-header-button").isVisible()
         expect(logoutButtonIsVisible).toBe(true)
@@ -88,7 +93,8 @@ test.describe.serial("auth", () => {
 
     test("login and logout", async ({ page, userData }) => {
         await page.getByTestId("login-header-button").click()
-        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         await page.getByTestId("email-input").locator("input").fill(userData.email)
         await page.getByTestId("password-input").locator("input").fill(userData.password)
@@ -99,7 +105,8 @@ test.describe.serial("auth", () => {
 
         await page.getByTestId("logout-header-button").click()
         await page.getByTestId("success-toast").waitFor()
-        await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         const loginButtonIsVisible = await page.getByTestId("login-header-button").isVisible()
         expect(loginButtonIsVisible).toBe(true)
@@ -107,7 +114,8 @@ test.describe.serial("auth", () => {
 
     test("login and delete account", async ({ page, userData }) => {
         await page.getByTestId("login-header-button").click()
-        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en/auth/login`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         await page.getByTestId("email-input").locator("input").fill(userData.email)
         await page.getByTestId("password-input").locator("input").fill(userData.password)
@@ -123,7 +131,8 @@ test.describe.serial("auth", () => {
         await usernameInput.waitFor()
         await usernameInput.fill(userData.username)
         await page.getByTestId("remove-user-dialog-button").click()
-        await page.waitForURL(`${url}/en`, { waitUntil: "networkidle" })
+        await page.waitForURL(`${url}/en`, { waitUntil: "load" })
+        await page.waitForTimeout(2000)
 
         const loginButtonIsVisible = await page.getByTestId("login-header-button").isVisible()
         expect(loginButtonIsVisible).toBe(true)

@@ -1,6 +1,9 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
 import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyPluginCallback } from "fastify"
+
+import { env } from "$/constants"
+import { PrismaClient } from "$/prisma/generated/client"
 
 declare module "fastify" {
     interface FastifyInstance {
@@ -9,7 +12,8 @@ declare module "fastify" {
 }
 
 export const prisma: FastifyPluginCallback = (app, options, done) => {
-    const client = new PrismaClient().$extends({
+    const adapter = new PrismaPg({ connectionString: env.POSTGRES_URL })
+    const client = new PrismaClient({ adapter }).$extends({
         result: {
             role: {
                 permissions: {

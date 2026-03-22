@@ -5,7 +5,7 @@ import type { IterableElement } from "type-fest"
 import * as common from "$/common"
 
 export function name() {
-    const locales = Object.values(common.locale().Values)
+    const locales = Object.values(common.locale().options)
 
     const obj: Record<string, z.ZodString> = {}
 
@@ -19,7 +19,7 @@ export function name() {
 export type Name = z.infer<ReturnType<typeof name>>
 
 export function permission() {
-    return z.nativeEnum(constantsEnums.Permission)
+    return z.enum(constantsEnums.Permission)
 }
 
 export type Permission = z.infer<ReturnType<typeof permission>>
