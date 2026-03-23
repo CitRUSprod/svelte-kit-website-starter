@@ -6,7 +6,7 @@
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
 
     import { ll, localePath, currentLocale } from "$i18n/helpers"
-    import { Content, Button } from "$lib/components"
+    import { ContentDefault, Button } from "$lib/components"
     import { userData } from "$lib/stores"
 
     const { data } = $props()
@@ -25,7 +25,7 @@
     <title>{localPost.title}</title>
 </svelte:head>
 
-<Content.Default title={localPost.title} titleTestId="content-title" bodyTestId="content-body">
+<ContentDefault title={localPost.title} titleTestId="content-title" bodyTestId="content-body">
     <div class="u:flex u:flex-col u:gap-4">
         {#each localPost.content.split(/\n+/) as paragraph (paragraph)}
             <p>{paragraph}</p>
@@ -62,14 +62,14 @@
         <div>
             <Button
                 variant="warning"
-                onclick={dialogPostEditing?.open}
+                onClick={dialogPostEditing?.open}
                 data-testid="edit-post-button"
             >
                 {$ll.edit()}
             </Button>
             <Button
                 variant="error"
-                onclick={dialogPostRemoving?.open}
+                onClick={dialogPostRemoving?.open}
                 data-testid="remove-post-button"
             >
                 {$ll.remove()}
@@ -77,12 +77,12 @@
         </div>
     {:else if $userData?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
         <div>
-            <Button variant="error" onclick={dialogPostRemoving?.open}>
+            <Button variant="error" onClick={dialogPostRemoving?.open}>
                 {$ll.remove()}
             </Button>
         </div>
     {/if}
-</Content.Default>
+</ContentDefault>
 
 <DialogPostEditing bind:this={dialogPostEditing} bind:post={localPost} />
 <DialogPostRemoving bind:this={dialogPostRemoving} post={localPost} />

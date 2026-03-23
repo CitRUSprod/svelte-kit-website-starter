@@ -3,7 +3,7 @@
 
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
-    import { Content } from "$lib/components"
+    import { ContentDefault } from "$lib/components"
     import { toasts } from "$lib/stores"
 
     onMount(() => {
@@ -19,4 +19,4 @@
     <title>{$ll.emailUnlinking()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.redirecting()} />
+<ContentDefault title={$ll.redirecting()} />

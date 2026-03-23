@@ -88,14 +88,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qUpdatePost.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdatePost.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qUpdatePost.loading}
             variant="success"
-            onclick={qUpdatePost.refetch}
+            onClick={qUpdatePost.refetch}
             data-testid="edit-post-dialog-button"
         >
             {$ll.save()}

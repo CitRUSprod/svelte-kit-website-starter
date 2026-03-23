@@ -57,10 +57,10 @@
         </p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qDeleteRole.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteRole.loading} text variant="success" onClick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={qDeleteRole.loading} variant="error" onclick={qDeleteRole.refetch}>
+        <Button loading={qDeleteRole.loading} variant="error" onClick={qDeleteRole.refetch}>
             {$ll.remove()}
         </Button>
     </div>

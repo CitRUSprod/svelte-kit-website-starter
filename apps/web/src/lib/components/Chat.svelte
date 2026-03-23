@@ -70,10 +70,10 @@
     </div>
     {#if !hideControls}
         <div>
-            <TextField placeholder={$ll.message()} bind:value={message} onkeypress={onEnter} />
+            <TextField placeholder={$ll.message()} bind:value={message} onKeyPress={onEnter} />
         </div>
         <div>
-            <Button class="u:w-full" disabled={!trimmedMessage} onclick={send}>
+            <Button class="u:w-full" disabled={!trimmedMessage} onClick={send}>
                 {$ll.send()}
             </Button>
         </div>

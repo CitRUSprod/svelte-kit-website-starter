@@ -73,14 +73,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qBanUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qBanUser.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qBanUser.loading}
             variant="success"
-            onclick={qBanUser.refetch}
+            onClick={qBanUser.refetch}
         >
             {$ll.ban()}
         </Button>

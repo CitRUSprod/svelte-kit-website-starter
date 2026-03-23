@@ -61,14 +61,14 @@
         <TextField disabled={qUpdateEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qUpdateEmail.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdateEmail.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qUpdateEmail.loading}
             variant="success"
-            onclick={qUpdateEmail.refetch}
+            onClick={qUpdateEmail.refetch}
         >
             {$ll.change()}
         </Button>

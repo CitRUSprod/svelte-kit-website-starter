@@ -1,55 +1,60 @@
 <script lang="ts">
-    import type { ClassValue } from "svelte/elements"
+    import type { ClassValue, HTMLInputAttributes } from "svelte/elements"
 
-    import { Input } from "./internal"
+    import type { ComponentBasicProps } from "$lib/types"
 
-    import type { ElementVariant } from "$lib/types"
-    import { getElementVariantObject } from "$lib/utils"
-
-    interface Props {
-        variant?: ElementVariant
-        placeholder?: string
+    type Props = ComponentBasicProps & {
+        value?: string
         label?: string
-        type?: string
+        placeholder?: string
+        type?: "text" | "password"
         disabled?: boolean
         readonly?: boolean
-        autofocus?: boolean
-        value: string | number | null | undefined
-        leftIconClass?: string
-        rightIconClass?: string
-        class?: ClassValue
-        [key: string]: unknown
+        leftIconClass?: ClassValue
+        rightIconClass?: ClassValue
+        onInput?: HTMLInputAttributes["oninput"]
+        onFocus?: HTMLInputAttributes["onfocus"]
+        onBlur?: HTMLInputAttributes["onblur"]
+        onKeyPress?: HTMLInputAttributes["onkeypress"]
     }
 
     let {
-        variant = "default",
-        placeholder = undefined,
+        class: klass = undefined,
+        value = $bindable(""),
         label = undefined,
+        placeholder = undefined,
         type = "text",
         disabled = false,
         readonly = false,
-        autofocus = false,
-        value = $bindable(),
         leftIconClass = undefined,
         rightIconClass = undefined,
-        class: klass = undefined,
+        onInput = undefined,
+        onFocus = undefined,
+        onBlur = undefined,
+        onKeyPress = undefined,
         ...rest
     }: Props = $props()
 
-    const variants = $derived(getElementVariantObject(variant))
+    let isFocused = $state(false)
+
+    const isLabelFloating = $derived(isFocused || !!value || !!placeholder)
+
+    const handleFocus: HTMLInputAttributes["onfocus"] = e => {
+        isFocused = true
+        onFocus?.(e)
+    }
+
+    const handleBlur: HTMLInputAttributes["onblur"] = e => {
+        isFocused = false
+        onBlur?.(e)
+    }
 </script>
 
 <div
     class={[
-        "u:relative u:flex u:items-center",
+        "u:relative u:flex u:items-center u:bg-content u:border u:border-default-lighter u:rounded",
         {
-            "u:opacity-50": disabled,
-            "u:text-default": variants.default,
-            "u:text-primary": variants.primary,
-            "u:text-success": variants.success,
-            "u:text-error": variants.error,
-            "u:text-warning": variants.warning,
-            "u:text-info": variants.info
+            "u:opacity-50": disabled
         },
         klass
     ]}
@@ -57,38 +62,54 @@
 >
     {#if label}
         <div
-            class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-xs u:select-none u:pointer-events-none u:z-1"
+            class={[
+                "u:absolute u:px-1 u:text-default-lighter u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
+                {
+                    "u:top-0 u:text-2xs": isLabelFloating,
+                    "u:top-1/2 u:translate-y--1/2": !isLabelFloating,
+                    "u:left-2": !leftIconClass,
+                    "u:left-9": leftIconClass
+                }
+            ]}
         >
             {label}
         </div>
     {/if}
     {#if leftIconClass}
-        <i class={`u:absolute u:left-3 u:pointer-events-none u:text-xl ${leftIconClass}`}></i>
+        <i
+            class={[
+                "u:absolute u:left-3 u:text-default-lighter u:pointer-events-none u:text-xl",
+                leftIconClass
+            ]}
+        ></i>
     {/if}
-    <Input
+    <input
         class={[
-            "u:w-full u:h-10 u:px-3 u:bg-content u:text-content-inverse u:border u:rounded u:placeholder-opacity-80 u:outline-none",
-            "u:dark:placeholder-opacity-80",
+            "u:w-full u:h-10 u:px-3 u:bg-transparent u:outline-none",
+            "u:placeholder-text-default u:placeholder-text-opacity-50",
             "u:disabled:cursor-not-allowed",
             {
+                "u:pt-1": label,
                 "u:pl-10": leftIconClass,
-                "u:pr-10": rightIconClass,
-                "u:border-default u:placeholder-text-default-lighter": variants.default,
-                "u:border-primary u:placeholder-text-primary-lighter": variants.primary,
-                "u:border-success u:placeholder-text-success-lighter": variants.success,
-                "u:border-error u:placeholder-text-error-lighter": variants.error,
-                "u:border-warning u:placeholder-text-warning-lighter": variants.warning,
-                "u:border-info u:placeholder-text-info-lighter": variants.info
+                "u:pr-10": rightIconClass
             }
         ]}
-        {autofocus}
         {disabled}
         {placeholder}
         {readonly}
         {type}
         bind:value
+        oninput={onInput}
+        onfocus={handleFocus}
+        onblur={handleBlur}
+        onkeypress={onKeyPress}
     />
     {#if rightIconClass}
-        <i class={`u:absolute u:right-3 u:pointer-events-none u:text-xl ${rightIconClass}`}></i>
+        <i
+            class={[
+                "u:absolute u:right-3 u:text-default-lighter u:pointer-events-none u:text-xl",
+                rightIconClass
+            ]}
+        ></i>
     {/if}
 </div>

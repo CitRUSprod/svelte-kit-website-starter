@@ -1,2 +1,2 @@
-export { default as Default } from "./Default.svelte"
-export { default as Center } from "./Center.svelte"
+export { default as ContentDefault } from "./ContentDefault.svelte"
+export { default as ContentCenter } from "./ContentCenter.svelte"

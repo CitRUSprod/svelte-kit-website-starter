@@ -1,34 +1,31 @@
 <script lang="ts">
     import type { Snippet } from "svelte"
-    import type { ClassValue } from "svelte/elements"
 
     import Button from "./Button.svelte"
 
     import { ll } from "$i18n/helpers"
-    import type { ElementBasicVariant } from "$lib/types"
-    import { getElementBasicVariantObject } from "$lib/utils"
+    import type { ComponentBasicProps, ComponentBasicVariant } from "$lib/types"
+    import { getComponentBasicVariantMap } from "$lib/utils"
 
-    interface Props {
-        variant: ElementBasicVariant
+    type Props = ComponentBasicProps & {
+        variant: ComponentBasicVariant
         visible?: boolean
         closable?: boolean
-        class?: ClassValue
-        onClose?(): void
+        onClose?(): void | Promise<void>
         children?: Snippet
-        [key: string]: unknown
     }
 
     let {
+        class: klass = undefined,
         variant,
         visible = $bindable(true),
         closable = false,
-        class: klass = undefined,
         onClose = undefined,
-        children,
+        children = undefined,
         ...rest
     }: Props = $props()
 
-    const variants = $derived(getElementBasicVariantObject(variant))
+    const variants = $derived(getComponentBasicVariantMap(variant))
 
     function getTextByVariant(localVariant: string) {
         switch (localVariant) {
@@ -52,7 +49,7 @@
 {#if visible}
     <div
         class={[
-            "u:flex u:w-full u:rounded-md u:bg-content u:border-2",
+            "u:flex u:w-full u:bg-content u:rounded-md u:border-2 u:overflow-hidden",
             {
                 "u:border-success": variants.success,
                 "u:border-error": variants.error,
@@ -65,7 +62,7 @@
     >
         <div
             class={[
-                "u:flex u:justify-center u:items-center u:w-12 u:text-content-lighter",
+                "u:flex u:justify-center u:items-center u:flex-shrink-0 u:w-12 u:text-content-lighter",
                 {
                     "u:bg-success": variants.success,
                     "u:bg-error": variants.error,
@@ -86,29 +83,30 @@
                 ]}
             ></i>
         </div>
-        <div class="u:flex u:flex-1 u:justify-between">
-            <div class="u:px-4 u:py-2">
+        <div class="u:px-4 u:py-2 u:flex-1 u:min-w-0">
+            <div class="u:flex u:justify-between">
                 <b
-                    class={{
-                        "u:text-success": variants.success,
-                        "u:text-error": variants.error,
-                        "u:text-warning": variants.warning,
-                        "u:text-info": variants.info
-                    }}
+                    class={[
+                        "u:min-w-0 u:break-words",
+                        {
+                            "u:text-success": variants.success,
+                            "u:text-error": variants.error,
+                            "u:text-warning": variants.warning,
+                            "u:text-info": variants.info
+                        }
+                    ]}
                 >
                     {getTextByVariant(variant)}
                 </b>
-                <p class="u:text-content-inverse u:text-sm">
-                    {@render children?.()}
-                </p>
-            </div>
-            {#if closable}
-                <div class="u:pr-2 u:py-2">
-                    <Button icon text {variant} onclick={close}>
-                        <i class="u:i-fa-solid-times u:text-xl"></i>
+                {#if closable}
+                    <Button class="u:mt--1 u:mr--3" size="xs" icon text {variant} onClick={close}>
+                        <i class="u:i-fa-solid-times"></i>
                     </Button>
-                </div>
-            {/if}
+                {/if}
+            </div>
+            <p class="u:text-content-inverse u:text-sm u:break-words">
+                {@render children?.()}
+            </p>
         </div>
     </div>
 {/if}

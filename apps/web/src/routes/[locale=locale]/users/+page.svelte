@@ -8,7 +8,7 @@
 
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, SimplePagination } from "$lib/components"
+    import { ContentDefault, Button, Pagination } from "$lib/components"
     import { useQueryParams, useQuery } from "$lib/hooks"
     import { toasts, userData } from "$lib/stores"
 
@@ -64,7 +64,7 @@
     <title>{$ll.users()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.users()}>
+<ContentDefault title={$ll.users()}>
     {#if qGetUsers.data}
         <table>
             <thead>
@@ -122,7 +122,7 @@
                                 {#if !user.ban}
                                     <Button
                                         variant="warning"
-                                        onclick={() => dialogRoleAssigning?.open(user)}
+                                        onClick={() => dialogRoleAssigning?.open(user)}
                                     >
                                         {$ll.assignRole()}
                                     </Button>
@@ -133,14 +133,14 @@
                                     <Button
                                         loading={qUnbanUser.loading && unbanUserId === user.id}
                                         variant="error"
-                                        onclick={() => unbanUser(user.id)}
+                                        onClick={() => unbanUser(user.id)}
                                     >
                                         {$ll.unban()}
                                     </Button>
                                 {:else}
                                     <Button
                                         variant="error"
-                                        onclick={() => dialogUserBanning?.open(user)}
+                                        onClick={() => dialogUserBanning?.open(user)}
                                     >
                                         {$ll.ban()}
                                     </Button>
@@ -152,7 +152,7 @@
             </tbody>
         </table>
         <div class="u:flex u:justify-center">
-            <SimplePagination
+            <Pagination
                 loading={qGetUsers.loading}
                 page={qGetUsers.data.page}
                 pages={qGetUsers.data.pages}
@@ -160,7 +160,7 @@
             />
         </div>
     {/if}
-</Content.Default>
+</ContentDefault>
 
 <DialogRoleAssigning
     bind:this={dialogRoleAssigning}

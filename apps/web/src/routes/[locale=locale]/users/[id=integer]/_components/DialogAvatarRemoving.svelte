@@ -51,10 +51,10 @@
         <p>{$ll.avatarRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qDeleteAvatar.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteAvatar.loading} text variant="success" onClick={close}>
             {$ll.cancel()}
         </Button>
-        <Button loading={qDeleteAvatar.loading} variant="error" onclick={qDeleteAvatar.refetch}>
+        <Button loading={qDeleteAvatar.loading} variant="error" onClick={qDeleteAvatar.refetch}>
             {$ll.remove()}
         </Button>
     </div>

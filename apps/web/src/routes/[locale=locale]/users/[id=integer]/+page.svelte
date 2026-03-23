@@ -15,7 +15,7 @@
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, OAuthProviderButton } from "$lib/components"
+    import { ContentDefault, Button, OAuthProviderButton } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts, userData } from "$lib/stores"
 
@@ -102,7 +102,7 @@
     <title>{$ll.profile()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.profile()}>
+<ContentDefault title={$ll.profile()}>
     <div class="u:flex u:gap-4">
         <div class="u:w-50 u:h-50 u:overflow-hidden">
             <img
@@ -126,7 +126,7 @@
                                 <Button
                                     loading={qTwitchUnlink.loading}
                                     variant="error"
-                                    onclick={qTwitchUnlink.refetch}
+                                    onClick={qTwitchUnlink.refetch}
                                 >
                                     {$ll.unlink()}
                                 </Button>
@@ -165,28 +165,28 @@
             <Button
                 loading={qUploadAvatar.loading}
                 variant="warning"
-                onclick={() => avatarInput?.click()}
+                onClick={() => avatarInput?.click()}
             >
                 {$ll.uploadAvatar()}
             </Button>
             <input bind:this={avatarInput} class="u:hidden" type="file" onchange={onSelectFile} />
             {#if localUser.avatar}
-                <Button variant="error" onclick={dialogAvatarRemoving?.open}>
+                <Button variant="error" onClick={dialogAvatarRemoving?.open}>
                     {$ll.removeAvatar()}
                 </Button>
             {/if}
-            <Button variant="warning" onclick={dialogProfileEditing?.open}>
+            <Button variant="warning" onClick={dialogProfileEditing?.open}>
                 {$ll.edit()}
             </Button>
-            <Button variant="warning" onclick={dialogPasswordChanging?.open}>
+            <Button variant="warning" onClick={dialogPasswordChanging?.open}>
                 {$ll.changePassword()}
             </Button>
             {#if $userData.email}
-                <Button variant="warning" onclick={dialogEmailChanging?.open}>
+                <Button variant="warning" onClick={dialogEmailChanging?.open}>
                     {$ll.changeEmail()}
                 </Button>
             {:else}
-                <Button variant="success" onclick={dialogEmailLinking?.open}>
+                <Button variant="success" onClick={dialogEmailLinking?.open}>
                     {$ll.linkEmail()}
                 </Button>
             {/if}
@@ -194,14 +194,14 @@
                 <Button
                     loading={qEmailUnlink.loading}
                     variant="error"
-                    onclick={qEmailUnlink.refetch}
+                    onClick={qEmailUnlink.refetch}
                 >
                     {$ll.unlinkEmail()}
                 </Button>
             {/if}
             <Button
                 variant="error"
-                onclick={dialogUserRemoving?.open}
+                onClick={dialogUserRemoving?.open}
                 data-testid="remove-user-button"
             >
                 {$ll.removeUser()}
@@ -213,7 +213,7 @@
             {/if}
         </div>
     {/if}
-</Content.Default>
+</ContentDefault>
 
 <DialogAvatarRemoving bind:this={dialogAvatarRemoving} bind:user={localUser} />
 <DialogProfileEditing bind:this={dialogProfileEditing} bind:user={localUser} />

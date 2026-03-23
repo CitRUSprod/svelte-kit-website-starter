@@ -61,7 +61,7 @@
         <h1 class="u:text-center">{$ll.emailLinking()}</h1>
     </div>
     <div>
-        <TextField autofocus disabled={qLinkEmail.loading} label={$ll.email()} bind:value={email} />
+        <TextField disabled={qLinkEmail.loading} label={$ll.email()} bind:value={email} />
     </div>
     <div>
         <TextField
@@ -80,14 +80,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qLinkEmail.loading} text variant="error" onclick={close}>
+        <Button disabled={qLinkEmail.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qLinkEmail.loading}
             variant="success"
-            onclick={qLinkEmail.refetch}
+            onClick={qLinkEmail.refetch}
         >
             {$ll.link()}
         </Button>

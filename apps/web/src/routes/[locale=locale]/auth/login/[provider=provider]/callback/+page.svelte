@@ -3,7 +3,7 @@
 
     import { invalidateAll } from "$app/navigation"
     import { ll } from "$i18n/helpers"
-    import { Content } from "$lib/components"
+    import { ContentDefault } from "$lib/components"
     import { toasts } from "$lib/stores"
 
     const { data } = $props()
@@ -27,4 +27,4 @@
     <title>{$ll.login()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.redirecting()} />
+<ContentDefault title={$ll.redirecting()} />

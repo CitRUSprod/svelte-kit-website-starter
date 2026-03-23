@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { Snippet } from "svelte"
-    import type { ClassValue } from "svelte/elements"
 
-    interface Props {
+    import type { ComponentBasicProps } from "$lib/types"
+
+    type Props = ComponentBasicProps & {
         title: string
         titleTestId?: string
         bodyTestId?: string
-        class?: ClassValue
         children?: Snippet
     }
 
@@ -15,11 +15,12 @@
         class: klass = undefined,
         titleTestId = undefined,
         bodyTestId = undefined,
-        children
+        children = undefined,
+        ...rest
     }: Props = $props()
 </script>
 
-<div class="u:container u:mx-auto u:p-4">
+<div class="u:container u:mx-auto u:p-4" {...rest}>
     <div>
         <h1 data-testid={titleTestId}>{title}</h1>
     </div>

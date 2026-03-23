@@ -56,7 +56,7 @@
             </Button>
         {/if}
         <LocaleSwitcher class="u:mx-1" />
-        <Button icon variant="primary" onclick={darkTheme.toggle} data-testid="theme-header-button">
+        <Button icon variant="primary" onClick={darkTheme.toggle} data-testid="theme-header-button">
             <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl"></i>
         </Button>
         {#if $userData}

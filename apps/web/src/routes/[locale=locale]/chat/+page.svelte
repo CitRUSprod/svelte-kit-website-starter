@@ -6,7 +6,7 @@
     import { onMount, onDestroy } from "svelte"
 
     import { ll } from "$i18n/helpers"
-    import { Content, Chat } from "$lib/components"
+    import { ContentCenter, Chat } from "$lib/components"
     import { userData } from "$lib/stores"
     import { socket } from "$lib/utils"
 
@@ -51,7 +51,7 @@
     <title>{$ll.chat()}</title>
 </svelte:head>
 
-<Content.Center class="u:p-8">
+<ContentCenter class="u:p-8">
     <div
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:h-full u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
@@ -60,4 +60,4 @@
         </div>
         <Chat hideControls={!$userData} {messages} onSend={text => sendMessage(text)} />
     </div>
-</Content.Center>
+</ContentCenter>

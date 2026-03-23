@@ -64,14 +64,14 @@
         <TextField disabled={qUpdateUser.loading} label={$ll.username()} bind:value={username} />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qUpdateUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qUpdateUser.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qUpdateUser.loading}
             variant="success"
-            onclick={qUpdateUser.refetch}
+            onClick={qUpdateUser.refetch}
         >
             {$ll.save()}
         </Button>

@@ -2,7 +2,7 @@
     import * as _ from "es-toolkit"
 
     import { ll } from "$i18n/helpers"
-    import { Content, Button } from "$lib/components"
+    import { ContentCenter, Button } from "$lib/components"
     import { env } from "$lib/constants"
     import { toasts } from "$lib/stores"
 
@@ -23,16 +23,16 @@
     <title>{$ll.home()}</title>
 </svelte:head>
 
-<Content.Center>
+<ContentCenter>
     <div class="u:p-8 u:border-primary u:rounded-lg u:border u:text-center">
         <h1>{env.PUBLIC_TITLE}</h1>
         <div class="u:flex u:justify-center u:gap-2 u:mt-5">
-            <Button variant="primary" onclick={addOne}>
+            <Button variant="primary" onClick={addOne}>
                 {$ll.clicks()}: {count}
             </Button>
-            <Button variant="primary" onclick={showRandomNumber}>
+            <Button variant="primary" onClick={showRandomNumber}>
                 {$ll.randomNumber()}
             </Button>
         </div>
     </div>
-</Content.Center>
+</ContentCenter>

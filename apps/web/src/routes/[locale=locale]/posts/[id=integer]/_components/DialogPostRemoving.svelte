@@ -50,13 +50,13 @@
         <p>{$ll.postRemovingQuestion()}</p>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qDeletePost.loading} text variant="success" click={close}>
+        <Button disabled={qDeletePost.loading} text variant="success" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             loading={qDeletePost.loading}
             variant="error"
-            onclick={qDeletePost.refetch}
+            onClick={qDeletePost.refetch}
             data-testid="remove-post-dialog-button"
         >
             {$ll.remove()}

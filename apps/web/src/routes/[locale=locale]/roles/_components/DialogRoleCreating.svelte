@@ -139,21 +139,21 @@
             <Button
                 disabled={!currentPermission || qCreateRole.loading}
                 variant="success"
-                onclick={addPermission}
+                onClick={addPermission}
             >
                 {$ll.add()}
             </Button>
         </div>
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qCreateRole.loading} text variant="error" onclick={close}>
+        <Button disabled={qCreateRole.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!vldResultName.valid}
             loading={qCreateRole.loading}
             variant="success"
-            onclick={qCreateRole.refetch}
+            onClick={qCreateRole.refetch}
         >
             {$ll.create()}
         </Button>

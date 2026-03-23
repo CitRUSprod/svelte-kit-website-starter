@@ -1,51 +1,56 @@
 <script lang="ts">
-    import type { ClassValue } from "svelte/elements"
+    import type { HTMLTextareaAttributes } from "svelte/elements"
 
-    import { Textarea } from "./internal"
+    import type { ComponentBasicProps } from "$lib/types"
 
-    import type { ElementVariant } from "$lib/types"
-    import { getElementVariantObject } from "$lib/utils"
-
-    interface Props {
-        variant?: ElementVariant
+    type Props = ComponentBasicProps & {
+        value?: string
         placeholder?: string
         label?: string
         resizable?: boolean
         disabled?: boolean
         readonly?: boolean
-        autofocus?: boolean
-        value: string | number | null | undefined
-        class?: ClassValue
-        [key: string]: unknown
+        onInput?: HTMLTextareaAttributes["oninput"]
+        onFocus?: HTMLTextareaAttributes["onfocus"]
+        onBlur?: HTMLTextareaAttributes["onblur"]
+        onKeyPress?: HTMLTextareaAttributes["onkeypress"]
     }
 
     let {
-        variant = "default",
+        class: klass = undefined,
+        value = $bindable(""),
         placeholder = undefined,
         label = undefined,
         resizable = false,
         disabled = false,
         readonly = false,
-        autofocus = false,
-        value = $bindable(),
-        class: klass = undefined,
+        onInput = undefined,
+        onFocus = undefined,
+        onBlur = undefined,
+        onKeyPress = undefined,
         ...rest
     }: Props = $props()
 
-    const variants = $derived(getElementVariantObject(variant))
+    let isFocused = $state(false)
+
+    const isLabelFloating = $derived(isFocused || !!value || !!placeholder)
+
+    const handleFocus: HTMLTextareaAttributes["onfocus"] = e => {
+        isFocused = true
+        onFocus?.(e)
+    }
+
+    const handleBlur: HTMLTextareaAttributes["onblur"] = e => {
+        isFocused = false
+        onBlur?.(e)
+    }
 </script>
 
 <div
     class={[
-        "u:relative u:flex u:items-center",
+        "u:relative u:flex u:items-center u:bg-content u:border u:border-default u:rounded",
         {
-            "u:opacity-50": disabled,
-            "u:text-default": variants.default,
-            "u:text-primary": variants.primary,
-            "u:text-success": variants.success,
-            "u:text-error": variants.error,
-            "u:text-warning": variants.warning,
-            "u:text-info": variants.info
+            "u:opacity-50": disabled
         },
         klass
     ]}
@@ -53,30 +58,43 @@
 >
     {#if label}
         <div
-            class="u:absolute u:left-3 u:top--1.8 u:px-0.5 u:bg-content u:text-xs u:select-none u:pointer-events-none u:z-1"
+            class={[
+                "u:absolute u:top--0.25 u:left-2 u:h-0.25 u:px-1 u:bg-content u:text-transparent u:text-xs u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
+                {
+                    "u:opacity-0": !isLabelFloating
+                }
+            ]}
+        >
+            {label}
+        </div>
+        <div
+            class={[
+                "u:absolute u:px-1 u:left-2 u:text-default u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
+                {
+                    "u:top--2 u:text-xs": isLabelFloating,
+                    "u:top-5 u:translate-y--1/2": !isLabelFloating
+                }
+            ]}
         >
             {label}
         </div>
     {/if}
-    <Textarea
+    <textarea
         class={[
-            "u:w-full u:h-40 u:px-3 u:py-2 u:bg-content u:text-content-inverse u:border u:rounded u:placeholder-opacity-80 u:outline-none",
-            "u:dark:placeholder-opacity-80",
+            "u:w-full u:h-40 u:px-3 u:py-2 u:bg-transparent u:outline-none",
+            "u:placeholder-text-default u:placeholder-text-opacity-50",
             "u:disabled:cursor-not-allowed",
             {
-                "u:border-default u:placeholder-text-default-lighter": variants.default,
-                "u:border-primary u:placeholder-text-primary-lighter": variants.primary,
-                "u:border-success u:placeholder-text-success-lighter": variants.success,
-                "u:border-error u:placeholder-text-error-lighter": variants.error,
-                "u:border-warning u:placeholder-text-warning-lighter": variants.warning,
-                "u:border-info u:placeholder-text-info-lighter": variants.info,
                 "u:resize-none": !resizable
             }
         ]}
-        {autofocus}
         {disabled}
         {placeholder}
         {readonly}
         bind:value
-    />
+        oninput={onInput}
+        onfocus={handleFocus}
+        onblur={handleBlur}
+        onkeypress={onKeyPress}
+    ></textarea>
 </div>

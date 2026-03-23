@@ -2,7 +2,7 @@
     import { invalidateAll } from "$app/navigation"
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, TextField } from "$lib/components"
+    import { ContentCenter, Button, TextField } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
@@ -41,7 +41,7 @@
     <title>{$ll.registration()}</title>
 </svelte:head>
 
-<Content.Center class="u:p-8">
+<ContentCenter class="u:p-8">
     <div
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
@@ -53,7 +53,7 @@
                 disabled={qRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
             />
         </div>
         <div class="u:flex">
@@ -62,10 +62,10 @@
                 disabled={!completedForm}
                 loading={qRegister.loading}
                 variant="primary"
-                onclick={qRegister.refetch}
+                onClick={qRegister.refetch}
             >
                 {$ll.register()}
             </Button>
         </div>
     </div>
-</Content.Center>
+</ContentCenter>

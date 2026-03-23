@@ -78,13 +78,13 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qAssignRoleToUser.loading} text variant="error" onclick={close}>
+        <Button disabled={qAssignRoleToUser.loading} text variant="error" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             loading={qAssignRoleToUser.loading}
             variant="success"
-            onclick={qAssignRoleToUser.refetch}
+            onClick={qAssignRoleToUser.refetch}
         >
             {$ll.save()}
         </Button>

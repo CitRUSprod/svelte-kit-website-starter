@@ -4,7 +4,7 @@
     import { invalidateAll } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
+    import { ContentCenter, Button, TextField, OAuthProviderButton } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import { socket } from "$lib/utils"
@@ -45,7 +45,7 @@
     <title>{$ll.login()}</title>
 </svelte:head>
 
-<Content.Center class="u:p-8">
+<ContentCenter class="u:p-8">
     <div
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
@@ -54,11 +54,10 @@
         </div>
         <div>
             <TextField
-                autofocus
                 disabled={qLogin.loading}
                 label={$ll.email()}
                 bind:value={email}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="email-input"
             />
         </div>
@@ -68,7 +67,7 @@
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="password-input"
             />
         </div>
@@ -89,7 +88,7 @@
                 disabled={!completedForm}
                 loading={qLogin.loading}
                 variant="primary"
-                onclick={qLogin.refetch}
+                onClick={qLogin.refetch}
                 data-testid="login-button"
             >
                 {$ll.doLogin()}
@@ -102,4 +101,4 @@
             <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
         </div>
     </div>
-</Content.Center>
+</ContentCenter>

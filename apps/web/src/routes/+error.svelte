@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state"
     import { ll, localePath } from "$i18n/helpers"
-    import { Content, Button } from "$lib/components"
+    import { ContentCenter, Button } from "$lib/components"
 </script>
 
 <svelte:head>
@@ -9,7 +9,7 @@
 </svelte:head>
 
 <main class="u:relative u:flex-1">
-    <Content.Center>
+    <ContentCenter>
         <div class="u:p-8 u:border-error u:rounded-lg u:border u:text-center">
             <h1>{$ll.error()} {page.status}</h1>
             {#if page.error}
@@ -21,5 +21,5 @@
                 </Button>
             </div>
         </div>
-    </Content.Center>
+    </ContentCenter>
 </main>

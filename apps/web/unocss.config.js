@@ -62,6 +62,15 @@ const config = {
         presetScrollbar(),
         presetIcons()
     ],
+    rules: [
+        [
+            /^text-2xs$/,
+            () => ({
+                "font-size": "0.625rem",
+                "line-height": "0.75rem"
+            })
+        ]
+    ],
     content: {
         pipeline: {
             include: [path.join(dirname, "src/**/*.svelte")]

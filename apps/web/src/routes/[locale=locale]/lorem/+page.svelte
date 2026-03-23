@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { Content } from "$lib/components"
+    import { ContentDefault } from "$lib/components"
 </script>
 
 <svelte:head>
     <title>Lorem</title>
 </svelte:head>
 
-<Content.Default title="Lorem">
+<ContentDefault title="Lorem">
     <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima quasi consequatur quos
         inventore aut recusandae beatae maiores aliquam et dolores quibusdam totam ipsum,
@@ -103,4 +103,4 @@
         temporibus. Labore quis, ullam omnis numquam molestias voluptate quae eligendi, sed error
         exercitationem saepe quos possimus iusto illum praesentium?
     </p>
-</Content.Default>
+</ContentDefault>

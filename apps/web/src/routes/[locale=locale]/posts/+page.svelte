@@ -9,7 +9,7 @@
 
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, TextField, Select, SimplePagination } from "$lib/components"
+    import { ContentDefault, Button, TextField, Select, Pagination } from "$lib/components"
     import { useQueryParams, useQuery } from "$lib/hooks"
     import { userData } from "$lib/stores"
 
@@ -82,7 +82,7 @@
     <title>{$ll.posts()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.posts()}>
+<ContentDefault title={$ll.posts()}>
     <div class="u:flex u:justify-between u:gap-2">
         <div class="u:flex u:gap-2">
             <TextField
@@ -90,7 +90,7 @@
                 placeholder={$ll.enterTitle()}
                 rightIconClass="u:i-material-symbols-search"
                 bind:value={queryParams.title}
-                oninput={_.debounce(onTitleInput, 500)}
+                onInput={_.debounce(onTitleInput, 500)}
                 data-testid="search-input"
             />
             <Select
@@ -104,7 +104,7 @@
             <div>
                 <Button
                     variant="success"
-                    onclick={dialogPostCreating?.open}
+                    onClick={dialogPostCreating?.open}
                     data-testid="create-post-button"
                 >
                     {$ll.createPost()}
@@ -140,7 +140,7 @@
             {/each}
         </div>
         <div class="u:flex u:justify-center">
-            <SimplePagination
+            <Pagination
                 loading={qGetPosts.loading}
                 page={qGetPosts.data.page}
                 pages={qGetPosts.data.pages}
@@ -149,6 +149,6 @@
             />
         </div>
     {/if}
-</Content.Default>
+</ContentDefault>
 
 <DialogPostCreating bind:this={dialogPostCreating} />

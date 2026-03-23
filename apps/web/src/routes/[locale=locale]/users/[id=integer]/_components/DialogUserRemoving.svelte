@@ -77,14 +77,14 @@
         />
     </div>
     <div class="u:flex u:justify-between">
-        <Button disabled={qDeleteUser.loading} text variant="success" onclick={close}>
+        <Button disabled={qDeleteUser.loading} text variant="success" onClick={close}>
             {$ll.cancel()}
         </Button>
         <Button
             disabled={!completedForm}
             loading={qDeleteUser.loading}
             variant="error"
-            onclick={qDeleteUser.refetch}
+            onClick={qDeleteUser.refetch}
             data-testid="remove-user-dialog-button"
         >
             {$ll.remove()}

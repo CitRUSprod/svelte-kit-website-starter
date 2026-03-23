@@ -1,49 +1,56 @@
 <script lang="ts">
     import { Button } from "bits-ui"
     import type { Snippet } from "svelte"
-    import type { ClassValue } from "svelte/elements"
+    import type { HTMLButtonAttributes } from "svelte/elements"
 
-    import type { ElementVariant } from "$lib/types"
-    import { getElementVariantObject } from "$lib/utils"
+    import type { ComponentBasicProps, ComponentVariant, ComponentSize } from "$lib/types"
+    import { getComponentVariantMap, getComponentSizeMap } from "$lib/utils"
 
-    interface Props {
-        variant?: ElementVariant
+    type Props = ComponentBasicProps & {
+        variant?: ComponentVariant
+        size?: ComponentSize
         href?: string
+        rel?: string
+        target?: string
         text?: boolean
         icon?: boolean
         disabled?: boolean
         loading?: boolean
-        class?: ClassValue
+        onClick?: HTMLButtonAttributes["onclick"]
         children?: Snippet
-        [key: string]: unknown
     }
 
     const {
+        class: klass = undefined,
         variant = "default",
+        size = "md",
         href = undefined,
         text = false,
         icon = false,
         disabled = false,
         loading = false,
-        class: klass = undefined,
-        children,
+        onClick = undefined,
+        children = undefined,
         ...rest
     }: Props = $props()
 
-    const variants = $derived(getElementVariantObject(variant))
+    const variants = $derived(getComponentVariantMap(variant))
+    const sizes = $derived(getComponentSizeMap(size))
 </script>
 
 <Button.Root
     class={[
-        "u:relative u:inline-flex u:justify-center u:items-center u:h-10 u:font-bold u:transition u:duration-200 u:align-top",
+        "u:relative u:inline-flex u:justify-center u:items-center u:flex-shrink-0 u:font-bold u:transition u:duration-200 u:align-top u:whitespace-nowrap u:overflow-hidden",
         "u:disabled:cursor-not-allowed",
         {
-            "u:px-4 u:rounded": !icon,
-            "u:w-10 u:rounded-full": icon,
+            "u:rounded": !icon && (sizes.xs || sizes.sm),
+            "u:rounded-md": !icon && sizes.md,
+            "u:rounded-lg": !icon && sizes.lg,
+            "u:rounded-xl": !icon && sizes.xl,
+            "u:rounded-full": icon,
             "u:text-content-lighter": !text && !loading,
             "u:text-transparent": loading,
-            "u:hover:bg-opacity-30 u:active:bg-opacity-30 u:dark:hover:bg-opacity-30 u:dark:active:bg-opacity-30":
-                text,
+            "u:hover:bg-opacity-30 u:active:bg-opacity-30": text,
             "u:active:transform u:active:scale-90": !disabled && !loading,
             "u:disabled:opacity-50": disabled,
             "u:bg-default": !text && variants.default,
@@ -63,12 +70,23 @@
             "u:text-success": !loading && text && variants.success,
             "u:text-error": !loading && text && variants.error,
             "u:text-warning": !loading && text && variants.warning,
-            "u:text-info": !loading && text && variants.info
+            "u:text-info": !loading && text && variants.info,
+            "u:h-6 u:px-2 u:text-xs": !icon && sizes.xs,
+            "u:h-8 u:px-3 u:text-sm": !icon && sizes.sm,
+            "u:h-10 u:px-4 u:text-base": !icon && sizes.md,
+            "u:h-12 u:px-5 u:text-lg": !icon && sizes.lg,
+            "u:h-14 u:px-6 u:text-xl": !icon && sizes.xl,
+            "u:w-6 u:h-6 u:text-xs": icon && sizes.xs,
+            "u:w-8 u:h-8 u:text-sm": icon && sizes.sm,
+            "u:w-10 u:h-10 u:text-base": icon && sizes.md,
+            "u:w-12 u:h-12 u:text-lg": icon && sizes.lg,
+            "u:w-14 u:h-14 u:text-xl": icon && sizes.xl
         },
         klass
     ]}
     disabled={disabled || loading}
-    href={href && !disabled && !loading ? href : undefined}
+    href={(href && !disabled && !loading ? href : undefined) as any}
+    onclick={onClick}
     {...rest}
 >
     {@render children?.()}
@@ -77,7 +95,11 @@
             class={[
                 "u:absolute u:top-0 u:left-0 u:flex u:justify-center u:items-center u:w-full u:h-full",
                 {
-                    "u:rounded": !icon,
+                    "u:rounded-sm": !icon && sizes.xs,
+                    "u:rounded": !icon && sizes.sm,
+                    "u:rounded-md": !icon && sizes.md,
+                    "u:rounded-lg": !icon && sizes.lg,
+                    "u:rounded-xl": !icon && sizes.xl,
                     "u:rounded-full": icon,
                     "u:text-content-lighter": !text,
                     "u:text-default": text && variants.default,
@@ -88,9 +110,8 @@
                     "u:text-info": text && variants.info
                 }
             ]}
-            data-indicator="loading"
         >
-            <i class="u:i-whh-loadingflowcw u:text-xl u:animate-spin"></i>
+            <i class="u:i-whh-loadingflowcw u:animate-spin"></i>
         </div>
     {/if}
 </Button.Root>

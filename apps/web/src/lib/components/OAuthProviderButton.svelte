@@ -1,16 +1,17 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
 
-    import { localePath } from "$i18n/helpers"
-    import { Button } from "$lib/components"
+    import Button from "./Button.svelte"
 
-    interface Props {
+    import { localePath } from "$i18n/helpers"
+    import type { ComponentBasicProps } from "$lib/types"
+
+    type Props = ComponentBasicProps & {
         provider: constantsEnums.OAuthProvider
         linkAccount?: boolean
-        [key: string]: unknown
     }
 
-    const { provider, linkAccount = false, ...rest }: Props = $props()
+    const { class: klass = undefined, provider, linkAccount = false, ...rest }: Props = $props()
 
     interface ButtonData {
         buttonClass: string
@@ -43,7 +44,7 @@
 </script>
 
 <Button
-    class={buttonData.buttonClass}
+    class={[buttonData.buttonClass, klass]}
     href={$localePath(`/auth/${linkAccount ? "link/oauth" : "login"}/${buttonData.providerInUrl}`)}
     {...rest}
 >

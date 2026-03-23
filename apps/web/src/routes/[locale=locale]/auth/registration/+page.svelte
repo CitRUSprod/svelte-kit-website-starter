@@ -4,7 +4,7 @@
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button, TextField, OAuthProviderButton } from "$lib/components"
+    import { ContentCenter, Button, TextField, OAuthProviderButton } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
@@ -53,7 +53,7 @@
     <title>{$ll.registration()}</title>
 </svelte:head>
 
-<Content.Center class="u:p-8">
+<ContentCenter class="u:p-8">
     <div
         class="u:flex u:flex-col u:gap-4 u:w-full u:sm:w-100 u:p-8 u:border-primary u:rounded-lg u:border u:text-center"
     >
@@ -62,11 +62,10 @@
         </div>
         <div>
             <TextField
-                autofocus
                 disabled={qRegister.loading}
                 label={$ll.email()}
                 bind:value={email}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="email-input"
             />
         </div>
@@ -75,7 +74,7 @@
                 disabled={qRegister.loading}
                 label={$ll.username()}
                 bind:value={username}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="username-input"
             />
         </div>
@@ -85,7 +84,7 @@
                 label={$ll.password()}
                 type="password"
                 bind:value={password}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="password-input"
             />
         </div>
@@ -95,7 +94,7 @@
                 label={$ll.passwordConfirmation()}
                 type="password"
                 bind:value={passwordConfirmation}
-                onkeypress={onEnter}
+                onKeyPress={onEnter}
                 data-testid="password-confirmation-input"
             />
         </div>
@@ -107,7 +106,7 @@
                 disabled={!completedForm}
                 loading={qRegister.loading}
                 variant="primary"
-                onclick={qRegister.refetch}
+                onClick={qRegister.refetch}
                 data-testid="register-button"
             >
                 {$ll.register()}
@@ -120,4 +119,4 @@
             <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
         </div>
     </div>
-</Content.Center>
+</ContentCenter>

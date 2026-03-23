@@ -6,7 +6,7 @@
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
-    import { Content, Button } from "$lib/components"
+    import { ContentDefault, Button } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { userData } from "$lib/stores"
 
@@ -30,7 +30,7 @@
     <title>{$ll.roles()}</title>
 </svelte:head>
 
-<Content.Default title={$ll.roles()}>
+<ContentDefault title={$ll.roles()}>
     {#if qGetRoles.data}
         <table>
             <thead>
@@ -62,13 +62,13 @@
                                 {#if !role.protected}
                                     <Button
                                         variant="warning"
-                                        onclick={() => dialogRoleEditing?.open(role)}
+                                        onClick={() => dialogRoleEditing?.open(role)}
                                     >
                                         {$ll.edit()}
                                     </Button>
                                     <Button
                                         variant="error"
-                                        onclick={() => dialogRoleRemoving?.open(role)}
+                                        onClick={() => dialogRoleRemoving?.open(role)}
                                     >
                                         {$ll.remove()}
                                     </Button>
@@ -81,11 +81,11 @@
         </table>
     {/if}
     <div class="u:flex u:justify-center">
-        <Button variant="success" onclick={dialogRoleCreating?.open}>
+        <Button variant="success" onClick={dialogRoleCreating?.open}>
             {$ll.createRole()}
         </Button>
     </div>
-</Content.Default>
+</ContentDefault>
 
 <DialogRoleCreating bind:this={dialogRoleCreating} {permissions} onCreateRole={qGetRoles.refetch} />
 <DialogRoleEditing bind:this={dialogRoleEditing} {permissions} onEditRole={qGetRoles.refetch} />
