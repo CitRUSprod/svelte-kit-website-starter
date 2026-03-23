@@ -221,7 +221,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
                 }
             )
 
-            const twitchUser = res.data.data[0]
+            const twitchUser = res.data.data[0]!
 
             const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
 
@@ -469,7 +469,7 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
                 }
             )
 
-            const twitchUser = res.data.data[0]
+            const twitchUser = res.data.data[0]!
 
             const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
 

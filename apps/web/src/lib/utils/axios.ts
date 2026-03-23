@@ -79,7 +79,7 @@ axios.interceptors.response.use(
                         "cookie",
                         uniqCookies([
                             ...cookies,
-                            ...tokensSetCookies.map(c => c.split("; ")[0])
+                            ...tokensSetCookies.map(c => c.split("; ")[0]!)
                         ]).join("; ")
                     )
                 }

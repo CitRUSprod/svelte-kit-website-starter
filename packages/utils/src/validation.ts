@@ -1,8 +1,8 @@
-import { z, ZodError } from "zod"
-import { fromZodError } from "zod-validation-error"
+import { z } from "zod"
+import { fromError } from "zod-validation-error"
 
 export function parseZodError(err: z.ZodError) {
-    return fromZodError(err)
+    return fromError(err)
 }
 
 export function createValidator<T extends z.ZodType>(schema: T) {
@@ -29,5 +29,3 @@ export function parseDataBySchema<T extends z.ZodType>(schema: T, data: unknown)
         throw parseZodError(result.error)
     }
 }
-
-export { ZodError }

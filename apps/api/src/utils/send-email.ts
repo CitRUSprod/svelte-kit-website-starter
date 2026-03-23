@@ -28,10 +28,13 @@ export async function sendEmail(
     const template = emailTemplates[templateName]
     const entries = [["subject", subject], ...Object.entries(data)]
 
-    const compiledTemplate = entries.reduce(
-        (acc, [key, value]) => acc.replace(new RegExp(`{{${key}}}`, "g"), value),
-        template
-    )
+    const compiledTemplate = entries.reduce((acc, [key, value]) => {
+        if (key !== undefined && value !== undefined) {
+            return acc.replace(new RegExp(`{{${key}}}`, "g"), value)
+        } else {
+            return acc
+        }
+    }, template)
 
     const { html, errors } = mjml2html(compiledTemplate)
 

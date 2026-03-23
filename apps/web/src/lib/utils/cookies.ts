@@ -26,7 +26,7 @@ export function uniqCookies(cookies: Array<string>) {
     const cookiesObject: Record<string, string> = {}
 
     for (const cookie of cookies) {
-        const parsedCookie = parse(cookie)[0]
+        const parsedCookie = parse(cookie)[0]!
         cookiesObject[parsedCookie.name] = cookie
     }
 

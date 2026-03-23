@@ -10,6 +10,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
-        "verbatimModuleSyntax": true
+        "verbatimModuleSyntax": true,
+        "noUncheckedIndexedAccess": true
     }
 }

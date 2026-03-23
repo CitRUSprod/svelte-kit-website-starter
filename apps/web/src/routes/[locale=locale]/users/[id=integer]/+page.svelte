@@ -63,7 +63,7 @@
 
     async function onSelectFile(e: { currentTarget: HTMLInputElement }) {
         if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-            const file = e.currentTarget.files[0]
+            const file = e.currentTarget.files[0]!
             uploadAvatarImg = file
             await qUploadAvatar.refetch()
         }
