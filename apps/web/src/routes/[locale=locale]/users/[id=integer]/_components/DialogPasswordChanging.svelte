@@ -50,14 +50,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.passwordChanging()}
     persistent={qChangePassword.loading}
 >
-    <div>
-        <h1 class="u:text-center">
-            {$ll.passwordChanging()}
-        </h1>
-    </div>
     <div>
         <TextField
             disabled={qChangePassword.loading}

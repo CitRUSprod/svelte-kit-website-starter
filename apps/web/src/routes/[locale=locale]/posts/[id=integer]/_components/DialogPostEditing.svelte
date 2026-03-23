@@ -62,12 +62,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-200"
+    class="u:w-200"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.postEditing()}
     persistent={qUpdatePost.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.postEditing()}</h1>
-    </div>
     <div>
         <TextField
             disabled={qUpdatePost.loading}

@@ -55,12 +55,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.userRemoving()}
     persistent={qDeleteUser.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.userRemoving()}</h1>
-    </div>
     <div>
         <p>{$ll.userRemovingQuestion()}</p>
     </div>

@@ -54,12 +54,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.emailLinking()}
     persistent={qLinkEmail.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.emailLinking()}</h1>
-    </div>
     <div>
         <TextField disabled={qLinkEmail.loading} label={$ll.email()} bind:value={email} />
     </div>

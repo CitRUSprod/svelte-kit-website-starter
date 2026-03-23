@@ -40,12 +40,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.postRemoving()}
     persistent={qDeletePost.loading}
 >
-    <div>
-        <h1>{$ll.postRemoving()}</h1>
-    </div>
     <div>
         <p>{$ll.postRemovingQuestion()}</p>
     </div>

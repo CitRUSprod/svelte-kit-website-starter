@@ -45,12 +45,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.roleRemoving()}
     persistent={qDeleteRole.loading}
 >
-    <div>
-        <h1>{$ll.roleRemoving()}</h1>
-    </div>
     <div>
         <p>
             {@html $ll.roleRemovingQuestion({ role: role?.name[$currentLocale] })}

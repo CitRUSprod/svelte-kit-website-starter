@@ -92,12 +92,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.roleEditing()}
     persistent={qUpdateRole.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.roleEditing()}</h1>
-    </div>
     <div class="u:flex u:flex-col u:gap-4">
         {#each locales as locale (locale)}
             <TextField

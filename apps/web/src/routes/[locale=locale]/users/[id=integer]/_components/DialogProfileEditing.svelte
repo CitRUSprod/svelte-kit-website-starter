@@ -54,12 +54,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.profileEditing()}
     persistent={qUpdateUser.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.profileEditing()}</h1>
-    </div>
     <div>
         <TextField disabled={qUpdateUser.loading} label={$ll.username()} bind:value={username} />
     </div>

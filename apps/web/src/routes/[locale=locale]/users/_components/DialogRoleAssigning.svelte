@@ -60,12 +60,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.roleAssigning()}
     persistent={qAssignRoleToUser.loading}
 >
-    <div>
-        <h1 class="u:text-center">{$ll.roleAssigning()}</h1>
-    </div>
     <div>
         <h3 class="u:text-center">{$ll.user()}: {username}</h3>
     </div>

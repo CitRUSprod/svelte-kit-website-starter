@@ -41,12 +41,11 @@
 
 <Dialog
     bind:this={dialog}
-    class="u:flex u:flex-col u:gap-4 u:w-100"
+    class="u:w-100"
+    contentClass="u:flex u:flex-col u:gap-4"
+    title={$ll.avatarRemoving()}
     persistent={qDeleteAvatar.loading}
 >
-    <div>
-        <h1>{$ll.avatarRemoving()}</h1>
-    </div>
     <div>
         <p>{$ll.avatarRemovingQuestion()}</p>
     </div>

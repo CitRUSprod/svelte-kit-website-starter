@@ -59,19 +59,9 @@
     {#if label}
         <div
             class={[
-                "u:absolute u:top--0.25 u:left-2 u:h-0.25 u:px-1 u:bg-content u:text-transparent u:text-xs u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
+                "u:absolute u:px-1 u:left-2 u:text-default-lighter u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
                 {
-                    "u:opacity-0": !isLabelFloating
-                }
-            ]}
-        >
-            {label}
-        </div>
-        <div
-            class={[
-                "u:absolute u:px-1 u:left-2 u:text-default u:select-none u:pointer-events-none u:z-1 u:transition-all u:duration-200 u:ease-in-out",
-                {
-                    "u:top--2 u:text-xs": isLabelFloating,
+                    "u:top-0 u:text-2xs": isLabelFloating,
                     "u:top-5 u:translate-y--1/2": !isLabelFloating
                 }
             ]}
@@ -85,6 +75,7 @@
             "u:placeholder-text-default u:placeholder-text-opacity-50",
             "u:disabled:cursor-not-allowed",
             {
+                "u:pt-3": label,
                 "u:resize-none": !resizable
             }
         ]}
