@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte"
 
-    import Button from "./Button.svelte"
+    import { Button } from "../Button"
 
     import { ll } from "$i18n/helpers"
     import type { ComponentBasicProps, ComponentBasicVariant } from "$lib/types"

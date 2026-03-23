@@ -12,7 +12,7 @@
         "check-types": "tsc --pretty --noEmit",
         "prisma": "dotenv -e ../../.env -- prisma",
         "prisma:generate": "pnpm prisma generate",
-        "prisma:studio": "pnpm prisma studio",
+        "prisma:studio": "pnpm prisma studio -p 6752",
         "prisma:migrations": "pnpm prisma migrate",
         "prisma:migrations:create": "pnpm prisma:migrations dev",
         "prisma:migrations:run": "pnpm prisma:migrations deploy",

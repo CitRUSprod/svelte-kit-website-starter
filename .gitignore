@@ -20,6 +20,7 @@ out
 dist
 i18n-*.ts
 **/prisma/generated
+storybook-static
 
 /storage/*
 !/storage/.gitkeep

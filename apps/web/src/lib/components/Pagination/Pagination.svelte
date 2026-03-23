@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Pagination } from "bits-ui"
 
-    import Button from "./Button.svelte"
+    import { Button } from "../Button"
 
     import type { ComponentBasicProps } from "$lib/types"
 

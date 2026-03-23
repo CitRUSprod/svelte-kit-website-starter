@@ -6,7 +6,7 @@
     import type { ClassValue } from "svelte/elements"
     import { fade, scale } from "svelte/transition"
 
-    import Button from "./Button.svelte"
+    import { Button } from "../Button"
 
     import type { DialogId } from "$lib/stores"
     import { dialogStack } from "$lib/stores"

@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
 
-    import Button from "./Button.svelte"
+    import { Button } from "../Button"
 
     import { localePath } from "$i18n/helpers"
     import type { ComponentBasicProps } from "$lib/types"

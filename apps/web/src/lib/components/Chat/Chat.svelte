@@ -2,8 +2,8 @@
     import * as schemasCommon from "@repo/schemas/common"
     import { tick } from "svelte"
 
-    import Button from "./Button.svelte"
-    import TextField from "./TextField.svelte"
+    import { Button } from "../Button"
+    import { TextField } from "../TextField"
 
     import { ll } from "$i18n/helpers"
 
