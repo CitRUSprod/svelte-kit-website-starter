@@ -4,7 +4,8 @@
     "type": "module",
     "exports": {
         "./enums": "./dist/enums/index.js",
-        "./routes": "./dist/routes/index.js"
+        "./routes": "./dist/routes/index.js",
+        "./ws": "./dist/ws/index.js"
     },
     "typesVersions": {
         "*": {

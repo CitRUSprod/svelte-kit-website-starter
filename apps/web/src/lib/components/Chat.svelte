@@ -1,14 +1,14 @@
 <script lang="ts">
+    import * as schemasCommon from "@repo/schemas/common"
     import { tick } from "svelte"
 
     import Button from "./Button.svelte"
     import TextField from "./TextField.svelte"
 
     import { ll } from "$i18n/helpers"
-    import type { ChatMessage } from "$lib/types"
 
     interface Props {
-        messages?: Array<ChatMessage>
+        messages?: Array<schemasCommon.chat.$Message>
         hideControls?: boolean
         onSend?(text: string): void
     }

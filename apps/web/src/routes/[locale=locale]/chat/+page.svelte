@@ -1,36 +1,49 @@
 <script lang="ts">
+    import * as constantsWs from "@repo/constants/ws"
+    import * as schemasCommon from "@repo/schemas/common"
+    import * as schemasWs from "@repo/schemas/ws"
+    import { defineWsEmit, defineWsOn } from "@repo/utils"
     import { onMount, onDestroy } from "svelte"
 
     import { ll } from "$i18n/helpers"
     import { Content, Chat } from "$lib/components"
     import { userData } from "$lib/stores"
-    import type { RawChatMessage, ChatMessage } from "$lib/types"
     import { socket } from "$lib/utils"
 
-    let messages = $state<Array<ChatMessage>>([])
+    const wsEvents = constantsWs.globalChat.client
+
+    let messages = $state<Array<schemasCommon.chat.$Message>>([])
 
     function sendMessage(text: string) {
-        const msg: RawChatMessage = { text }
-        socket.emit("global-chat:send", msg)
+        socket.emit(
+            wsEvents.emit.sendMessage,
+            defineWsEmit<schemasWs.globalChat.$SendMessage>({ text })
+        )
     }
 
     onMount(() => {
         socket
-            .emit("global-chat:join")
-            .once("global-chat:get-history", (msgs: Array<ChatMessage>) => {
-                messages = msgs
-            })
-            .on("global-chat:receive", (msg: ChatMessage) => {
-                if (messages.length === 100) {
-                    messages.shift()
-                }
+            .emit(wsEvents.emit.join)
+            .once(
+                wsEvents.on.receiveHistory,
+                defineWsOn<schemasWs.globalChat.$ReceiveHistory>(msgs => {
+                    messages = msgs
+                })
+            )
+            .on(
+                wsEvents.on.receiveMessage,
+                defineWsOn<schemasWs.globalChat.$ReceiveMessage>(msg => {
+                    if (messages.length === 100) {
+                        messages.shift()
+                    }
 
-                messages.push(msg)
-            })
+                    messages.push(msg)
+                })
+            )
     })
 
     onDestroy(() => {
-        socket.off("global-chat:receive").emit("global-chat:leave")
+        socket.off(wsEvents.on.receiveMessage).emit(wsEvents.emit.leave)
     })
 </script>
 

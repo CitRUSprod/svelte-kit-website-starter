@@ -1,51 +1,64 @@
+import * as constantsWs from "@repo/constants/ws"
+import * as schemasCommon from "@repo/schemas/common"
+import * as schemasWs from "@repo/schemas/ws"
+import { defineWsEmit, defineWsOn } from "@repo/utils"
 import { v4 as createUuid } from "uuid"
 
 import type { SocketModule } from "$/types"
 
-interface RawChatMessage {
-    text: string
-}
+const wsEvents = constantsWs.globalChat.server
 
-interface ChatMessage {
-    uuid: string
-    user: {
-        id: number
-        username: string
-    }
-    text: string
-}
-
-const globalChatHistory: Array<ChatMessage> = []
+const globalChatHistory: Array<schemasCommon.chat.$Message> = []
 
 export const globalChat: SocketModule = (app, socket, user) => {
-    socket.on("global-chat:join", () => {
-        socket.join("global-chat")
-        socket.emit("global-chat:get-history", globalChatHistory)
-    })
+    socket.on(
+        wsEvents.on.join,
+        defineWsOn<schemasWs.globalChat.$Join>(() => {
+            socket.join(wsEvents.room)
+            socket.emit(
+                wsEvents.emit.receiveHistory,
+                defineWsEmit<schemasWs.globalChat.$ReceiveHistory>(globalChatHistory)
+            )
+        })
+    )
 
-    socket.on("global-chat:leave", () => {
-        socket.leave("global-chat")
-    })
+    socket.on(
+        wsEvents.on.leave,
+        defineWsOn<schemasWs.globalChat.$Leave>(() => {
+            socket.leave(wsEvents.room)
+        })
+    )
 
     if (user) {
-        socket.on("global-chat:send", (rawMsg: RawChatMessage) => {
-            const msg: ChatMessage = {
-                uuid: createUuid(),
-                user: {
-                    id: user.id,
-                    username: user.username
-                },
-                text: rawMsg.text
-            }
+        socket.on(
+            wsEvents.on.sendMessage,
+            defineWsOn<schemasWs.globalChat.$SendMessage>(rawMsg => {
+                const msg: schemasCommon.chat.$Message = {
+                    uuid: createUuid(),
+                    user: {
+                        id: user.id,
+                        username: user.username
+                    },
+                    text: rawMsg.text
+                }
 
-            if (globalChatHistory.length === 100) {
-                globalChatHistory.shift()
-            }
+                if (globalChatHistory.length === 100) {
+                    globalChatHistory.shift()
+                }
 
-            globalChatHistory.push(msg)
+                globalChatHistory.push(msg)
 
-            socket.emit("global-chat:receive", msg)
-            socket.broadcast.to("global-chat").emit("global-chat:receive", msg)
-        })
+                socket.emit(
+                    wsEvents.emit.receiveMessage,
+                    defineWsEmit<schemasWs.globalChat.$ReceiveMessage>(msg)
+                )
+                socket.broadcast
+                    .to(wsEvents.room)
+                    .emit(
+                        wsEvents.emit.receiveMessage,
+                        defineWsEmit<schemasWs.globalChat.$ReceiveMessage>(msg)
+                    )
+            })
+        )
     }
 }
