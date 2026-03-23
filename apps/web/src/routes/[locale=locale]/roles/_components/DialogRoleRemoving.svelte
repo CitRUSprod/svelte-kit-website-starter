@@ -17,7 +17,7 @@
 
     let dialog = $state<Dialog>()
 
-    let role = $state<Role>()
+    let role = $state<Role | null>()
 
     export function open(r: Role) {
         role = r
@@ -26,6 +26,8 @@
     }
 
     export function close() {
+        role = null
+
         dialog?.close()
     }
 

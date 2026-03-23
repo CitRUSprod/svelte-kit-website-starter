@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
@@ -8,8 +8,10 @@
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
 
+    type User = schemasRoutes.profile.$GetUserResponse
+
     interface Props {
-        user: schemasModels.user.$User
+        user: User
     }
 
     const { user }: Props = $props()
@@ -29,6 +31,8 @@
     }
 
     export function close() {
+        email = ""
+
         dialog?.close()
     }
 

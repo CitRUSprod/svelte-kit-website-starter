@@ -25,6 +25,9 @@
     }
 
     export function close() {
+        title = ""
+        content = ""
+
         dialog?.close()
     }
 

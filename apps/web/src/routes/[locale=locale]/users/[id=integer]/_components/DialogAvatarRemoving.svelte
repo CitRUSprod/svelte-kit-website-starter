@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
@@ -7,8 +7,10 @@
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
 
+    type User = schemasRoutes.profile.$GetUserResponse
+
     interface Props {
-        user: schemasModels.user.$User
+        user: User
     }
 
     let { user = $bindable() }: Props = $props()

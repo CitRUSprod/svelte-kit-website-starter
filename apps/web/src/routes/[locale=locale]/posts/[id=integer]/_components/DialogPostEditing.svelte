@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
@@ -8,8 +8,10 @@
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
 
+    type Post = schemasRoutes.posts.$GetPostResponse
+
     interface Props {
-        post: schemasModels.post.$Post
+        post: Post
     }
 
     let { post = $bindable() }: Props = $props()
@@ -36,6 +38,9 @@
     }
 
     export function close() {
+        title = ""
+        content = ""
+
         dialog?.close()
     }
 

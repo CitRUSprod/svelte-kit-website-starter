@@ -28,6 +28,9 @@
     }
 
     export function close() {
+        oldPassword = ""
+        newPassword = ""
+
         dialog?.close()
     }
 

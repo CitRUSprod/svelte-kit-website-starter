@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
@@ -9,8 +9,10 @@
     import { toasts } from "$lib/stores"
     import { socket } from "$lib/utils"
 
+    type User = schemasRoutes.profile.$GetUserResponse
+
     interface Props {
-        user: schemasModels.user.$User
+        user: User
     }
 
     const { user }: Props = $props()
@@ -24,10 +26,14 @@
     const completedForm = $derived(vldResultUsername)
 
     export function open() {
+        username = ""
+
         dialog?.open()
     }
 
     export function close() {
+        username = ""
+
         dialog?.close()
     }
 

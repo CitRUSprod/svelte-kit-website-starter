@@ -35,6 +35,10 @@
     }
 
     export function close() {
+        userId = 0
+        username = ""
+        reason = ""
+
         dialog?.close()
     }
 

@@ -51,6 +51,15 @@
     }
 
     export function close() {
+        roleId = 0
+
+        for (const locale of locales) {
+            name[locale] = ""
+        }
+
+        currentPermission = undefined
+        selectedPermissions = []
+
         dialog?.close()
     }
 

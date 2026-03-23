@@ -36,6 +36,10 @@
     }
 
     export function close() {
+        userId = 0
+        username = ""
+        roleId = "0"
+
         dialog?.close()
     }
 

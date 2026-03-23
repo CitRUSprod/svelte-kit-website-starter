@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { goto } from "$app/navigation"
     import { ll, localePath } from "$i18n/helpers"
@@ -8,8 +8,10 @@
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
 
+    type Post = schemasRoutes.posts.$GetPostResponse
+
     interface Props {
-        post: schemasModels.post.$Post
+        post: Post
     }
 
     const { post }: Props = $props()

@@ -31,6 +31,10 @@
     }
 
     export function close() {
+        email = ""
+        password = ""
+        passwordConfirmation = ""
+
         dialog?.close()
     }
 
