@@ -1,4 +1,4 @@
-export * from "./dark-theme"
-export * from "./toasts"
-export * from "./user-data"
+export * from "./theme.svelte"
+export * from "./toasts.svelte"
+export * from "./user.svelte"
 export * from "./dialog-stack.svelte"

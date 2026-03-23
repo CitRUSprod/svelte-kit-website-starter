@@ -7,7 +7,7 @@
     import { ToastContainer, PageTransition } from "./_components"
 
     import { currentLocale, setLocale } from "$i18n/helpers"
-    import { userData } from "$lib/stores"
+    import { user } from "$lib/stores"
     import { setGlobalSocketListeners } from "$lib/utils"
 
     // eslint-disable-next-line import/no-unassigned-import
@@ -21,12 +21,12 @@
 
     setLocale(untrack(() => data.locale))
 
-    $userData = untrack(() => data.user)
+    user.data = untrack(() => data.user)
 
     watch(
         () => data.user,
         newUser => {
-            $userData = newUser
+            user.data = newUser
         }
     )
 

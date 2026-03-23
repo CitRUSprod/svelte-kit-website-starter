@@ -1,4 +1,4 @@
-import * as schemasModels from "@repo/schemas/models"
+import * as schemasRoutes from "@repo/schemas/routes"
 import type { Handle, RequestEvent } from "@sveltejs/kit"
 import { redirect } from "@sveltejs/kit"
 import { sequence } from "@sveltejs/kit/hooks"
@@ -63,13 +63,13 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
 }
 
 const authHandle: Handle = async ({ event: e, resolve }) => {
-    let userData: schemasModels.user.$User | null = null
+    let user: schemasRoutes.profile.$GetUserResponse | null = null
 
     try {
         const res = await api.profile.getUser({ headers: e.request.headers })
         setCookies(e.cookies, res.headers)
 
-        userData = res.data
+        user = res.data
     } catch {}
 
     const newCookies: Array<string> = []
@@ -87,7 +87,7 @@ const authHandle: Handle = async ({ event: e, resolve }) => {
         e.request.headers.set("cookie", cookies.join("; "))
     }
 
-    e.locals.user = userData
+    e.locals.user = user
 
     const response = await resolve(e)
 

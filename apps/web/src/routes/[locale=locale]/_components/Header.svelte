@@ -6,7 +6,7 @@
     import { ll, localePath } from "$i18n/helpers"
     import { Button } from "$lib/components"
     import { env } from "$lib/constants"
-    import { darkTheme, userData } from "$lib/stores"
+    import { theme, user } from "$lib/stores"
 </script>
 
 <header
@@ -18,9 +18,9 @@
         </h2>
     </div>
     <div class="u:flex u:flex-1 u:flex-wrap u:justify-end u:gap-2">
-        {#if $userData}
+        {#if user.data}
             <Button
-                href={$localePath(`/users/${$userData.id}`)}
+                href={$localePath(`/users/${user.data.id}`)}
                 variant="primary"
                 data-testid="profile-header-button"
             >
@@ -37,7 +37,7 @@
         <Button href={$localePath("/posts")} variant="primary" data-testid="posts-header-button">
             {$ll.posts()}
         </Button>
-        {#if $userData?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)}
+        {#if user.data?.role.permissions.includes(constantsEnums.Permission.GetOtherUserEmail)}
             <Button
                 href={$localePath("/users")}
                 variant="primary"
@@ -46,7 +46,7 @@
                 {$ll.users()}
             </Button>
         {/if}
-        {#if $userData?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
+        {#if user.data?.role.permissions.includes(constantsEnums.Permission.AssignRole)}
             <Button
                 href={$localePath("/roles")}
                 variant="primary"
@@ -56,10 +56,10 @@
             </Button>
         {/if}
         <LocaleSwitcher class="u:mx-1" />
-        <Button icon variant="primary" onClick={darkTheme.toggle} data-testid="theme-header-button">
+        <Button icon variant="primary" onClick={theme.toggle} data-testid="theme-header-button">
             <i class="u:i-fa-solid-sun u:dark:i-fa-solid-moon u:text-xl"></i>
         </Button>
-        {#if $userData}
+        {#if user.data}
             <Button
                 href={$localePath("/auth/logout")}
                 variant="primary"

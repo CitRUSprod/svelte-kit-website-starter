@@ -7,7 +7,7 @@
 
     import { ll, localePath, currentLocale } from "$i18n/helpers"
     import { ContentDefault, Button } from "$lib/components"
-    import { userData } from "$lib/stores"
+    import { user } from "$lib/stores"
 
     const { data } = $props()
 
@@ -58,7 +58,7 @@
             {/if}
         </ul>
     </div>
-    {#if localPost.author && $userData?.id === localPost.author.id}
+    {#if localPost.author && user.data?.id === localPost.author.id}
         <div>
             <Button
                 variant="warning"
@@ -75,7 +75,7 @@
                 {$ll.remove()}
             </Button>
         </div>
-    {:else if $userData?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
+    {:else if user.data?.role.permissions.includes(constantsEnums.Permission.DeleteOtherUserPost)}
         <div>
             <Button variant="error" onClick={dialogPostRemoving?.open}>
                 {$ll.remove()}

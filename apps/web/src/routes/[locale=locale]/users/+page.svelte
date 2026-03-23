@@ -10,7 +10,7 @@
     import * as api from "$lib/api"
     import { ContentDefault, Button, Pagination } from "$lib/components"
     import { useQueryParams, useQuery } from "$lib/hooks"
-    import { toasts, userData } from "$lib/stores"
+    import { toasts, user } from "$lib/stores"
 
     const { data } = $props()
 
@@ -82,65 +82,65 @@
                 </tr>
             </thead>
             <tbody>
-                {#each qGetUsers.data.items as user (user.id)}
+                {#each qGetUsers.data.items as u (u.id)}
                     <tr
                         class="u:children:p-2 u:children:border u:children:border-default u:children:text-center u:children:hover:bg-zinc-100 u:dark:children:hover:bg-zinc-900 u:children:duration-200"
                     >
-                        <td>{user.id}</td>
+                        <td>{u.id}</td>
                         <td class="u:w-0">
                             <div class="u:w-20 u:h-20 u:overflow-hidden">
                                 <img
                                     class="u:w-full u:h-full u:object-cover"
                                     alt={$ll.avatar()}
-                                    src={user.avatar ?? "/img/no-avatar.png"}
+                                    src={u.avatar ?? "/img/no-avatar.png"}
                                 />
                             </div>
                         </td>
-                        <td>{user.username}</td>
-                        <td>{user.email ?? "-"}</td>
-                        <td>{user.role.name[$currentLocale]}</td>
+                        <td>{u.username}</td>
+                        <td>{u.email ?? "-"}</td>
+                        <td>{u.role.name[$currentLocale]}</td>
                         <td>
-                            {#if user.ban}
+                            {#if u.ban}
                                 <div>{$ll.yes()}</div>
-                                <div>{$ll.who()}: {user.ban.author.username}</div>
-                                <div>{$ll.reason()}: {user.ban.reason}</div>
+                                <div>{$ll.who()}: {u.ban.author.username}</div>
+                                <div>{$ll.reason()}: {u.ban.reason}</div>
                             {:else}
                                 <div>{$ll.no()}</div>
                             {/if}
                         </td>
-                        <td>{dt.getFullDate(user.registrationDate, data.tz, $currentLocale)}</td>
+                        <td>{dt.getFullDate(u.registrationDate, data.tz, $currentLocale)}</td>
                         <td>
                             <Button
-                                href={$localePath(`/users/${String(user.id)}`)}
+                                href={$localePath(`/users/${String(u.id)}`)}
                                 rel="noopener noreferrer"
                                 target="_blank"
                                 variant="info"
                             >
                                 {$ll.open()}
                             </Button>
-                            {#if $userData && $userData.id !== user.id && $userData.role.permissions.includes(constantsEnums.Permission.AssignRole)}
-                                {#if !user.ban}
+                            {#if user.data && user.data.id !== u.id && user.data.role.permissions.includes(constantsEnums.Permission.AssignRole)}
+                                {#if !u.ban}
                                     <Button
                                         variant="warning"
-                                        onClick={() => dialogRoleAssigning?.open(user)}
+                                        onClick={() => dialogRoleAssigning?.open(u)}
                                     >
                                         {$ll.assignRole()}
                                     </Button>
                                 {/if}
                             {/if}
-                            {#if $userData && $userData.id !== user.id && $userData.role.permissions.includes(constantsEnums.Permission.BanUser)}
-                                {#if user.ban}
+                            {#if user.data && user.data.id !== u.id && user.data.role.permissions.includes(constantsEnums.Permission.BanUser)}
+                                {#if u.ban}
                                     <Button
-                                        loading={qUnbanUser.loading && unbanUserId === user.id}
+                                        loading={qUnbanUser.loading && unbanUserId === u.id}
                                         variant="error"
-                                        onClick={() => unbanUser(user.id)}
+                                        onClick={() => unbanUser(u.id)}
                                     >
                                         {$ll.unban()}
                                     </Button>
                                 {:else}
                                     <Button
                                         variant="error"
-                                        onClick={() => dialogUserBanning?.open(user)}
+                                        onClick={() => dialogUserBanning?.open(u)}
                                     >
                                         {$ll.ban()}
                                     </Button>

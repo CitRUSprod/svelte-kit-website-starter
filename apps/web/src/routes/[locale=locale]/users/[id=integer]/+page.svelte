@@ -17,7 +17,7 @@
     import * as api from "$lib/api"
     import { ContentDefault, Button, OAuthProviderButton } from "$lib/components"
     import { useQuery } from "$lib/hooks"
-    import { toasts, userData } from "$lib/stores"
+    import { toasts, user } from "$lib/stores"
 
     const { data } = $props()
 
@@ -36,7 +36,7 @@
     })
 
     const hasMoreThanOneLinkedAccount = $derived(
-        Object.values($userData?.linkedAccounts ?? {}).filter(value => value).length > 1
+        Object.values(user.data?.linkedAccounts ?? {}).filter(value => value).length > 1
     )
 
     let uploadAvatarImg = $state<File | null>(null)
@@ -59,7 +59,7 @@
             const res = await api.users.getUser({
                 id: data.user.id
             })
-            $userData = res.data
+            user.data = res.data
             localUser = res.data
             toasts.add("success", $ll.avatarUpdatedSuccessfully())
         }
@@ -88,8 +88,8 @@
                 provider: _.kebabCase(constantsEnums.OAuthProvider.Twitch)
             })
         },
-        async onSuccess(user) {
-            $userData = user
+        async onSuccess(u) {
+            user.data = u
             toasts.add(
                 "success",
                 $ll.accountUnlinkedSuccessfully({ provider: constantsEnums.OAuthProvider.Twitch })
@@ -117,10 +117,10 @@
                 {#if localUser.email}
                     <li><b>{$ll.email()}:</b> {localUser.email}</li>
                 {/if}
-                {#if $userData?.id === localUser.id && $userData.linkedAccounts}
+                {#if user.data?.id === localUser.id && user.data.linkedAccounts}
                     <li>
                         <b>Twitch:</b>
-                        {#if $userData.linkedAccounts.twitch}
+                        {#if user.data.linkedAccounts.twitch}
                             {$ll.linked()}
                             {#if hasMoreThanOneLinkedAccount}
                                 <Button
@@ -160,7 +160,7 @@
             </ul>
         </div>
     </div>
-    {#if $userData?.id === localUser.id}
+    {#if user.data?.id === localUser.id}
         <div>
             <Button
                 loading={qUploadAvatar.loading}
@@ -181,7 +181,7 @@
             <Button variant="warning" onClick={dialogPasswordChanging?.open}>
                 {$ll.changePassword()}
             </Button>
-            {#if $userData.email}
+            {#if user.data.email}
                 <Button variant="warning" onClick={dialogEmailChanging?.open}>
                     {$ll.changeEmail()}
                 </Button>
@@ -190,7 +190,7 @@
                     {$ll.linkEmail()}
                 </Button>
             {/if}
-            {#if $userData.linkedAccounts.email}
+            {#if user.data.linkedAccounts.email}
                 <Button
                     loading={qEmailUnlink.loading}
                     variant="error"
@@ -208,7 +208,7 @@
             </Button>
         </div>
         <div>
-            {#if !$userData.linkedAccounts.twitch}
+            {#if !user.data.linkedAccounts.twitch}
                 <OAuthProviderButton linkAccount provider={constantsEnums.OAuthProvider.Twitch} />
             {/if}
         </div>

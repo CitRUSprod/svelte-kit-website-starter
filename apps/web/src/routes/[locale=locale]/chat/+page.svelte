@@ -7,7 +7,7 @@
 
     import { ll } from "$i18n/helpers"
     import { ContentCenter, Chat } from "$lib/components"
-    import { userData } from "$lib/stores"
+    import { user } from "$lib/stores"
     import { socket } from "$lib/utils"
 
     const wsEvents = constantsWs.globalChat.client
@@ -58,6 +58,6 @@
         <div>
             <h1>{$ll.chat()}</h1>
         </div>
-        <Chat hideControls={!$userData} {messages} onSend={text => sendMessage(text)} />
+        <Chat hideControls={!user.data} {messages} onSend={text => sendMessage(text)} />
     </div>
 </ContentCenter>

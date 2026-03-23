@@ -8,7 +8,7 @@
     import * as api from "$lib/api"
     import { ContentDefault, Button } from "$lib/components"
     import { useQuery } from "$lib/hooks"
-    import { userData } from "$lib/stores"
+    import { user } from "$lib/stores"
 
     const { data } = $props()
 
@@ -39,7 +39,7 @@
                 >
                     <th>{$ll.name()}</th>
                     <th>{$ll.permissions()}</th>
-                    {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
+                    {#if user.data?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
                         <th>{$ll.actions()}</th>
                     {/if}
                 </tr>
@@ -57,7 +57,7 @@
                                 <span class="u:opacity-30">({$ll.empty()})</span>
                             {/if}
                         </td>
-                        {#if $userData?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
+                        {#if user.data?.role.permissions.includes(constantsEnums.Permission.CreateRole)}
                             <td>
                                 {#if !role.protected}
                                     <Button

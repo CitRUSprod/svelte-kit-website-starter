@@ -11,7 +11,7 @@
     import * as api from "$lib/api"
     import { ContentDefault, Button, TextField, Select, Pagination } from "$lib/components"
     import { useQueryParams, useQuery } from "$lib/hooks"
-    import { userData } from "$lib/stores"
+    import { user } from "$lib/stores"
 
     type SortAndOrder =
         `${schemasRoutes.posts.$GetPostsQuery["sort"]}-${schemasRoutes.posts.$GetPostsQuery["order"]}`
@@ -100,7 +100,7 @@
                 onChange={onSortingChange}
             />
         </div>
-        {#if $userData}
+        {#if user.data}
             <div>
                 <Button
                     variant="success"
