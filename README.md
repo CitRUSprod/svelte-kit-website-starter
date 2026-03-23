@@ -159,10 +159,22 @@ Format with formatters:
 pnpm format
 ```
 
-Test with `playwright`:
+Unit test with `vitest`:
+
+```sh
+pnpm test:unit
+```
+
+E2E test with `playwright`:
 
 ```sh
 pnpm test:e2e
+```
+
+Validate project (types + linting + unit tests):
+
+```sh
+pnpm validate
 ```
 
 ### Environment variables

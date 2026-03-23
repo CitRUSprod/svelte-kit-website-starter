@@ -17,8 +17,9 @@
         "eslint:fix:all": "pnpm eslint:all --fix",
         "lint": "pnpm stylelint:all && pnpm eslint:all",
         "format": "pnpm stylelint:fix:all && pnpm eslint:fix:all",
-        "validate": "pnpm check-types && pnpm lint",
+        "test:unit": "vitest --run",
         "test:e2e": "playwright test",
+        "validate": "pnpm check-types && pnpm lint && pnpm test:unit",
         "prepare": "husky"
     },
     "packageManager": "pnpm@10.32.1",
@@ -70,6 +71,7 @@
         "svelte-eslint-parser": "1.6.0",
         "turbo": "2.8.19",
         "typescript": "5.9.3",
-        "typescript-eslint": "8.57.1"
+        "typescript-eslint": "8.57.1",
+        "vitest": "4.1.0"
     }
 }

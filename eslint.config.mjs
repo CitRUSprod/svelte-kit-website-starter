@@ -4,6 +4,7 @@ import typescriptConfig from "@citrus-linting/eslint-config/typescript"
 import anyParser from "any-eslint-parser"
 import prettierConfig from "eslint-config-prettier"
 import prettier from "eslint-plugin-prettier"
+import globals from "globals"
 
 typescriptConfig[0].languageOptions.parserOptions.project = [
     "./tsconfig.json",
@@ -18,7 +19,7 @@ const prettierRules = {
     "prefer-arrow-callback": 0
 }
 
-/** @type {import('eslint').Linter.Config[]} */
+/** @type {import("eslint").Linter.Config[]} */
 const config = [
     {
         ignores: [
@@ -44,6 +45,15 @@ const config = [
     ...baseConfig,
     ...typescriptConfig,
     ...svelteTypescriptConfig,
+    {
+        files: ["**/*.test.ts"],
+        ignores: ["e2e-tests/**/*.test.ts"],
+        languageOptions: {
+            globals: {
+                ...globals.vitest
+            }
+        }
+    },
     {
         files: ["**/*.json"],
         languageOptions: {

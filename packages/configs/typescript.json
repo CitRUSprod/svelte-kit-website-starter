@@ -11,6 +11,7 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "verbatimModuleSyntax": true,
-        "noUncheckedIndexedAccess": true
+        "noUncheckedIndexedAccess": true,
+        "types": ["vitest/globals"]
     }
 }
