@@ -1,7 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 
 declare namespace App {
-    type User = import("@repo/schemas/models").user.User
+    type User = import("@repo/schemas/routes").profile.$GetUserResponse
     type Locale = import("$i18n/helpers").Locale
     type TranslationFunctions = import("$i18n/helpers").TranslationFunctions
 
@@ -9,6 +9,6 @@ declare namespace App {
         locale: Locale
         ll: TranslationFunctions
         tz: string
-        userData: User | null
+        user: User | null
     }
 }

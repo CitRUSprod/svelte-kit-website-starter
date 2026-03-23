@@ -9,7 +9,7 @@
     import * as vld from "$lib/validators"
 
     interface Props {
-        user: schemasModels.user.User
+        user: schemasModels.user.$User
     }
 
     let { user = $bindable() }: Props = $props()

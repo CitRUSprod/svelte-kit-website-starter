@@ -1,8 +1,11 @@
+/* eslint sort-keys: 2 */
+
 import type { BaseTranslation } from "../i18n-types"
 
 const ru = {
     accountAlreadyLinked: "Этот {provider}-аккаунт уже привязан к другому аккаунту",
     banned: "Забанен",
+    cannotDeleteSystemUser: "Невозможно удалить системного пользователя",
     cannotUnlinkLastAuthMethod: "Невозможно отвязать единственный способ входа в аккаунт",
     completeRegistration: "Завершить регистрацию",
     dear: "Дорогой",
@@ -39,6 +42,7 @@ const ru = {
     roleWithSuchIdIsProtected: "Роль с таким ID защищена",
     roleWithSuchIdWasNotFound: "Роль с таким ID не найдена",
     statesDoNotMatch: "State не совпадают",
+    temporaryImageWithSuchIdWasNotFound: "Временное изображение с таким ID не найдено",
     unexpectedError: "Неожиданная ошибка",
     unlinkEmail: "Отвязать электронную почту",
     unlinkingTokenExpired: "Срок действия токена отвязки истёк",

@@ -3,7 +3,7 @@ import * as schemasRoutes from "@repo/schemas/routes"
 import * as api from "$lib/api"
 
 export async function load(e) {
-    const schema = schemasRoutes.posts.getPostsQuery()
+    const schema = schemasRoutes.posts.$getPostsQuery()
 
     const res = await api.posts.getPosts({
         headers: e.request.headers,

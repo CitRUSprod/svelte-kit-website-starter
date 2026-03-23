@@ -1,3 +1,5 @@
+/* eslint sort-keys: 2 */
+
 import type { Translation } from "../i18n-types"
 
 const en = {
@@ -15,8 +17,8 @@ const en = {
     ban: "Ban",
     banAuthor: "Ban author",
     banDate: "Ban date",
-    banned: "Banned",
     banReason: "Ban reason",
+    banned: "Banned",
     cancel: "Cancel",
     change: "Change",
     changeEmail: "Change email",
@@ -28,9 +30,9 @@ const en = {
     content: "Content",
     count: "Count",
     create: "Create",
-    created: "Created",
     createPost: "Create a new post",
     createRole: "Create a role",
+    created: "Created",
     creationDateAsc: "Creation date (Earliest)",
     creationDateDesc: "Creation date (Latest)",
     deleted: "Deleted",
@@ -60,8 +62,8 @@ const en = {
     home: "Home",
     info: "Info",
     link: "Link",
-    linked: "Linked",
     linkEmail: "Link email",
+    linked: "Linked",
     loggedInSuccessfully: "You have successfully logged in",
     loggedOutSuccessfully: "You have successfully logged out",
     login: "Login",
@@ -128,20 +130,20 @@ const en = {
     titleDesc: "Title (Z-A)",
     unban: "Unban",
     unlink: "Unlink",
-    unlinked: "Unlinked",
     unlinkEmail: "Unlink email",
+    unlinked: "Unlinked",
     uploadAvatar: "Upload avatar",
     user: "User",
     userBannedSuccessfully: "User successfully banned",
     userBanning: "User banning",
-    username: "Username",
     userRemovedSuccessfully: "Account successfully removed",
     userRemoving: "Account removing",
     userRemovingConfirmation: "Write your username to confirm.",
     userRemovingQuestion:
         "Do you really want to remove this account with no possibility of recovery?",
-    users: "Users",
     userUnbannedSuccessfully: "User successfully unbanned",
+    username: "Username",
+    users: "Users",
     warning: "Warning",
     who: "Who",
     yes: "Yes"

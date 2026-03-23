@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
@@ -7,8 +7,11 @@
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
 
+    type Role = schemasRoutes.roles.$GetRolesResponse["items"][number]
+    type User = schemasRoutes.users.$GetUsersResponse["items"][number]
+
     interface Props {
-        roles: Array<schemasModels.role.Role>
+        roles: Array<Role>
         onAssignRole?(): void
     }
 
@@ -24,7 +27,7 @@
         roles.map(r => ({ text: r.name[$currentLocale], value: r.id.toString() }))
     )
 
-    export function open(user: schemasModels.user.User) {
+    export function open(user: User) {
         userId = user.id
         username = user.username
         roleId = user.role.id.toString()

@@ -11,11 +11,14 @@ import * as utils from "./utils"
 
 import { enums, env } from "$/constants"
 import type { User } from "$/prisma/generated/client"
-import type { RouteHandler, UserPayload } from "$/types"
-import { oAuthProviders, sendEmail, models } from "$/utils"
+import type { UserPayload } from "$/types"
+import { defineRouteHandler, models, oAuthProviders, sendEmail } from "$/utils"
 
-export const register = (async (app, req) => {
-    const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+export const register = defineRouteHandler<
+    { Body: schemasRoutes.auth.$RegisterBody },
+    schemasRoutes.auth.$RegisterResponse
+>(async (app, req) => {
+    const userByEmail = await app.prisma.user.findUnique({ where: { email: req.body.email } })
 
     if (userByEmail) {
         throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
@@ -31,7 +34,7 @@ export const register = (async (app, req) => {
 
     await utils.deleteExpiredRegistrationTokens(app)
 
-    const registrationTokenByEmail = await app.prisma.registrationToken.findFirst({
+    const registrationTokenByEmail = await app.prisma.registrationToken.findUnique({
         where: { email: req.body.email }
     })
 
@@ -63,15 +66,15 @@ export const register = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.auth.RegisterBody },
-    schemasRoutes.auth.RegisterResponse
->
+})
 
-export const completeRegistration = (async (app, req) => {
+export const completeRegistration = defineRouteHandler<
+    { Params: schemasRoutes.auth.$CompleteRegistrationParams },
+    schemasRoutes.auth.$CompleteRegistrationResponse
+>(async (app, req) => {
     await utils.deleteExpiredRegistrationTokens(app)
 
-    const registrationToken = await app.prisma.registrationToken.findFirst({
+    const registrationToken = await app.prisma.registrationToken.findUnique({
         where: { token: req.params.registrationToken }
     })
 
@@ -91,12 +94,15 @@ export const completeRegistration = (async (app, req) => {
     await app.prisma.registrationToken.delete({ where: { id: registrationToken.id } })
 
     return utils.login(app, { id: user.id }, false, true)
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.CompleteRegistrationParams },
-    schemasRoutes.auth.CompleteRegistrationResponse
->
+})
 
-export const oAuthRegister = (async (app, req) => {
+export const oAuthRegister = defineRouteHandler<
+    {
+        Params: schemasRoutes.auth.$OAuthRegisterParams
+        Body: schemasRoutes.auth.$OAuthRegisterBody
+    },
+    schemasRoutes.auth.$OAuthRegisterResponse
+>(async (app, req) => {
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { equals: req.body.username, mode: "insensitive" } }
     })
@@ -107,7 +113,7 @@ export const oAuthRegister = (async (app, req) => {
 
     await utils.deleteExpiredOAuthRegistrationTokens(app)
 
-    const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findFirst({
+    const oAuthRegistrationToken = await app.prisma.oAuthRegistrationToken.findUnique({
         where: { token: req.params.oAuthRegistrationToken }
     })
 
@@ -139,13 +145,13 @@ export const oAuthRegister = (async (app, req) => {
     await app.prisma.oAuthRegistrationToken.delete({ where: { id: oAuthRegistrationToken.id } })
 
     return utils.login(app, { id: user.id }, true, true)
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.OAuthRegisterParams; Body: schemasRoutes.auth.OAuthRegisterBody },
-    schemasRoutes.auth.OAuthRegisterResponse
->
+})
 
-export const login = (async (app, req) => {
-    const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+export const login = defineRouteHandler<
+    { Body: schemasRoutes.auth.$LoginBody },
+    schemasRoutes.auth.$LoginResponse
+>(async (app, req) => {
+    const user = await app.prisma.user.findUnique({ where: { email: req.body.email } })
 
     if (!user) {
         throw new BadRequestError(req.ll.userWithEmailNotFound())
@@ -162,9 +168,12 @@ export const login = (async (app, req) => {
     }
 
     return utils.login(app, { id: user.id }, false, false)
-}) satisfies RouteHandler<{ Body: schemasRoutes.auth.LoginBody }, schemasRoutes.auth.LoginResponse>
+})
 
-export const oAuthLogin = (async (app, req) => {
+export const oAuthLogin = defineRouteHandler<
+    { Params: schemasRoutes.auth.$OAuthLoginParams },
+    schemasRoutes.auth.$OAuthLoginResponse
+>(async (app, req) => {
     const oAuthState = generateState()
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
@@ -194,12 +203,16 @@ export const oAuthLogin = (async (app, req) => {
             throw new InternalServerError(req.ll.unexpectedError())
         }
     }
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.OAuthLoginParams },
-    schemasRoutes.auth.OAuthLoginResponse
->
+})
 
-export const oAuthLoginCallback = (async (app, req, cookies) => {
+export const oAuthLoginCallback = defineRouteHandler<
+    {
+        Params: schemasRoutes.auth.$OAuthLoginCallbackParams
+        Body: schemasRoutes.auth.$OAuthLoginCallbackBody
+    },
+    schemasRoutes.auth.$OAuthLoginCallbackResponse,
+    schemasRoutes.auth.$OAuthLoginCallbackCookies
+>(async (app, req, cookies) => {
     if (cookies.oAuthState !== req.body.oAuthState) {
         throw new BadRequestError(req.ll.statesDoNotMatch())
     }
@@ -223,7 +236,7 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
 
             const twitchUser = res.data.data[0]!
 
-            const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
+            const user = await app.prisma.user.findUnique({ where: { twitchId: twitchUser.id } })
 
             if (user) {
                 return utils.login(app, { id: user.id }, true, false)
@@ -267,16 +280,12 @@ export const oAuthLoginCallback = (async (app, req, cookies) => {
             throw new InternalServerError(req.ll.unexpectedError())
         }
     }
-}) satisfies RouteHandler<
-    {
-        Params: schemasRoutes.auth.OAuthLoginCallbackParams
-        Body: schemasRoutes.auth.OAuthLoginCallbackBody
-    },
-    schemasRoutes.auth.OAuthLoginCallbackResponse,
-    schemasRoutes.auth.OAuthLoginCallbackCookies
->
+})
 
-export const link = (async (app, req) => {
+export const link = defineRouteHandler<
+    { Body: schemasRoutes.auth.$LinkBody },
+    schemasRoutes.auth.$LinkResponse
+>(async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -285,7 +294,7 @@ export const link = (async (app, req) => {
         throw new BadRequestError(req.ll.youAlreadyHaveEmail())
     }
 
-    const userByEmail = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+    const userByEmail = await app.prisma.user.findUnique({ where: { email: req.body.email } })
 
     if (userByEmail) {
         throw new BadRequestError(req.ll.userWithSuchEmailAlreadyExists())
@@ -293,7 +302,7 @@ export const link = (async (app, req) => {
 
     await utils.deleteExpiredLinkingTokens(app)
 
-    const linkingTokenByEmail = await app.prisma.linkingToken.findFirst({
+    const linkingTokenByEmail = await app.prisma.linkingToken.findUnique({
         where: { email: req.body.email }
     })
 
@@ -325,12 +334,15 @@ export const link = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<{ Body: schemasRoutes.auth.LinkBody }, schemasRoutes.auth.LinkResponse>
+})
 
-export const completeLinking = (async (app, req) => {
+export const completeLinking = defineRouteHandler<
+    { Params: schemasRoutes.auth.$CompleteLinkingParams },
+    schemasRoutes.auth.$CompleteLinkingResponse
+>(async (app, req) => {
     await utils.deleteExpiredLinkingTokens(app)
 
-    const linkingToken = await app.prisma.linkingToken.findFirst({
+    const linkingToken = await app.prisma.linkingToken.findUnique({
         where: { token: req.params.linkingToken }
     })
 
@@ -349,57 +361,60 @@ export const completeLinking = (async (app, req) => {
     await app.prisma.linkingToken.delete({ where: { id: linkingToken.id } })
 
     return {}
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.CompleteLinkingParams },
-    schemasRoutes.auth.CompleteLinkingResponse
->
+})
 
-export const unlink = (async (app, req) => {
-    if (!req.userData) {
-        throw new InternalServerError(req.ll.unexpectedError())
-    }
-
-    if (!req.userData.email) {
-        throw new BadRequestError(req.ll.emailIsNotSet())
-    }
-
-    await utils.deleteExpiredUnlinkingTokens(app)
-
-    const unlinkingTokenByEmail = await app.prisma.unlinkingToken.findFirst({
-        where: { userId: req.userData.id }
-    })
-
-    if (unlinkingTokenByEmail) {
-        await app.prisma.unlinkingToken.delete({ where: { id: unlinkingTokenByEmail.id } })
-    }
-
-    const token = createUuid()
-
-    await app.prisma.unlinkingToken.create({
-        data: {
-            token,
-            userId: req.userData.id,
-            creationDate: new Date()
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+export const unlink = defineRouteHandler<void, schemasRoutes.auth.$UnlinkResponse>(
+    async (app, req) => {
+        if (!req.userData) {
+            throw new InternalServerError(req.ll.unexpectedError())
         }
-    })
 
-    const url = new URL(`/auth/unlink/complete/${token}`, env.PUBLIC_BASE_URL).toString()
-    const subject = req.ll.emailUnlinking()
+        if (!req.userData.email) {
+            throw new BadRequestError(req.ll.emailIsNotSet())
+        }
 
-    await sendEmail(req.userData.email, subject, "basic", {
-        greeting: `${req.ll.dear()} ${req.userData.username}!`,
-        text: req.ll.emailUnlinkingText(),
-        link: url,
-        linkText: req.ll.unlinkEmail()
-    })
+        await utils.deleteExpiredUnlinkingTokens(app)
 
-    return {}
-}) satisfies RouteHandler<void, schemasRoutes.auth.UnlinkResponse>
+        const unlinkingTokenByEmail = await app.prisma.unlinkingToken.findUnique({
+            where: { userId: req.userData.id }
+        })
 
-export const completeUnlinking = (async (app, req) => {
+        if (unlinkingTokenByEmail) {
+            await app.prisma.unlinkingToken.delete({ where: { id: unlinkingTokenByEmail.id } })
+        }
+
+        const token = createUuid()
+
+        await app.prisma.unlinkingToken.create({
+            data: {
+                token,
+                userId: req.userData.id,
+                creationDate: new Date()
+            }
+        })
+
+        const url = new URL(`/auth/unlink/complete/${token}`, env.PUBLIC_BASE_URL).toString()
+        const subject = req.ll.emailUnlinking()
+
+        await sendEmail(req.userData.email, subject, "basic", {
+            greeting: `${req.ll.dear()} ${req.userData.username}!`,
+            text: req.ll.emailUnlinkingText(),
+            link: url,
+            linkText: req.ll.unlinkEmail()
+        })
+
+        return {}
+    }
+)
+
+export const completeUnlinking = defineRouteHandler<
+    { Params: schemasRoutes.auth.$CompleteUnlinkingParams },
+    schemasRoutes.auth.$CompleteUnlinkingResponse
+>(async (app, req) => {
     await utils.deleteExpiredUnlinkingTokens(app)
 
-    const unlinkingToken = await app.prisma.unlinkingToken.findFirst({
+    const unlinkingToken = await app.prisma.unlinkingToken.findUnique({
         where: { token: req.params.unlinkingToken }
     })
 
@@ -430,12 +445,16 @@ export const completeUnlinking = (async (app, req) => {
     await app.prisma.unlinkingToken.delete({ where: { id: unlinkingToken.id } })
 
     return {}
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.CompleteUnlinkingParams },
-    schemasRoutes.auth.CompleteUnlinkingResponse
->
+})
 
-export const oAuthLinkCallback = (async (app, req, cookies) => {
+export const oAuthLinkCallback = defineRouteHandler<
+    {
+        Params: schemasRoutes.auth.$OAuthLinkCallbackParams
+        Body: schemasRoutes.auth.$OAuthLinkCallbackBody
+    },
+    schemasRoutes.auth.$OAuthLinkCallbackResponse,
+    schemasRoutes.auth.$OAuthLinkCallbackCookies
+>(async (app, req, cookies) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -471,7 +490,7 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
 
             const twitchUser = res.data.data[0]!
 
-            const user = await app.prisma.user.findFirst({ where: { twitchId: twitchUser.id } })
+            const user = await app.prisma.user.findUnique({ where: { twitchId: twitchUser.id } })
 
             const oAuthStateCookie = {
                 name: "oAuthState",
@@ -506,16 +525,12 @@ export const oAuthLinkCallback = (async (app, req, cookies) => {
             throw new InternalServerError(req.ll.unexpectedError())
         }
     }
-}) satisfies RouteHandler<
-    {
-        Params: schemasRoutes.auth.OAuthLinkCallbackParams
-        Body: schemasRoutes.auth.OAuthLinkCallbackBody
-    },
-    schemasRoutes.auth.OAuthLinkCallbackResponse,
-    schemasRoutes.auth.OAuthLinkCallbackCookies
->
+})
 
-export const oAuthUnlink = (async (app, req) => {
+export const oAuthUnlink = defineRouteHandler<
+    { Params: schemasRoutes.auth.$OAuthUnlinkParams },
+    schemasRoutes.auth.$OAuthUnlinkResponse
+>(async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -548,23 +563,27 @@ export const oAuthUnlink = (async (app, req) => {
                 data: {
                     twitchId: null
                 },
-                include: { role: true, ban: { include: { author: true } } }
+                include: models.user.include
             })
 
-            return { payload: models.user.dto(updatedUser) }
+            return {
+                payload: models.user.dto(updatedUser)
+            }
         }
 
         default: {
             throw new InternalServerError(req.ll.unexpectedError())
         }
     }
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.auth.OAuthUnlinkParams },
-    schemasRoutes.auth.OAuthUnlinkResponse
->
+})
 
-export const logout = (async (app, req, cookies) => {
-    const refreshToken = await app.prisma.refreshToken.findFirst({
+export const logout = defineRouteHandler<
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+    void,
+    schemasRoutes.auth.$LogoutResponse,
+    schemasRoutes.auth.$LogoutCookies
+>(async (app, req, cookies) => {
+    const refreshToken = await app.prisma.refreshToken.findUnique({
         where: { token: cookies.refreshToken }
     })
 
@@ -586,10 +605,17 @@ export const logout = (async (app, req, cookies) => {
 
     await app.prisma.refreshToken.delete({ where: { id: refreshToken.id } })
 
-    return { cookies: utils.getLogoutCookies() }
-}) satisfies RouteHandler<void, schemasRoutes.auth.LogoutResponse, schemasRoutes.auth.LogoutCookies>
+    return {
+        cookies: utils.getLogoutCookies()
+    }
+})
 
-export const refreshTokens = (async (app, req, cookies) => {
+export const refreshTokens = defineRouteHandler<
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+    void,
+    schemasRoutes.auth.$RefreshTokensResponse,
+    schemasRoutes.auth.$RefreshTokensCookies
+>(async (app, req, cookies) => {
     let payload: UserPayload
 
     try {
@@ -603,7 +629,7 @@ export const refreshTokens = (async (app, req, cookies) => {
 
     await utils.deleteExpiredRefreshTokens(app)
 
-    const refreshToken = await app.prisma.refreshToken.findFirst({
+    const refreshToken = await app.prisma.refreshToken.findUnique({
         where: { token: cookies.refreshToken }
     })
 
@@ -640,8 +666,4 @@ export const refreshTokens = (async (app, req, cookies) => {
             }
         ]
     }
-}) satisfies RouteHandler<
-    void,
-    schemasRoutes.auth.RefreshTokensResponse,
-    schemasRoutes.auth.RefreshTokensCookies
->
+})

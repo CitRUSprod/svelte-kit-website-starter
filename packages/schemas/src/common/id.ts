@@ -1,7 +1,7 @@
 import { z } from "@repo/utils"
 
-export function id() {
-    return z.coerce.number().int().min(1)
+export function $id() {
+    return z.coerce.number().int().positive()
 }
 
-export type Id = z.infer<ReturnType<typeof id>>
+export type $Id = z.infer<ReturnType<typeof $id>>

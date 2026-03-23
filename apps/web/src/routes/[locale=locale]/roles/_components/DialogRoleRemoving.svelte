@@ -1,11 +1,13 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { Button, Dialog } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
+
+    type Role = schemasRoutes.roles.$GetRolesResponse["items"][number]
 
     interface Props {
         onRemoveRole?(): void
@@ -15,9 +17,9 @@
 
     let dialog = $state<Dialog>()
 
-    let role = $state<schemasModels.role.Role>()
+    let role = $state<Role>()
 
-    export function open(r: schemasModels.role.Role) {
+    export function open(r: Role) {
         role = r
 
         dialog?.open()

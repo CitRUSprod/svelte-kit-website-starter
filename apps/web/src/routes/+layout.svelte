@@ -19,10 +19,10 @@
 
     setLocale(untrack(() => data.locale))
 
-    $userData = untrack(() => data.userData)
+    $userData = untrack(() => data.user)
 
     $effect(() => {
-        $userData = data.userData
+        $userData = data.user
     })
 
     onMount(() => {

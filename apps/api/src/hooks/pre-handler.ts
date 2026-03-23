@@ -4,13 +4,14 @@ import { InternalServerError } from "http-errors-enhanced"
 
 import type { Locale, TranslationFunctions } from "$/i18n/helpers"
 import { l, isLocale } from "$/i18n/helpers"
-import type { UserPayload, UserData } from "$/types"
+import type { UserPayload } from "$/types"
+import { models } from "$/utils"
 
 declare module "fastify" {
     interface FastifyRequest {
         ll: TranslationFunctions
         tz: string
-        userData?: UserData
+        userData?: models.user.Type
         authError?: HttpError
     }
 }
@@ -38,9 +39,9 @@ export const preHandler: FastifyPluginCallback = (app, options, done) => {
         }
 
         if (payload) {
-            const user = await app.prisma.user.findFirst({
+            const user = await app.prisma.user.findUnique({
                 where: { id: payload.id },
-                include: { role: true, ban: { include: { author: true } } }
+                include: models.user.include
             })
 
             if (user === null) {

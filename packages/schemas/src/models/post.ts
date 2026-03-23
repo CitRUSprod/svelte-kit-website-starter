@@ -4,44 +4,27 @@ import * as user from "./user"
 
 import * as common from "$/common"
 
-export function title() {
+export function $title() {
     return z.string().trim().min(1).max(100)
 }
 
-export type Title = z.infer<ReturnType<typeof title>>
+export type $Title = z.infer<ReturnType<typeof $title>>
 
-export function content() {
+export function $content() {
     return z.string().trim().min(1)
 }
 
-export type Content = z.infer<ReturnType<typeof content>>
+export type $Content = z.infer<ReturnType<typeof $content>>
 
-export function creationDate() {
-    return z.string().min(1)
-}
-
-export type CreationDate = z.infer<ReturnType<typeof creationDate>>
-
-export function editingDate() {
-    return z.string().min(1)
-}
-
-export type EditingDate = z.infer<ReturnType<typeof editingDate>>
-
-export function post() {
+export function $post() {
     return z.object({
-        id: common.id(),
-        title: title(),
-        content: content(),
-        author: z
-            .object({
-                id: common.id(),
-                username: user.username()
-            })
-            .nullable(),
-        creationDate: creationDate(),
-        editingDate: editingDate().nullable()
+        id: common.$id(),
+        title: $title(),
+        content: $content(),
+        author: user.$simpleUser().nullable(),
+        creationDate: common.$date(),
+        editingDate: common.$date().nullable()
     })
 }
 
-export type Post = z.infer<ReturnType<typeof post>>
+export type $Post = z.infer<ReturnType<typeof $post>>

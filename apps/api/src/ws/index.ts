@@ -14,14 +14,14 @@ function getUserFromSocket(socket: any) {
     return loggedIn ? (user as User) : null
 }
 
-export function initSockets(app: FastifyInstance) {
+export function initWebSockets(app: FastifyInstance) {
     app.io.use(
         authenticate(
             { secret: env.JWT_SECRET, succeedWithoutToken: true },
             (payload: UserPayload, done) => {
                 if (Object.keys(payload).length) {
                     app.prisma.user
-                        .findFirst({
+                        .findUnique({
                             where: { id: payload.id },
                             include: { role: true }
                         })
@@ -41,7 +41,7 @@ export function initSockets(app: FastifyInstance) {
 
     app.io.on("connection", socket => {
         const user = getUserFromSocket(socket)
-        initModules(socket, user)
+        initModules(app, socket, user)
 
         socketTimeouts[socket.id] = setTimeout(
             () => {

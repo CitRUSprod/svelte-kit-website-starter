@@ -76,25 +76,25 @@ export async function login(
     userPayload: UserPayload,
     isOAuthHandler: false,
     isRegistrationHandler: true
-): Promise<ReplyData<schemasRoutes.auth.RegisterResponse>>
+): Promise<ReplyData<schemasRoutes.auth.$RegisterResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
     isOAuthHandler: true,
     isRegistrationHandler: true
-): Promise<ReplyData<schemasRoutes.auth.OAuthRegisterResponse>>
+): Promise<ReplyData<schemasRoutes.auth.$OAuthRegisterResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
     isOAuthHandler: false,
     isRegistrationHandler: false
-): Promise<ReplyData<schemasRoutes.auth.LoginResponse>>
+): Promise<ReplyData<schemasRoutes.auth.$LoginResponse>>
 export async function login(
     app: FastifyInstance,
     userPayload: UserPayload,
     isOAuthHandler: true,
     isRegistrationHandler: false
-): Promise<ReplyData<schemasRoutes.auth.OAuthLoginCallbackResponse>>
+): Promise<ReplyData<schemasRoutes.auth.$OAuthLoginCallbackResponse>>
 
 export async function login(
     app: FastifyInstance,
@@ -102,7 +102,14 @@ export async function login(
     isOAuthHandler: boolean,
     isRegistrationHandler: boolean
 ): Promise<
-    ReplyData<schemasRoutes.auth.RegisterResponse | schemasRoutes.auth.OAuthLoginCallbackResponse>
+    ReplyData<
+        | schemasRoutes.auth.$RegisterResponse
+        | schemasRoutes.auth.$OAuthLoginCallbackResponse
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+        | schemasRoutes.auth.$LoginResponse
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+        | schemasRoutes.auth.$OAuthRegisterResponse
+    >
 > {
     await deleteExpiredRefreshTokens(app)
 

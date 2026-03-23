@@ -4,15 +4,15 @@ import * as schemasRoutes from "@repo/schemas/routes"
 import type { RequestData } from "$lib/types"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-export function getRoles(data: RequestData<schemasRoutes.roles.GetRolesRequest> = {}) {
-    return axios.get<schemasRoutes.roles.GetRolesResponse>(
+export function getRoles(data: RequestData<schemasRoutes.roles.$GetRolesRequest> = {}) {
+    return axios.get<schemasRoutes.roles.$GetRolesResponse>(
         createApiUrl(constantsRoutes.roles.getRoles),
         createAxiosConfig(data.headers)
     )
 }
 
-export function createRole(data: RequestData<schemasRoutes.roles.CreateRoleRequest>) {
-    return axios.post<schemasRoutes.roles.CreateRoleResponse>(
+export function createRole(data: RequestData<schemasRoutes.roles.$CreateRoleRequest>) {
+    return axios.post<schemasRoutes.roles.$CreateRoleResponse>(
         createApiUrl(constantsRoutes.roles.createRole),
         {
             name: data.name,
@@ -22,8 +22,8 @@ export function createRole(data: RequestData<schemasRoutes.roles.CreateRoleReque
     )
 }
 
-export function updateRole(data: RequestData<schemasRoutes.roles.UpdateRoleRequest>) {
-    return axios.patch<schemasRoutes.roles.UpdateRoleResponse>(
+export function updateRole(data: RequestData<schemasRoutes.roles.$UpdateRoleRequest>) {
+    return axios.patch<schemasRoutes.roles.$UpdateRoleResponse>(
         createApiUrl(constantsRoutes.roles.updateRole, data.id),
         {
             name: data.name,
@@ -33,8 +33,8 @@ export function updateRole(data: RequestData<schemasRoutes.roles.UpdateRoleReque
     )
 }
 
-export function deleteRole(data: RequestData<schemasRoutes.roles.DeleteRoleRequest>) {
-    return axios.delete<schemasRoutes.roles.DeleteRoleResponse>(
+export function deleteRole(data: RequestData<schemasRoutes.roles.$DeleteRoleRequest>) {
+    return axios.delete<schemasRoutes.roles.$DeleteRoleResponse>(
         createApiUrl(constantsRoutes.roles.deleteRole, data.id),
         createAxiosConfig(data.headers)
     )

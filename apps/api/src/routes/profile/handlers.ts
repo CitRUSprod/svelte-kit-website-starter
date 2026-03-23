@@ -1,4 +1,3 @@
-import type { MultipartFile } from "@fastify/multipart"
 import * as schemasRoutes from "@repo/schemas/routes"
 import argon2 from "argon2"
 import { BadRequestError, InternalServerError } from "http-errors-enhanced"
@@ -9,18 +8,26 @@ import { getLogoutCookies } from "../auth/utils"
 import * as utils from "./utils"
 
 import { env, enums } from "$/constants"
-import type { RouteHandler } from "$/types"
-import { isImgFile, sendEmail, models } from "$/utils"
+import { Prisma } from "$/prisma/generated/client"
+import { defineRouteHandler, sendEmail, models } from "$/utils"
 
-export const getUser = (async (app, req) => {
-    if (!req.userData) {
-        throw new InternalServerError(req.ll.unexpectedError())
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+export const getUser = defineRouteHandler<void, schemasRoutes.profile.$GetUserResponse>(
+    async (app, req) => {
+        if (!req.userData) {
+            throw new InternalServerError(req.ll.unexpectedError())
+        }
+
+        return {
+            payload: models.user.dto(req.userData)
+        }
     }
+)
 
-    return { payload: models.user.dto(req.userData) }
-}) satisfies RouteHandler<void, schemasRoutes.profile.GetUserResponse>
-
-export const updateUser = (async (app, req) => {
+export const updateUser = defineRouteHandler<
+    { Body: schemasRoutes.profile.$UpdateUserBody },
+    schemasRoutes.profile.$UpdateUserResponse
+>(async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -35,80 +42,66 @@ export const updateUser = (async (app, req) => {
         }
     }
 
+    const data: Prisma.UserUpdateInput = {}
+
+    if (req.body.username) {
+        data.username = req.body.username
+    }
+
+    if (req.body.imgTempId !== undefined) {
+        if (req.body.imgTempId === null) {
+            data.avatar = null
+        } else {
+            const temporaryImage = await models.temporaryImage.get(app, req, req.body.imgTempId)
+
+            data.avatar = temporaryImage.image
+
+            await app.prisma.temporaryImage.delete({
+                where: { id: req.body.imgTempId }
+            })
+
+            await app.minio.moveFile(
+                enums.TemporaryStoragePath.Image,
+                temporaryImage.image,
+                enums.ImgPath.Avatars
+            )
+        }
+    }
+
     const updatedUser = await app.prisma.user.update({
         where: { id: req.userData.id },
-        data: {
-            username: req.body.username
-        },
-        include: { role: true, ban: { include: { author: true } } }
+        data,
+        include: models.user.include
     })
 
-    return { payload: models.user.dto(updatedUser) }
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.profile.UpdateUserBody },
-    schemasRoutes.profile.UpdateUserResponse
->
-
-export const deleteUser = (async (app, req) => {
-    if (!req.userData) {
-        throw new InternalServerError(req.ll.unexpectedError())
+    return {
+        payload: models.user.dto(updatedUser)
     }
+})
 
-    await utils.deleteUser(app, req.userData)
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+export const deleteUser = defineRouteHandler<void, schemasRoutes.profile.$DeleteUserResponse>(
+    async (app, req) => {
+        if (!req.userData) {
+            throw new InternalServerError(req.ll.unexpectedError())
+        }
 
-    return { cookies: getLogoutCookies() }
-}) satisfies RouteHandler<void, schemasRoutes.profile.DeleteUserResponse>
+        if (req.userData.id === 1) {
+            throw new BadRequestError(req.ll.cannotDeleteSystemUser())
+        }
 
-export const uploadAvatar = (async (app, req) => {
-    if (!req.userData) {
-        throw new InternalServerError(req.ll.unexpectedError())
+        await utils.deleteUser(app, req.userData)
+
+        return {
+            cookies: getLogoutCookies()
+        }
     }
+)
 
-    const img = req.body.img as MultipartFile
-
-    if (!isImgFile(img)) {
-        throw new BadRequestError(req.ll.fileIsNotImage())
-    }
-
-    const avatar = await app.minio.writeFile(enums.ImgPath.Avatars, img)
-
-    if (req.userData.avatar) {
-        await app.minio.removeFile(enums.ImgPath.Avatars, req.userData.avatar)
-    }
-
-    await app.prisma.user.update({
-        where: { id: req.userData.id },
-        data: { avatar }
-    })
-
-    return {}
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.profile.UploadAvatarBody },
-    schemasRoutes.profile.UploadAvatarResponse
->
-
-export const deleteAvatar = (async (app, req) => {
-    if (!req.userData) {
-        throw new InternalServerError(req.ll.unexpectedError())
-    }
-
-    if (!req.userData.avatar) {
-        throw new BadRequestError(req.ll.youDoNotHaveAvatar())
-    }
-
-    if (req.userData.avatar) {
-        await app.minio.removeFile(enums.ImgPath.Avatars, req.userData.avatar)
-    }
-
-    await app.prisma.user.update({
-        where: { id: req.userData.id },
-        data: { avatar: null }
-    })
-
-    return {}
-}) satisfies RouteHandler<void, schemasRoutes.profile.DeleteAvatarResponse>
-
-export const sendEmailUpdateEmailToOld = (async (app, req) => {
+export const sendEmailUpdateEmailToOld = defineRouteHandler<
+    { Body: schemasRoutes.profile.$SendEmailUpdateEmailToOldBody },
+    schemasRoutes.profile.$SendEmailUpdateEmailToOldResponse
+>(async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -126,7 +119,7 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     const tokenFrom = createUuid()
     const tokenTo = createUuid()
 
-    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findUnique({
         where: { userId: req.userData.id }
     })
 
@@ -158,15 +151,15 @@ export const sendEmailUpdateEmailToOld = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.profile.SendEmailUpdateEmailToOldBody },
-    schemasRoutes.profile.SendEmailUpdateEmailToOldResponse
->
+})
 
-export const sendEmailUpdateEmailToNew = (async (app, req) => {
+export const sendEmailUpdateEmailToNew = defineRouteHandler<
+    { Params: schemasRoutes.profile.$SendEmailUpdateEmailToNewParams },
+    schemasRoutes.profile.$SendEmailUpdateEmailToNewResponse
+>(async (app, req) => {
     await utils.deleteExpiredEmailUpdateTokens(app)
 
-    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findUnique({
         where: { tokenFrom: req.params.emailUpdateToken }
     })
 
@@ -174,7 +167,7 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
         throw new BadRequestError(req.ll.emailUpdateTokenExpired())
     }
 
-    const user = await app.prisma.user.findFirst({
+    const user = await app.prisma.user.findUnique({
         where: { id: emailUpdateToken.userId }
     })
 
@@ -195,15 +188,15 @@ export const sendEmailUpdateEmailToNew = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.profile.SendEmailUpdateEmailToNewParams },
-    schemasRoutes.profile.SendEmailUpdateEmailToNewResponse
->
+})
 
-export const updateEmail = (async (app, req) => {
+export const updateEmail = defineRouteHandler<
+    { Params: schemasRoutes.profile.$UpdateEmailParams },
+    schemasRoutes.profile.$UpdateEmailResponse
+>(async (app, req) => {
     await utils.deleteExpiredEmailUpdateTokens(app)
 
-    const emailUpdateToken = await app.prisma.emailUpdateToken.findFirst({
+    const emailUpdateToken = await app.prisma.emailUpdateToken.findUnique({
         where: { tokenTo: req.params.emailUpdateToken }
     })
 
@@ -221,12 +214,12 @@ export const updateEmail = (async (app, req) => {
     await app.prisma.emailUpdateToken.delete({ where: { id: emailUpdateToken.id } })
 
     return {}
-}) satisfies RouteHandler<
-    { Params: schemasRoutes.profile.UpdateEmailParams },
-    schemasRoutes.profile.UpdateEmailResponse
->
+})
 
-export const changePassword = (async (app, req) => {
+export const changePassword = defineRouteHandler<
+    { Body: schemasRoutes.profile.$ChangePasswordBody },
+    schemasRoutes.profile.$ChangePasswordResponse
+>(async (app, req) => {
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -252,13 +245,13 @@ export const changePassword = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.profile.ChangePasswordBody },
-    schemasRoutes.profile.ChangePasswordResponse
->
+})
 
-export const sendPasswordResetEmail = (async (app, req) => {
-    const user = await app.prisma.user.findFirst({ where: { email: req.body.email } })
+export const sendPasswordResetEmail = defineRouteHandler<
+    { Body: schemasRoutes.profile.$SendPasswordResetEmailBody },
+    schemasRoutes.profile.$SendPasswordResetEmailResponse
+>(async (app, req) => {
+    const user = await app.prisma.user.findUnique({ where: { email: req.body.email } })
 
     if (!user) {
         throw new BadRequestError(req.ll.userWithEmailNotFound())
@@ -266,7 +259,7 @@ export const sendPasswordResetEmail = (async (app, req) => {
 
     const token = createUuid()
 
-    const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
+    const passwordResetToken = await app.prisma.passwordResetToken.findUnique({
         where: { userId: user.id }
     })
 
@@ -292,15 +285,18 @@ export const sendPasswordResetEmail = (async (app, req) => {
     })
 
     return {}
-}) satisfies RouteHandler<
-    { Body: schemasRoutes.profile.SendPasswordResetEmailBody },
-    schemasRoutes.profile.SendPasswordResetEmailResponse
->
+})
 
-export const resetPassword = (async (app, req) => {
+export const resetPassword = defineRouteHandler<
+    {
+        Params: schemasRoutes.profile.$ResetPasswordParams
+        Body: schemasRoutes.profile.$ResetPasswordBody
+    },
+    schemasRoutes.profile.$ResetPasswordResponse
+>(async (app, req) => {
     await utils.deleteExpiredPasswordResetTokens(app)
 
-    const passwordResetToken = await app.prisma.passwordResetToken.findFirst({
+    const passwordResetToken = await app.prisma.passwordResetToken.findUnique({
         where: { token: req.params.passwordResetToken }
     })
 
@@ -317,10 +313,4 @@ export const resetPassword = (async (app, req) => {
     await app.prisma.passwordResetToken.delete({ where: { id: passwordResetToken.id } })
 
     return {}
-}) satisfies RouteHandler<
-    {
-        Params: schemasRoutes.profile.ResetPasswordParams
-        Body: schemasRoutes.profile.ResetPasswordBody
-    },
-    schemasRoutes.profile.ResetPasswordResponse
->
+})

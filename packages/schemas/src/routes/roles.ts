@@ -5,105 +5,99 @@ import * as models from "$/models"
 
 // GetRoles
 
-export function getRolesRequest() {
+export function $getRolesRequest() {
     return z.void()
 }
 
-export type GetRolesRequest = z.infer<ReturnType<typeof getRolesRequest>>
+export type $GetRolesRequest = z.infer<ReturnType<typeof $getRolesRequest>>
 
-export function getRolesResponse() {
+export function $getRolesResponse() {
     return z.object({
-        items: z.array(models.role.role())
+        items: z.array(models.role.$role())
     })
 }
 
-export type GetRolesResponse = z.infer<ReturnType<typeof getRolesResponse>>
+export type $GetRolesResponse = z.infer<ReturnType<typeof $getRolesResponse>>
 
 // CreateRole
 
-export function createRoleBody() {
+export function $createRoleBody() {
     return z.object({
-        name: models.role.name(),
-        permissions: z.array(models.role.permission())
+        name: models.role.$name(),
+        permissions: z.array(models.role.$permission())
     })
 }
 
-export type CreateRoleBody = z.infer<ReturnType<typeof createRoleBody>>
+export type $CreateRoleBody = z.infer<ReturnType<typeof $createRoleBody>>
 
-export function createRoleRequest() {
+export function $createRoleRequest() {
     return z.object({
-        ...createRoleBody().shape
+        ...$createRoleBody().shape
     })
 }
 
-export type CreateRoleRequest = z.infer<ReturnType<typeof createRoleRequest>>
+export type $CreateRoleRequest = z.infer<ReturnType<typeof $createRoleRequest>>
 
-export function createRoleResponse() {
-    return z.object({
-        ...models.role.role().shape
-    })
+export function $createRoleResponse() {
+    return models.role.$role()
 }
 
-export type CreateRoleResponse = z.infer<ReturnType<typeof createRoleResponse>>
+export type $CreateRoleResponse = z.infer<ReturnType<typeof $createRoleResponse>>
 
 // UpdateRole
 
-export function updateRoleParams() {
+export function $updateRoleParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type UpdateRoleParams = z.infer<ReturnType<typeof updateRoleParams>>
+export type $UpdateRoleParams = z.infer<ReturnType<typeof $updateRoleParams>>
 
-export function updateRoleBody() {
+export function $updateRoleBody() {
     return z.object({
-        name: models.role.name().optional(),
-        permissions: z.array(models.role.permission()).optional()
+        name: models.role.$name().optional(),
+        permissions: z.array(models.role.$permission()).optional()
     })
 }
 
-export type UpdateRoleBody = z.infer<ReturnType<typeof updateRoleBody>>
+export type $UpdateRoleBody = z.infer<ReturnType<typeof $updateRoleBody>>
 
-export function updateRoleRequest() {
+export function $updateRoleRequest() {
     return z.object({
-        ...updateRoleParams().shape,
-        ...updateRoleBody().shape
+        ...$updateRoleParams().shape,
+        ...$updateRoleBody().shape
     })
 }
 
-export type UpdateRoleRequest = z.infer<ReturnType<typeof updateRoleRequest>>
+export type $UpdateRoleRequest = z.infer<ReturnType<typeof $updateRoleRequest>>
 
-export function updateRoleResponse() {
-    return z.object({
-        ...models.role.role().shape
-    })
+export function $updateRoleResponse() {
+    return models.role.$role()
 }
 
-export type UpdateRoleResponse = z.infer<ReturnType<typeof updateRoleResponse>>
+export type $UpdateRoleResponse = z.infer<ReturnType<typeof $updateRoleResponse>>
 
 // DeleteRole
 
-export function deleteRoleParams() {
+export function $deleteRoleParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type DeleteRoleParams = z.infer<ReturnType<typeof deleteRoleParams>>
+export type $DeleteRoleParams = z.infer<ReturnType<typeof $deleteRoleParams>>
 
-export function deleteRoleRequest() {
+export function $deleteRoleRequest() {
     return z.object({
-        ...deleteRoleParams().shape
+        ...$deleteRoleParams().shape
     })
 }
 
-export type DeleteRoleRequest = z.infer<ReturnType<typeof deleteRoleRequest>>
+export type $DeleteRoleRequest = z.infer<ReturnType<typeof $deleteRoleRequest>>
 
-export function deleteRoleResponse() {
-    return z.object({
-        ...models.role.role().shape
-    })
+export function $deleteRoleResponse() {
+    return models.role.$role()
 }
 
-export type DeleteRoleResponse = z.infer<ReturnType<typeof deleteRoleResponse>>
+export type $DeleteRoleResponse = z.infer<ReturnType<typeof $deleteRoleResponse>>

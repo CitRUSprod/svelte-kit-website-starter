@@ -4,8 +4,8 @@ import * as schemasRoutes from "@repo/schemas/routes"
 import type { RequestData } from "$lib/types"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-export function getPosts(data: RequestData<schemasRoutes.posts.GetPostsRequest> = {}) {
-    return axios.get<schemasRoutes.posts.GetPostsResponse>(
+export function getPosts(data: RequestData<schemasRoutes.posts.$GetPostsRequest> = {}) {
+    return axios.get<schemasRoutes.posts.$GetPostsResponse>(
         createApiUrl(constantsRoutes.posts.getPosts),
         {
             params: {
@@ -20,15 +20,15 @@ export function getPosts(data: RequestData<schemasRoutes.posts.GetPostsRequest> 
     )
 }
 
-export function getPost(data: RequestData<schemasRoutes.posts.GetPostRequest>) {
-    return axios.get<schemasRoutes.posts.GetPostResponse>(
+export function getPost(data: RequestData<schemasRoutes.posts.$GetPostRequest>) {
+    return axios.get<schemasRoutes.posts.$GetPostResponse>(
         createApiUrl(constantsRoutes.posts.getPost, data.id),
         createAxiosConfig(data.headers)
     )
 }
 
-export function createPost(data: RequestData<schemasRoutes.posts.CreatePostRequest>) {
-    return axios.post<schemasRoutes.posts.CreatePostResponse>(
+export function createPost(data: RequestData<schemasRoutes.posts.$CreatePostRequest>) {
+    return axios.post<schemasRoutes.posts.$CreatePostResponse>(
         createApiUrl(constantsRoutes.posts.createPost),
         {
             title: data.title,
@@ -38,8 +38,8 @@ export function createPost(data: RequestData<schemasRoutes.posts.CreatePostReque
     )
 }
 
-export function updatePost(data: RequestData<schemasRoutes.posts.UpdatePostRequest>) {
-    return axios.patch<schemasRoutes.posts.UpdatePostResponse>(
+export function updatePost(data: RequestData<schemasRoutes.posts.$UpdatePostRequest>) {
+    return axios.patch<schemasRoutes.posts.$UpdatePostResponse>(
         createApiUrl(constantsRoutes.posts.updatePost, data.id),
         {
             title: data.title,
@@ -49,8 +49,8 @@ export function updatePost(data: RequestData<schemasRoutes.posts.UpdatePostReque
     )
 }
 
-export function deletePost(data: RequestData<schemasRoutes.posts.DeletePostRequest>) {
-    return axios.delete<schemasRoutes.posts.DeletePostResponse>(
+export function deletePost(data: RequestData<schemasRoutes.posts.$DeletePostRequest>) {
+    return axios.delete<schemasRoutes.posts.$DeletePostResponse>(
         createApiUrl(constantsRoutes.posts.deletePost, data.id),
         createAxiosConfig(data.headers)
     )

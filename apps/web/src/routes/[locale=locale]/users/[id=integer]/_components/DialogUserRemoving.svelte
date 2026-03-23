@@ -10,7 +10,7 @@
     import { socket } from "$lib/utils"
 
     interface Props {
-        user: schemasModels.user.User
+        user: schemasModels.user.$User
     }
 
     const { user }: Props = $props()

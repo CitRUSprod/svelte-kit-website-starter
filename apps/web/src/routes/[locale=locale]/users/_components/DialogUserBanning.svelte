@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import { ll } from "$i18n/helpers"
     import * as api from "$lib/api"
@@ -7,6 +7,8 @@
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
+
+    type User = schemasRoutes.users.$GetUsersResponse["items"][number]
 
     let dialog = $state<Dialog>()
 
@@ -24,7 +26,7 @@
 
     const completedForm = $derived(vldResultReason.valid)
 
-    export function open(user: schemasModels.user.User) {
+    export function open(user: User) {
         userId = user.id
         username = user.username
         reason = ""

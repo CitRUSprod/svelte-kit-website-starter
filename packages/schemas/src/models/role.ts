@@ -1,42 +1,31 @@
 import * as constantsEnums from "@repo/constants/enums"
 import { z } from "@repo/utils"
-import type { IterableElement } from "type-fest"
 
 import * as common from "$/common"
 
-export function name() {
-    const locales = Object.values(common.locale().options)
-
-    const obj: Record<string, z.ZodString> = {}
-
-    for (const locale of locales) {
-        obj[locale] = z.string().min(1)
-    }
-
-    return z.object(obj as Record<IterableElement<typeof locales>, z.ZodString>)
+export function $name() {
+    return common.$localization(z.string().min(1))
 }
 
-export type Name = z.infer<ReturnType<typeof name>>
+export type $Name = z.infer<ReturnType<typeof $name>>
 
-export function permission() {
+export function $permission() {
     return z.enum(constantsEnums.Permission)
 }
 
-export type Permission = z.infer<ReturnType<typeof permission>>
+export type $Permission = z.infer<ReturnType<typeof $permission>>
 
-export function protected$() {
+export function $protected() {
     return z.boolean()
 }
 
-export type Protected = z.infer<ReturnType<typeof protected$>>
+export type $Protected = z.infer<ReturnType<typeof $protected>>
 
-export function role() {
+export function $role() {
     return z.object({
-        id: common.id(),
-        name: name(),
-        permissions: z.array(permission()),
-        protected: protected$()
+        id: common.$id(),
+        name: $name(),
+        permissions: z.array($permission()),
+        protected: $protected()
     })
 }
-
-export type Role = z.infer<ReturnType<typeof role>>

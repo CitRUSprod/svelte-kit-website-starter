@@ -42,10 +42,14 @@
     let uploadAvatarImg = $state<File | null>(null)
 
     const qUploadAvatar = useQuery({
-        fn() {
+        async fn() {
             if (uploadAvatarImg) {
-                return api.profile.uploadAvatar({
+                const res = await api.temporaryStorage.uploadImage({
                     img: uploadAvatarImg
+                })
+
+                return api.profile.updateUser({
+                    imgTempId: res.data.id
                 })
             } else {
                 throw new Error("File is not selected")
@@ -186,7 +190,7 @@
                     {$ll.linkEmail()}
                 </Button>
             {/if}
-            {#if $userData.linkedAccounts?.email}
+            {#if $userData.linkedAccounts.email}
                 <Button
                     loading={qEmailUnlink.loading}
                     variant="error"
@@ -204,7 +208,7 @@
             </Button>
         </div>
         <div>
-            {#if !$userData.linkedAccounts?.twitch}
+            {#if !$userData.linkedAccounts.twitch}
                 <OAuthProviderButton linkAccount provider={constantsEnums.OAuthProvider.Twitch} />
             {/if}
         </div>

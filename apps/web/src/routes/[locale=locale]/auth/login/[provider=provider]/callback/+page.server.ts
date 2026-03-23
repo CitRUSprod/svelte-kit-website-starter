@@ -13,7 +13,7 @@ interface CallbackReturn {
 export async function load(e): Promise<CallbackReturn> {
     const oAuthProviderFromCookie = e.cookies.get("link-account")
 
-    if (e.locals.userData && !oAuthProviderFromCookie) {
+    if (e.locals.user && !oAuthProviderFromCookie) {
         redirect(302, `/${e.params.locale as string}`)
     }
 
@@ -30,7 +30,7 @@ export async function load(e): Promise<CallbackReturn> {
         redirect(302, `/${e.params.locale as string}`)
     }
 
-    if (e.locals.userData) {
+    if (e.locals.user) {
         e.cookies.delete("link-account", { path: "/" })
 
         try {

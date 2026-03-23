@@ -8,7 +8,7 @@
     import { toasts } from "$lib/stores"
 
     interface Props {
-        user: schemasModels.user.User
+        user: schemasModels.user.$User
     }
 
     let { user = $bindable() }: Props = $props()
@@ -25,7 +25,9 @@
 
     const qDeleteAvatar = useQuery({
         fn() {
-            return api.profile.deleteAvatar()
+            return api.profile.updateUser({
+                imgTempId: null
+            })
         },
         onSuccess() {
             user.avatar = null

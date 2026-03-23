@@ -4,7 +4,7 @@ import * as api from "$lib/api"
 import { setCookies } from "$lib/utils"
 
 export async function load(e) {
-    if (!e.locals.userData) {
+    if (!e.locals.user) {
         redirect(302, `/${e.params.locale as string}`)
     }
 

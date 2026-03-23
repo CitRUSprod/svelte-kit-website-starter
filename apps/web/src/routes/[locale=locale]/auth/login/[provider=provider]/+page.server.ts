@@ -8,7 +8,7 @@ import { setCookies } from "$lib/utils"
 export async function load(e) {
     const oAuthProviderFromCookie = e.cookies.get("link-account")
 
-    if (e.locals.userData && !oAuthProviderFromCookie) {
+    if (e.locals.user && !oAuthProviderFromCookie) {
         redirect(302, `/${e.params.locale as string}`)
     }
 

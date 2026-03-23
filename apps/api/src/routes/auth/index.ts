@@ -6,81 +6,81 @@ import { UnauthorizedError } from "http-errors-enhanced"
 import * as handlers from "./handlers"
 
 export const authRoutes: FastifyPluginCallback = (app, options, done) => {
-    app.post<{ Body: schemasRoutes.auth.RegisterBody }>(constantsRoutes.auth.register, {
+    app.post<{ Body: schemasRoutes.auth.$RegisterBody }>(constantsRoutes.auth.register, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            body: schemasRoutes.auth.registerBody()
+            body: schemasRoutes.auth.$registerBody()
         },
         async handler(req, reply) {
-            const data = await handlers.register(app, req)
+            const data = await handlers.register(app, req, {})
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.CompleteRegistrationParams
+        Params: schemasRoutes.auth.$CompleteRegistrationParams
     }>(constantsRoutes.auth.completeRegistration, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.completeRegistrationParams()
+            params: schemasRoutes.auth.$completeRegistrationParams()
         },
         async handler(req, reply) {
-            const data = await handlers.completeRegistration(app, req)
+            const data = await handlers.completeRegistration(app, req, {})
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.OAuthRegisterParams
-        Body: schemasRoutes.auth.OAuthRegisterBody
+        Params: schemasRoutes.auth.$OAuthRegisterParams
+        Body: schemasRoutes.auth.$OAuthRegisterBody
     }>(constantsRoutes.auth.oAuthRegister, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.oAuthRegisterParams(),
-            body: schemasRoutes.auth.oAuthRegisterBody()
+            params: schemasRoutes.auth.$oAuthRegisterParams(),
+            body: schemasRoutes.auth.$oAuthRegisterBody()
         },
         async handler(req, reply) {
-            const data = await handlers.oAuthRegister(app, req)
+            const data = await handlers.oAuthRegister(app, req, {})
             await reply.sendData(data)
         }
     })
 
-    app.post<{ Body: schemasRoutes.auth.LoginBody }>(constantsRoutes.auth.login, {
+    app.post<{ Body: schemasRoutes.auth.$LoginBody }>(constantsRoutes.auth.login, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            body: schemasRoutes.auth.loginBody()
+            body: schemasRoutes.auth.$loginBody()
         },
         async handler(req, reply) {
-            const data = await handlers.login(app, req)
+            const data = await handlers.login(app, req, {})
             await reply.sendData(data)
         }
     })
 
-    app.post<{ Params: schemasRoutes.auth.OAuthLoginParams }>(constantsRoutes.auth.oAuthLogin, {
+    app.post<{ Params: schemasRoutes.auth.$OAuthLoginParams }>(constantsRoutes.auth.oAuthLogin, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.oAuthLoginParams()
+            params: schemasRoutes.auth.$oAuthLoginParams()
         },
         async handler(req, reply) {
-            const data = await handlers.oAuthLogin(app, req)
+            const data = await handlers.oAuthLogin(app, req, {})
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.OAuthLoginCallbackParams
-        Body: schemasRoutes.auth.OAuthLoginCallbackBody
+        Params: schemasRoutes.auth.$OAuthLoginCallbackParams
+        Body: schemasRoutes.auth.$OAuthLoginCallbackBody
     }>(constantsRoutes.auth.oAuthLoginCallback, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.oAuthLoginCallbackParams(),
-            body: schemasRoutes.auth.oAuthLoginCallbackBody()
+            params: schemasRoutes.auth.$oAuthLoginCallbackParams(),
+            body: schemasRoutes.auth.$oAuthLoginCallbackBody()
         },
         async handler(req, reply) {
-            let cookies: schemasRoutes.auth.OAuthLoginCallbackCookies
+            let cookies: schemasRoutes.auth.$OAuthLoginCallbackCookies
 
             try {
-                cookies = schemasRoutes.auth.oAuthLoginCallbackCookies().parse(req.cookies)
+                cookies = schemasRoutes.auth.$oAuthLoginCallbackCookies().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }
@@ -91,29 +91,29 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
     })
 
     app.post<{
-        Body: schemasRoutes.auth.LinkBody
+        Body: schemasRoutes.auth.$LinkBody
     }>(constantsRoutes.auth.link, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            body: schemasRoutes.auth.linkBody()
+            body: schemasRoutes.auth.$linkBody()
         },
         preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            const data = await handlers.link(app, req)
+            const data = await handlers.link(app, req, {})
 
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.CompleteLinkingParams
+        Params: schemasRoutes.auth.$CompleteLinkingParams
     }>(constantsRoutes.auth.completeLinking, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.completeLinkingParams()
+            params: schemasRoutes.auth.$completeLinkingParams()
         },
         async handler(req, reply) {
-            const data = await handlers.completeLinking(app, req)
+            const data = await handlers.completeLinking(app, req, {})
 
             await reply.sendData(data)
         }
@@ -125,41 +125,41 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            const data = await handlers.unlink(app, req)
+            const data = await handlers.unlink(app, req, {})
 
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.CompleteUnlinkingParams
+        Params: schemasRoutes.auth.$CompleteUnlinkingParams
     }>(constantsRoutes.auth.completeUnlinking, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.completeUnlinkingParams()
+            params: schemasRoutes.auth.$completeUnlinkingParams()
         },
         async handler(req, reply) {
-            const data = await handlers.completeUnlinking(app, req)
+            const data = await handlers.completeUnlinking(app, req, {})
 
             await reply.sendData(data)
         }
     })
 
     app.post<{
-        Params: schemasRoutes.auth.OAuthLinkCallbackParams
-        Body: schemasRoutes.auth.OAuthLinkCallbackBody
+        Params: schemasRoutes.auth.$OAuthLinkCallbackParams
+        Body: schemasRoutes.auth.$OAuthLinkCallbackBody
     }>(constantsRoutes.auth.oAuthLinkCallback, {
         schema: {
             tags: [constantsRoutes.auth.base],
-            params: schemasRoutes.auth.oAuthLinkCallbackParams(),
-            body: schemasRoutes.auth.oAuthLinkCallbackBody()
+            params: schemasRoutes.auth.$oAuthLinkCallbackParams(),
+            body: schemasRoutes.auth.$oAuthLinkCallbackBody()
         },
         preHandler: app.createPreHandler([app.verifyAuth, app.verifyNotBanned]),
         async handler(req, reply) {
-            let cookies: schemasRoutes.auth.OAuthLinkCallbackCookies
+            let cookies: schemasRoutes.auth.$OAuthLinkCallbackCookies
 
             try {
-                cookies = schemasRoutes.auth.oAuthLinkCallbackCookies().parse(req.cookies)
+                cookies = schemasRoutes.auth.$oAuthLinkCallbackCookies().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }
@@ -170,12 +170,12 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
         }
     })
 
-    app.post<{ Params: schemasRoutes.auth.OAuthUnlinkParams }>(constantsRoutes.auth.oAuthUnlink, {
+    app.post<{ Params: schemasRoutes.auth.$OAuthUnlinkParams }>(constantsRoutes.auth.oAuthUnlink, {
         schema: {
             tags: [constantsRoutes.auth.base]
         },
         async handler(req, reply) {
-            const data = await handlers.oAuthUnlink(app, req)
+            const data = await handlers.oAuthUnlink(app, req, {})
             await reply.sendData(data)
         }
     })
@@ -185,10 +185,10 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.auth.base]
         },
         async handler(req, reply) {
-            let cookies: schemasRoutes.auth.LogoutCookies
+            let cookies: schemasRoutes.auth.$LogoutCookies
 
             try {
-                cookies = schemasRoutes.auth.logoutCookies().parse(req.cookies)
+                cookies = schemasRoutes.auth.$logoutCookies().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }
@@ -203,10 +203,10 @@ export const authRoutes: FastifyPluginCallback = (app, options, done) => {
             tags: [constantsRoutes.auth.base]
         },
         async handler(req, reply) {
-            let cookies: schemasRoutes.auth.RefreshTokensCookies
+            let cookies: schemasRoutes.auth.$RefreshTokensCookies
 
             try {
-                cookies = schemasRoutes.auth.refreshTokensCookies().parse(req.cookies)
+                cookies = schemasRoutes.auth.$refreshTokensCookies().parse(req.cookies)
             } catch (err: any) {
                 throw new UnauthorizedError(err.message)
             }

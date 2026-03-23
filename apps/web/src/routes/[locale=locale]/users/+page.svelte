@@ -14,7 +14,7 @@
 
     const { data } = $props()
 
-    const paramSchemas = schemasRoutes.users.getUsersQuery().shape
+    const paramSchemas = schemasRoutes.users.$getUsersQuery().shape
 
     const queryParams = useQueryParams({
         page: paramSchemas.page,

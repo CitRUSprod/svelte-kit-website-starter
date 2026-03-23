@@ -18,7 +18,7 @@ import { env } from "$/constants"
 import { decorators } from "$/decorators"
 import { hooks } from "$/hooks"
 import { routes } from "$/routes"
-import { initSockets } from "$/sockets"
+import { initWebSockets } from "$/ws"
 
 const port = 6702
 
@@ -47,7 +47,12 @@ if (env.ENABLE_SWAGGER) {
     }).register(swaggerUi, { routePrefix: "/swagger" })
 }
 
-app.register(multipart, { attachFieldsToBody: true })
+app.register(multipart, {
+    attachFieldsToBody: true,
+    limits: {
+        fileSize: 10 * 1024 * 1024
+    }
+})
     .register(jwt, { secret: env.JWT_SECRET, cookie: { cookieName: "accessToken", signed: false } })
     .register(cookie)
     .register(auth)
@@ -62,6 +67,6 @@ await app.listen({
     port
 })
 
-initSockets(app)
+initWebSockets(app)
 
 console.log(`Running on http://localhost:${port}`)

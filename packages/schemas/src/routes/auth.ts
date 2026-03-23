@@ -5,377 +5,377 @@ import * as models from "$/models"
 
 // Register
 
-export function registerBody() {
+export function $registerBody() {
     return z.object({
-        email: models.user.email(),
-        username: models.user.username(),
-        password: models.user.password()
+        email: common.$email(),
+        username: models.user.$username(),
+        password: models.user.$password()
     })
 }
 
-export type RegisterBody = z.infer<ReturnType<typeof registerBody>>
+export type $RegisterBody = z.infer<ReturnType<typeof $registerBody>>
 
-export function registerRequest() {
+export function $registerRequest() {
     return z.object({
-        ...registerBody().shape
+        ...$registerBody().shape
     })
 }
 
-export type RegisterRequest = z.infer<ReturnType<typeof registerRequest>>
+export type $RegisterRequest = z.infer<ReturnType<typeof $registerRequest>>
 
-export function registerResponse() {
+export function $registerResponse() {
     return z.void()
 }
 
-export type RegisterResponse = z.infer<ReturnType<typeof registerResponse>>
+export type $RegisterResponse = z.infer<ReturnType<typeof $registerResponse>>
 
 // CompleteRegistration
 
-export function completeRegistrationParams() {
+export function $completeRegistrationParams() {
     return z.object({
-        registrationToken: common.token()
+        registrationToken: common.$token()
     })
 }
 
-export type CompleteRegistrationParams = z.infer<ReturnType<typeof completeRegistrationParams>>
+export type $CompleteRegistrationParams = z.infer<ReturnType<typeof $completeRegistrationParams>>
 
-export function completeRegistrationRequest() {
+export function $completeRegistrationRequest() {
     return z.object({
-        ...completeRegistrationParams().shape
+        ...$completeRegistrationParams().shape
     })
 }
 
-export type CompleteRegistrationRequest = z.infer<ReturnType<typeof completeRegistrationRequest>>
+export type $CompleteRegistrationRequest = z.infer<ReturnType<typeof $completeRegistrationRequest>>
 
-export function completeRegistrationResponse() {
+export function $completeRegistrationResponse() {
     return z.void()
 }
 
-export type CompleteRegistrationResponse = z.infer<ReturnType<typeof completeRegistrationResponse>>
+export type $CompleteRegistrationResponse = z.infer<
+    ReturnType<typeof $completeRegistrationResponse>
+>
 
 // OAuthRegister
 
-export function oAuthRegisterParams() {
+export function $oAuthRegisterParams() {
     return z.object({
-        oAuthRegistrationToken: common.token()
+        oAuthRegistrationToken: common.$token()
     })
 }
 
-export type OAuthRegisterParams = z.infer<ReturnType<typeof oAuthRegisterParams>>
+export type $OAuthRegisterParams = z.infer<ReturnType<typeof $oAuthRegisterParams>>
 
-export function oAuthRegisterBody() {
+export function $oAuthRegisterBody() {
     return z.object({
-        username: models.user.username()
+        username: models.user.$username()
     })
 }
 
-export type OAuthRegisterBody = z.infer<ReturnType<typeof oAuthRegisterBody>>
+export type $OAuthRegisterBody = z.infer<ReturnType<typeof $oAuthRegisterBody>>
 
-export function oAuthRegisterRequest() {
+export function $oAuthRegisterRequest() {
     return z.object({
-        ...oAuthRegisterParams().shape,
-        ...oAuthRegisterBody().shape
+        ...$oAuthRegisterParams().shape,
+        ...$oAuthRegisterBody().shape
     })
 }
 
-export type OAuthRegisterRequest = z.infer<ReturnType<typeof oAuthRegisterRequest>>
+export type $OAuthRegisterRequest = z.infer<ReturnType<typeof $oAuthRegisterRequest>>
 
-export function oAuthRegisterResponse() {
+export function $oAuthRegisterResponse() {
     return z.void()
 }
 
-export type OAuthRegisterResponse = z.infer<ReturnType<typeof oAuthRegisterResponse>>
+export type $OAuthRegisterResponse = z.infer<ReturnType<typeof $oAuthRegisterResponse>>
 
 // Login
 
-export function loginBody() {
+export function $loginBody() {
     return z.object({
-        email: models.user.email(),
-        password: models.user.password()
+        email: common.$email(),
+        password: models.user.$password()
     })
 }
 
-export type LoginBody = z.infer<ReturnType<typeof loginBody>>
+export type $LoginBody = z.infer<ReturnType<typeof $loginBody>>
 
-export function loginRequest() {
+export function $loginRequest() {
     return z.object({
-        ...loginBody().shape
+        ...$loginBody().shape
     })
 }
 
-export type LoginRequest = z.infer<ReturnType<typeof loginRequest>>
+export type $LoginRequest = z.infer<ReturnType<typeof $loginRequest>>
 
-export function loginResponse() {
+export function $loginResponse() {
     return z.void()
 }
 
-export type LoginResponse = z.infer<ReturnType<typeof loginResponse>>
+export type $LoginResponse = z.infer<ReturnType<typeof $loginResponse>>
 
 // OAuthLogin
 
-export function oAuthLoginParams() {
+export function $oAuthLoginParams() {
     return z.object({
-        provider: models.oAuthRegistrationToken.provider$Kebab()
+        provider: models.oAuthRegistrationToken.$provider_kebab()
     })
 }
 
-export type OAuthLoginParams = z.infer<ReturnType<typeof oAuthLoginParams>>
+export type $OAuthLoginParams = z.infer<ReturnType<typeof $oAuthLoginParams>>
 
-export function oAuthLoginRequest() {
+export function $oAuthLoginRequest() {
     return z.object({
-        ...oAuthLoginParams().shape
+        ...$oAuthLoginParams().shape
     })
 }
 
-export type OAuthLoginRequest = z.infer<ReturnType<typeof oAuthLoginRequest>>
+export type $OAuthLoginRequest = z.infer<ReturnType<typeof $oAuthLoginRequest>>
 
-export function oAuthLoginResponse() {
+export function $oAuthLoginResponse() {
     return z.object({
-        redirectUrl: z.url().trim()
+        redirectUrl: common.$url()
     })
 }
 
-export type OAuthLoginResponse = z.infer<ReturnType<typeof oAuthLoginResponse>>
+export type $OAuthLoginResponse = z.infer<ReturnType<typeof $oAuthLoginResponse>>
 
 // OAuthLoginCallback
 
-export function oAuthLoginCallbackCookies() {
+export function $oAuthLoginCallbackCookies() {
     return z.object({
         oAuthState: z.string().trim().min(1)
     })
 }
 
-export type OAuthLoginCallbackCookies = z.infer<ReturnType<typeof oAuthLoginCallbackCookies>>
+export type $OAuthLoginCallbackCookies = z.infer<ReturnType<typeof $oAuthLoginCallbackCookies>>
 
-export function oAuthLoginCallbackParams() {
+export function $oAuthLoginCallbackParams() {
     return z.object({
-        provider: models.oAuthRegistrationToken.provider$Kebab()
+        provider: models.oAuthRegistrationToken.$provider_kebab()
     })
 }
 
-export type OAuthLoginCallbackParams = z.infer<ReturnType<typeof oAuthLoginCallbackParams>>
+export type $OAuthLoginCallbackParams = z.infer<ReturnType<typeof $oAuthLoginCallbackParams>>
 
-export function oAuthLoginCallbackBody() {
+export function $oAuthLoginCallbackBody() {
     return z.object({
         code: z.string().trim().min(1),
         oAuthState: z.string().trim().min(1)
     })
 }
 
-export type OAuthLoginCallbackBody = z.infer<ReturnType<typeof oAuthLoginCallbackBody>>
+export type $OAuthLoginCallbackBody = z.infer<ReturnType<typeof $oAuthLoginCallbackBody>>
 
-export function oAuthLoginCallbackRequest() {
+export function $oAuthLoginCallbackRequest() {
     return z.object({
-        ...oAuthLoginCallbackParams().shape,
-        ...oAuthLoginCallbackBody().shape
+        ...$oAuthLoginCallbackParams().shape,
+        ...$oAuthLoginCallbackBody().shape
     })
 }
 
-export type OAuthLoginCallbackRequest = z.infer<ReturnType<typeof oAuthLoginCallbackRequest>>
+export type $OAuthLoginCallbackRequest = z.infer<ReturnType<typeof $oAuthLoginCallbackRequest>>
 
-export function oAuthLoginCallbackResponse() {
+export function $oAuthLoginCallbackResponse() {
     return z.object({
-        oAuthRegistrationToken: common.token().nullable()
+        oAuthRegistrationToken: common.$token().nullable()
     })
 }
 
-export type OAuthLoginCallbackResponse = z.infer<ReturnType<typeof oAuthLoginCallbackResponse>>
+export type $OAuthLoginCallbackResponse = z.infer<ReturnType<typeof $oAuthLoginCallbackResponse>>
 
 // Link
 
-export function linkBody() {
+export function $linkBody() {
     return z.object({
-        email: models.user.email(),
-        password: models.user.password()
+        email: common.$email(),
+        password: models.user.$password()
     })
 }
 
-export type LinkBody = z.infer<ReturnType<typeof linkBody>>
+export type $LinkBody = z.infer<ReturnType<typeof $linkBody>>
 
-export function linkRequest() {
+export function $linkRequest() {
     return z.object({
-        ...linkBody().shape
+        ...$linkBody().shape
     })
 }
 
-export type LinkRequest = z.infer<ReturnType<typeof linkRequest>>
+export type $LinkRequest = z.infer<ReturnType<typeof $linkRequest>>
 
-export function linkResponse() {
+export function $linkResponse() {
     return z.void()
 }
 
-export type LinkResponse = z.infer<ReturnType<typeof linkResponse>>
+export type $LinkResponse = z.infer<ReturnType<typeof $linkResponse>>
 
 // CompleteLinking
 
-export function completeLinkingParams() {
+export function $completeLinkingParams() {
     return z.object({
-        linkingToken: common.token()
+        linkingToken: common.$token()
     })
 }
 
-export type CompleteLinkingParams = z.infer<ReturnType<typeof completeLinkingParams>>
+export type $CompleteLinkingParams = z.infer<ReturnType<typeof $completeLinkingParams>>
 
-export function completeLinkingRequest() {
+export function $completeLinkingRequest() {
     return z.object({
-        ...completeLinkingParams().shape
+        ...$completeLinkingParams().shape
     })
 }
 
-export type CompleteLinkingRequest = z.infer<ReturnType<typeof completeLinkingRequest>>
+export type $CompleteLinkingRequest = z.infer<ReturnType<typeof $completeLinkingRequest>>
 
-export function completeLinkingResponse() {
+export function $completeLinkingResponse() {
     return z.void()
 }
 
-export type CompleteLinkingResponse = z.infer<ReturnType<typeof completeLinkingResponse>>
+export type $CompleteLinkingResponse = z.infer<ReturnType<typeof $completeLinkingResponse>>
 
 // Unlink
 
-export function unlinkRequest() {
+export function $unlinkRequest() {
     return z.void()
 }
 
-export type UnlinkRequest = z.infer<ReturnType<typeof unlinkRequest>>
+export type $UnlinkRequest = z.infer<ReturnType<typeof $unlinkRequest>>
 
-export function unlinkResponse() {
+export function $unlinkResponse() {
     return z.void()
 }
 
-export type UnlinkResponse = z.infer<ReturnType<typeof unlinkResponse>>
+export type $UnlinkResponse = z.infer<ReturnType<typeof $unlinkResponse>>
 
 // CompleteUnlinking
 
-export function completeUnlinkingParams() {
+export function $completeUnlinkingParams() {
     return z.object({
-        unlinkingToken: common.token()
+        unlinkingToken: common.$token()
     })
 }
 
-export type CompleteUnlinkingParams = z.infer<ReturnType<typeof completeUnlinkingParams>>
+export type $CompleteUnlinkingParams = z.infer<ReturnType<typeof $completeUnlinkingParams>>
 
-export function completeUnlinkingRequest() {
+export function $completeUnlinkingRequest() {
     return z.object({
-        ...completeUnlinkingParams().shape
+        ...$completeUnlinkingParams().shape
     })
 }
 
-export type CompleteUnlinkingRequest = z.infer<ReturnType<typeof completeUnlinkingRequest>>
+export type $CompleteUnlinkingRequest = z.infer<ReturnType<typeof $completeUnlinkingRequest>>
 
-export function completeUnlinkingResponse() {
+export function $completeUnlinkingResponse() {
     return z.void()
 }
 
-export type CompleteUnlinkingResponse = z.infer<ReturnType<typeof completeUnlinkingResponse>>
+export type $CompleteUnlinkingResponse = z.infer<ReturnType<typeof $completeUnlinkingResponse>>
 
 // OAuthLinkCallback
 
-export function oAuthLinkCallbackCookies() {
+export function $oAuthLinkCallbackCookies() {
     return z.object({
         oAuthState: z.string().trim().min(1)
     })
 }
 
-export type OAuthLinkCallbackCookies = z.infer<ReturnType<typeof oAuthLinkCallbackCookies>>
+export type $OAuthLinkCallbackCookies = z.infer<ReturnType<typeof $oAuthLinkCallbackCookies>>
 
-export function oAuthLinkCallbackParams() {
+export function $oAuthLinkCallbackParams() {
     return z.object({
-        provider: models.oAuthRegistrationToken.provider$Kebab()
+        provider: models.oAuthRegistrationToken.$provider_kebab()
     })
 }
 
-export type OAuthLinkCallbackParams = z.infer<ReturnType<typeof oAuthLinkCallbackParams>>
+export type $OAuthLinkCallbackParams = z.infer<ReturnType<typeof $oAuthLinkCallbackParams>>
 
-export function oAuthLinkCallbackBody() {
+export function $oAuthLinkCallbackBody() {
     return z.object({
         code: z.string().trim().min(1),
         oAuthState: z.string().trim().min(1)
     })
 }
 
-export type OAuthLinkCallbackBody = z.infer<ReturnType<typeof oAuthLinkCallbackBody>>
+export type $OAuthLinkCallbackBody = z.infer<ReturnType<typeof $oAuthLinkCallbackBody>>
 
-export function oAuthLinkCallbackRequest() {
+export function $oAuthLinkCallbackRequest() {
     return z.object({
-        ...oAuthLinkCallbackParams().shape,
-        ...oAuthLinkCallbackBody().shape
+        ...$oAuthLinkCallbackParams().shape,
+        ...$oAuthLinkCallbackBody().shape
     })
 }
 
-export type OAuthLinkCallbackRequest = z.infer<ReturnType<typeof oAuthLinkCallbackRequest>>
+export type $OAuthLinkCallbackRequest = z.infer<ReturnType<typeof $oAuthLinkCallbackRequest>>
 
-export function oAuthLinkCallbackResponse() {
+export function $oAuthLinkCallbackResponse() {
     return z.void()
 }
 
-export type OAuthLinkCallbackResponse = z.infer<ReturnType<typeof oAuthLinkCallbackResponse>>
+export type $OAuthLinkCallbackResponse = z.infer<ReturnType<typeof $oAuthLinkCallbackResponse>>
 
 // OAuthUnlink
 
-export function oAuthUnlinkParams() {
+export function $oAuthUnlinkParams() {
     return z.object({
-        provider: models.oAuthRegistrationToken.provider$Kebab()
+        provider: models.oAuthRegistrationToken.$provider_kebab()
     })
 }
 
-export type OAuthUnlinkParams = z.infer<ReturnType<typeof oAuthUnlinkParams>>
+export type $OAuthUnlinkParams = z.infer<ReturnType<typeof $oAuthUnlinkParams>>
 
-export function oAuthUnlinkRequest() {
+export function $oAuthUnlinkRequest() {
     return z.object({
-        ...oAuthUnlinkParams().shape
+        ...$oAuthUnlinkParams().shape
     })
 }
 
-export type OAuthUnlinkRequest = z.infer<ReturnType<typeof oAuthUnlinkRequest>>
+export type $OAuthUnlinkRequest = z.infer<ReturnType<typeof $oAuthUnlinkRequest>>
 
-export function oAuthUnlinkResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $oAuthUnlinkResponse() {
+    return models.user.$user()
 }
 
-export type OAuthUnlinkResponse = z.infer<ReturnType<typeof oAuthUnlinkResponse>>
+export type $OAuthUnlinkResponse = z.infer<ReturnType<typeof $oAuthUnlinkResponse>>
 
 // Logout
 
-export function logoutCookies() {
+export function $logoutCookies() {
     return z.object({
-        refreshToken: models.refreshToken.token()
+        refreshToken: common.$jwt()
     })
 }
 
-export type LogoutCookies = z.infer<ReturnType<typeof logoutCookies>>
+export type $LogoutCookies = z.infer<ReturnType<typeof $logoutCookies>>
 
-export function logoutRequest() {
+export function $logoutRequest() {
     return z.void()
 }
 
-export type LogoutRequest = z.infer<ReturnType<typeof logoutRequest>>
+export type $LogoutRequest = z.infer<ReturnType<typeof $logoutRequest>>
 
-export function logoutResponse() {
+export function $logoutResponse() {
     return z.void()
 }
 
-export type LogoutResponse = z.infer<ReturnType<typeof logoutResponse>>
+export type $LogoutResponse = z.infer<ReturnType<typeof $logoutResponse>>
 
 // RefreshTokens
 
-export function refreshTokensCookies() {
+export function $refreshTokensCookies() {
     return z.object({
-        refreshToken: models.refreshToken.token()
+        refreshToken: common.$jwt()
     })
 }
 
-export type RefreshTokensCookies = z.infer<ReturnType<typeof refreshTokensCookies>>
+export type $RefreshTokensCookies = z.infer<ReturnType<typeof $refreshTokensCookies>>
 
-export function refreshTokensRequest() {
+export function $refreshTokensRequest() {
     return z.void()
 }
 
-export type RefreshTokensRequest = z.infer<ReturnType<typeof refreshTokensRequest>>
+export type $RefreshTokensRequest = z.infer<ReturnType<typeof $refreshTokensRequest>>
 
-export function refreshTokensResponse() {
+export function $refreshTokensResponse() {
     return z.void()
 }
 
-export type RefreshTokensResponse = z.infer<ReturnType<typeof refreshTokensResponse>>
+export type $RefreshTokensResponse = z.infer<ReturnType<typeof $refreshTokensResponse>>

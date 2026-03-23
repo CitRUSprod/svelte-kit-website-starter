@@ -11,19 +11,19 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.getUser(app, req)
+            const data = await handlers.getUser(app, req, {})
             await reply.sendData(data)
         }
     })
 
-    app.patch<{ Body: schemasRoutes.profile.UpdateUserBody }>(constantsRoutes.profile.updateUser, {
+    app.patch<{ Body: schemasRoutes.profile.$UpdateUserBody }>(constantsRoutes.profile.updateUser, {
         schema: {
             tags: [constantsRoutes.profile.base],
-            body: schemasRoutes.profile.updateUserBody()
+            body: schemasRoutes.profile.$updateUserBody()
         },
         preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.updateUser(app, req)
+            const data = await handlers.updateUser(app, req, {})
             await reply.sendData(data)
         }
     })
@@ -34,120 +34,94 @@ export const profileRoutes: FastifyPluginCallback = (app, options, done) => {
         },
         preHandler: app.createPreHandler([app.verifyAuth]),
         async handler(req, reply) {
-            const data = await handlers.deleteUser(app, req)
+            const data = await handlers.deleteUser(app, req, {})
             await reply.sendData(data)
         }
     })
 
-    app.post<{ Body: schemasRoutes.profile.UploadAvatarBody }>(
-        constantsRoutes.profile.uploadAvatar,
-        {
-            schema: {
-                tags: [constantsRoutes.profile.base],
-                body: schemasRoutes.profile.uploadAvatarBody()
-            },
-            preHandler: app.createPreHandler([app.verifyAuth]),
-            async handler(req, reply) {
-                const data = await handlers.uploadAvatar(app, req)
-                await reply.sendData(data)
-            }
-        }
-    )
-
-    app.delete(constantsRoutes.profile.deleteAvatar, {
-        schema: {
-            tags: [constantsRoutes.profile.base]
-        },
-        preHandler: app.createPreHandler([app.verifyAuth]),
-        async handler(req, reply) {
-            const data = await handlers.deleteAvatar(app, req)
-            await reply.sendData(data)
-        }
-    })
-
-    app.post<{ Body: schemasRoutes.profile.SendEmailUpdateEmailToOldBody }>(
+    app.post<{ Body: schemasRoutes.profile.$SendEmailUpdateEmailToOldBody }>(
         constantsRoutes.profile.sendEmailUpdateEmailToOld,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                body: schemasRoutes.profile.sendEmailUpdateEmailToOldBody()
+                body: schemasRoutes.profile.$sendEmailUpdateEmailToOldBody()
             },
             preHandler: app.createPreHandler([app.verifyAuth]),
             async handler(req, reply) {
-                const data = await handlers.sendEmailUpdateEmailToOld(app, req)
+                const data = await handlers.sendEmailUpdateEmailToOld(app, req, {})
                 await reply.sendData(data)
             }
         }
     )
 
-    app.post<{ Params: schemasRoutes.profile.SendEmailUpdateEmailToNewParams }>(
+    app.post<{ Params: schemasRoutes.profile.$SendEmailUpdateEmailToNewParams }>(
         constantsRoutes.profile.sendEmailUpdateEmailToNew,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                params: schemasRoutes.profile.sendEmailUpdateEmailToNewParams()
+                params: schemasRoutes.profile.$sendEmailUpdateEmailToNewParams()
             },
             async handler(req, reply) {
-                const data = await handlers.sendEmailUpdateEmailToNew(app, req)
+                const data = await handlers.sendEmailUpdateEmailToNew(app, req, {})
                 await reply.sendData(data)
             }
         }
     )
 
-    app.post<{ Params: schemasRoutes.profile.UpdateEmailParams }>(
+    app.post<{ Params: schemasRoutes.profile.$UpdateEmailParams }>(
         constantsRoutes.profile.updateEmail,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                params: schemasRoutes.profile.updateEmailParams()
+                params: schemasRoutes.profile.$updateEmailParams()
             },
             async handler(req, reply) {
-                const data = await handlers.updateEmail(app, req)
+                const data = await handlers.updateEmail(app, req, {})
                 await reply.sendData(data)
             }
         }
     )
 
-    app.post<{ Body: schemasRoutes.profile.ChangePasswordBody }>(
+    app.post<{ Body: schemasRoutes.profile.$ChangePasswordBody }>(
         constantsRoutes.profile.changePassword,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                body: schemasRoutes.profile.changePasswordBody()
+                body: schemasRoutes.profile.$changePasswordBody()
             },
             preHandler: app.createPreHandler([app.verifyAuth]),
             async handler(req, reply) {
-                const data = await handlers.changePassword(app, req)
+                const data = await handlers.changePassword(app, req, {})
                 await reply.sendData(data)
             }
         }
     )
 
-    app.post<{ Body: schemasRoutes.profile.SendPasswordResetEmailBody }>(
+    app.post<{ Body: schemasRoutes.profile.$SendPasswordResetEmailBody }>(
         constantsRoutes.profile.sendPasswordResetEmail,
         {
             schema: {
                 tags: [constantsRoutes.profile.base],
-                body: schemasRoutes.profile.sendPasswordResetEmailBody()
+                body: schemasRoutes.profile.$sendPasswordResetEmailBody()
             },
             async handler(req, reply) {
-                const data = await handlers.sendPasswordResetEmail(app, req)
+                const data = await handlers.sendPasswordResetEmail(app, req, {})
                 await reply.sendData(data)
             }
         }
     )
 
     app.post<{
-        Params: schemasRoutes.profile.ResetPasswordParams
-        Body: schemasRoutes.profile.ResetPasswordBody
+        Params: schemasRoutes.profile.$ResetPasswordParams
+        Body: schemasRoutes.profile.$ResetPasswordBody
     }>(constantsRoutes.profile.resetPassword, {
         schema: {
             tags: [constantsRoutes.profile.base],
-            params: schemasRoutes.profile.resetPasswordParams(),
-            body: schemasRoutes.profile.resetPasswordBody()
+            params: schemasRoutes.profile.$resetPasswordParams(),
+            body: schemasRoutes.profile.$resetPasswordBody()
         },
         async handler(req, reply) {
-            const data = await handlers.resetPassword(app, req)
+            const data = await handlers.resetPassword(app, req, {})
             await reply.sendData(data)
         }
     })

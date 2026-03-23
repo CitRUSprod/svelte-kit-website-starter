@@ -4,8 +4,8 @@ import * as schemasRoutes from "@repo/schemas/routes"
 import type { RequestData } from "$lib/types"
 import { axios, createApiUrl, createAxiosConfig } from "$lib/utils"
 
-export function getUsers(data: RequestData<schemasRoutes.users.GetUsersRequest> = {}) {
-    return axios.get<schemasRoutes.users.GetUsersResponse>(
+export function getUsers(data: RequestData<schemasRoutes.users.$GetUsersRequest> = {}) {
+    return axios.get<schemasRoutes.users.$GetUsersResponse>(
         createApiUrl(constantsRoutes.users.getUsers),
         {
             params: {
@@ -21,23 +21,23 @@ export function getUsers(data: RequestData<schemasRoutes.users.GetUsersRequest> 
     )
 }
 
-export function getUser(data: RequestData<schemasRoutes.users.GetUserRequest>) {
-    return axios.get<schemasRoutes.users.GetUserResponse>(
+export function getUser(data: RequestData<schemasRoutes.users.$GetUserRequest>) {
+    return axios.get<schemasRoutes.users.$GetUserResponse>(
         createApiUrl(constantsRoutes.users.getUser, data.id),
         createAxiosConfig(data.headers)
     )
 }
 
-export function assignRoleToUser(data: RequestData<schemasRoutes.users.AssignRoleToUserRequest>) {
-    return axios.post<schemasRoutes.users.AssignRoleToUserResponse>(
+export function assignRoleToUser(data: RequestData<schemasRoutes.users.$AssignRoleToUserRequest>) {
+    return axios.post<schemasRoutes.users.$AssignRoleToUserResponse>(
         createApiUrl(constantsRoutes.users.assignRoleToUser, data.id, data.roleId),
         {},
         createAxiosConfig(data.headers)
     )
 }
 
-export function banUser(data: RequestData<schemasRoutes.users.BanUserRequest>) {
-    return axios.post<schemasRoutes.users.BanUserResponse>(
+export function banUser(data: RequestData<schemasRoutes.users.$BanUserRequest>) {
+    return axios.post<schemasRoutes.users.$BanUserResponse>(
         createApiUrl(constantsRoutes.users.banUser, data.id),
         {
             reason: data.reason
@@ -46,8 +46,8 @@ export function banUser(data: RequestData<schemasRoutes.users.BanUserRequest>) {
     )
 }
 
-export function unbanUser(data: RequestData<schemasRoutes.users.UnbanUserRequest>) {
-    return axios.post<schemasRoutes.users.UnbanUserResponse>(
+export function unbanUser(data: RequestData<schemasRoutes.users.$UnbanUserRequest>) {
+    return axios.post<schemasRoutes.users.$UnbanUserResponse>(
         createApiUrl(constantsRoutes.users.unbanUser, data.id),
         {},
         createAxiosConfig(data.headers)

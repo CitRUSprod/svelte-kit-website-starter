@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
-    import * as schemasModels from "@repo/schemas/models"
+    import * as schemasRoutes from "@repo/schemas/routes"
 
     import type { Locale } from "$i18n/helpers"
     import { ll, locales } from "$i18n/helpers"
@@ -9,6 +9,8 @@
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
+
+    type Role = schemasRoutes.roles.$GetRolesResponse["items"][number]
 
     interface Props {
         permissions: Array<constantsEnums.Permission>
@@ -35,7 +37,7 @@
         permissions.filter(p => !selectedPermissions.includes(p)).map(p => ({ text: p, value: p }))
     )
 
-    export function open(role: schemasModels.role.Role) {
+    export function open(role: Role) {
         roleId = role.id
 
         for (const locale of locales) {

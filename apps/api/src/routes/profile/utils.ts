@@ -1,9 +1,9 @@
 import type { FastifyInstance } from "fastify"
 
 import { enums } from "$/constants"
-import type { UserData } from "$/types"
+import { models } from "$/utils"
 
-export async function deleteUser(app: FastifyInstance, userData: UserData) {
+export async function deleteUser(app: FastifyInstance, userData: models.user.Type) {
     await app.prisma.emailUpdateToken.deleteMany({ where: { userId: userData.id } })
     await app.prisma.passwordResetToken.deleteMany({ where: { userId: userData.id } })
     await app.prisma.ban.deleteMany({ where: { userId: userData.id } })

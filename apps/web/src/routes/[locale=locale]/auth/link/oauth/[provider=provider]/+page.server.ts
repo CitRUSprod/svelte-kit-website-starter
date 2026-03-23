@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit"
 import * as _ from "es-toolkit"
 
 export async function load(e) {
-    if (!e.locals.userData) {
+    if (!e.locals.user) {
         redirect(302, `/${e.params.locale as string}`)
     }
 

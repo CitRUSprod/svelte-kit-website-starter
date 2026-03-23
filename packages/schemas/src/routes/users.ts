@@ -5,148 +5,137 @@ import * as models from "$/models"
 
 // GetUsers
 
-export function getUsersQuery() {
-    const { page, perPage } = common.pagination().shape
-    const { sort, order } = common.sorting("registrationDate", "email", "username").shape
-
+export function $getUsersQuery() {
     return z.object({
-        page: page.catch(1),
-        perPage: perPage.catch(10),
-        sort: sort.catch("registrationDate"),
-        order: order.catch("asc"),
-        email: models.user.email().optional().catch(undefined),
-        username: models.user.username().optional().catch(undefined)
+        page: common.pagination.$page().catch(1),
+        perPage: common.pagination.$perPage().catch(10),
+        sort: common.sorting
+            .$sort("registrationDate", "email", "username")
+            .catch("registrationDate"),
+        order: common.sorting.$order().catch("asc"),
+        email: common.$email().optional().catch(undefined),
+        username: models.user.$username().optional().catch(undefined)
     })
 }
 
-export type GetUsersQuery = z.infer<ReturnType<typeof getUsersQuery>>
+export type $GetUsersQuery = z.infer<ReturnType<typeof $getUsersQuery>>
 
-export function getUsersRequest() {
+export function $getUsersRequest() {
     return z.object({
-        ...getUsersQuery().partial().shape
+        ...$getUsersQuery().partial().shape
     })
 }
 
-export type GetUsersRequest = z.infer<ReturnType<typeof getUsersRequest>>
+export type $GetUsersRequest = z.infer<ReturnType<typeof $getUsersRequest>>
 
-export function getUsersResponse() {
-    return z.object({
-        ...common.itemsPage(models.user.user()).shape
-    })
+export function $getUsersResponse() {
+    return common.pagination.$itemsPage(models.user.$user())
 }
 
-export type GetUsersResponse = z.infer<ReturnType<typeof getUsersResponse>>
+export type $GetUsersResponse = z.infer<ReturnType<typeof $getUsersResponse>>
 
 // GetUser
 
-export function getUserParams() {
+export function $getUserParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type GetUserParams = z.infer<ReturnType<typeof getUserParams>>
+export type $GetUserParams = z.infer<ReturnType<typeof $getUserParams>>
 
-export function getUserRequest() {
+export function $getUserRequest() {
     return z.object({
-        ...getUserParams().shape
+        ...$getUserParams().shape
     })
 }
 
-export type GetUserRequest = z.infer<ReturnType<typeof getUserRequest>>
+export type $GetUserRequest = z.infer<ReturnType<typeof $getUserRequest>>
 
-export function getUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $getUserResponse() {
+    return models.user.$user()
 }
 
-export type GetUserResponse = z.infer<ReturnType<typeof getUserResponse>>
+export type $GetUserResponse = z.infer<ReturnType<typeof $getUserResponse>>
 
 // AssignRoleToUser
 
-export function assignRoleToUserParams() {
+export function $assignRoleToUserParams() {
     return z.object({
-        id: common.id(),
-        roleId: common.id()
+        id: common.$id(),
+        roleId: common.$id()
     })
 }
 
-export type AssignRoleToUserParams = z.infer<ReturnType<typeof assignRoleToUserParams>>
+export type $AssignRoleToUserParams = z.infer<ReturnType<typeof $assignRoleToUserParams>>
 
-export function assignRoleToUserRequest() {
+export function $assignRoleToUserRequest() {
     return z.object({
-        ...assignRoleToUserParams().shape
+        ...$assignRoleToUserParams().shape
     })
 }
 
-export type AssignRoleToUserRequest = z.infer<ReturnType<typeof assignRoleToUserRequest>>
+export type $AssignRoleToUserRequest = z.infer<ReturnType<typeof $assignRoleToUserRequest>>
 
-export function assignRoleToUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $assignRoleToUserResponse() {
+    return models.user.$user()
 }
 
-export type AssignRoleToUserResponse = z.infer<ReturnType<typeof assignRoleToUserResponse>>
+export type $AssignRoleToUserResponse = z.infer<ReturnType<typeof $assignRoleToUserResponse>>
 
 // BanUser
 
-export function banUserParams() {
+export function $banUserParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type BanUserParams = z.infer<ReturnType<typeof banUserParams>>
+export type $BanUserParams = z.infer<ReturnType<typeof $banUserParams>>
 
-export function banUserBody() {
+export function $banUserBody() {
     return z.object({
-        reason: models.ban.reason()
+        reason: models.ban.$reason()
     })
 }
 
-export type BanUserBody = z.infer<ReturnType<typeof banUserBody>>
+export type $BanUserBody = z.infer<ReturnType<typeof $banUserBody>>
 
-export function banUserRequest() {
+export function $banUserRequest() {
     return z.object({
-        ...banUserParams().shape,
-        ...banUserBody().shape
+        ...$banUserParams().shape,
+        ...$banUserBody().shape
     })
 }
 
-export type BanUserRequest = z.infer<ReturnType<typeof banUserRequest>>
+export type $BanUserRequest = z.infer<ReturnType<typeof $banUserRequest>>
 
-export function banUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $banUserResponse() {
+    return models.user.$user()
 }
 
-export type BanUserResponse = z.infer<ReturnType<typeof banUserResponse>>
+export type $BanUserResponse = z.infer<ReturnType<typeof $banUserResponse>>
 
 // UnbanUser
 
-export function unbanUserParams() {
+export function $unbanUserParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type UnbanUserParams = z.infer<ReturnType<typeof unbanUserParams>>
+export type $UnbanUserParams = z.infer<ReturnType<typeof $unbanUserParams>>
 
-export function unbanUserRequest() {
+export function $unbanUserRequest() {
     return z.object({
-        ...unbanUserParams().shape
+        ...$unbanUserParams().shape
     })
 }
 
-export type UnbanUserRequest = z.infer<ReturnType<typeof unbanUserRequest>>
+export type $UnbanUserRequest = z.infer<ReturnType<typeof $unbanUserRequest>>
 
-export function unbanUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $unbanUserResponse() {
+    return models.user.$user()
 }
 
-export type UnbanUserResponse = z.infer<ReturnType<typeof unbanUserResponse>>
+export type $UnbanUserResponse = z.infer<ReturnType<typeof $unbanUserResponse>>

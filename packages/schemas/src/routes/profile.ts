@@ -5,264 +5,223 @@ import * as models from "$/models"
 
 // GetUser
 
-export function getUserRequest() {
+export function $getUserRequest() {
     return z.void()
 }
 
-export type GetUserRequest = z.infer<ReturnType<typeof getUserRequest>>
+export type $GetUserRequest = z.infer<ReturnType<typeof $getUserRequest>>
 
-export function getUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $getUserResponse() {
+    return models.user.$user()
 }
 
-export type GetUserResponse = z.infer<ReturnType<typeof getUserResponse>>
+export type $GetUserResponse = z.infer<ReturnType<typeof $getUserResponse>>
 
 // UpdateUser
 
-export function updateUserBody() {
+export function $updateUserBody() {
     return z.object({
-        username: models.user.username().optional()
+        username: models.user.$username().optional(),
+        imgTempId: common.$id().nullable().optional()
     })
 }
 
-export type UpdateUserBody = z.infer<ReturnType<typeof updateUserBody>>
+export type $UpdateUserBody = z.infer<ReturnType<typeof $updateUserBody>>
 
-export function updateUserRequest() {
+export function $updateUserRequest() {
     return z.object({
-        ...updateUserBody().shape
+        ...$updateUserBody().shape
     })
 }
 
-export type UpdateUserRequest = z.infer<ReturnType<typeof updateUserRequest>>
+export type $UpdateUserRequest = z.infer<ReturnType<typeof $updateUserRequest>>
 
-export function updateUserResponse() {
-    return z.object({
-        ...models.user.user().shape
-    })
+export function $updateUserResponse() {
+    return models.user.$user()
 }
 
-export type UpdateUserResponse = z.infer<ReturnType<typeof updateUserResponse>>
+export type $UpdateUserResponse = z.infer<ReturnType<typeof $updateUserResponse>>
 
 // DeleteUser
 
-export function deleteUserRequest() {
+export function $deleteUserRequest() {
     return z.void()
 }
 
-export type DeleteUserRequest = z.infer<ReturnType<typeof deleteUserRequest>>
+export type $DeleteUserRequest = z.infer<ReturnType<typeof $deleteUserRequest>>
 
-export function deleteUserResponse() {
+export function $deleteUserResponse() {
     return z.void()
 }
 
-export type DeleteUserResponse = z.infer<ReturnType<typeof deleteUserResponse>>
-
-// UploadAvatar
-
-export function uploadAvatarBody() {
-    return z.object({
-        img: common.file()
-    })
-}
-
-export type UploadAvatarBody = z.infer<ReturnType<typeof uploadAvatarBody>>
-
-export function uploadAvatarRequest() {
-    return z.object({
-        ...uploadAvatarBody().shape
-    })
-}
-
-export type UploadAvatarRequest = z.infer<ReturnType<typeof uploadAvatarRequest>>
-
-export function uploadAvatarResponse() {
-    return z.void()
-}
-
-export type UploadAvatarResponse = z.infer<ReturnType<typeof uploadAvatarResponse>>
-
-// DeleteAvatar
-
-export function deleteAvatarRequest() {
-    return z.void()
-}
-
-export type DeleteAvatarRequest = z.infer<ReturnType<typeof deleteAvatarRequest>>
-
-export function deleteAvatarResponse() {
-    return z.void()
-}
-
-export type DeleteAvatarResponse = z.infer<ReturnType<typeof deleteAvatarResponse>>
+export type $DeleteUserResponse = z.infer<ReturnType<typeof $deleteUserResponse>>
 
 // SendEmailUpdateEmailToOld
 
-export function sendEmailUpdateEmailToOldBody() {
+export function $sendEmailUpdateEmailToOldBody() {
     return z.object({
-        email: models.user.email()
+        email: common.$email()
     })
 }
 
-export type SendEmailUpdateEmailToOldBody = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToOldBody>
+export type $SendEmailUpdateEmailToOldBody = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToOldBody>
 >
 
-export function sendEmailUpdateEmailToOldRequest() {
+export function $sendEmailUpdateEmailToOldRequest() {
     return z.object({
-        ...sendEmailUpdateEmailToOldBody().shape
+        ...$sendEmailUpdateEmailToOldBody().shape
     })
 }
 
-export type SendEmailUpdateEmailToOldRequest = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToOldRequest>
+export type $SendEmailUpdateEmailToOldRequest = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToOldRequest>
 >
 
-export function sendEmailUpdateEmailToOldResponse() {
+export function $sendEmailUpdateEmailToOldResponse() {
     return z.void()
 }
 
-export type SendEmailUpdateEmailToOldResponse = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToOldResponse>
+export type $SendEmailUpdateEmailToOldResponse = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToOldResponse>
 >
 
 // SendEmailUpdateEmailToNew
 
-export function sendEmailUpdateEmailToNewParams() {
+export function $sendEmailUpdateEmailToNewParams() {
     return z.object({
-        emailUpdateToken: common.token()
+        emailUpdateToken: common.$token()
     })
 }
 
-export type SendEmailUpdateEmailToNewParams = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToNewParams>
+export type $SendEmailUpdateEmailToNewParams = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToNewParams>
 >
 
-export function sendEmailUpdateEmailToNewRequest() {
+export function $sendEmailUpdateEmailToNewRequest() {
     return z.object({
-        ...sendEmailUpdateEmailToNewParams().shape
+        ...$sendEmailUpdateEmailToNewParams().shape
     })
 }
 
-export type SendEmailUpdateEmailToNewRequest = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToNewRequest>
+export type $SendEmailUpdateEmailToNewRequest = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToNewRequest>
 >
 
-export function sendEmailUpdateEmailToNewResponse() {
+export function $sendEmailUpdateEmailToNewResponse() {
     return z.void()
 }
 
-export type SendEmailUpdateEmailToNewResponse = z.infer<
-    ReturnType<typeof sendEmailUpdateEmailToNewResponse>
+export type $SendEmailUpdateEmailToNewResponse = z.infer<
+    ReturnType<typeof $sendEmailUpdateEmailToNewResponse>
 >
 
 // UpdateEmail
 
-export function updateEmailParams() {
+export function $updateEmailParams() {
     return z.object({
-        emailUpdateToken: common.token()
+        emailUpdateToken: common.$token()
     })
 }
 
-export type UpdateEmailParams = z.infer<ReturnType<typeof updateEmailParams>>
+export type $UpdateEmailParams = z.infer<ReturnType<typeof $updateEmailParams>>
 
-export function updateEmailRequest() {
+export function $updateEmailRequest() {
     return z.object({
-        ...updateEmailParams().shape
+        ...$updateEmailParams().shape
     })
 }
 
-export type UpdateEmailRequest = z.infer<ReturnType<typeof updateEmailRequest>>
+export type $UpdateEmailRequest = z.infer<ReturnType<typeof $updateEmailRequest>>
 
-export function updateEmailResponse() {
+export function $updateEmailResponse() {
     return z.void()
 }
 
-export type UpdateEmailResponse = z.infer<ReturnType<typeof updateEmailResponse>>
+export type $UpdateEmailResponse = z.infer<ReturnType<typeof $updateEmailResponse>>
 
 // ChangePassword
 
-export function changePasswordBody() {
+export function $changePasswordBody() {
     return z.object({
-        oldPassword: models.user.password(),
-        newPassword: models.user.password()
+        oldPassword: models.user.$password(),
+        newPassword: models.user.$password()
     })
 }
 
-export type ChangePasswordBody = z.infer<ReturnType<typeof changePasswordBody>>
+export type $ChangePasswordBody = z.infer<ReturnType<typeof $changePasswordBody>>
 
-export function changePasswordRequest() {
+export function $changePasswordRequest() {
     return z.object({
-        ...changePasswordBody().shape
+        ...$changePasswordBody().shape
     })
 }
 
-export type ChangePasswordRequest = z.infer<ReturnType<typeof changePasswordRequest>>
+export type $ChangePasswordRequest = z.infer<ReturnType<typeof $changePasswordRequest>>
 
-export function changePasswordResponse() {
+export function $changePasswordResponse() {
     return z.void()
 }
 
-export type ChangePasswordResponse = z.infer<ReturnType<typeof changePasswordResponse>>
+export type $ChangePasswordResponse = z.infer<ReturnType<typeof $changePasswordResponse>>
 
 // SendPasswordResetEmail
 
-export function sendPasswordResetEmailBody() {
+export function $sendPasswordResetEmailBody() {
     return z.object({
-        email: models.user.email()
+        email: common.$email()
     })
 }
 
-export type SendPasswordResetEmailBody = z.infer<ReturnType<typeof sendPasswordResetEmailBody>>
+export type $SendPasswordResetEmailBody = z.infer<ReturnType<typeof $sendPasswordResetEmailBody>>
 
-export function sendPasswordResetEmailRequest() {
+export function $sendPasswordResetEmailRequest() {
     return z.object({
-        ...sendPasswordResetEmailBody().shape
+        ...$sendPasswordResetEmailBody().shape
     })
 }
 
-export type SendPasswordResetEmailRequest = z.infer<
-    ReturnType<typeof sendPasswordResetEmailRequest>
+export type $SendPasswordResetEmailRequest = z.infer<
+    ReturnType<typeof $sendPasswordResetEmailRequest>
 >
 
-export function sendPasswordResetEmailResponse() {
+export function $sendPasswordResetEmailResponse() {
     return z.void()
 }
 
-export type SendPasswordResetEmailResponse = z.infer<
-    ReturnType<typeof sendPasswordResetEmailResponse>
+export type $SendPasswordResetEmailResponse = z.infer<
+    ReturnType<typeof $sendPasswordResetEmailResponse>
 >
 
 // ResetPassword
 
-export function resetPasswordParams() {
+export function $resetPasswordParams() {
     return z.object({
-        passwordResetToken: common.token()
+        passwordResetToken: common.$token()
     })
 }
 
-export type ResetPasswordParams = z.infer<ReturnType<typeof resetPasswordParams>>
+export type $ResetPasswordParams = z.infer<ReturnType<typeof $resetPasswordParams>>
 
-export function resetPasswordBody() {
+export function $resetPasswordBody() {
     return z.object({
-        newPassword: models.user.password()
+        newPassword: models.user.$password()
     })
 }
 
-export type ResetPasswordBody = z.infer<ReturnType<typeof resetPasswordBody>>
+export type $ResetPasswordBody = z.infer<ReturnType<typeof $resetPasswordBody>>
 
-export function resetPasswordRequest() {
+export function $resetPasswordRequest() {
     return z.object({
-        ...resetPasswordParams().shape,
-        ...resetPasswordBody().shape
+        ...$resetPasswordParams().shape,
+        ...$resetPasswordBody().shape
     })
 }
 
-export type ResetPasswordRequest = z.infer<ReturnType<typeof resetPasswordRequest>>
+export type $ResetPasswordRequest = z.infer<ReturnType<typeof $resetPasswordRequest>>
 
-export function resetPasswordResponse() {
+export function $resetPasswordResponse() {
     return z.void()
 }
 
-export type ResetPasswordResponse = z.infer<ReturnType<typeof resetPasswordResponse>>
+export type $ResetPasswordResponse = z.infer<ReturnType<typeof $resetPasswordResponse>>

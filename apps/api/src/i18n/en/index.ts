@@ -1,8 +1,11 @@
+/* eslint sort-keys: 2 */
+
 import type { Translation } from "../i18n-types"
 
 const en = {
     accountAlreadyLinked: "This {provider}-account is already linked to another account",
     banned: "Banned",
+    cannotDeleteSystemUser: "Cannot delete system user",
     cannotUnlinkLastAuthMethod: "Cannot unlink the only way to sign in to your account",
     completeRegistration: "Complete registration",
     dear: "Dear",
@@ -36,6 +39,7 @@ const en = {
     roleWithSuchIdIsProtected: "Role with such ID is protected",
     roleWithSuchIdWasNotFound: "Role with such ID was not found",
     statesDoNotMatch: "States do not match",
+    temporaryImageWithSuchIdWasNotFound: "Temporary image with such ID was not found",
     unexpectedError: "Unexpected error",
     unlinkEmail: "Unlink email",
     unlinkingTokenExpired: "Unlinking token expired",

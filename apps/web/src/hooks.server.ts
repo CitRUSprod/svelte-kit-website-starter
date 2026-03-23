@@ -63,7 +63,7 @@ const localeAndThemeHandle: Handle = async ({ event: e, resolve }) => {
 }
 
 const authHandle: Handle = async ({ event: e, resolve }) => {
-    let userData: schemasModels.user.User | null = null
+    let userData: schemasModels.user.$User | null = null
 
     try {
         const res = await api.profile.getUser({ headers: e.request.headers })
@@ -87,7 +87,7 @@ const authHandle: Handle = async ({ event: e, resolve }) => {
         e.request.headers.set("cookie", cookies.join("; "))
     }
 
-    e.locals.userData = userData
+    e.locals.user = userData
 
     const response = await resolve(e)
 

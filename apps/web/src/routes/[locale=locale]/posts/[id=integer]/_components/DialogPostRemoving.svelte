@@ -9,7 +9,7 @@
     import { toasts } from "$lib/stores"
 
     interface Props {
-        post: schemasModels.post.Post
+        post: schemasModels.post.$Post
     }
 
     const { post }: Props = $props()

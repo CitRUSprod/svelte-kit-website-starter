@@ -13,6 +13,7 @@ declare module "fastify" {
         minio: {
             writeFile(dirPath: string, file: MultipartFile): Promise<string>
             removeFile(dirPath: string, fileName: string): Promise<void>
+            moveFile(dirPath: string, fileName: string, newDirPath: string): Promise<void>
         }
     }
 }
@@ -86,8 +87,18 @@ export const minio: FastifyPluginCallback = (app, options, done) => {
         await minioClient.removeObject(bucketName, objectName)
     }
 
+    async function moveFile(dirPath: string, fileName: string, newDirPath: string) {
+        await minioClient.copyObject(
+            bucketName,
+            `${newDirPath}/${fileName}`,
+            `/${bucketName}/${dirPath}/${fileName}`
+        )
+
+        await removeFile(dirPath, fileName)
+    }
+
     createBucketIfNotExists().then(() => {
-        app.decorate<FastifyInstance["minio"]>("minio", { writeFile, removeFile })
+        app.decorate<FastifyInstance["minio"]>("minio", { writeFile, removeFile, moveFile })
 
         done()
     })

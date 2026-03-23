@@ -1,44 +1,27 @@
-import * as constantsEnums from "@repo/constants/enums"
 import type { FastifyInstance, FastifyRequest } from "fastify"
 import { BadRequestError } from "http-errors-enhanced"
-import type { JsonObject } from "type-fest"
+
+import { dto as roleDto } from "./role"
 
 import { enums } from "$/constants"
-import type { Locale } from "$/i18n/helpers"
-import type { UserData } from "$/types"
+import { Prisma } from "$/prisma/generated/client"
+import { defineDto } from "$/utils"
 
-export function dto(user: UserData) {
-    return {
-        id: user.id,
-        email: user.email,
-        linkedAccounts: {
-            email: user.email !== null,
-            twitch: user.twitchId !== null
-        },
-        username: user.username,
-        role: {
-            id: user.role.id,
-            name: user.role.name as Record<Locale, string>,
-            permissions: user.role.permissions as Array<constantsEnums.Permission>
-        },
-        ban: user.ban && {
-            id: user.ban.id,
-            author: {
-                id: user.ban.author.id,
-                username: user.ban.author.username
-            },
-            reason: user.ban.reason,
-            date: user.ban.date.toJSON()
-        },
-        registrationDate: user.registrationDate.toJSON(),
-        avatar: user.avatar && `/files/${enums.ImgPath.Avatars}/${user.avatar}`
-    } satisfies JsonObject
-}
+export const include = {
+    role: true,
+    ban: {
+        include: {
+            author: true
+        }
+    }
+} as const satisfies Prisma.UserInclude
+
+export type Type = Prisma.UserGetPayload<{ include: typeof include }>
 
 export async function get(app: FastifyInstance, req: FastifyRequest, id: number) {
-    const user = await app.prisma.user.findFirst({
+    const user = await app.prisma.user.findUnique({
         where: { id },
-        include: { role: true, ban: { include: { author: true } } }
+        include
     })
 
     if (!user) {
@@ -47,3 +30,35 @@ export async function get(app: FastifyInstance, req: FastifyRequest, id: number)
 
     return user
 }
+
+interface SimpleType {
+    id: Type["id"]
+    username: Type["username"]
+    avatar: Type["avatar"]
+    [key: string]: unknown
+}
+
+export const simpleDto = defineDto((user: SimpleType) => ({
+    id: user.id,
+    username: user.username,
+    avatar: user.avatar && `/files/${enums.ImgPath.Avatars}/${user.avatar}`
+}))
+
+export const dto = defineDto((user: Type) => ({
+    id: user.id,
+    email: user.email,
+    linkedAccounts: {
+        email: user.email !== null,
+        twitch: user.twitchId !== null
+    },
+    username: user.username,
+    role: roleDto(user.role),
+    ban: user.ban && {
+        id: user.ban.id,
+        author: simpleDto(user.ban.author),
+        reason: user.ban.reason,
+        date: user.ban.date.toJSON()
+    },
+    registrationDate: user.registrationDate.toJSON(),
+    avatar: user.avatar && `/files/${enums.ImgPath.Avatars}/${user.avatar}`
+}))

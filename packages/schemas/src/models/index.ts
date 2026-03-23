@@ -1,6 +1,5 @@
-export * as registrationToken from "./registration-token"
+export * as temporaryImage from "./temporary-image"
 export * as oAuthRegistrationToken from "./o-auth-registration-token"
-export * as refreshToken from "./refresh-token"
 export * as role from "./role"
 export * as ban from "./ban"
 export * as user from "./user"

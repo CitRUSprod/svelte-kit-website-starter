@@ -5,148 +5,135 @@ import * as models from "$/models"
 
 // GetPosts
 
-export function getPostsQuery() {
-    const { page, perPage } = common.pagination().shape
-    const { sort, order } = common.sorting("creationDate", "title").shape
-
+export function $getPostsQuery() {
     return z.object({
-        page: page.catch(1),
-        perPage: perPage.catch(10),
-        sort: sort.catch("creationDate"),
-        order: order.catch("asc"),
-        title: models.post.title().optional().catch(undefined)
+        page: common.pagination.$page().catch(1),
+        perPage: common.pagination.$perPage().catch(10),
+        sort: common.sorting.$sort("creationDate", "title").catch("creationDate"),
+        order: common.sorting.$order().catch("asc"),
+        title: models.post.$title().optional().catch(undefined)
     })
 }
 
-export type GetPostsQuery = z.infer<ReturnType<typeof getPostsQuery>>
+export type $GetPostsQuery = z.infer<ReturnType<typeof $getPostsQuery>>
 
-export function getPostsRequest() {
+export function $getPostsRequest() {
     return z.object({
-        ...getPostsQuery().partial().shape
+        ...$getPostsQuery().partial().shape
     })
 }
 
-export type GetPostsRequest = z.infer<ReturnType<typeof getPostsRequest>>
+export type $GetPostsRequest = z.infer<ReturnType<typeof $getPostsRequest>>
 
-export function getPostsResponse() {
-    return z.object({
-        ...common.itemsPage(models.post.post()).shape
-    })
+export function $getPostsResponse() {
+    return common.pagination.$itemsPage(models.post.$post())
 }
 
-export type GetPostsResponse = z.infer<ReturnType<typeof getPostsResponse>>
+export type $GetPostsResponse = z.infer<ReturnType<typeof $getPostsResponse>>
 
 // CreatePost
 
-export function createPostBody() {
+export function $createPostBody() {
     return z.object({
-        title: models.post.title(),
-        content: models.post.content()
+        title: models.post.$title(),
+        content: models.post.$content()
     })
 }
 
-export type CreatePostBody = z.infer<ReturnType<typeof createPostBody>>
+export type $CreatePostBody = z.infer<ReturnType<typeof $createPostBody>>
 
-export function createPostRequest() {
+export function $createPostRequest() {
     return z.object({
-        ...createPostBody().shape
+        ...$createPostBody().shape
     })
 }
 
-export type CreatePostRequest = z.infer<ReturnType<typeof createPostRequest>>
+export type $CreatePostRequest = z.infer<ReturnType<typeof $createPostRequest>>
 
-export function createPostResponse() {
-    return z.object({
-        ...models.post.post().shape
-    })
+export function $createPostResponse() {
+    return models.post.$post()
 }
 
-export type CreatePostResponse = z.infer<ReturnType<typeof createPostResponse>>
+export type $CreatePostResponse = z.infer<ReturnType<typeof $createPostResponse>>
 
 // GetPost
 
-export function getPostParams() {
+export function $getPostParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type GetPostParams = z.infer<ReturnType<typeof getPostParams>>
+export type $GetPostParams = z.infer<ReturnType<typeof $getPostParams>>
 
-export function getPostRequest() {
+export function $getPostRequest() {
     return z.object({
-        ...getPostParams().shape
+        ...$getPostParams().shape
     })
 }
 
-export type GetPostRequest = z.infer<ReturnType<typeof getPostRequest>>
+export type $GetPostRequest = z.infer<ReturnType<typeof $getPostRequest>>
 
-export function getPostResponse() {
-    return z.object({
-        ...models.post.post().shape
-    })
+export function $getPostResponse() {
+    return models.post.$post()
 }
 
-export type GetPostResponse = z.infer<ReturnType<typeof getPostResponse>>
+export type $GetPostResponse = z.infer<ReturnType<typeof $getPostResponse>>
 
 // UpdatePost
 
-export function updatePostParams() {
+export function $updatePostParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type UpdatePostParams = z.infer<ReturnType<typeof updatePostParams>>
+export type $UpdatePostParams = z.infer<ReturnType<typeof $updatePostParams>>
 
-export function updatePostBody() {
+export function $updatePostBody() {
     return z.object({
-        title: models.post.title().optional(),
-        content: models.post.content().optional()
+        title: models.post.$title().optional(),
+        content: models.post.$content().optional()
     })
 }
 
-export type UpdatePostBody = z.infer<ReturnType<typeof updatePostBody>>
+export type $UpdatePostBody = z.infer<ReturnType<typeof $updatePostBody>>
 
-export function updatePostRequest() {
+export function $updatePostRequest() {
     return z.object({
-        ...updatePostParams().shape,
-        ...updatePostBody().shape
+        ...$updatePostParams().shape,
+        ...$updatePostBody().shape
     })
 }
 
-export type UpdatePostRequest = z.infer<ReturnType<typeof updatePostRequest>>
+export type $UpdatePostRequest = z.infer<ReturnType<typeof $updatePostRequest>>
 
-export function updatePostResponse() {
-    return z.object({
-        ...models.post.post().shape
-    })
+export function $updatePostResponse() {
+    return models.post.$post()
 }
 
-export type UpdatePostResponse = z.infer<ReturnType<typeof updatePostResponse>>
+export type $UpdatePostResponse = z.infer<ReturnType<typeof $updatePostResponse>>
 
 // DeletePost
 
-export function deletePostParams() {
+export function $deletePostParams() {
     return z.object({
-        id: common.id()
+        id: common.$id()
     })
 }
 
-export type DeletePostParams = z.infer<ReturnType<typeof deletePostParams>>
+export type $DeletePostParams = z.infer<ReturnType<typeof $deletePostParams>>
 
-export function deletePostRequest() {
+export function $deletePostRequest() {
     return z.object({
-        ...deletePostParams().shape
+        ...$deletePostParams().shape
     })
 }
 
-export type DeletePostRequest = z.infer<ReturnType<typeof deletePostRequest>>
+export type $DeletePostRequest = z.infer<ReturnType<typeof $deletePostRequest>>
 
-export function deletePostResponse() {
-    return z.object({
-        ...models.post.post().shape
-    })
+export function $deletePostResponse() {
+    return models.post.$post()
 }
 
-export type DeletePostResponse = z.infer<ReturnType<typeof deletePostResponse>>
+export type $DeletePostResponse = z.infer<ReturnType<typeof $deletePostResponse>>

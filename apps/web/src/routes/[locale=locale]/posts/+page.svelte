@@ -14,11 +14,11 @@
     import { userData } from "$lib/stores"
 
     type SortAndOrder =
-        `${schemasRoutes.posts.GetPostsQuery["sort"]}-${schemasRoutes.posts.GetPostsQuery["order"]}`
+        `${schemasRoutes.posts.$GetPostsQuery["sort"]}-${schemasRoutes.posts.$GetPostsQuery["order"]}`
 
     const { data } = $props()
 
-    const paramSchemas = schemasRoutes.posts.getPostsQuery().shape
+    const paramSchemas = schemasRoutes.posts.$getPostsQuery().shape
 
     const queryParams = useQueryParams({
         page: paramSchemas.page,

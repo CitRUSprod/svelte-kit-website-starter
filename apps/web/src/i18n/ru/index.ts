@@ -1,3 +1,5 @@
+/* eslint sort-keys: 2 */
+
 import type { BaseTranslation } from "../i18n-types"
 
 const ru = {
@@ -15,8 +17,8 @@ const ru = {
     ban: "Забанить",
     banAuthor: "Автор бана",
     banDate: "Дата бана",
-    banned: "Забанен",
     banReason: "Причина бана",
+    banned: "Забанен",
     cancel: "Отмена",
     change: "Изменить",
     changeEmail: "Изменить электронную почту",
@@ -28,9 +30,9 @@ const ru = {
     content: "Содержание",
     count: "Количество",
     create: "Создать",
-    created: "Создан",
     createPost: "Создать новый пост",
     createRole: "Создать роль",
+    created: "Создан",
     creationDateAsc: "Дата создания (Сначала старые)",
     creationDateDesc: "Дата создания (Сначала новые)",
     deleted: "Удалено",
@@ -61,8 +63,8 @@ const ru = {
     home: "Главная",
     info: "Информация",
     link: "Привязать",
-    linked: "Привязан",
     linkEmail: "Привязать электронную почту",
+    linked: "Привязан",
     loggedInSuccessfully: "Вы успешно вошли",
     loggedOutSuccessfully: "Вы успешно вышли",
     login: "Вход",
@@ -129,20 +131,20 @@ const ru = {
     titleDesc: "Заголовок (Я-А)",
     unban: "Разбанить",
     unlink: "Отвязать",
-    unlinked: "Не привязан",
     unlinkEmail: "Отвязать электронную почту",
+    unlinked: "Не привязан",
     uploadAvatar: "Загрузить аватар",
     user: "Пользователь",
     userBannedSuccessfully: "Пользователь успешно забанен",
     userBanning: "Бан пользователя",
-    username: "Имя пользователя",
     userRemovedSuccessfully: "Аккаунт успешно удалён",
     userRemoving: "Удаление аккаунта",
     userRemovingConfirmation: "Для подтверждения напишите ваше имя пользователя.",
     userRemovingQuestion:
         "Вы действительно хотите удалить этот аккаунт без возможности восстановления?",
-    users: "Пользователи",
     userUnbannedSuccessfully: "Пользователь успешно разбанен",
+    username: "Имя пользователя",
+    users: "Пользователи",
     warning: "Предупреждение",
     who: "Кто",
     yes: "Да"

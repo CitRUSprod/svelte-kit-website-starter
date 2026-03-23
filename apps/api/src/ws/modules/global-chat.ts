@@ -17,7 +17,7 @@ interface ChatMessage {
 
 const globalChatHistory: Array<ChatMessage> = []
 
-export const globalChat: SocketModule = (socket, user) => {
+export const globalChat: SocketModule = (app, socket, user) => {
     socket.on("global-chat:join", () => {
         socket.join("global-chat")
         socket.emit("global-chat:get-history", globalChatHistory)
