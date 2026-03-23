@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as schemasCommon from "@repo/schemas/common"
+    import { watch } from "runed"
     import { tick } from "svelte"
 
     import { Button } from "../Button"
@@ -36,11 +37,14 @@
         }
     }
 
-    $effect(() => {
-        if (messages.length > 0) {
-            scrollDown()
+    watch(
+        () => messages,
+        msgs => {
+            if (msgs.length > 0) {
+                scrollDown()
+            }
         }
-    })
+    )
 
     function send() {
         onSend?.(trimmedMessage)

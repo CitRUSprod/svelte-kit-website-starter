@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as constantsEnums from "@repo/constants/enums"
     import { dt } from "@repo/utils"
+    import { watch } from "runed"
     import { untrack } from "svelte"
 
     import { DialogPostEditing, DialogPostRemoving } from "./_components"
@@ -16,9 +17,12 @@
 
     let localPost = $state(untrack(() => data.post))
 
-    $effect(() => {
-        localPost = data.post
-    })
+    watch(
+        () => data.post,
+        post => {
+            localPost = post
+        }
+    )
 </script>
 
 <svelte:head>

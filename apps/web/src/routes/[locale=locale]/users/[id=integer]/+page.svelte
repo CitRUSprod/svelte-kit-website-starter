@@ -2,6 +2,7 @@
     import * as constantsEnums from "@repo/constants/enums"
     import { dt } from "@repo/utils"
     import * as _ from "es-toolkit"
+    import { watch } from "runed"
     import { untrack } from "svelte"
 
     import {
@@ -31,9 +32,12 @@
 
     let localUser = $state(untrack(() => data.user))
 
-    $effect(() => {
-        localUser = data.user
-    })
+    watch(
+        () => data.user,
+        u => {
+            localUser = u
+        }
+    )
 
     const hasMoreThanOneLinkedAccount = $derived(
         Object.values(user.data?.linkedAccounts ?? {}).filter(value => value).length > 1
