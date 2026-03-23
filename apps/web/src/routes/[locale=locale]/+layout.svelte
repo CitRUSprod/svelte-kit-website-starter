@@ -11,7 +11,7 @@
 </script>
 
 <Header />
-<main class="u:relative u:flex-1">
+<main class="u:relative u:flex-1" style:view-transition-name="main">
     {@render children?.()}
 </main>
 <Footer />

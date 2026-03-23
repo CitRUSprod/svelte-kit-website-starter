@@ -7,7 +7,7 @@
     import { Button, TextField, Dialog } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { socket } from "$lib/utils"
+    import { reconnectSocket } from "$lib/utils"
 
     type User = schemasRoutes.profile.$GetUserResponse
 
@@ -44,7 +44,7 @@
         async onSuccess() {
             toasts.add("success", $ll.userRemovedSuccessfully())
             close()
-            socket.disconnect().connect()
+            reconnectSocket()
             await goto($localePath("/"), {
                 replaceState: true,
                 invalidateAll: true

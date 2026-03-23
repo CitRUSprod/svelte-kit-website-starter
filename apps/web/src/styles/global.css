@@ -27,3 +27,46 @@ h3 {
 #app {
     @apply u:contents;
 }
+
+:root {
+    view-transition-name: none;
+}
+
+::view-transition-old(main),
+::view-transition-new(main) {
+    animation-duration: 0.3s;
+}
+
+::view-transition-old(main) {
+    animation-name: fade-out;
+    animation-timing-function: ease-out;
+}
+
+::view-transition-new(main) {
+    animation-name: fade-in;
+    animation-timing-function: ease-in;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-3%);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(3%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

@@ -7,7 +7,7 @@
     import { ContentCenter, Button, TextField, OAuthProviderButton } from "$lib/components"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
-    import { socket } from "$lib/utils"
+    import { reconnectSocket } from "$lib/utils"
     import * as vld from "$lib/validators"
 
     let email = $state("")
@@ -26,8 +26,8 @@
             })
         },
         async onSuccess() {
+            reconnectSocket()
             toasts.add("success", $ll.loggedInSuccessfully())
-            socket.disconnect().connect()
             await invalidateAll()
         }
     })

@@ -5,10 +5,10 @@
     import { ll } from "$i18n/helpers"
     import { ContentDefault } from "$lib/components"
     import { toasts } from "$lib/stores"
-    import { socket } from "$lib/utils"
+    import { reconnectSocket } from "$lib/utils"
 
     onMount(async () => {
-        socket.disconnect().connect()
+        reconnectSocket()
         toasts.add("success", $ll.loggedOutSuccessfully())
         await invalidateAll()
     })

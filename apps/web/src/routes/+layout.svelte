@@ -1,12 +1,14 @@
 <script lang="ts">
     import { ProgressBar } from "@prgm/sveltekit-progress-bar"
     import Cookies from "js-cookie"
+    import { watch } from "runed"
     import { onMount, untrack } from "svelte"
 
-    import { ToastContainer } from "./_components"
+    import { ToastContainer, PageTransition } from "./_components"
 
     import { currentLocale, setLocale } from "$i18n/helpers"
     import { userData } from "$lib/stores"
+    import { setGlobalSocketListeners } from "$lib/utils"
 
     // eslint-disable-next-line import/no-unassigned-import
     import "uno.css"
@@ -21,9 +23,23 @@
 
     $userData = untrack(() => data.user)
 
-    $effect(() => {
-        $userData = data.user
-    })
+    watch(
+        () => data.user,
+        newUser => {
+            $userData = newUser
+        }
+    )
+
+    watch(
+        () => $currentLocale,
+        locale => {
+            Cookies.set("locale", locale, {
+                path: "/",
+                expires: 100,
+                sameSite: "lax"
+            })
+        }
+    )
 
     onMount(() => {
         // eslint-disable-next-line new-cap
@@ -33,17 +49,12 @@
             expires: 100,
             sameSite: "lax"
         })
-    })
 
-    $effect(() => {
-        Cookies.set("locale", $currentLocale, {
-            path: "/",
-            expires: 100,
-            sameSite: "lax"
-        })
+        setGlobalSocketListeners()
     })
 </script>
 
 <ProgressBar class={"u:text-green-500" as any} />
+<PageTransition />
 {@render children?.()}
 <ToastContainer />

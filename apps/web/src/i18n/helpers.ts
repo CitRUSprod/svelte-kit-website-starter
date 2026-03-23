@@ -16,8 +16,13 @@ export const localePath = derived(
     l => (path: string, locale?: string) => `/${locale ?? l}${path === "/" ? "" : path}`
 )
 
-export function replaceLocaleInUrl(url: URL, locale: string) {
+export function getPathnameWithoutLocale(url: URL) {
     const [, , ...rest] = url.pathname.split("/")
-    const newPathname = `/${[locale, ...rest].join("/")}`
+    return `/${rest.join("/")}`
+}
+
+export function replaceLocaleInUrl(url: URL, locale: string) {
+    const pathnameWithoutLocale = getPathnameWithoutLocale(url)
+    const newPathname = `/${locale}${pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale}`
     return `${newPathname}${url.search}`
 }

@@ -5,6 +5,7 @@ import io from "socket.io-client"
 import { createApiUrl } from "./axios"
 
 export const socket = io({
+    autoConnect: false,
     path: createApiUrl(constantsRoutes.ws.base),
     transports: ["websocket"],
     auth(done) {
@@ -13,3 +14,12 @@ export const socket = io({
         done(cookie ? { auth_token: cookie.value } : {})
     }
 })
+
+export function setGlobalSocketListeners() {
+    socket.connect()
+}
+
+export function reconnectSocket() {
+    socket.disconnect()
+    setGlobalSocketListeners()
+}
