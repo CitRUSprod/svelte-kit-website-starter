@@ -4,7 +4,8 @@
         "baseUrl": ".",
         "paths": {
             "$/*": ["*"]
-        }
+        },
+        "types": []
     },
-    "exclude": ["node_modules", "apps", "packages"]
+    "exclude": [".template", "node_modules", "apps", "packages"]
 }
