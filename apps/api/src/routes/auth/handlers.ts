@@ -4,7 +4,7 @@ import { generateState } from "arctic"
 import argon2 from "argon2"
 import axios from "axios"
 import * as _ from "es-toolkit"
-import { BadRequestError, InternalServerError } from "http-errors-enhanced"
+import { BadRequestError, ForbiddenError, InternalServerError } from "http-errors-enhanced"
 import { v4 as createUuid } from "uuid"
 
 import * as utils from "./utils"
@@ -103,6 +103,10 @@ export const oAuthRegister = defineRouteHandler<
     },
     schemasRoutes.auth.$OAuthRegisterResponse
 >(async (app, req) => {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        throw new ForbiddenError(req.ll.noAccess())
+    }
+
     const userByUsername = await app.prisma.user.findFirst({
         where: { username: { equals: req.body.username, mode: "insensitive" } }
     })
@@ -174,12 +178,16 @@ export const oAuthLogin = defineRouteHandler<
     { Params: schemasRoutes.auth.$OAuthLoginParams },
     schemasRoutes.auth.$OAuthLoginResponse
 >(async (app, req) => {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        throw new ForbiddenError(req.ll.noAccess())
+    }
+
     const oAuthState = generateState()
 
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
-            const url = oAuthProviders.twitch.createAuthorizationURL(oAuthState, [])
+            const url = oAuthProviders.twitch!.createAuthorizationURL(oAuthState, [])
 
             return {
                 payload: {
@@ -213,6 +221,10 @@ export const oAuthLoginCallback = defineRouteHandler<
     schemasRoutes.auth.$OAuthLoginCallbackResponse,
     schemasRoutes.auth.$OAuthLoginCallbackCookies
 >(async (app, req, cookies) => {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        throw new ForbiddenError(req.ll.noAccess())
+    }
+
     if (cookies.oAuthState !== req.body.oAuthState) {
         throw new BadRequestError(req.ll.statesDoNotMatch())
     }
@@ -220,7 +232,7 @@ export const oAuthLoginCallback = defineRouteHandler<
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
-            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
+            const twitchTokens = await oAuthProviders.twitch!.validateAuthorizationCode(
                 req.body.code
             )
 
@@ -455,6 +467,10 @@ export const oAuthLinkCallback = defineRouteHandler<
     schemasRoutes.auth.$OAuthLinkCallbackResponse,
     schemasRoutes.auth.$OAuthLinkCallbackCookies
 >(async (app, req, cookies) => {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        throw new ForbiddenError(req.ll.noAccess())
+    }
+
     if (!req.userData) {
         throw new InternalServerError(req.ll.unexpectedError())
     }
@@ -474,7 +490,7 @@ export const oAuthLinkCallback = defineRouteHandler<
                 )
             }
 
-            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
+            const twitchTokens = await oAuthProviders.twitch!.validateAuthorizationCode(
                 req.body.code
             )
 

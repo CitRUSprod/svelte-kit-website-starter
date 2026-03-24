@@ -16,6 +16,7 @@ services:
                 POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
                 PUBLIC_TITLE: ${PUBLIC_TITLE}
                 PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+                PUBLIC_ENABLE_TWITCH_AUTH: ${PUBLIC_ENABLE_TWITCH_AUTH}
         restart: unless-stopped
     api:
         build:
@@ -28,6 +29,7 @@ services:
         restart: unless-stopped
         environment:
             PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+            PUBLIC_ENABLE_TWITCH_AUTH: ${PUBLIC_ENABLE_TWITCH_AUTH}
             POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
             MINIO_USER: ${MINIO_USER}
             MINIO_PASSWORD: ${MINIO_PASSWORD}

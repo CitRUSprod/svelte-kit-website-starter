@@ -17,6 +17,7 @@
     import { ll, currentLocale } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { ContentDefault, Button, OAuthProviderButton } from "$lib/components"
+    import { env } from "$lib/constants"
     import { useQuery } from "$lib/hooks"
     import { toasts, user } from "$lib/stores"
 
@@ -211,11 +212,11 @@
                 {$ll.removeUser()}
             </Button>
         </div>
-        <div>
-            {#if !user.data.linkedAccounts.twitch}
+        {#if env.PUBLIC_ENABLE_TWITCH_AUTH && !user.data.linkedAccounts.twitch}
+            <div>
                 <OAuthProviderButton linkAccount provider={constantsEnums.OAuthProvider.Twitch} />
-            {/if}
-        </div>
+            </div>
+        {/if}
     {/if}
 </ContentDefault>
 

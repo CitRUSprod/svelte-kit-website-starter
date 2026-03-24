@@ -5,6 +5,7 @@ on: [push, workflow_dispatch]
 env:
     POSTGRES_URL: postgresql://user:password@postgres:6703/db
     PUBLIC_BASE_URL: http://localhost:6700
+    PUBLIC_ENABLE_TWITCH_AUTH: true
     PUBLIC_TITLE: SvelteKit Website Starter
 
 jobs:

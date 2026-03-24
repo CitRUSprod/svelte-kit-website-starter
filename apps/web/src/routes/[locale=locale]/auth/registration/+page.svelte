@@ -5,6 +5,7 @@
     import { ll, localePath } from "$i18n/helpers"
     import * as api from "$lib/api"
     import { ContentCenter, Button, TextField, OAuthProviderButton } from "$lib/components"
+    import { env } from "$lib/constants"
     import { useQuery } from "$lib/hooks"
     import { toasts } from "$lib/stores"
     import * as vld from "$lib/validators"
@@ -112,11 +113,13 @@
                 {$ll.register()}
             </Button>
         </div>
-        <div>
-            <h3>{$ll.orRegisterWith()}</h3>
-        </div>
-        <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
-            <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
-        </div>
+        {#if env.PUBLIC_ENABLE_TWITCH_AUTH}
+            <div>
+                <h3>{$ll.orRegisterWith()}</h3>
+            </div>
+            <div class="u:flex u:justify-center u:gap-2 u:flex-wrap">
+                <OAuthProviderButton provider={constantsEnums.OAuthProvider.Twitch} />
+            </div>
+        {/if}
     </div>
 </ContentCenter>

@@ -1,7 +1,13 @@
 import { redirect } from "@sveltejs/kit"
 import * as _ from "es-toolkit"
 
+import { env } from "$lib/constants"
+
 export async function load(e) {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        redirect(302, `/${e.params.locale as string}`)
+    }
+
     if (!e.locals.user) {
         redirect(302, `/${e.params.locale as string}`)
     }

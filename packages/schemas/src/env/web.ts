@@ -6,7 +6,8 @@ export function $web() {
     return z.object({
         PUBLIC_IS_DOCKER_CONTAINER: z.coerce.boolean(),
         PUBLIC_TITLE: z.string().trim().min(1),
-        PUBLIC_BASE_URL: common.$url()
+        PUBLIC_BASE_URL: common.$url(),
+        PUBLIC_ENABLE_TWITCH_AUTH: z.stringbool()
     })
 }
 

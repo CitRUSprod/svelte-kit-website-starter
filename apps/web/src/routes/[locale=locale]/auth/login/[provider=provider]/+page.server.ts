@@ -3,9 +3,14 @@ import { redirect } from "@sveltejs/kit"
 import * as _ from "es-toolkit"
 
 import * as api from "$lib/api"
+import { env } from "$lib/constants"
 import { setCookies } from "$lib/utils"
 
 export async function load(e) {
+    if (!env.PUBLIC_ENABLE_TWITCH_AUTH) {
+        redirect(302, `/${e.params.locale as string}`)
+    }
+
     const oAuthProviderFromCookie = e.cookies.get("link-account")
 
     if (e.locals.user && !oAuthProviderFromCookie) {

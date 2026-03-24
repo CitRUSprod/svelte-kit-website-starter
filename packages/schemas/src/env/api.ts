@@ -10,9 +10,10 @@ export function $api() {
         MINIO_USER: z.string().trim().min(1),
         MINIO_PASSWORD: z.string().trim().min(1),
         ENABLE_SWAGGER: z.stringbool(),
+        PUBLIC_ENABLE_TWITCH_AUTH: z.stringbool(),
         JWT_SECRET: z.string().trim().min(6),
-        TWITCH_CLIENT_ID: z.string().trim().length(30),
-        TWITCH_CLIENT_SECRET: z.string().trim().length(30),
+        TWITCH_CLIENT_ID: z.string().trim().length(30).optional(),
+        TWITCH_CLIENT_SECRET: z.string().trim().length(30).optional(),
         MAILER_HOST: z
             .string()
             .trim()
