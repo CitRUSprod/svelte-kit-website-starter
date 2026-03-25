@@ -131,7 +131,7 @@ After completing all steps, the application will be available at `http://localho
 - `configs` - Configuration files (docker, nginx, etc.)
 - `scripts` - Project management scripts (start, stop, restart, backup, etc.)
 - `storage` - Storage directory for backups and other data that should not be in the repository
-- `tests` - E2E tests with Playwright
+- `e2e-tests` - E2E tests with Playwright
 
 ### Tools
 
