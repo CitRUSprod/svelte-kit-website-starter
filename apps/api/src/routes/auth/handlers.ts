@@ -187,7 +187,7 @@ export const oAuthLogin = defineRouteHandler<
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
-            const url = oAuthProviders.twitch!.createAuthorizationURL(oAuthState, [])
+            const url = oAuthProviders.twitch.createAuthorizationURL(oAuthState, [])
 
             return {
                 payload: {
@@ -232,7 +232,7 @@ export const oAuthLoginCallback = defineRouteHandler<
     switch (_.upperFirst(_.camelCase(req.params.provider))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         case constantsEnums.OAuthProvider.Twitch: {
-            const twitchTokens = await oAuthProviders.twitch!.validateAuthorizationCode(
+            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
                 req.body.code
             )
 
@@ -490,7 +490,7 @@ export const oAuthLinkCallback = defineRouteHandler<
                 )
             }
 
-            const twitchTokens = await oAuthProviders.twitch!.validateAuthorizationCode(
+            const twitchTokens = await oAuthProviders.twitch.validateAuthorizationCode(
                 req.body.code
             )
 
